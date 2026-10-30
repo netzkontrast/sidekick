@@ -60,6 +60,16 @@ Was C0 klären muss und was heute bekannt ist (Claude Code 2.1.314, lokal instal
 in den Projektregeln. Vorschlag: M2 in einem isolierten Messverzeichnis ohne diese Hinweise (nur `.claude/skills/` mit den Prüflingen),
 optional eine zweite Reihe im Repo. Beide getrennt berichten.
 
+**B0 im Repo ist nicht skillfrei** (Review vom 30.10.2026, Punkt 1): Auch mit abgeschalteter Skill-Funktion kann das Modell `.agents/skills/*/SKILL.md`
+per Read öffnen, weil `AGENTS.md` die Pfade nennt. B0 läuft deshalb nur im isolierten Messverzeichnis **ohne** Skill-Dateien und ohne Projektregeln.
+In allen Varianten wertet M2 ein Read auf eine `SKILL.md` als eigene Kategorie **„manuell geladen“**, getrennt von „vom Client ausgewählt“ und „nicht geladen“.
+
+**Zwei Isolationswege, in C0 verglichen** (Punkt 2): (a) isoliertes Verzeichnis mit `--setting-sources project`, (b) `--bare --add-dir <Messverzeichnis>`.
+Laut `claude --help` (2.1.314) schaltet `--bare` unter anderem CLAUDE.md-Autodiscovery, Plugin-Sync, Hooks und Auto-Memory ab; Skills lassen sich weiter per
+`/skill-name` aufrufen. Offen ist, ob das Modell unter `--bare` Skills noch **selbst** auswählt; wenn nicht, taugt (b) für M3, aber nicht für M2.
+Laut Review gilt unter `--bare` nur API-Key-Anmeldung, nicht OAuth. Das ändert Anmeldung und Abrechnung und damit die Kostenfelder (§8).
+C0 hält je Weg fest: sichtbare Skills, ob Auto-Auswahl stattfindet, Anmeldeweg.
+
 Codex, die Claude-App und andere Oberflächen: in der ersten Messreihe **nicht** enthalten. Ergebnisse gelten nur für den gemessenen Client und dessen Version.
 
 ## 5. Fallkatalog
@@ -72,7 +82,14 @@ Vorhandene Fälle behalten ihren Inhalt; sie bekommen nur stabile IDs für die R
 |---|---|---|
 | `grilling-evaluation.json` Trigger, 6 Fälle | `GT-01`…`GT-06` (Reihenfolge der Datei) | M2 |
 | `grilling-evaluation.json` Verhalten B01–B11 | unverändert `B01`…`B11`, B06/B10 nach §6 | M3 |
-| `skill-evaluation.json`, 9 Fälle | `ST-01`…`ST-09` (Reihenfolge der Datei); jeder Fall prüft Auswahl (M2) und, wo eine Assertion steht, Verhalten (M3) | M2, M3 |
+| `skill-evaluation.json`, 9 Fälle | `ST-01`…`ST-09` (Reihenfolge der Datei); jeder Fall prüft Auswahl (M2) und, wo eine Assertion steht, Verhalten (M3) nach der Regel unten | M2, M3 |
+
+**M2 und M3 im selben Lauf** (Punkt 4): Ein Lauf ohne expliziten Aufruf liefert M2. Er zählt zusätzlich für M3 nur, wenn der erwartete Skill dort
+tatsächlich ausgewählt wurde. Sonst braucht M3 einen eigenen Lauf mit ausdrücklichem Aufruf, der im Budget gesondert zählt.
+
+**Vereinheitlichung bei der ID-Vergabe** (Punkt 5): „Kein Skill“ ist in `skill-evaluation.json` `null`, in `grilling-evaluation.json` `"none"`.
+In den Rohdaten gilt einheitlich `expected_skill: null`. Gleiche Aufgaben aus beiden Dateien teilen eine `family_id`, zum Beispiel
+ST-08 („Korrigiere diesen Tippfehler“) und GT-06 („Korrigiere den Tippfehler in der Überschrift“). Sie liegen immer im selben Split.
 
 ### 5.2 Ergänzungen für M2
 
@@ -144,7 +161,7 @@ Berichte immer Zähler und Nenner, Ursprungsfamilien und Wiederholungen getrennt
 | Aufwand | Input-, Output-, Cache-Lese-/Schreib-Tokens laut Client; Latenz; Anzahl Läufe; Nacharbeit. Kosten je akzeptiertem Ergebnis (K7.7), fehlende Werte als „unbekannt“ |
 
 **Rubrik:** eine Rubrik, versioniert (K5.6), mit festen Kriterien je Skill. Ein Modellurteil darf bewerten, wenn Modell und Version fixiert sind
-und der Mensch eine Stichprobe von mindestens 20 % nachprüft. Der Autor eines Kandidaten bewertet ihn nicht als alleiniger Nachweis.
+und der Mensch eine Stichprobe von 20 %, mindestens aber 3 Urteilen nachprüft (Punkt 7). Der Autor eines Kandidaten bewertet ihn nicht als alleiniger Nachweis.
 
 ## 8. Rohresultate und Versionsbindung
 
