@@ -23,7 +23,7 @@ Zeit / beantwortet von / Quelle: 2026-10-30 ca. 17:19 UTC, Owner, AskUserQuestio
 Bezug: Version 1, Runde R-20261030-sl-runde1
 Antwort: „Ja, bis ~40 Läufe (Empfohlen)“ – Option A. (wörtlich gewählte Option)
 Ersetzt Antwort: keine
-Folgen / Rückfragen: Umsetzung im [Library-Research-Plan](../../../../research/skills-meta-prompting/library-research-plan.md) und den SL-Ergebnissen.
+Folgen / Rückfragen: Budget gilt für die Versuche in SL5. Laut Plan-Fassung 549ad85 (nach dieser Antwort) laufen in der ersten Ausführung keine Experimente; SL1 enthält nur den Budgetvorschlag. Umsetzung im [Library-Research-Plan](../../../../research/skills-meta-prompting/library-research-plan.md) und den SL-Ergebnissen.
 
 ## Verlauf
 - 2026-10-30: Aus dem Library-Research-Plan erfasst.
