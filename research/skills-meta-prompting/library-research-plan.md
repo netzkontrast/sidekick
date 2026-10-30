@@ -59,6 +59,8 @@ Gelesen am 30.10.2026: main `38333a40c5287de034a3fe1d84bd869bffb7ebf0`, nach Mer
 
 Folgerung: Die Library baut auf der entstehenden V0-Domäne auf. E2 verwendet den Rechercheablauf und seine Vertragsfälle; E3 prüft Skill-Kandidaten als Artefakte mit denselben Wirkungstoren.
 
+Zusätzliche unabhängige Quellenprüfung am 30.10.2026: [Bericht und Prüfmanifest](../../docs/research/skill-library-primaerquellen-2026-10-30.md). SL1 trennt jetzt öffentliche Pflichtregressionen vom Holdout, präzisiert Runtime-Beobachtbarkeit und führt den 40-Läufe-Rahmen als Diagnosepilot ohne versprochenen E3-Lernerfolg. SL0/SL1 bleiben Entwürfe zur Review; kein Clientlauf wurde durch diese Gegenprüfung ausgeführt.
+
 ## 3. Forschungsmodell: vier getrennte Lernziele
 
 | Ebene | Was verändert werden darf | Was gemessen werden muss |

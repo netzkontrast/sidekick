@@ -4,6 +4,8 @@
 > Baut auf der [Bestandsaufnahme (SL0)](library-inventory.md) auf. Es wurde **kein** Modelllauf gestartet, kein Score erhoben, kein Skill geändert.
 > Alles hier ist ein prüfbarer Vorschlag. Das Review kann ihn bestätigen oder begründet ändern, bevor Läufe stattfinden (SL5).
 
+> Ergänzt durch die [unabhängige Primärquellenprüfung](../../docs/research/skill-library-primaerquellen-2026-10-30.md) am 30.10.2026. Änderungen unten präzisieren Quellen, Messbarkeit und den Diagnosecharakter des Budgets; es wurden weiterhin keine Modellläufe ausgeführt.
+
 ## 1. Ziel und Grenzen
 
 Das Design legt fest, **wie** später gemessen wird, ob Skills gefunden, passend ausgewählt, korrekt ausgeführt und sinnvoll kombiniert werden,
@@ -29,7 +31,7 @@ Jede Ebene wird getrennt berichtet (K1.5, WEB-R2). Eine bestandene Ebene sagt ni
 
 | ID | Variante | Zweck |
 |---|---|---|
-| **B0** | Keine Skills (`claude -p --disable-slash-commands`; laut `claude --help` „Disable all skills and commands“) | Referenz für M4: Was leistet das Modell ohne Skill? |
+| **B0** | Keine offengelegten/aktivierten Skills im kontrollierten Messbestand. CLI-Flag aus lokalem `--help` erst nach C0 verwenden; alternativ prüfbare SDK-Skill-Liste, falls die freigegebene Runtime sie unterstützt | Referenz für M4; gleiche Tools und sonstiges Gerüst wie B1, tatsächlich sichtbaren Katalog und Dateizugriff mitprüfen |
 | **B1** | Die vier Skills am eingefrorenen Commit, unverändert | Baseline für jede spätere Änderung |
 | **K*n*** | Ein Kandidat mit genau einer Änderung gegenüber B1 | Nur in SL5/E3, nur nach Review dieses Designs |
 
@@ -49,6 +51,10 @@ Was C0 klären muss und was heute bekannt ist (Claude Code 2.1.314, lokal instal
 | Usage und Kosten im Ergebnis | *offen*; `--output-format json` und `--max-budget-usd` sind laut `--help` vorhanden | welche Usage-Felder (Input, Output, Cache) geliefert werden. Fehlende Werte bleiben „unbekannt“ (K7.6) |
 | AskUser-Werkzeug im headless Lauf | *offen*; interaktiv in dieser Session *praktisch beobachtet* | ob es in `-p` verfügbar ist. Wenn nicht, misst E1 Grilling-Verhalten über den Chat-Fallback (B05) und weist das aus |
 | Konkurrierende Skills | Dieser Container hat zusätzlich viele Plugin- und Nutzer-Skills | Messverzeichnis und `--setting-sources project` so wählen, dass nur die Prüflinge sichtbar sind; C0 listet, was tatsächlich sichtbar war |
+
+**Primärquellenbefund:** Im [aktuellen Python-SDK](https://github.com/anthropics/claude-agent-sdk-python/blob/1ea8cb74ddcdadbfaa9b20dfa8268e18047851e7/src/claude_agent_sdk/types.py) ist `skills=None` nicht „aus“; `[]` unterdrückt den Skill-Katalog, konkrete Namen filtern ihn. Das ist ein Context-Filter, keine Dateisandbox. Dieser Quellstand belegt nicht, dass die lokal installierte CLI oder ein anderes SDK ihn unterstützt. `setting_sources` allein beweist keine Skill-/Plugin-Isolation. C0 protokolliert entdeckte, offengelegte und aktivierte Skills, Tools, Plugins und Versionen. Unerwartete Skills stoppen die kontrollierte Reihe.
+
+**Beobachtung:** Aktivierung kann laut Agent-Skills-Integrationsanleitung per Datei-Lesen oder speziellem Werkzeug erfolgen. Der Spurnormalisierer muss beide tatsächlich unterstützten Wege erfassen. Permission-Callbacks sind kein vollständiges Aufrufjournal, weil bereits erlaubte Tools sie umgehen können; vollständige Hooks/Spuren separat prüfen. `beobachtbar: false` ist von „nicht aktiviert“ zu unterscheiden. AskUser-Verfügbarkeit bleibt ohne Clientlauf offen.
 
 **Störgröße Projektregeln:** `AGENTS.md` nennt die vier Skills ausdrücklich. Wer im Repo misst, misst Discovery über Beschreibung **plus** Hinweis
 in den Projektregeln. Vorschlag: M2 in einem isolierten Messverzeichnis ohne diese Hinweise (nur `.claude/skills/` mit den Prüflingen),
@@ -75,7 +81,7 @@ Die vorhandenen Fälle sind fast nur eindeutig. Für eine belastbare Auswahlmess
 - ein **Konkurrenzfall**, bei dem zwei Skills plausibel sind und einer erwartet wird,
 - ein **Englisch-/Deutsch-Paar** desselben Anliegens (beide Sprachen stehen in den Beschreibungen).
 
-Das ergibt 12 neue Fälle `GT-07`…, `ST-10`…. Sie werden vor den Läufen geschrieben und nach §5.5 einem Split zugeordnet.
+Die konkrete Fallzahl und eindeutige IDs entstehen bei der Ausformulierung vor den Läufen; ein Sprachpaar hat zwei Prompts, aber eine Ursprungsfamilie. Bei mehrdeutigen Aufgaben eine begründete zulässige Skill-Menge statt eines willkürlichen Einzellabels festlegen. Fälle werden nach §5.5 einem Split zugeordnet.
 
 ### 5.3 Fälle für M5 (Komposition)
 
@@ -110,8 +116,9 @@ Zuordnung **vor** jedem Lauf, nach Ursprungsaufgabe. Paraphrasen und Sprachpaare
 | **select** | Zwischen Kandidaten wählen | Auswertung, nicht der Kandidatengenerator |
 | **test** | Abschließender Vergleich Baseline gegen gewählten Kandidaten | Erst nach der Auswahl, einmal pro Kandidatenrunde |
 
-Vorschlag für die Verteilung: alle R-Fälle in **jedem** Split (sie sind Pflichtregressionen, kein Lernmaterial).
-Die übrigen Fälle ungefähr 40/30/30 nach Ursprungsaufgabe. Die konkrete Liste entsteht als Datei mit Hash, bevor E3 beginnt.
+**Regression versus Holdout:** Die veröffentlichten R-Fälle bilden eine gemeinsame Pflicht-Regressionssuite außerhalb dev/select/test. Sie können in jeder Variante wiederholt werden, zählen aber nicht als unabhängige Testdaten. Zusätzliche neue Varianten kritischer Situationen werden vorab nach Ursprungsfamilie in disjunkte Splits verteilt. Niemand kopiert dieselben Fälle oder Paraphrasen in alle Splits.
+
+Für die übrigen Familien ist ungefähr 40/30/30 ein Vorschlag, keine statistische Garantie. Die konkrete Liste samt `family_id`, Hash und Zugriffsberechtigung entsteht vor Kandidatensuche. Öffentliche Repo-Fixtures allein können keinen geheim gehaltenen finalen Testsatz bilden; unabhängige neue Familien und passende Zugriffstrennung sind nötig.
 Wird der Test-Split einmal zur Auswahl benutzt, ist er verbraucht. Für eine neue Runde braucht es neue Testfälle.
 
 ## 6. Korrekturvorschläge B06 und B10
@@ -125,8 +132,7 @@ Nur Vorschlag. Die Fixture-Datei ändert sich erst nach Review.
 
 ## 7. Metriken
 
-Zählen statt Prozente vortäuschen: Bei wenigen Fällen werden Trefferzahlen als „k von n“ berichtet. Prozentwerte nur ab n ≥ 20 je Zelle,
-dann mit exaktem 95-%-Konfidenzintervall (Clopper-Pearson).
+Berichte immer Zähler und Nenner, Ursprungsfamilien und Wiederholungen getrennt. Prozentdarstellung ab n=20 erzeugt keine zusätzliche Aussagekraft. Konfidenzintervalle nur mit benannter Stichprobeneinheit und tragfähigen Unabhängigkeitsannahmen; korrelierte Paraphrasen, Assertions desselben Laufs und wiederholte Familien nicht als unabhängige Fälle zählen. Der kleine Pilot liefert deskriptive Hinweise.
 
 | Ebene | Metrik |
 |---|---|
@@ -146,10 +152,10 @@ Je Lauf ein JSON-Datensatz. Berichte entstehen nur daraus (K5.5). Vorgeschlagene
 
 | Feld | Inhalt |
 |---|---|
-| `run_id`, `case_id`, `split`, `ebene` | Identität und Zuordnung |
+| `run_id`, `case_id`, `family_id`, `repeat_id`, `attempt_id`, `split`, `ebene` | Lauf, Ursprungsfamilie, Wiederholung, Fehlversuch und Zuordnung; Regression ist ein eigener Suite-Typ |
 | `variante` | `B0`, `B1` oder Kandidaten-ID |
 | `skills` | je Skill Name und SHA-256 über alle Dateien des Skill-Ordners |
-| `client` | Name, Version, relevante Flags |
+| `client` | Name, SDK-/CLI-Versionen, Flags, effektive Skill-/Tool-/Plugin-Listen, Aktivierungsweg und Einstellungen |
 | `modell` | wie vom Client gemeldet |
 | `eval_version`, `rubrik_version`, `fall_hash` | Stand von Design, Rubrik und Fall |
 | `eingabe_ref`, `ausgabe_ref`, `spur_ref` | Verweise auf gespeicherte Dateien, keine Inline-Kopien |
@@ -162,29 +168,28 @@ Ablage: nur synthetische Eingaben (Owner-Vorgabe Feedbackdaten). Spuren werden v
 
 ## 9. Budget und Ressourcen
 
-Freigegeben sind bis ~40 Läufe ([Q-20261030-sl-live-laeufe](../../docs/fragen/skill-library/questions/Q-20261030-sl-live-laeufe.md)).
-Vorschlag zur Verteilung, ausgeführt erst in SL5:
+Freigegeben sind bis ~40 headless CLI-Läufe ([Q-20261030-sl-live-laeufe](../../docs/fragen/skill-library/questions/Q-20261030-sl-live-laeufe.md)); Ausführung erst in SL5 nach Review. Ein CLI-Start kann mehrere Modell-/Tool-Turns enthalten. Fehlversuche, Wiederholungen, zusätzliche Proposer-/Judge-CLI-Aufrufe und Capability-Läufe zählen im selben Startbudget; Token-, Zeit- und Kostenlimits werden zusätzlich erfasst.
 
-| Block | Läufe | Inhalt |
+Der ursprüngliche Plan versuchte in 40 Läufen auch E3 abzudecken. Nach Gegenprüfung ist die folgende Verteilung ein **Diagnosepilot**, kein abgeschlossener Lernvergleich:
+
+| Block | Maximale CLI-Starts | Inhalt |
 |---|---|---|
-| C0 | 2 | Capability-Check B1 und B0 |
-| E1 Auswahl | 18 | 6 GT + 9 ST + 3 der neuen Grenzfälle, je einmal, in B1 |
-| E1 Verhalten | 4 | B02, B03, B06a, B10a |
-| E2 Komposition | 5 | C-01 bis C-04; C-02 braucht zwei Sessions |
-| E3 Lernschritt | 9 | 1 Kandidat, select- und test-Split gegen B1 |
-| Reserve | 2 | nur für Läufe, die vor dem ersten Test abbrechen |
-| **Summe** | **40** | |
+| C0 | 2 | B0/B1-Capability-Prüfung; kostenlose lokale Hilfe-/Dateiprüfungen zuerst |
+| E1 Auswahl | 12 | eingefrorene positive, nahe negative und Konkurrenzfälle; genaue Teilmenge vorab festlegen |
+| E1 Verhalten | 6 | priorisierte Rückfrage-/Rechtefälle, Auswahl explizit dokumentieren |
+| M4 Baseline-Pilot | 12 | 3 Ursprungsaufgaben × B0/B1 × 2 Wiederholungen, gepaart; keine Kandidatenoptimierung |
+| E2 Komposition | 4 | C-01 ein Start, C-02 zwei Starts, C-04 ein Start; C-03 nur soweit der Baseline-Pilot ihn abdeckt |
+| Reserve | 4 | abgebrochene Starts/Wiederholungen; alle zählen, nicht automatisch für Kandidatensuche freigeben |
+| **Summe** | **40** | Pilot deckt nicht den gesamten Fallkatalog und keinen E3-Nachweis ab |
 
-Je Lauf `--max-budget-usd` als Sicherung. Der Betrag wird vor SL5 nach einem C0-Lauf festgelegt, weil die tatsächlichen Kosten pro Lauf noch unbekannt sind.
-Einzelläufe je Fall: Das reicht, um grobe Fehler und Auswahlprobleme zu sehen. Für statistisch belastbare Unterschiede reicht es **nicht**.
-Ergebnisse werden entsprechend als Hinweise berichtet, nicht als Wirkungsnachweis.
+E3 bleibt als späteres Ziel erhalten. Vor dessen Ausführung muss ein eigener innerhalb der tatsächlichen Restautorisierung passender Plan für Vorschläge, Variantenwahl, gepaarte Baseline-/Kandidatenläufe und unabhängige Tests vorliegen. Reicht der bestehende Rahmen nicht, Ausführung blockiert lassen und konkreten Ressourcenbedarf vorlegen; keine zusätzliche Freigabe aus diesem Dokument ableiten.
+
+Vor **dem ersten** kostenpflichtigen C0-Start müssen gültige Lauf-, Zeit- und Budgetgrenzen sowie der tatsächliche Auth-/Abrechnungspfad geklärt sein. Vorhandene Autorisierung respektieren; fehlende USD-Telemetrie bei Abo-Nutzung als unbekannt führen. Ein USD-Flag ist keine zugesicherte Kostensperre ohne Capability-Nachweis. Der Pilot dient Diagnose und Machbarkeit, nicht statistisch belastbarer Qualitäts- oder Sicherheitszusage.
 
 ## 10. Erfolgs- und Abbruchkriterien (vor den Läufen festgelegt)
 
-- **E1** ist erfolgreich, wenn alle positiven Fälle und alle negativen Fälle einzeln berichtet sind, mit beobachteter oder als nicht beobachtbar markierter Auswahl.
-  Ein Schwellenwert für „gut genug“ wird hier bewusst nicht gesetzt; das entscheidet das Review nach den Zahlen, nicht der Autor.
-- **E3**: Ein Kandidat gilt nur als besser, wenn er im test-Split in keinem R-Fall verstößt und in M4 mehr Fälle verbessert als verschlechtert.
-  „Kein Vorteil“ ist ein gültiges Ergebnis.
+- **E1 als Diagnosepilot** ist vollständig dokumentiert, wenn alle vorab ausgewählten Fälle inklusive Fehlern einzeln berichtet sind. Ungetestete Fälle bleiben ungetestet. Das ist keine Produktfreigabe. Eine spätere Leistungs-/Aktivierungsschwelle muss vor dem dafür bestimmten unabhängigen Test feststehen; nach Einsicht in Ergebnisse nicht rückwirkend „gut genug“ definieren.
+- **E3 später:** Null Verstöße in der Pflichtsuite ist eine notwendige Bedingung, keine Garantie. Mehr Verbesserungen als Verschlechterungen auf wenigen Fällen ist ein exploratives Signal, kein belastbarer Lernnachweis. Stichprobengröße, Mindestvorteil, Fehlertoleranz und unabhängiges Urteil sind vor dem finalen Test festzulegen. Die Aktivierung bleibt beim Owner am geprüften Hash; „kein Vorteil“ ist gültig.
 - **Abbruch**: Fehlt in C0 die Beobachtbarkeit von Skill-Aufrufen, entfällt die automatische M2-Messung. Dann wird E1 als Protokoll mit manueller Sichtung ausgeführt und so gekennzeichnet.
 
 ## 11. Unabhängigkeit
@@ -195,6 +200,7 @@ Vorschlag: Der Owner reviewt das Design im PR. Vor E3 prüft eine getrennte Sess
 ## 12. Offen nach SL1
 
 - Ergebnisse von C0 (Beobachtbarkeit, Usage-Felder, AskUser headless).
-- Schwellenwerte für E1, falls der Owner welche will.
+- Für einen späteren Aktivierungsvergleich vorab definierte Schwellen und unabhängige Testfamilien; der Diagnosepilot erteilt keine Aktivierung.
 - Rubriktexte je Skill: in SL5 vor dem ersten M3/M4-Lauf schreiben und versionieren.
+- Falls E3 nicht in die verbleibende Autorisierung passt: konkreter weiterer Versuchs-/Budgetplan.
 - Ort der Rohdaten im Repo (Vorschlag: `research/skills-meta-prompting/eval-runs/`, nur synthetisch).
