@@ -20,6 +20,7 @@ Tool-Zustellung nötig; Chat-Runden kompakt im Themenindex protokollieren.
 | Thema | Inhalt |
 |---|---|
 | [Human-Input-Vertrag](human-input/index.md) | Vorbereitete Fragen für Phase 0b; noch nicht gestellt |
+| [Skill-Library](skill-library/index.md) | Owner-Entscheidungen für SL1–SL7 der lernbaren Library |
 
 Die Ablage ist öffentlich. Keine Secrets, persönlichen Rohdaten oder ungefilterten
 Chat-/Tool-Protokolle committen. Gründe bedeuten kurze sachliche Anlässe, Quellen und
