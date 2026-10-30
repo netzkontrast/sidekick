@@ -38,4 +38,7 @@ Grundsatz: Postgres-Transaktionen definieren fachliche Übergänge. Die Workflow
 
 ## Offene Punkte
 
+- Offen, 30.10.2026: Für die [Library im Anwendungskern](../../research/skills-meta-prompting/library-research-plan.md) Versionierung, Lauf-Pinning, lokale Verfügbarkeit, erlaubte Feedbackdaten, Lernartefakte und Rücknahme spezifizieren. Keine Festlegung auf DSPy, ein Registry-Backend oder Cloud-Optimierung; diese brauchen separate Nachweise und Entscheidung.
+
+
 - Offen, 30.10.2026: Den [Vision-v5-Vorschlag](../vision-v5-entwurf.md) für statisches Offline-Frontend, ersten Vercel-Hub und selbst hostbare Alternative prüfen. Speicher-, Lösch- und Backupgrenzen für Episoden, Erinnerungen und Trainingsdaten festlegen; konkrete Hostinglimits vor Umsetzung verifizieren.

@@ -35,6 +35,9 @@ Winziges Testrepo, benannter Ausgangscommit, Änderung an zwei Dateien, bewusst 
 
 ## Entscheidung
 
+Produktvorgabe des Owners, 30.10.2026: Die aufeinander aufbauende Skill-Library wird als Kernfähigkeit innerhalb Sidekicks untersucht. Die bisherige Empfehlung eines separaten Produktrepos ist überholt. Das entscheidet weder Paperclip/OpenHands gegen eigenen Kern noch eine bestimmte Skill-Engine. Untersuchungsauftrag und offene Architekturfragen: [Library-Research-Plan](../../research/skills-meta-prompting/library-research-plan.md).
+
+
 ## Offene Punkte
 
 - Offen, 30.10.2026: Den [Vision-v5-Entwurf](../vision-v5-entwurf.md) als Erweiterung des Produktziels prüfen: Kontinuität für Vorhaben, Gedächtnis und begrenzte Proaktivität. Für Paperclip/OpenHands und den eigenen Kern denselben Auftrags-/Effektvertrag zugrunde legen; keine Auswahlentscheidung aus dem Entwurf ableiten.

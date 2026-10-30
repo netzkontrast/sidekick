@@ -5,6 +5,10 @@ Stand 2026-10-30. Forschungsergebnisse sind keine Implementierungsentscheidungen
 **Forschungsfrage:** Wie lassen sich die Skills und Meta-Prompting-Konzepte aus den unten
 gelisteten Repos so integrieren, dass ein Clean-Room-Rewrite ihre wesentlichen Aspekte abdeckt?
 
+## Aktueller Auftrag: lernbare Library im Anwendungskern
+
+Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine Kernfähigkeit innerhalb Sidekicks und ein lernbares Prompt-Framework. Ausführungseinstieg für Claude und einzige Statusablage SL0–SL7: [Library-Research-Plan](library-research-plan.md). Er nutzt die bestehenden Dossiers und K1–K8, erweitert sie auf neun Skill-Bereiche und trennt Inhaltsoptimierung, Auswahl, Komposition und Modelltraining. Recherche ist beauftragt; Laufzeitarchitektur und Dependencies bleiben zu prüfen.
+
 ## Organisation
 
 - [Synthese: Konzeptkarte und Anforderungen](synthese.md)
@@ -43,4 +47,4 @@ Upstream, Herkunft und Evidenz stehen jeweils im Dossier.
   - offline-Auswertungen bei meta-prompting, APE und dspy-advanced-prompting.
 - Kein Fremdcode wurde für Benchmarks ausgeführt, keine API wurde aufgerufen. Benchmarkzahlen aus den READMEs gelten als unbelegt.
 - Ergebnis: [Synthese](synthese.md) mit Konzeptkarte K1–K8 und [Clean-Room-Plan](clean-room-plan.md) mit Stufen und offenen Entscheidungen.
-- Nächster Schritt: offene Entscheidungen im Clean-Room-Plan klären, danach die Spec für Stufe 0 schreiben.
+- Nächster Schritt: SL0/SL1 im [Library-Research-Plan](library-research-plan.md) bearbeiten. Die bisherige Repo-Ortsfrage ist durch den Owner-Auftrag geklärt; übrige offene Entscheidungen mit konkreten Vorlagen bearbeiten.
