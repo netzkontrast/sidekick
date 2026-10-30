@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/auftrag.schema.json",
+  "title": "Auftrag (Vertrag) – V0",
+  "description": "Versionierter Auftragsvertrag. Siehe docs/spec/v0-ziel-und-vertraege.md §4.1 und V0-INV-01.",
+  "type": "object",
+  "required": ["schema_version", "id", "version", "vorhaben_id", "typ", "ziel", "abnahmekriterien", "befugnis", "budget", "datenklasse", "owner_id", "zustand", "erstellt_am"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^a-[a-z0-9-]+$" },
+    "version": { "type": "integer", "minimum": 1, "description": "Steigt bei jeder Vertragsänderung; Runs bleiben an ihre Version gebunden." },
+    "vorhaben_id": { "type": "string", "pattern": "^v-[a-z0-9-]+$" },
+    "typ": { "enum": ["research-report", "code-change"], "description": "V0 baut nur research-report; code-change ist reserviert." },
+    "ziel": { "type": "string", "minLength": 1 },
+    "ausgangsstand": {
+      "type": "object",
+      "description": "Versionierte Eingaben, z. B. Quellen oder Repo + Commit.",
+      "additionalProperties": false,
+      "properties": {
+        "beschreibung": { "type": "string" },
+        "referenzen": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "abnahmekriterien": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "pruefart"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string", "minLength": 1 },
+          "pruefart": { "enum": ["mensch", "check", "agent-review"] }
+        }
+      }
+    },
+    "befugnis": {
+      "type": "object",
+      "required": ["grants"],
+      "additionalProperties": false,
+      "properties": {
+        "grants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "effekt_typ", "ziel", "freigabe"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "effekt_typ": { "type": "string", "description": "Typisierter Effekt, z. B. artifact.store oder github.open_pr." },
+              "ziel": { "type": "string", "description": "Zielressource oder Präfix." },
+              "freigabe": { "enum": ["immer", "policy", "keine"], "description": "immer = Owner-Freigabe je Effekt; keine = Grant erlaubt ohne Einzelfreigabe." },
+              "parent_grant_id": { "type": ["string", "null"], "description": "Delegation verkleinert nur; in V0 immer null." }
+            }
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["max_dauer_min", "max_runs"],
+      "additionalProperties": false,
+      "properties": {
+        "max_dauer_min": { "type": "integer", "minimum": 1 },
+        "max_runs": { "type": "integer", "minimum": 1 },
+        "max_kosten_eur": { "type": "number", "minimum": 0 }
+      }
+    },
+    "datenklasse": { "enum": ["public", "internal", "confidential", "local-only"] },
+    "owner_id": { "type": "string" },
+    "zustand": {
+      "enum": ["draft", "open", "in_progress", "waiting_input", "waiting_approval", "submitted", "checking", "in_review", "accepted", "applying", "completed", "rework", "outcome_unknown", "cancelled", "failed"]
+    },
+    "erstellt_am": { "type": "string", "format": "date-time" },
+    "herkunft": {
+      "type": "object",
+      "description": "Wie der Auftrag entstand; ein ASR- oder Modellvorschlag ist nie eine Freigabe (V0-INV-07).",
+      "additionalProperties": false,
+      "properties": {
+        "kanal": { "enum": ["text", "sprache", "agent-vorschlag"] },
+        "entwurf_id": { "type": "string", "description": "Lokaler Entwurf, aus dem der Auftrag hervorging (V0-ENT)." },
+        "geraet_id": { "type": "string" }
+      }
+    }
+  }
+}

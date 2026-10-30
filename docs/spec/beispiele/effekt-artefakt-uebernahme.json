@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "id": "e-beispiel-1",
+  "auftrag_id": "a-beispiel-1",
+  "auftrag_version": 1,
+  "epoch": 1,
+  "typ": "artifact.store",
+  "ziel": "vorhaben/v-beispiel-1/",
+  "parameter": {
+    "artefakt": "bericht.md",
+    "artefakt_hash": "sha256:7cd9399db5390e197456f693e95de16d6d4d5770826b9021fcc381bc80c1528b",
+    "ziel": "vorhaben/v-beispiel-1/"
+  },
+  "parameter_hash": "sha256:1fad57d46651762c6ee7304fb2a7091b03e9958f1a2a9bcf56302ddaaa7e2ce7",
+  "artefakt_hash": "sha256:7cd9399db5390e197456f693e95de16d6d4d5770826b9021fcc381bc80c1528b",
+  "idempotenz_key": "k-e-beispiel-1-v1",
+  "zustand": "approved",
+  "freigabe": {
+    "entschieden_von": "owner",
+    "entschieden_am": "2026-10-30T09:40:00Z",
+    "geraet_id": "g-browser-b",
+    "gebunden_an": {
+      "parameter_hash": "sha256:1fad57d46651762c6ee7304fb2a7091b03e9958f1a2a9bcf56302ddaaa7e2ce7",
+      "artefakt_hash": "sha256:7cd9399db5390e197456f693e95de16d6d4d5770826b9021fcc381bc80c1528b",
+      "ziel": "vorhaben/v-beispiel-1/",
+      "auftrag_version": 1,
+      "epoch": 1
+    }
+  },
+  "abgleich": null
+}

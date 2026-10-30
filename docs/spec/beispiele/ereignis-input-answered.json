@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1",
+  "id": "ev-beispiel-6",
+  "strom": "a-beispiel-1",
+  "seq": 6,
+  "typ": "input.answered",
+  "zeit": "2026-10-30T09:15:00Z",
+  "akteur": {
+    "art": "owner",
+    "id": "owner",
+    "geraet_id": "g-browser-b"
+  },
+  "auftrag_version": 1,
+  "epoch": 1,
+  "idempotenz_key": "k-q-beispiel-1-a1",
+  "ursache": "ev-beispiel-4",
+  "daten": {
+    "rueckfrage_id": "q-beispiel-1",
+    "frage_version": 1,
+    "option": "B"
+  },
+  "inhalt_ref": null
+}

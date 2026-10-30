@@ -37,3 +37,5 @@ Welcher Transport verbindet Connector, Hub und Browser, und wie bleibt der lokal
 ## Offene Punkte
 
 - Offen, 30.10.2026: Erneuerbares WSS anhand des [Vercel-Befunds](../research/vision-v5-machbarkeit.md#vercel-hub-ja-unendlicher-prozess-nein) gegen Polling/Event-Upload/SSE messen. Instanzwechsel, dauerhafte Zustellung, Reconnect, Offline-/Origin-Zugriff und Kosten nachweisen; Ausgangshypothese bis zur Entscheidung unverändert.
+
+- Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md): Transport muss V0-FALL-03, -11 und -12 erfüllen (Nachlieferung per Cursor, Instanzwechsel, doppelt gesendete Offline-Entwürfe). Lokale Entwürfe des Browsers (§4.7) brauchen dieselbe Idempotenz wie die Connector-Outbox.

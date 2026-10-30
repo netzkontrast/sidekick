@@ -37,3 +37,5 @@ Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachg
 ## Offene Punkte
 
 - Offen, 30.10.2026: Den [frühen Needle-Versuch N0](../claude-startauftrag-vision-v5.md) und lokale ASR-/Inferenzdienste als zusätzliche Gerätefähigkeiten prüfen. Lokale Modelle über den Connector waren bereits in v4 vorgesehen; neu sind insbesondere Training/Fine-Tuning und der konkretisierte Betrieb. Die Claude-Anbindung bleibt der bestehende P0-Vergleich.
+
+- Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md) (§4.6, §8): Der gewählte Adapter ersetzt die Fake-Runtime aus V0-ABL-01 und meldet sich als Capability der Art `runtime`. Lokale Modelle werden als Capability `local_model` modelliert ([A-20261030-v0-lokal-offline](../fragen/v0-ziel-und-vertraege/questions/Q-20261030-v0-lokal-offline.md)); ob dafür ein eigener Adapter nötig ist, bleibt offen.

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/erinnerung.schema.json",
+  "title": "Erinnerung – V0",
+  "description": "Belegte, korrigierbare Erinnerung (§4.8). Ohne Quelle unzulässig (V0-INV-10).",
+  "type": "object",
+  "required": ["schema_version", "id", "version", "art", "inhalt_ref", "zusammenfassung", "quellen", "datenklasse", "geltungsbereich", "zustand", "erstellt_am"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^m-[a-z0-9-]+$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "ersetzt": { "type": ["string", "null"], "description": "ID@Version der korrigierten Fassung." },
+    "art": { "enum": ["fakt", "vorliebe", "projektregel", "offenes_vorhaben"] },
+    "zusammenfassung": { "type": "string", "maxLength": 280, "description": "Kurzform für Listen; kein sensibler Inhalt." },
+    "inhalt_ref": { "type": "string", "description": "Referenz auf gesondert löschbares Inhaltsobjekt (V0-INV-11)." },
+    "quellen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["art", "ref"],
+        "additionalProperties": false,
+        "properties": {
+          "art": { "enum": ["auftrag", "rueckfrage", "episode", "artefakt", "owner"] },
+          "ref": { "type": "string" },
+          "fundstelle": { "type": "string" }
+        }
+      }
+    },
+    "datenklasse": { "enum": ["public", "internal", "confidential", "local-only"] },
+    "geltungsbereich": {
+      "type": "object",
+      "required": ["ebene"],
+      "additionalProperties": false,
+      "properties": {
+        "ebene": { "enum": ["person", "vorhaben", "projekt"] },
+        "ref": { "type": "string" }
+      }
+    },
+    "gueltig_bis": { "type": ["string", "null"], "format": "date-time" },
+    "zustand": { "enum": ["candidate", "confirmed", "rejected", "superseded", "withdrawn", "conflicted"] },
+    "konflikt_mit": { "type": "array", "items": { "type": "string" } },
+    "trainingsfreigabe": { "type": "boolean", "default": false, "description": "Darf als Übungsfall dienen. In V0 immer false." },
+    "erstellt_am": { "type": "string", "format": "date-time" },
+    "entschieden": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "von": { "type": "string" },
+        "am": { "type": "string", "format": "date-time" },
+        "geraet_id": { "type": "string" }
+      }
+    }
+  }
+}

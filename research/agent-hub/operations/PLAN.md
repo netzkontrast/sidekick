@@ -22,11 +22,12 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 
 - [x] Offline-/Geräte-/Sprach-/Gedächtnisrichtung mit elf fixierten GitHub-Quellen und Selfplay abgleichen; [fertiger Befund](../../../docs/research/vision-v5-machbarkeit.md).
 - [x] Separaten [Vision-Entwurf](../../../docs/vision-v5-entwurf.md) und [Claude-Bauauftrag](../../../docs/claude-startauftrag-vision-v5.md) vorlegen; v4 unverändert lassen.
-- [ ] V0: Produktänderungen reviewen und betroffene Tore A–D fortschreiben. Keine Forschungsoption als beschlossen behandeln.
+- [x] V0: Drei Vorentscheidungen mit dem Owner geklärt ([Fragen](../../../docs/fragen/v0-ziel-und-vertraege/index.md)); [V0-Spec](../../../docs/spec/v0-ziel-und-vertraege.md) mit Schemas als Entwurf; Tore A–D um offene Punkte ergänzt, keine Tor-Entscheidung getroffen.
+- [ ] V1: Contract-Test-Spec für V0-ABL-01 und die Fallmatrix V0-FALL-01 bis -17; abhängig von Befunden zu Tor A.
 - [ ] Vor dem Geräte-Prototyp: Offline-/Origin-Zugriff, Vercel-Instanzwechsel und dauerhafte Zustellung praktisch prüfen; Polling/SSE gegen erneuerbares WSS vergleichen.
 - [ ] N0: Frühen Needle-Baseline-/Fine-Tune-Versuch mit synthetischen deutschen Beispielen spezifizieren; tatsächliche GPU-Zeit und Nutzen auf Zielhardware messen.
 
-Dieser PLAN ist die maßgebliche Statusablage auch für V0–V6/N0. Der Bauauftrag beschreibt die Pakete und ihre Abnahme, ohne separaten Ausführungsstatus. V1–V6 sind noch nicht begonnen; V0 und N0 stehen oben offen.
+Dieser PLAN ist die maßgebliche Statusablage auch für V0–V6/N0. Der Bauauftrag beschreibt die Pakete und ihre Abnahme, ohne separaten Ausführungsstatus. V0 liegt als Spec-Entwurf vor (Review offen); V1–V6 und N0 sind noch nicht begonnen.
 
 N0 folgt dem ausdrücklichen neuen Owner-Ziel eines frühen Lernversuchs. Es ist als begrenzter, unabhängiger Research-Spike vorgesehen und erklärt keine P0-Prüfung zu Paperclip/OpenHands/Claude für erledigt. Der neue Input ergänzt diese Prüfungen. v5 bleibt bis zu einer gesonderten Entscheidung Ergänzungsentwurf; der Merge ersetzt v4 nicht.
 
