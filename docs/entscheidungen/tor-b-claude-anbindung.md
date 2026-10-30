@@ -1,0 +1,37 @@
+# Tor B: Claude-Anbindung
+
+**Status:** offen · **Bezug:** [Analyse §6, Tor B](../analyse-und-uebernahmeplan.md#tor-b-claude-anbindung) · **Zeitbox:** 2–3 Tage (zusammen mit Tor A)
+
+## Frage
+
+Über welchen Weg bindet der Connector Claude Code an: [Claude ACP](https://github.com/agentclientprotocol/claude-agent-acp), Claude Agent SDK direkt oder die dokumentierte strukturierte CLI-Schnittstelle? Claude ACP nutzt selbst das Agent SDK; der Vergleich betrifft daher auch Abstraktion, Versionsrisiko und Funktionsabdeckung.
+
+## Adapter-Matrix
+
+| Fähigkeit | Claude ACP | Agent SDK | Strukturierte CLI |
+|---|---|---|---|
+| Unterstützter Auth-Pfad / Nutzungsbedingungen | | | |
+| Streaming | | | |
+| Rückfragen | | | |
+| Permission-Details | | | |
+| Abbruch | | | |
+| Resume (`session/load` o. ä.) | | | |
+| Modell-/Kostenmeldungen | | | |
+| Custom Tools | | | |
+| Arbeitsverzeichnis | | | |
+| Versionsbindung | | | |
+| Verhalten bei Crash | | | |
+
+Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachgewiesen* oder *offen*.
+
+## Leitplanken
+
+- Keine Abo-Tokens extrahieren oder an den Hub übertragen.
+- Ein funktionierender Login beweist keine Berechtigung für jede Produktintegration.
+- Ohne geeignete Credentials: Tests mit deterministischem Fake, Live-Auth ausdrücklich offen lassen.
+
+## Befunde
+
+## Entscheidung
+
+## Offene Punkte

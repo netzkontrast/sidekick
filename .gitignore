@@ -1,0 +1,21 @@
+# Dependencies & Builds
+node_modules/
+.next/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Umgebung & Secrets
+.env
+.env.*
+!.env.example
+
+# Lokale Daten
+.vercel/
+*.log
+.DS_Store
+
+# Recherche-Arbeitsdateien (Berichte werden nach docs/research/ übernommen)
+research_notes/
+reports/
