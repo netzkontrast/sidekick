@@ -1,9 +1,9 @@
 # Research-Plan: lernbare Skill-Library im Anwendungskern
 
 > Auftrag des Owners vom 30.10.2026 · Ausführung durch Claude, Ergebnisse agentenunabhängig.
-> Status 30.10.2026: SL0 und SL1 als Entwurf geliefert, Review offen. SL2–SL7 geplant. Kein Modelllauf, kein Skill geändert.
+> Status 30.10.2026: SL0 und SL1 geliefert; SL1 nach Review einer getrennten Session überarbeitet, Owner-Review offen. Owner-Wahl des nächsten Abschnitts: SL1 korrigieren, dann C0 ([Q-20261030-sl-naechster-abschnitt](../../docs/fragen/skill-library/questions/Q-20261030-sl-naechster-abschnitt.md)). C0 vorbereitet, Starts blockiert (Anmelde-/Abrechnungsweg ungeklärt): [C0-Vorprüfung](eval-runs/C0-vorpruefung-2026-10-30.md). Verbrauchte CLI-Starts: 0 von ~40. SL2–SL7 geplant. Kein Skill geändert.
 > Owner-Antworten zu Live-Budget, Reichweite, Feedbackdaten und Aktivierung: [docs/fragen/skill-library](../../docs/fragen/skill-library/index.md).
-> Nächster Schritt: Review beider Artefakte; danach legt der Owner den nächsten begrenzten Abschnitt fest.
+> Nächster Schritt: Owner wählt einen Weg aus der C0-Vorprüfung §4 (eigener Rechner, API-Schlüssel als Secret oder ausdrücklich freigegebener Lauf hier). SL2 kann unabhängig davon beginnen, wenn der Owner das will.
 > Dieser Plan ist die einzige Statusablage für SL0–SL7. Bestehende Hub-Pakete bleiben im [Hub-Plan](../agent-hub/operations/PLAN.md).
 > Einstieg: [vorhandene Synthese K1–K8](synthese.md), [Clean-Room-Plan](clean-room-plan.md), [Vision v5](../../docs/vision-v5-entwurf.md), [Projektregeln](../../AGENTS.md).
 
@@ -162,7 +162,7 @@ Needle bleibt ein früher eigenständiger Versuch N0 aus dem Hub-Plan. Prüfe hi
 | **SL2 Bereichsrecherche** | geplant; nach SL0/SL1-Review | Review von SL0/SL1; Versuche nach dessen Design | Neun `area-*.md`, ergänzte Dossiers nur bei Auswahlbedarf | Für A01–A09 Fragen, Quellen, Minimalversuch und begründete Umsetzungskategorie vorhanden |
 | **SL3 Kompositionsvertrag** | geplant; nach SL0/SL1-Review | SL1 und relevante SL2-Befunde | `library-composition.md`: Datenmodell, Schichten, Versionen, Übergaben, Fehler- und Offline-Verträge | Ein vollständiger Beispielablauf plus Ablehnung von Zyklus, falscher Ausgabe und inkompatibler Version; Anforderungen gegen K1–K8 rückverfolgbar |
 | **SL4 Lernvertrag** | geplant; nach SL0/SL1-Review | SL1/SL3 | `library-learning.md`: Inhalts-/Auswahl-/Kompositionsoptimierung, Datenwege, Aktivierung und Rücknahme | Kandidat verändert aktive Library nicht; Testsatz bleibt unabhängig; Grenzen von Modelltraining klar |
-| **SL5 Minimalnachweise** | geplant; nach SL0/SL1-Review | SL1–SL4, notwendige Zugänge | `library-experiments.md` mit Rohartefaktverweisen und tatsächlichen Befehlen | Drei unten beschriebene Versuche ausgeführt oder jeweils konkrete Blockade dokumentiert; keine simulierten Erfolgszahlen |
+| **SL5 Minimalnachweise** | C0 vorgezogen: Vorprüfung erledigt, Starts blockiert ([C0-Vorprüfung](eval-runs/C0-vorpruefung-2026-10-30.md)); E1–E3 geplant | SL1–SL4, notwendige Zugänge | `library-experiments.md` mit Rohartefaktverweisen und tatsächlichen Befehlen | Drei unten beschriebene Versuche ausgeführt oder jeweils konkrete Blockade dokumentiert; keine simulierten Erfolgszahlen |
 | **SL6 Synthese und Entscheidungen** | geplant; nach SL0/SL1-Review | SL2–SL5 | Bestehende `synthese.md` und `clean-room-plan.md` fortschreiben; passende Tore A/B/D aktualisieren | Jede Anforderung belegt oder eigene Vorgabe; Empfehlung gegen Status quo; keine doppelten Backlogs |
 | **SL7 Implementierungsübergabe** | geplant; nach SL0/SL1-Review | SL6 | Eigene ergänzende Spec unter `docs/` und kleiner erster Implementierungsauftrag; PR #8s Spec-Konventionen nach Review/Merge übernehmen | Ausgangsstand, Inputs, Kriterien, Tests, offene Fragen und Rücknahme enthalten; Forschungsbelege nicht als Laufzeitgarantie verkauft |
 
