@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "unmeasured_candidates_not_active",
+  "candidates": [
+    {
+      "id": "K-DESC",
+      "dimension": "description",
+      "hypothesis": "Factual questions and already confirmed choices should trigger fewer unnecessary interviews.",
+      "replacements": [
+        {
+          "path": ".agents/skills/grilling/SKILL.md",
+          "before": "description: Kläre entscheidungsrelevante offene Fragen zu Ideen, Plänen und Anforderungen durch ein strukturiertes Interview. Nutze bei „grill mich“, „hinterfrage den Plan“, „kläre offene Fragen“, Anforderungsinterviews oder „stress-test this idea“. Nicht für reine Faktenrecherche, triviale Änderungen oder bereits eindeutig beantwortete Entscheidungen.",
+          "after": "description: Kläre offene Nutzerentscheidungen durch gezielte Fragen mit nachvollziehbaren Antworten. Nutze bei „grill mich“, Anforderungsinterviews oder „stress-test this idea“, wenn Präferenzen fehlen. Nicht für recherchierbare Fakten, triviale Aufgaben oder bereits bestätigte Entscheidungen."
+        }
+      ],
+      "baseline_sha256": "d1a04e2631f55cd9f14d52db535d32c410b42a26641ddc4e41bfc3a9d4ea38c4"
+    },
+    {
+      "id": "K-PORTABLE",
+      "dimension": "project-binding",
+      "hypothesis": "The same workflow should honor project configuration without hard-coded Sidekick paths.",
+      "replacements": [
+        {
+          "path": ".agents/skills/grilling/SKILL.md",
+          "before": "Nutze die konfigurierte Fragenablage; in Sidekick gilt `docs/fragen/`. Andernorts bestehende Ablage übernehmen.",
+          "after": "Nutze die in den Projektregeln konfigurierte Fragenablage. Übernimm eine vorhandene Ablage; kläre den Ort nur, wenn keine Vorgabe existiert."
+        },
+        {
+          "path": ".agents/skills/grilling/references/workflow.md",
+          "before": "Konfigurierte Projektablage verwenden. Sidekick: `docs/fragen/`.",
+          "after": "Die in den Projektregeln konfigurierte Fragenablage verwenden."
+        },
+        {
+          "path": ".agents/skills/grilling/references/workflow.md",
+          "before": "Fachentscheidungen erst entsprechend Projektregeln nach `docs/entscheidungen/` überführen",
+          "after": "Fachentscheidungen erst entsprechend Projektregeln in das konfigurierte Entscheidungsregister überführen"
+        },
+        {
+          "path": ".agents/skills/grilling/references/workflow.md",
+          "before": "In Sidekick später Auftrag/Schritt/Run als optionale Referenzen führen. Zukunftsziel: adapterfähige Human-Input-Interaktionen, keine Behauptung einer schon implementierten Runtime.",
+          "after": "Auftrag, Schritt und Run nur als optionale Referenzen führen, wenn das umgebende System sie bereitstellt. Kein schon vorhandenes Laufzeitfeature unterstellen."
+        }
+      ],
+      "baseline_sha256": "d1a04e2631f55cd9f14d52db535d32c410b42a26641ddc4e41bfc3a9d4ea38c4"
+    }
+  ]
+}
