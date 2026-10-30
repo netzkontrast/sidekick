@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Read-only validator, hash, token count and registry check for .agents/skills (docs/spec/skill-library-v0.md).",
+  "description": "Validator, hash, token count, registry check and eval harness for .agents/skills (docs/spec/skill-library-v0.md). No client starts, no network.",
   "scripts": {
     "test": "node --test \"test/*.test.js\""
   },

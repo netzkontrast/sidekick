@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-raw-record.schema.json",
+  "title": "Rohdatensatz je Start – Skill-Library V0",
+  "description": "Ein Datensatz je Start (SLV0-EVAL-09, Felder nach SL1 §8). Einzige Quelle für Berichte (SLV0-INV-09). Verweise statt Inline-Kopien; Usage nach SLV0-TOK-06 nur je Lauf, je Skill unbekannt. Feldnamen folgen SL1 §8 (offen: O-8). Kein Qualitätsurteil über den Lauf; Assertions tragen Art und Bewerter.",
+  "type": "object",
+  "required": ["schema_version", "run_id", "case_id", "family_id", "repeat_id", "attempt_id", "split", "ebene", "variante", "skills", "client", "modell", "eval_version", "rubrik_version", "fall_hash", "eingabe_ref", "ausgabe_ref", "spur_ref", "spur_sha256", "status", "katalog", "skill_aufrufe", "assertions", "usage", "latenz_ms", "fehler", "normalisierer"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": { "$ref": "#/$defs/id" },
+    "case_id": { "$ref": "#/$defs/id" },
+    "family_id": { "$ref": "#/$defs/id" },
+    "repeat_id": { "type": "integer", "minimum": 1 },
+    "attempt_id": { "type": "integer", "minimum": 1, "description": "attempt_id der Reservierung im Ledger (SLV0-EVAL-05)." },
+    "split": { "enum": ["dev", "select", "test", "regression"] },
+    "ebene": { "enum": ["M0", "M1", "M2", "M3", "M4", "M5", "R"] },
+    "variante": { "type": "string", "pattern": "^(B0|B1|K-[A-Za-z0-9._-]{1,64})$" },
+    "skills": {
+      "type": "array",
+      "description": "Je bereitgestelltem Skill Name und Inhaltshash (sl-hash-v0); bei B0 leer.",
+      "items": {
+        "type": "object",
+        "required": ["name", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "required": ["name", "version", "flags"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "version": { "type": ["string", "null"], "maxLength": 64 },
+        "flags": { "type": "array", "items": { "type": "string", "maxLength": 256 } }
+      }
+    },
+    "modell": { "type": ["string", "null"], "description": "Wie vom Client gemeldet (aus der normalisierten Spur)." },
+    "eval_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "rubrik_version": { "type": ["string", "null"], "maxLength": 128 },
+    "fall_hash": { "$ref": "#/$defs/sha256" },
+    "eingabe_ref": { "$ref": "#/$defs/ref" },
+    "ausgabe_ref": { "$ref": "#/$defs/ref" },
+    "spur_ref": { "$ref": "#/$defs/ref" },
+    "spur_sha256": { "$ref": "#/$defs/sha256" },
+    "status": { "enum": ["completed", "incomplete_or_error"] },
+    "katalog": {
+      "type": "object",
+      "required": ["status", "skills"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["beobachtet", "unbekannt"] },
+        "skills": { "type": ["array", "null"], "items": { "type": "string" } }
+      }
+    },
+    "skill_aufrufe": {
+      "type": "object",
+      "required": ["beobachtbar", "abwesenheit_belegt", "aufrufe"],
+      "additionalProperties": false,
+      "properties": {
+        "beobachtbar": { "type": "boolean", "description": "false, wenn die Spur keine Aufrufereignisse zeigt; dann ist aufrufe leer und belegt nichts." },
+        "abwesenheit_belegt": { "const": false },
+        "aufrufe": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["skill", "modus", "bestaetigt"],
+            "additionalProperties": false,
+            "properties": {
+              "skill": { "type": ["string", "null"] },
+              "modus": { "enum": ["skill_tool", "file_read"] },
+              "bestaetigt": { "type": ["boolean", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "art", "bewerter", "ergebnis", "r_regel"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "art": { "enum": ["deterministisch", "rubrik"] },
+          "bewerter": { "type": "string", "minLength": 1, "maxLength": 128, "description": "Wer oder was geprüft hat, z. B. spur-regel@1 oder eine benannte Bewerter-Session." },
+          "ergebnis": { "enum": ["bestanden", "nicht_bestanden", "unklar"] },
+          "r_regel": { "type": ["string", "null"], "pattern": "^R-[0-9]{2}$", "description": "Gesetzt, wenn die Assertion eine harte Regel prüft (SL1 §5.4). Wird nie mit anderen Assertions verrechnet (SLV0-EVAL-11)." }
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "required": ["lauf", "je_skill", "kosten_client_schaetzung"],
+      "additionalProperties": false,
+      "properties": {
+        "lauf": {
+          "type": "object",
+          "required": ["input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/token" },
+            "output_tokens": { "$ref": "#/$defs/token" },
+            "cache_read_input_tokens": { "$ref": "#/$defs/token" },
+            "cache_creation_input_tokens": { "$ref": "#/$defs/token" }
+          }
+        },
+        "je_skill": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["skill", "tokens"],
+            "additionalProperties": false,
+            "properties": {
+              "skill": { "type": "string" },
+              "tokens": { "$ref": "#/$defs/token" }
+            }
+          }
+        },
+        "kosten_client_schaetzung": {
+          "type": "object",
+          "required": ["wert", "quelle", "beleg"],
+          "additionalProperties": false,
+          "properties": {
+            "wert": { "type": ["number", "null"], "minimum": 0 },
+            "quelle": { "enum": ["gemeldet", "unbekannt"] },
+            "beleg": { "type": ["string", "null"] },
+            "hinweis": { "type": "string" }
+          }
+        }
+      }
+    },
+    "latenz_ms": { "type": ["integer", "null"], "minimum": 0 },
+    "fehler": { "type": ["string", "null"], "maxLength": 512 },
+    "normalisierer": { "const": "sl-eval-normalize@1" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "ref": { "type": ["string", "null"], "pattern": "^[^\\n\\r]{1,512}$", "description": "Verweis (Pfad oder ID) auf eine gespeicherte Datei, keine Inline-Kopie." },
+    "token": {
+      "type": "object",
+      "required": ["wert", "quelle", "methode", "bezug", "beleg"],
+      "additionalProperties": false,
+      "properties": {
+        "wert": { "type": ["integer", "null"], "minimum": 0 },
+        "quelle": { "enum": ["gemeldet", "geschaetzt", "unbekannt"] },
+        "methode": { "type": ["string", "null"] },
+        "bezug": { "type": "string" },
+        "beleg": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

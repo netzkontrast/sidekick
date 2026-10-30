@@ -6,6 +6,8 @@ const SUPPORTED = new Set([
   '$schema', '$id', 'title', 'description', '$defs', '$ref',
   'type', 'const', 'enum', 'required', 'properties', 'additionalProperties',
   'items', 'minLength', 'maxLength', 'pattern', 'minimum', 'format', 'allOf', 'if', 'then',
+  // Added for the eval schemas (SLV0-EVAL, docs/spec/schemas/eval-*.schema.json).
+  'maximum', 'minItems', 'propertyNames',
 ]);
 
 export class SchemaUnsupportedError extends Error {}
@@ -98,9 +100,22 @@ export function validateSchema(schema, value, root = schema, pointer = '') {
   if (typeof value === 'number' && schema.minimum !== undefined && value < schema.minimum) {
     errors.push({ pointer: at, message: `kleiner als ${schema.minimum}` });
   }
+  if (typeof value === 'number' && schema.maximum !== undefined && value > schema.maximum) {
+    errors.push({ pointer: at, message: `größer als ${schema.maximum}` });
+  }
+  if (Array.isArray(value) && schema.minItems !== undefined && value.length < schema.minItems) {
+    errors.push({ pointer: at, message: `weniger als ${schema.minItems} Einträge` });
+  }
   if (jsonType(value) === 'object') {
     for (const req of schema.required ?? []) {
       if (!Object.hasOwn(value, req)) errors.push({ pointer: at, message: `Pflichtfeld fehlt: ${req}` });
+    }
+    if (schema.propertyNames !== undefined) {
+      for (const k of Object.keys(value)) {
+        for (const e of validateSchema(schema.propertyNames, k, root, pointer)) {
+          errors.push({ pointer: at, message: `Schlüssel ${JSON.stringify(k)}: ${e.message}` });
+        }
+      }
     }
     const props = schema.properties ?? {};
     for (const [k, v] of Object.entries(value)) {

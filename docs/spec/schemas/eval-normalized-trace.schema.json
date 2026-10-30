@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-normalized-trace.schema.json",
+  "title": "Normalisierte Client-Spur – Skill-Library V0",
+  "description": "Ergebnis der Normalisierung (SLV0-EVAL-08). Nur Felder dieser Positivliste: Status, sichtbarer Katalog, Tools, Plugins, Modell, Aktivierungsnachweise, Usage, Client-Kostenschätzung, Spur-Hash. Keine Denktexte, keine freien Modellausgaben, keine Werkzeugeingaben außer dem Skill-Namen. Fehlender Katalog ist unbekannt (null), nicht leer; eine leere oder fehlerhafte Spur belegt keine Nicht-Auswahl (absence_is_proven: false).",
+  "type": "object",
+  "required": ["schema_version", "normalizer", "source_format", "input_sha256", "trace_sha256", "status", "catalog", "tools", "plugins", "model", "activations", "activation_observability", "absence_is_proven", "usage", "client_cost_estimate_usd", "quality_scored"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "normalizer": { "const": "sl-eval-normalize@1" },
+    "source_format": { "enum": ["claude-stream-json", "skill-pilot-v1"], "description": "Rohe JSONL-Spur oder bereits vom Research-Helfer normalisierte Spur (Import)." },
+    "input_sha256": { "$ref": "#/$defs/sha256", "description": "Hash der gelesenen Eingabedatei." },
+    "trace_sha256": { "$ref": "#/$defs/sha256", "description": "Hash der rohen Spur; beim Import aus skill-pilot-v1 übernommen." },
+    "status": { "enum": ["completed", "incomplete_or_error"] },
+    "catalog": {
+      "type": "object",
+      "required": ["status", "skills"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["beobachtet", "unbekannt"] },
+        "skills": { "type": ["array", "null"], "items": { "type": "string" } }
+      }
+    },
+    "tools": { "type": ["array", "null"], "items": { "type": "string" } },
+    "plugins": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "required": ["name", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": ["string", "null"] },
+          "source": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "model": { "type": ["string", "null"] },
+    "activations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mode", "skill", "tool_use_id", "confirmed"],
+        "additionalProperties": false,
+        "properties": {
+          "mode": { "enum": ["skill_tool", "file_read"], "description": "Skill-Werkzeug und Datei-Lesen werden getrennt geführt." },
+          "skill": { "type": ["string", "null"] },
+          "tool_use_id": { "type": ["string", "null"] },
+          "confirmed": { "type": ["boolean", "null"], "description": "true nur bei erfolgreicher Antwort, false bei Fehlerantwort, null ohne Antwort." }
+        }
+      }
+    },
+    "activation_observability": { "enum": ["events_observed", "not_established"] },
+    "absence_is_proven": { "const": false },
+    "usage": {
+      "type": ["object", "null"],
+      "required": ["input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"],
+      "additionalProperties": false,
+      "properties": {
+        "input_tokens": { "$ref": "#/$defs/count" },
+        "output_tokens": { "$ref": "#/$defs/count" },
+        "cache_read_input_tokens": { "$ref": "#/$defs/count" },
+        "cache_creation_input_tokens": { "$ref": "#/$defs/count" }
+      }
+    },
+    "client_cost_estimate_usd": { "type": ["number", "null"], "minimum": 0 },
+    "quality_scored": { "const": false }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "count": { "type": ["integer", "null"], "minimum": 0 }
+  }
+}

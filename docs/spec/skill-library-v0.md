@@ -229,8 +229,14 @@ Jeder Fall ist ein späterer Contract-Test mit synthetischen Eingaben, außer -0
 | Schema | Inhalt | Beispiel |
 |---|---|---|
 | [skill-package.schema.json](schemas/skill-package.schema.json) | Registry-Datensatz eines Pakets (SLV0-PKG-10…24) | [skill-paket-demo.json](beispiele/skill-paket-demo.json) |
+| [eval-snapshot.schema.json](schemas/eval-snapshot.schema.json) | Snapshot (SLV0-EVAL-01/-02), Form des Research-Helfers | [skill-pilot-baseline-v2.json](../../research/skills-meta-prompting/skill-pilot-baseline-v2.json) |
+| [eval-ledger.schema.json](schemas/eval-ledger.schema.json) | Eine Ledger-Zeile: Kopf, Reservierung, Ergebnis, Splitzugriff, Auswahl (SLV0-EVAL-05/-07) | Tests unter `tools/skill-library/test/` |
+| [eval-split-manifest.schema.json](schemas/eval-split-manifest.schema.json) | Split-Manifest (SLV0-EVAL-06) | Tests |
+| [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08) | Tests |
+| [eval-raw-record.schema.json](schemas/eval-raw-record.schema.json) | Rohdatensatz je Start (SLV0-EVAL-09, SL1 §8) | Tests |
+| [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11) | Tests |
 
-Snapshot, Ledger, Split-Manifest, Rohdatensatz und Bericht erhalten Schemas mit dem Eval-Harness-PR (Handover §7); bis dahin gilt SL1 §8.
+Die Eval-Schemas kamen mit dem Eval-Harness-PR (Handover §7); Umsetzung und Auslegungen: [tools/skill-library/README.md](../../tools/skill-library/README.md).
 Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die Vereinheitlichung ist offen (O-8).
 
 ## 12. Offene Punkte
