@@ -37,3 +37,5 @@ Grundsatz: Postgres-Transaktionen definieren fachliche Übergänge. Die Workflow
 ## Entscheidung
 
 ## Offene Punkte
+
+- Offen, 30.10.2026: Den [Vision-v5-Vorschlag](../vision-v5-entwurf.md) für statisches Offline-Frontend, ersten Vercel-Hub und selbst hostbare Alternative prüfen. Speicher-, Lösch- und Backupgrenzen für Episoden, Erinnerungen und Trainingsdaten festlegen; konkrete Hostinglimits vor Umsetzung verifizieren.

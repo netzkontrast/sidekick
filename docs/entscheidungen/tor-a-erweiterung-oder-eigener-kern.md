@@ -36,3 +36,5 @@ Winziges Testrepo, benannter Ausgangscommit, Änderung an zwei Dateien, bewusst 
 ## Entscheidung
 
 ## Offene Punkte
+
+- Offen, 30.10.2026: Den [Vision-v5-Entwurf](../vision-v5-entwurf.md) als Erweiterung des Produktziels prüfen: Kontinuität für Vorhaben, Gedächtnis und begrenzte Proaktivität. Für Paperclip/OpenHands und den eigenen Kern denselben Auftrags-/Effektvertrag zugrunde legen; keine Auswahlentscheidung aus dem Entwurf ableiten.
