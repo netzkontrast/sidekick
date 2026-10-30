@@ -3,27 +3,68 @@
   "trigger_cases": [
     {
       "prompt": "Grill mich zu diesem Plan: Lass uns die noch offenen Produktentscheidungen klären.",
-      "expected_skill": "grilling"
+      "expected_skill": "grilling",
+      "id": "GT-01"
     },
     {
       "prompt": "Hinterfrage unsere Anforderungen und frag mich nach den fehlenden Vorgaben.",
-      "expected_skill": "grilling"
+      "expected_skill": "grilling",
+      "id": "GT-02"
     },
     {
       "prompt": "Stress-test this idea and interview me about the unresolved trade-offs.",
-      "expected_skill": "grilling"
+      "expected_skill": "grilling",
+      "id": "GT-03"
     },
     {
       "prompt": "Setzen wir das Anforderungsinterview von gestern mit den offenen Fragen fort.",
-      "expected_skill": "grilling"
+      "expected_skill": "grilling",
+      "id": "GT-04"
     },
     {
       "prompt": "Welche Version verwendet das Repo?",
-      "expected_skill": null
+      "expected_skill": null,
+      "id": "GT-05"
     },
     {
       "prompt": "Korrigiere den Tippfehler in der Überschrift.",
-      "expected_skill": null
+      "expected_skill": null,
+      "id": "GT-06"
+    },
+    {
+      "id": "GT-07",
+      "prompt": "Welche der beiden Optionen empfiehlst du anhand der Belege?",
+      "expected_skill": "reviewing-decision-gates",
+      "allowed_skills": [
+        "reviewing-decision-gates"
+      ],
+      "assertion": "Grenzfall: zulässig `{reviewing-decision-gates}`, nicht grilling",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "GT-08",
+      "prompt": "Frag mich nach den Vorgaben, die dir für den Plan fehlen.",
+      "expected_skill": "grilling",
+      "family_id": "GT-08/09",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "GT-09",
+      "prompt": "Interview me about the decisions this plan still needs.",
+      "expected_skill": "grilling",
+      "family_id": "GT-08/09",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "GT-10",
+      "prompt": "Plane die Einführung; mir ist noch unklar, was Priorität hat.",
+      "expected_skill": "grilling",
+      "allowed_skills": [
+        "grilling",
+        "planning-work-packages"
+      ],
+      "assertion": "Konkurrenzfall: zulässige Menge `{grilling, planning-work-packages}`",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
     }
   ],
   "behavior_cases": [
@@ -104,6 +145,55 @@
       "session": "grilling already active",
       "event": "Eine einzelne Frage wird im Chat gestellt und beantwortet.",
       "assertion": "Kompakter Rundeneintrag im Themenindex genügt; keine separate Runden-Datei."
+    },
+    {
+      "id": "B12",
+      "level": "M3",
+      "session": "grilling already active",
+      "event": "Eine `fact`-Frage ist durch Lesen einer Repo-Datei beantwortbar",
+      "assertion": "Nicht fragen; Beleg verlinken, Frage nicht anlegen oder als belegt schließen",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "B12h",
+      "level": "M3, R",
+      "session": "grilling already active",
+      "event": "Headless, kein AskUser-Tool, niemand antwortet",
+      "assertion": "Fragen im Ausgabetext, Zustellung `unbekannt`, Session `waiting_user`, keine Antwort und kein Default (Familie R-01)",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "B13",
+      "level": "M3",
+      "session": "grilling already active",
+      "event": "Q1 (Version 1) beantwortet; Fragetext ändert sich wesentlich",
+      "assertion": "Version 2, Antwort bleibt an Version 1, Q1 `needs_review`",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "B14",
+      "level": "M3, R",
+      "session": "grilling already active",
+      "event": "Zwei Antworten auf dieselbe Frageversion",
+      "assertion": "Erste bestätigte gilt; zweite als Konflikt sichtbar, nicht verworfen",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    },
+    {
+      "id": "B15",
+      "level": "M3, R",
+      "session": "grilling already active",
+      "event": "Frist abgelaufen, vereinbartes Verhalten „Schritt bleibt blockiert“",
+      "assertion": "Kein Antwort-Eintrag; Frage bleibt offen/`asked`, abhängige Arbeit blockiert (Familie R-05)",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
+    }
+  ],
+  "static_checks": [
+    {
+      "id": "GT-L1",
+      "level": "M0",
+      "check": "`grep` auf `.agents/skills/grilling/` nach Projektnamen und `docs/fragen`",
+      "assertion": "Keine Treffer (deterministisch, ohne Modell)",
+      "source": "research/skills-meta-prompting/area-grilling.md §11"
     }
   ]
 }

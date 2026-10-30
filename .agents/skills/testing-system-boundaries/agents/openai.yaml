@@ -1,0 +1,6 @@
+interface:
+  display_name: "Systemgrenzen testen"
+  short_description: "Ausfall- und Grenztests ableiten und Belege bewerten"
+  default_prompt: "Nutze $testing-system-boundaries, um aus der Spec eine Ausfallmatrix mit Umgebungen und Assertions abzuleiten."
+policy:
+  allow_implicit_invocation: true
