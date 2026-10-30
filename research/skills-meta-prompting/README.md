@@ -9,6 +9,7 @@ gelisteten Repos so integrieren, dass ein Clean-Room-Rewrite ihre wesentlichen A
 
 - [Synthese: Konzeptkarte und Anforderungen](synthese.md)
 - [Clean-Room-Plan](clean-room-plan.md)
+- [Web-Gegenprüfung mit Primärquellen](web-recherche-2026-10-30.md) (S1–S12, Anforderungen WEB-R1–R10)
 - [Dossier-Vorlage](repos/_vorlage.md)
 
 Vorgehen nach den Projektregeln in [AGENTS.md](../../AGENTS.md) (Evidenzstufen, Permalinks auf den

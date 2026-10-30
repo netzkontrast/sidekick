@@ -1,7 +1,8 @@
 # Synthese: Konzeptkarte und Anforderungen
 
 Stand 2026-10-30. Grundlage sind die zwölf [Dossiers](README.md#untersuchte-repositories).
-Diese Datei verdichtet deren Abschnitte „Clean-Room-Relevanz“. Sie formuliert Anforderungen in eigenen
+Diese Datei verdichtet deren Abschnitte „Clean-Room-Relevanz“ und bezieht die
+[Web-Gegenprüfung](web-recherche-2026-10-30.md) ein (Quellen `S1`–`S12`, Anforderungen `WEB-R1`–`R10`). Sie formuliert Anforderungen in eigenen
 Worten und enthält keine Texte oder Codes aus den Repos. Evidenz und Fundstellen stehen in den Dossiers.
 
 ## Kürzel
@@ -16,6 +17,7 @@ Anforderungen werden mit Repo-Kürzel und der Nummer aus dem Dossier zitiert, z.
 | PA | [prompt-architect](repos/prompt-architect.md) | AHP | [agentic-harness-patterns-skill](repos/agentic-harness-patterns-skill.md) |
 | PES | [prompt-engineering-skill](repos/prompt-engineering-skill.md) (eigenes Material) | RD | [recursive-decomposition-skill](repos/recursive-decomposition-skill.md) |
 | CPM | [claude-prompts-mcp](repos/claude-prompts-mcp.md) | C2P | [code2prompt](repos/code2prompt.md) |
+| WEB | [Web-Gegenprüfung](web-recherche-2026-10-30.md) | | |
 
 ## Querschnittsbefund
 
@@ -40,6 +42,11 @@ Anforderungen werden mit Repo-Kürzel und der Nummer aus dem Dossier zitiert, z.
    Meta-Operationen (MP-A3).
 4. **Progressive Disclosure ist Konsens** (AHP-R2, SCO-R3, PA-R1, RD, PES). Nur Metadaten sind dauerhaft geladen,
    Details kommen bei Bedarf dazu. Messbar wird das erst mit echten Token-Budgets (SCO-R1, C2P-R3).
+5. **Format, Auswahl und Wirkung sind drei verschiedene Nachweise** (WEB §1–2, S1/S2). Eine valide SKILL.md belegt
+   weder, dass ein Client den Skill findet und passend lädt, noch, dass er das Ergebnis verbessert.
+6. **„Meta-Prompting“ meint mehrere Verfahren** (WEB §3, S4/S5): strukturorientierte Schablonen (MP) und
+   agentische Koordination über Experten-Rollen (Suzgun & Kalai, arXiv:2401.12954). Beide getrennt spezifizieren
+   und messen; keine „Meta-Prompting-Engine“ als bewiesene Verbesserung annehmen.
 
 ## Konzeptkarte
 
@@ -54,6 +61,7 @@ Quellen, aus denen sie stammt.
 | K1.2 | Ein Validator, der Frontmatter tatsächlich parst, Referenzen und Größenbudgets prüft und Pflichtlisten aus den Daten ableitet. | PA-R3, RD-R5, SCO-R3 |
 | K1.3 | Zweiphasiges Laden: ein Metadaten-Katalog mit Token-Budget, der Rumpf erst bei Aktivierung. | AHP-R2, SCO-R3 |
 | K1.4 | Installation ohne implizite Seiteneffekte. | PA-R5 |
+| K1.5 | Discovery, Trigger, Verhalten und Regression werden je Zielclient und Version getrennt geprüft und berichtet. Ein Trigger-Test erzwingt den Skill nicht vorab. | WEB-R2, S1, S2 |
 
 ### K2 Technik-Katalog und Auswahl (Meta-Prompting-Kern)
 
@@ -96,6 +104,8 @@ Quellen, aus denen sie stammt.
 | K5.4 | Optimierer erzeugen Instruktionen aus Beispielen, führen die Kandidaten tatsächlich aus und wählen unter Budget aus (z. B. UCB). Ausgegeben werden Score und Stichprobenzahl. | APE-B1/B3, DSPY-C3 |
 | K5.5 | Rohergebnisse (Modell, Version, Seed, n, Einzelwerte) werden maschinenlesbar gespeichert. Berichte entstehen nur daraus. | SOPT-R3, MP-A4 |
 | K5.6 | Eine einzige, versionierte Qualitätsrubrik und eine Anti-Pattern-Liste als prüfbare Regeln. | PES-R3/R4 |
+| K5.7 | Jeder Lauf bindet Skill-, Referenz-, Modell-, Client- und Eval-Version. Baseline und Kandidat laufen mit gleicher Runtime, gleichen Tools und gleichen Eingaben; je Vergleich wird nur eine Maßnahme verändert. | WEB-R1, WEB §4, SOPT-R5 |
+| K5.8 | Optimierer als austauschbarer Adapter (APE-artige Induktion, feedbackbasiert wie GEPA, DSPy-Optimierer), der nur Kandidaten liefert. | WEB-R3, S3, S6–S8 |
 
 ### K6 Sichere Änderung von Prompts und Skills
 
@@ -106,6 +116,7 @@ Quellen, aus denen sie stammt.
 | K6.3 | Deterministische Gates laufen getrennt von einem semantischen Urteil in eigenem Kontext, das Belegstellen liefern muss. | SO-R3 |
 | K6.4 | Schreiben ist atomar, mit Backup, Manifest und Compare-and-swap. Restore ist nur bei passenden Hashes erlaubt. Endzustände sind fail-closed. | SO-R4/R5 |
 | K6.5 | Eine Edit-Historie (was, warum, Messwert) und Abbruchbedingungen für rekursive Verfeinerung. | MP-A4, PES-R5 |
+| K6.6 | Kandidaten und Ergebnisse sind begrenzt aufbewahrt und reversibel; die Übernahme ist an Hashes gebunden. | WEB-R9, SO-R4 |
 
 ### K7 Kosten und Budgets
 
@@ -116,18 +127,25 @@ Quellen, aus denen sie stammt.
 | K7.3 | Kontext-Budgets mit Kürzungshinweis. Kompression schützt definierte Klassen. | AHP-R3, SCO-R4 |
 | K7.4 | Die Modellwahl ist eine Richtlinie auf Harness-Ebene, mit Begründung im Log und Qualitäts-Eval vor jeder Herabstufung. | SCO-R2 |
 | K7.5 | Ersparnis gilt nur, wenn sie in einem Vorher-Nachher-Lauf derselben Aufgabe gemessen wurde. | SCO-R5 |
+| K7.6 | Tatsächliche Usage (inkl. Cache-Lesen/-Schreiben), Schätzung und unbekannte Kosten werden getrennt ausgewiesen. Bei Abo-Runtimes bleiben fehlende Kosten „unbekannt“. | WEB-R6, S9, S10 |
+| K7.7 | Kosten werden pro akzeptiertem Ergebnis über den ganzen Auftrag gerechnet: Metadaten, Referenzen, Ausgabe, Nacharbeit und Optimierungsaufwand. | WEB-R7 |
 
 ### K8 Harness-Grenzen
 
 | ID | Anforderung | Quellen |
 |---|---|---|
-| K8.1 | Ein Freigabe-Gate je Tool-Aufruf (erlauben, fragen, verweigern), fail-closed, mit dokumentierter Rangfolge der Regelquellen. | AHP-R1 |
+| K8.1 | Ein Freigabe-Gate je Tool-Aufruf (erlauben, fragen, verweigern), fail-closed, mit dokumentierter Rangfolge der Regelquellen (verweigern vor fragen vor erlauben). | AHP-R1, S11 |
 | K8.2 | Delegation mit begrenzter Tiefe und eingeschränkten Tools. Die Synthese bleibt beim Koordinator. | AHP-R4 |
 | K8.3 | Getrennte Speicherschichten (kuratiert und agentgeschrieben). Kuratierte Regeln werden nur mit Freigabe übernommen. | AHP-R5 |
-| K8.4 | Hooks nur in vertrautem Workspace, mit klarer Exit-Code-Semantik. | AHP-R6 |
+| K8.4 | Hooks nur in vertrautem Workspace, mit klarer Exit-Code-Semantik. | AHP-R6, S12 |
+| K8.5 | Kritische Rechte- und Antwortregeln sind harte Regressionstests: Ein Timeout erzeugt keine Zustimmung, fremde Inhalte ändern keine Rechte, Skill-Empfehlungen verleihen keine Ausführungsrechte. | WEB-R8, WEB §6 |
 
 K8 berührt die Agent-Hub-Recherche (`research/agent-hub/`) und deren Entscheidungstore. Hier wird K8 nur als
 Schnittstelle erfasst und nicht doppelt geplant.
+
+K8.1 und K8.4 sind durch öffentliche Claude-Code-Dokumentation (S11, S12) gedeckt. Interne Details aus AHP
+(Dispatcher, feste Kontextquoten, Memoisierung, Rekursionstiefen) bleiben aus der normativen Spec heraus,
+bis eine unbedenkliche Quelle oder ein eigener Versuch sie trägt (WEB-R10).
 
 ## Widersprüche zwischen den Quellen
 
@@ -140,6 +158,6 @@ Schnittstelle erfasst und nicht doppelt geplant.
 
 ## Was kein Repo abdeckt
 
-- Ein Conductor-/Experten-Muster als echte Implementierung. Das Original von Suzgun & Kalai ist in MP nicht enthalten.
+- Ein Conductor-/Experten-Muster als echte Implementierung. Das Original von Suzgun & Kalai (S5) ist in MP nicht enthalten.
 - Verhaltensbasierte Evaluation von Skills im Client: Wird der Skill ausgewählt, und verbessert er das Ergebnis?
 - Ein einheitliches Datenmodell, das Technik-Katalog, Registry, Eval-Set und Änderungshistorie verbindet.

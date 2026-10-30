@@ -15,6 +15,9 @@ Die Integration gelingt am besten über **ein gemeinsames Datenmodell** und **ei
 3. Jede Behauptung über Qualität oder Kosten kommt aus der Evaluationsschicht (K5, K7). Ohne Messung gibt es
    keine Zahl.
 
+Die [Web-Gegenprüfung](web-recherche-2026-10-30.md) stützt diese Reihenfolge: zuerst Auswahl und Wirkung der
+vorhandenen Skills messen, Optimierung erst danach als budgetierten Vorschlagsprozess (WEB-R3, WEB-R4).
+
 ## Zielarchitektur (Skizze)
 
 ```text
@@ -47,10 +50,10 @@ prüfbares Ergebnis.
 |---|---|---|---|
 | 0 | Spec: Datenmodell und Skill-Format (K1.1, K2.1, K5.1) unter `docs/` | Review der Spec | – |
 | 1 | Validator und Token-Zählung (K1.2, K7.1) | Validator prüft die vorhandenen Skills im Repo; Tokenzahlen statt Wortzahlen | 0 |
-| 2 | Eval-Harness (K5.1–K5.3, K5.5) mit kleinem eigenem Eval-Set | Baseline-Lauf mit gespeicherten Rohergebnissen | 1 |
+| 2 | Eval-Harness (K5.1–K5.3, K5.5, K5.7) mit kleinem eigenem Eval-Set; Discovery/Trigger getrennt von Verhalten (K1.5); Usage-Erfassung (K7.6) | Baseline-Lauf mit gespeicherten Rohergebnissen; erste Fälle: Auswahl und Verhalten des Grilling-Skills (PR #5) | 1 |
 | 3 | Technik-Katalog und Auswahl (K2.1–K2.4), Startinhalt aus PES (eigenes Material) | Auswahl-Trefferquote auf dem Eval-Set | 2 |
 | 4 | Änderungspipeline (K6) und erste Meta-Operation „kürzen“ | Kandidat besteht Inventar und Gates; Restore funktioniert | 1, 2 |
-| 5 | Optimierer: Instruktionen aus Beispielen ableiten und per Bandit auswählen (K5.4), mit Kostenvoranschlag (K7.2) | Verbesserung auf dem Test-Split, nicht auf dem Training | 2, 4 |
+| 5 | Optimierer als Adapter (K5.4, K5.8): zuerst APE-artig mit Bandit, GEPA/DSPy als Alternativen; Kostenvoranschlag (K7.2), Kosten pro akzeptiertem Ergebnis (K7.7) | Verbesserung auf dem vorher abgetrennten Test-Split, nicht auf dem Training | 2, 4 |
 | 6 | Registry, Sandbox-Templating, Ketten und Ausgabe-Gates (K3) | Ketten-Lauf mit echten Ausgabe-Prüfungen | 0 |
 | 7 | Kontext-Builder und Zerlegung (K4) | Zerlegung mit vollständigem Segmentprotokoll und verifizierten Belegen | 1, 6 |
 
@@ -85,12 +88,13 @@ Diese Fragen kann nur der Owner beantworten. Bis dahin bleibt der Plan ein Vorsc
 | Laufzeit und Sprache? | TypeScript (passt zur sidekick-Planung) · Python (näher an DSPy und den Eval-Werkzeugen) | Offen. Hängt an der Entscheidung zu DSPy als Dependency. |
 | DSPy als Dependency? | Ja für Signaturen und Optimierer · Nein, eigene schlanke Umsetzung | Erst nach Stufe 2 entscheiden, mit Messung. |
 | Umfang der ersten Version? | Stufen 0–3 · 0–5 · alles | 0–4: Damit sind Messung, Auswahl und sichere Änderung früh abgedeckt. |
-| Umgang mit AHP? | Konzepte aus öffentlicher Doku neu begründen · ganz weglassen | Nur Anforderungen, die sich aus öffentlicher Doku oder eigenen Experimenten begründen lassen. |
+| Umgang mit AHP? | Konzepte aus öffentlicher Doku neu begründen · ganz weglassen | Nur Anforderungen, die sich aus öffentlicher Doku oder eigenen Experimenten begründen lassen. Für K8.1 und K8.4 ist das mit S11/S12 bereits erfüllt (WEB §6). |
 
 ## Nächster Schritt
 
-Die offenen Entscheidungen klären, danach die Spec für Stufe 0 schreiben. Nicht ausgeführte Versuche aus den
-Dossiers, die die Planung beeinflussen:
+Die offenen Entscheidungen klären, danach die Spec für Stufe 0 schreiben. Die kleinen Versuche aus der
+Web-Gegenprüfung (§8: Grilling-Auswahl, Grilling-Verhalten, Kompression im Vergleich) passen als erste Fälle in
+Stufe 2. Nicht ausgeführte Versuche aus den Dossiers, die die Planung beeinflussen:
 
 - Tests von SO laufen lassen.
 - Echte Tokenzählung für die SO-Benchmarks.
