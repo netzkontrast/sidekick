@@ -5,7 +5,7 @@
   "design": "research/skills-meta-prompting/library-evaluation-design.md §9 (E1 Auswahl, 12 Starts)",
   "variant": "B1",
   "baseline_snapshot": "research/skills-meta-prompting/skill-pilot-baseline-v2.json",
-  "baseline_package_set_sha256": "712b6bd8c279513e332a33f5b9ed5dffa6bba9ec2251f3aaf892fc40807c0f9f",
+  "baseline_package_set_sha256": "4ad5b6dbae228982fe3ba7df6552d9e7029af0fc0c972dde09ad9406f2473967",
   "client": "claude 2.1.314, -p, stream-json, --setting-sources project, --max-budget-usd 0.30, --permission-prompts none, --no-session-persistence, bereinigte Umgebung (env -i)",
   "workspace": "isoliertes Verzeichnis nur mit .claude/skills/ (Kopien der acht Skills), keine AGENTS.md/CLAUDE.md, keine Fixture-Dateien",
   "metric": "M2: erster Skill-Aufruf in der Spur (Skill-Tool-Ereignis) gegen expected_skill; Read auf SKILL.md als manuell geladen; keine Qualitätsbewertung",
@@ -84,5 +84,6 @@
       "expected_skill": "evaluating-changes",
       "prompt_sha256": "4b2ca8fd2ef91baa53aae3ca47102805c44216735cb306b2a70fffedc075d56a"
     }
-  ]
+  ],
+  "baseline_source_commit": "d0cf27cd3e8e65474bada6382c26348abbcb0a45"
 }
