@@ -1,6 +1,6 @@
 ---
 id: Q-20261030-sl-code-sprache
-status: open
+status: answered
 needs_review: false
 depends_on: []
 ---
@@ -18,7 +18,13 @@ Empfehlung + sachlicher Grund: B; gleiche Laufzeit wie Phase 1 ohne neue Depende
 Benötigter Sachbeleg: keiner.
 
 ## Antworten
-Noch keine. Empfehlung ist keine Antwort.
+Antwort-ID: A-20261030-sl-code-sprache
+Zeit / beantwortet von / Quelle: 2026-10-30, Owner, AskUserQuestion in der Claude-Code-Session (keine eigene Message-ID)
+Bezug: Version 1, Runde R-20261030-sl-runde3
+Antwort: „Node ohne Deps (Empfohlen)“ – Option B: JavaScript (ESM) auf Node ohne Dependencies unter `tools/skill-library/`. (wörtlich gewählte Option)
+Ersetzt Antwort: keine
+Folgen / Rückfragen: Implementierungs-PR 1 nach der [Übergabe](../../../../research/skills-meta-prompting/library-implementation-handover.md) kann beginnen; YAML-Teilmenge selbst geparst; Testbefehl `node --test`.
 
 ## Verlauf
 - 2026-10-30: Bei SL7 (Implementierungsübergabe) aus Spec O-4/O-5 erfasst; noch nicht gestellt.
+- 2026-10-30: In R-20261030-sl-runde3 gestellt und beantwortet.
