@@ -1,0 +1,6 @@
+interface:
+  display_name: "Entscheidungen prüfen"
+  short_description: "Entscheidungsreife anhand von Belegen prüfen"
+  default_prompt: "Nutze $reviewing-decision-gates, um die vorgelegte Entscheidung anhand ihrer Belege zu prüfen."
+policy:
+  allow_implicit_invocation: true

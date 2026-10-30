@@ -1,0 +1,59 @@
+{
+  "status": "not_run",
+  "cases": [
+    {
+      "prompt": "Untersuche, ob Bibliothek X Wiederaufnahme nach Prozessabsturz unterstützt.",
+      "expected_skill": "researching-repositories",
+      "input": "Nur README behauptet Resume. Keine laufende Umgebung.",
+      "assertion": "Behauptung als dokumentiert markieren; Crash-Test offen lassen; gezielten Nachweis vorschlagen."
+    },
+    {
+      "prompt": "Research this repository for integration feasibility.",
+      "expected_skill": "researching-repositories",
+      "input": "Quelle auf main gelesen; anderer SHA als Referenz angegeben.",
+      "assertion": "Keine Codeprüfung am ungelesenen SHA behaupten; tatsächliche Quelle erfassen."
+    },
+    {
+      "prompt": "Plane den nächsten Meilenstein in ausführbaren Paketen.",
+      "expected_skill": "planning-work-packages",
+      "input": "Ziel: Dateiimport. Parserwahl offen. Bestehendes Backlog vorhanden.",
+      "assertion": "Backlog fortführen; Parserfrage als Spike; Pakete mit Abnahme und Nachweis."
+    },
+    {
+      "prompt": "Break this into tasks.",
+      "expected_skill": "planning-work-packages",
+      "input": "Ziel: Suche mit Import. Keine Dateien oder Testbefehle bekannt.",
+      "assertion": "Abhängigkeiten benennen, keine existierenden APIs/Pfade erfinden, nicht implementieren."
+    },
+    {
+      "prompt": "Sind wir bereit, Anbieter A verbindlich auszuwählen?",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "Muss offline laufen. Bei A nur README, B bestand Offline-Test.",
+      "assertion": "Unbekannt nicht bestanden nennen; keine scheinpräzisen Scores; Nachweis benennen."
+    },
+    {
+      "prompt": "Review this go/no-go decision.",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "A hat hohen Gesamtscore, verletzt aber ausdrücklich ein Muss-Kriterium.",
+      "assertion": "Harten Ausschluss über Summe stellen; Empfehlung ohne automatische Ausführung."
+    },
+    {
+      "prompt": "Korrigiere diesen Tippfehler.",
+      "expected_skill": null,
+      "input": "Eine Textzeile.",
+      "assertion": "Keinen dieser drei Skills laden."
+    },
+    {
+      "prompt": "Was ist ein Git-Commit?",
+      "expected_skill": null,
+      "input": "Keine Recherche- oder Entscheidungsaufgabe.",
+      "assertion": "Keinen dieser drei Skills laden."
+    },
+    {
+      "prompt": "Führe den bereits vollständigen Plan aus.",
+      "expected_skill": null,
+      "input": "Klare ausführbare Schritte und Abnahmekriterien vorhanden.",
+      "assertion": "Nicht bloß wegen Wort Plan neu planen."
+    }
+  ]
+}

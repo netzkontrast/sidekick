@@ -82,6 +82,13 @@ Vor Abschluss relative Links und Konsistenz zwischen Dossier und Backlog prüfen
 Keine Secrets oder unbearbeiteten sensiblen Logs einchecken. Im PR neue Befunde,
 verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
+## Wiederverwendbare Skills
+
+Passende Abläufe bedarfsweise aus `.agents/skills/` laden: `researching-repositories`
+für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Planung,
+`reviewing-decision-gates` für Entscheidungsreife. Nur den passenden Skill lesen,
+Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
+
 ## Code-Navigation mit CodeGraph
 
 Das Repo ist für [CodeGraph](https://github.com/colbymchenry/codegraph) eingerichtet.
