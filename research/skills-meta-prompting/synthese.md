@@ -161,3 +161,110 @@ bis eine unbedenkliche Quelle oder ein eigener Versuch sie trägt (WEB-R10).
 - Ein Conductor-/Experten-Muster als echte Implementierung. Das Original von Suzgun & Kalai (S5) ist in MP nicht enthalten.
 - Verhaltensbasierte Evaluation von Skills im Client: Wird der Skill ausgewählt, und verbessert er das Ergebnis?
 - Ein einheitliches Datenmodell, das Technik-Katalog, Registry, Eval-Set und Änderungshistorie verbindet.
+
+## Fortschreibung nach SL0–SL5 (Skill-Library)
+
+> Stand 30.10.2026 · SL6 im [Library-Research-Plan](library-research-plan.md) · Branch `research/learnable-skill-library` bei `06869bc`.
+> Grundlage: [SL0](library-inventory.md), [SL1](library-evaluation-design.md), [A01–A09](library-inventory.md#3-neun-bereiche-zuordnung) (`area-*.md`), [SL3](library-composition.md), [SL4](library-learning.md),
+> [SL5-Teilergebnis C0/E1](eval-runs/C0-E1-ergebnis-2026-10-30.md), [Skill-Review](skill-review-2026-10-30.md), [V0-Spec](../../docs/spec/v0-ziel-und-vertraege.md) (gemergt mit PR #8; gegenüber dem von SL3 gelesenen Stand `2c4733e0` unverändert, per `git diff` geprüft).
+> Status und nächste Schritte stehen nur im Plan (§8). Dieser Abschnitt ordnet zu und empfiehlt; er entscheidet nichts.
+> Evidenz wie in `AGENTS.md`. Zusätzlich: *Vorgabe* = Owner-Antwort, *Vorschlag* = eigene Anforderung ohne Messung, *lokal geprüft* = eigenes Skript an den Dateien.
+> *Praktisch nachgewiesen* steht hier nur für die Befunde aus C0 und E1-Auswahl laut Ergebnisdokument.
+
+### F1. Zuordnung der K1–K8/WEB-Anforderungen mit Library-Bezug
+
+Urteile: **zugeordnet** (von einem SL-Ergebnis abgedeckt), **ergänzt** (übernommen und präzisiert oder erweitert), **verworfen** (in dieser Form nicht Teil der Library, mit Grund).
+
+| ID | Urteil | Library-Fassung bzw. Begründung | Beleg | Evidenz |
+|---|---|---|---|---|
+| K1.1 | zugeordnet | Portables SKILL.md-Paket, Laufzeitdaten als Registry-Datensatz daneben; `agents/openai.yaml` künftig generiert | SL3 §2 | Format 8/8 *lokal geprüft* (Review); Claude-Zugang per Symlink in C0 *praktisch nachgewiesen*; Generator *offen* |
+| K1.2 | zugeordnet | Validator in Stufe 1 der ersten Version | SL0 §2.3, SL7 | Nur Ad-hoc-Skripte *lokal geprüft*; kein Validator im Repo |
+| K1.3 | ergänzt | Drei Ladestufen (Katalog, Rumpf, Referenzen); kritische Regeln nie still gekürzt | SL3-R06/R07 | Mechanik im Client *dokumentiert*; Katalogkosten der acht Beschreibungen *offen* (Review O2) |
+| K1.4 | ergänzt | „Installation“ ist im Repo eine Aktivierung: Symlink plus implizite Auswahl. Sie geschieht nur durch den Owner am Hash per PR-Merge | SL4 §5, Review B1 | *Vorgabe*; Durchsetzung *offen* |
+| K1.5 | ergänzt | Ebenen M0–M5 und R getrennt; Repo-Discovery und Sidekick-Auswahl getrennt; manuelles Lesen einer SKILL.md als eigene Kategorie | SL1 §2, §4 | Discovery und Auswahl im Client *praktisch nachgewiesen* (C0/E1, Diagnose); Verhalten und Wirkung *offen* |
+| K2.1–K2.3, K2.5, K2.6 | verworfen | Ein Technik-Katalog mit Weiche ist keine Library-Anforderung: Die Skills wählen ihr Vorgehen selbst, kein Bereich A01–A09 braucht ihn, und für seinen Nutzen gibt es keinen Beleg. Kann als eigener, gemessener Vorschlag zurückkommen | SL0 §3, SL3 §11 | – |
+| K2.4 | ergänzt | Typisierte Ein-/Ausgaben als Übergabeartefakte mit Typversion. Der Teil „Text wird aus der Signatur erzeugt“ ist verworfen; Skilltext bleibt Prosa | SL3 §4 | *Vorschlag* |
+| K3.1 | zugeordnet | Registry mit stabiler `skill_id`, `inputs`/`outputs`, `requires_capabilities` | SL3 §2 | *Vorschlag*; Format offen (O-2) |
+| K3.2 | verworfen | Skills werden nicht gerendert; es gibt keine Variablen. Fremdinhalte gelten als Daten (SL3 §8, R-02) | SL3 §8 | – |
+| K3.3 | zugeordnet | L2-Ablauf als Daten; Zyklus, falsche Ausgabe und inkompatible Version werden vor dem Start abgelehnt | SL3 §3, F01–F03 | *Vorschlag*; ob L2 eigenes Artefakt wird, ist offen (O-4) |
+| K3.4 | ergänzt | Übergabeprüfung der Pflichtfelder deterministisch, Inhalt per Rubrik; Wiederholung nur ausdrücklich, kein automatischer Retry-Zähler | SL3 §4, F02/F04 | *Vorschlag* |
+| K3.5 | verworfen | Hot-Reload widerspricht der Versionsbindung: Laufende Runs wechseln nie still, neue Freigaben erscheinen als „verfügbar“. Der Teil „Schreiben nur über Pfadgrenze“ ist in SL4 §5.2 zugeordnet | SL3-R02/R10 | – |
+| K4.1, K4.2 | zugeordnet (teilweise) | Nur als Inhalt des `context-package` von resuming-work; ein Kontext-Builder ist nicht Teil der ersten Version | SL3 §4, A06 | *Vorschlag* |
+| K4.4 | zugeordnet | Skill→Skill-Tiefe 0, Delegationstiefe Standard 1 | SL3-F06 | *Vorschlag* |
+| K5.1 | ergänzt | Splits dev/select/test nach Ursprungsfamilie; Pflichtregression R außerhalb der Splits; Test-Split nach einmaliger Nutzung verbraucht | SL1 §5.5, SL4 §4 | Spezifiziert; Zugriffstrennung nicht implementiert |
+| K5.2, K5.3 | zugeordnet | Metriken je Ebene; Fixtures `skill-evaluation.json` und `grilling-evaluation.json` als Artefakt; Vergleichsbericht von evaluating-changes | SL1 §7, A08 | Rubriken je Skill fehlen (*offen*) |
+| K5.4, K5.8 | zugeordnet | Optimierer liefern nur Kandidaten im Zustand `vorgeschlagen`; ihre interne Validierung ersetzt nie den Test. Adapter und Dependency zurückgestellt, bis ein manueller Kandidat gemessen ist | SL4 §2.1, §4 | *Vorschlag* |
+| K5.5 | zugeordnet | Rohspuren normalisiert unter `eval-runs/`, Start-Ledger, Berichte nur daraus | SL1 §8, [ledger.json](eval-runs/ledger.json) | Für C0/E1 liegen Rohspuren vor |
+| K5.6 | ergänzt | Eine versionierte Rubrik **je Skill**; Rubrikänderung nur in eigenem PR mit neuer `rubrik_version`, Vergleiche über Versionen ungültig | SL4 §8 | Rubriken noch nicht geschrieben (*offen*) |
+| K5.7 | zugeordnet | Run-Manifest mit Skill-, Referenz-, Ablauf-, Client- und Modellangaben; B1 mit Paket-Hash eingefroren | SL3-R01, [Baseline v2](skill-pilot-baseline-v2.json) | Modell und Usage im Lauf gemeldet: *praktisch nachgewiesen* (C0) |
+| K6.1 | ergänzt | Kandidat liegt nie unter `.agents/skills/` (Invariante L1). Manuelle Änderungen ohne Lauf sind ungemessene Owner-Vorlagen, keine übersprungene Messung | SL4 §4 | SL2 hat diesen Weg genommen (Review S1) |
+| K6.2, K6.3, K6.5 | zugeordnet | Inventar im Schritt `dev_geprueft`; Rollen Autor/Auswerter/Owner; Zustände samt Grund als Historie | SL4 §4 | *Vorschlag* |
+| K6.4, K6.6 | ergänzt | Im Repo: Compare-and-swap = Hashgleichheit vor und nach dem Merge, Restore = Revert durch den Owner; Kandidat `veraltet` bei Baseline-Drift | SL4 §4, §5 | Drift *lokal geprüft* (9 von 13 Pilotdateien durch SL2 geändert) |
+| K7.1 | zugeordnet | Token-Zählung in Stufe 1; bis dahin Bytes/Wörter | SL0 §2.1 | Client meldet Token-Usage: *praktisch nachgewiesen* (C0); eigener Tokenizer *offen* |
+| K7.2 | ergänzt | Freigabeeinheit sind CLI-Starts (~40); alle Starts inkl. Fehlversuche im Ledger. USD-Werte bei Abo-Anmeldung sind Client-Schätzungen | SL1 §9, C0/E1 §1 | 14 von ~40 Starts verbraucht; ~1,48 USD laut Client geschätzt |
+| K7.3, K7.4, K7.5, K7.7 | zugeordnet | Kontextbudget ohne stille Kürzung; Modell steht im Manifest, nicht im Skill; keine Ersparnis ohne M4; Kosten je akzeptiertem Ergebnis über den ganzen Ablauf | SL3-R07, §8; SL1 §7 | Keine Ersparnis behauptet |
+| K7.6 | zugeordnet | Usage, Schätzung und Unbekanntes getrennt | SL1 §8 | Felder Input, Output, Cache-Lesen/-Schreiben, Thinking, `total_cost_usd`: *praktisch nachgewiesen* (C0) |
+| K8.1, K8.2 | zugeordnet | Skills empfehlen, der Harness erzwingt (Schnittstelle zum Hub-Kern, dort geplant) | SL3-R08, F06 | *Vorschlag* |
+| K8.3 | zugeordnet | A09 nur als `memory-candidate` mit `trainingsfreigabe: false`; Skill zurückgestellt | A09 §9, SL4 §3 | *Vorschlag* |
+| K8.5 | ergänzt | R-01…R-05 als Pflichtregression. Ohne AskUser im headless Lauf muss R-01 auch im Chat-Fallback gelten (Fall B12h) | SL1 §5.4, C0 | AskUser headless fehlt: *praktisch nachgewiesen*; Einhaltung von R-01 *offen* |
+| WEB-R1, R3, R4, R6–R9 | zugeordnet | Deckungsgleich mit K5.7, K6.1, K5.1, K7.6, K7.7, K8.5, K6.6. Für R4 zusätzlich: E1-Fälle wurden vor dem ersten Start committet ([e1-auswahl-plan.json](eval-runs/e1-auswahl-plan.json)) | wie dort | wie dort |
+| WEB-R2 | ergänzt | wie K1.5 | C0/E1 | wie K1.5 |
+| WEB-R5 | zugeordnet | Inhaltliche Assertions je Fall; Erfolg nie aus Länge oder Judge-Prosa | SL1 §7, SL4 §2.1 | *offen* (keine M3/M4-Läufe) |
+| WEB-R10 | zugeordnet | C0/E1 stützen sich nur auf öffentliche CLI-Hilfe und eigene Läufe; AHP-Interna bleiben ausgeschlossen | [Clean-Room-Plan](clean-room-plan.md#stand-nach-sl0sl5) | – |
+
+Ohne Library-Bezug und hier nicht bewertet: K4.3, K4.5 (Zerlegung, Batch-Programme) und K8.4 (Hooks). Sie bleiben fachliche Referenz im Clean-Room-Plan.
+
+### F2. Neue Anforderungen aus SL2–SL5
+
+| ID | Anforderung | Herkunft | Evidenz |
+|---|---|---|---|
+| KL-01 | Identität eines Skills ist sein Inhaltshash; ein Versionslabel mit anderem Hash ist ein Fehler. Registry-Einträge ändern den Paket-Hash nie. | SL3 §2, R03 | *Vorschlag*; Kanonisierung offen (O-1) |
+| KL-02 | Projektkonfiguration (Ablagen, ID-Schemata, Statusquelle) steht in den Projektregeln, nie im portablen Skill. | A01, SL3 §2 | *lokal geprüft*: grep auf Projektbegriffe in allen Skill-Dateien 0 Treffer (Review) |
+| KL-03 | Übergaben zwischen Skills laufen als typisierte Artefakte per Referenz mit Hash; der Verbraucher prüft Typ, Typversion und Pflichtfelder vor Arbeitsbeginn. | SL3 §4 | *Vorschlag* |
+| KL-04 | Beziehungen `requires`, `alternative`, `recommends` sind verschieden; `recommends` wird nie automatisch ausgeführt, und kein Skill lädt einen anderen. | SL3 §3, A06 (Review S3) | *Vorschlag*; Kaskadenfreiheit in Spuren *offen* |
+| KL-05 | Ein Run pinnt alle Versionen im Manifest; offline laufen nur lokal vorhandene, freigegebene Hashes; Versionskonflikte werden sichtbar und vom Owner gelöst. | SL3-R01/R02/R09/R10 | *Vorschlag* |
+| KL-06 | Jeder Kompositionsfehler (Zyklus, falsche Ausgabe, Version, Teilfehler, Abbruch, Tiefe, Capability) endet in einem eigenen Zustand; keiner zählt als Erfolg. | SL3 §6 | *Vorschlag* |
+| KL-07 | Vor jeder Messreihe werden die Capabilities je Client und Version nachgewiesen. Optionale Capabilities haben einen im Skill dokumentierten Fallback, der als solcher markiert wird. | SL1 §4, SL3-R05, C0 | *praktisch nachgewiesen*, dass der Nachweis nötig ist: AskUser fehlt headless, eingebaute Client-Skills bleiben trotz `--setting-sources project` sichtbar |
+| KL-08 | Auswahl wird aus der Ereignisspur gemessen und unterscheidet „vom Client ausgewählt“, „manuell gelesen“ und „nicht geladen“; B0 läuft isoliert ohne Skill-Dateien. | SL1 §4 | *praktisch nachgewiesen*: Skill-Aufruf als Werkzeugereignis sichtbar, B0 ohne Skill-Werkzeug, 0 von 12 manuellen Lesezugriffen |
+| KL-09 | Auswahlfälle brauchen das Material, auf das sich der Prompt bezieht; Platzhalter-Prompts messen eher „direkt antworten“ als Auswahl. | C0/E1 §3 | Beide E1-Verfehlungen hatten Platzhalter (*praktisch beobachtet*); die Ursache ist *offen* |
+| KL-10 | Ein Kandidat wird `veraltet`, sobald der aktive Baseline-Hash von seiner Baseline abweicht; Neubindung erzeugt einen neuen Kandidaten. | SL4 §4 | Drift *lokal geprüft* |
+| KL-11 | Aktivierung und Rücknahme nur durch den Owner am Kandidaten-Hash, im Repo per PR-Merge bzw. Revert; ein Aktivierungs-PR ändert nie Rubrik, Fälle, Splits oder Judge. | SL4 §5, §8 | *Vorgabe* (Q-20261030-sl-aktivierung) plus *Vorschlag* |
+| KL-12 | Feedbackfälle nur aus synthetischen Fällen und freigegebenen Repo-Artefakten mit Feedback-Manifest; ein korrigierter oder zurückgezogener Erinnerungseintrag sperrt abgeleitete Fälle für neue Nutzung. | SL4 §3 | *Vorgabe* plus *Vorschlag* |
+| KL-13 | Alle Starts zählen gegen das freigegebene Budget, auch Fehlversuche; die Fallauswahl wird vor dem ersten Start versioniert. | SL1 §9, [ledger.json](eval-runs/ledger.json) | Für C0/E1 so durchgeführt |
+| KL-14 | Was ohne Modell prüfbar ist, wird Code: Fragen-Konsistenz (A01), Fundstellen (A02), Paketfelder (A03), Entscheidungsregister (A04), ID-Rückverfolgbarkeit (A05), Diff/Hash beim Fortsetzen (A06), Contract-Tests (A07), Eval-Harness (A08), Erinnerungszustände (A09). | `area-*.md` §9/§10, SL3 §12 | *Vorschlag* |
+| KL-15 | Empfehlung, Entscheidung und Ausführungsbefugnis sind getrennte Ausgabefelder; „entscheidungsreif“ und „zur Aktivierung vorlegen“ sind keine Entscheidung. | A04, SL3 §8 | *Vorschlag*; Skilltext geändert, Verhalten *offen* |
+
+### F3. Was praktisch nachgewiesen ist und was nicht
+
+Nur diese Befunde tragen die Stufe *praktisch nachgewiesen* ([Ergebnis](eval-runs/C0-E1-ergebnis-2026-10-30.md) §2–§3; Claude Code headless, Modell laut Spur `claude-opus-5-5`, B1 = acht Skills, Einzelstarts):
+
+- In B1 sind alle acht Projekt-Skills sichtbar, in B0 keiner. Eingebaute Client-Skills und drei Plugins bleiben in beiden sichtbar.
+- Ein Skill-Aufruf erscheint als Ereignis des `Skill`-Werkzeugs; M2 ist damit deterministisch messbar. Auto-Auswahl ohne ausdrücklichen Aufruf kommt vor (GT-01).
+- Ein AskUser-Werkzeug gibt es im headless Lauf nicht.
+- Die Usage-Felder werden geliefert (siehe K7.6).
+- E1-Auswahl: 8 von 10 positiven Fällen richtig, 2 von 2 negativen ohne Skill, Konkurrenzfall RW-N1 wie erwartet, 0 manuelle Lesezugriffe.
+
+Nicht nachgewiesen: Verhalten (M3), Wirkung gegenüber B0 oder B1-alt (M4), Komposition (M5/E2), ein Lernschritt (E3), Holdout-Fälle, Wiederholungen, andere Modelle, Clients (Codex) oder Clientversionen. „Gewählt“ heißt nicht „gut ausgeführt“.
+
+### F4. Empfehlung gegenüber dem Status quo
+
+Verglichen werden **S0**: die vier Skills unverändert (B1-alt, main `38333a4`), und **S1**: die jetzige Suite aus acht Skills (B1, Paket-Hash `4ad5b6dbae228982…`, Quellcommit `d0cf27cd`).
+
+**Empfehlung: S1 statt S0 als Arbeitsstand und Baseline der Library.** Gründe:
+1. S1 behebt belegte Mängel von S0 ohne Lauf: Projektbindung im Grilling-Skill, unvollständige bzw. widersprüchliche Fixtures (B06, B10), fehlende Konkurrenz- und Negativfälle. Format ist 8/8 *lokal geprüft*.
+2. Nur S1 ist überhaupt gemessen: Discovery und Auswahl aller acht Skills, jeder neue Skill in seinem positiven Fall gewählt, keine Fehlauswahl in den Negativfällen. Für S0 gibt es keine Läufe.
+3. Ein Rückfall auf S0 würde die eingefrorene, in C0/E1 genutzte Baseline wechseln; die verbleibenden ~26 Starts (E1-Verhalten, M4, E2) müssten dann neu geplant werden.
+
+**Aktivierung** im Hauptzweig ist Sache des Owners am Hash (Merge). Empfohlen wird, im PR die Hashes je Skill zu nennen und S1 ausdrücklich als *ungemessen in Verhalten und Wirkung* zu kennzeichnen (SL4 §4). Für zwei Skills sind die eigenen Aktivierungsbedingungen nicht erfüllt: testing-system-boundaries („erst nach dem Minimalversuch“, A07 §9) und resuming-work („nicht aktiv, nicht geprüft“, A06 §11). Der Owner vermerkt entweder ausdrücklich, dass er sie übersteuert, oder hält beide bis zu ihrem E1-Verhaltensfall als Kandidaten zurück (Symlink entfernen, implizite Auswahl aus). Der zweite Weg ändert den Messbestand; E1-Ergebnisse gelten dann für B1, nicht für den neuen Stand. Für specifying-behavior ist die Bedingung „nach Review der Spec-Konvention aus PR #8“ formal erfüllt, weil PR #8 gemergt ist.
+
+**Grenzen der Empfehlung:**
+- S0 → S1 ändert viele Dimensionen zugleich. Ein Qualitätsvorteil ist weder messbar zuzuschreiben noch gemessen (Review S1). Die Empfehlung beruht auf behobenen Mängeln und Auswahlbefunden, nicht auf besseren Ergebnissen.
+- Ein Modell, ein Client, Einzelstarts, öffentliche Fälle, kein Holdout: diagnostisch, nicht statistisch belastbar.
+- Mehr Skills kosten Katalogkontext: Die vier neuen Beschreibungen haben zusammen etwa 2 450 Zeichen, die alten etwa 1 150 (Review O2). Die Wirkung auf das Katalogbudget ist ungemessen.
+- V1 hängt nicht davon ab: Die Hub-Abnahme kann die vier Skills unverändert nutzen (Plan §1). Diese Empfehlung erweitert die V1-Abnahme nicht.
+
+### F5. Folgen für die Querschnittsbefunde oben
+
+- Befund 5 (Format, Auswahl, Wirkung getrennt) ist für Format und Auswahl jetzt belegt; Wirkung bleibt offen.
+- Widerspruch „Rekursionstiefe“: in der Library aufgelöst durch SL3-F06 (Skill→Skill-Tiefe 0, Delegation Standard 1).
+- „Was kein Repo abdeckt“: Für verhaltensbasierte Evaluation im Client liegt die Auswahlhälfte als Diagnose vor. Ein einheitliches Datenmodell gibt es als Entwurf (SL3 §2–§4, SL4 §3–§4); geprüft ist es nicht.

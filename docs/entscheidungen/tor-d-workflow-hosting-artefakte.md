@@ -43,3 +43,5 @@ Grundsatz: Postgres-Transaktionen definieren fachliche Übergänge. Die Workflow
 - Offen, 30.10.2026: Den [Vision-v5-Vorschlag](../vision-v5-entwurf.md) für statisches Offline-Frontend, ersten Vercel-Hub und selbst hostbare Alternative prüfen. Speicher-, Lösch- und Backupgrenzen für Episoden, Erinnerungen und Trainingsdaten festlegen; konkrete Hostinglimits vor Umsetzung verifizieren.
 
 - Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md) (§8): Vercel als erster Hub mit dauerhafter Zustellung außerhalb des Instanz-RAM (V0-FALL-11); statisches Frontend als PWA von stabiler HTTPS-Adresse; Ablage für gesondert löschbare Inhaltsobjekte (V0-INV-11) neben dem Artefaktspeicher.
+
+- Zum Library-Punkt oben liegen Entwürfe vor: Lauf-Pinning, Offline-Verfügbarkeit und Konflikte ([Kompositionsvertrag](../../research/skills-meta-prompting/library-composition.md) §5, §9), Feedbackdaten, Aktivierung und Rücknahme ([Lernvertrag](../../research/skills-meta-prompting/library-learning.md) §3, §5). Für die erste Version genügt danach Git (Merge am Hash, Revert); ein Registry-Backend oder Artefaktspeicher für Skills ist nicht vorausgesetzt. Festgelegt ist damit nichts.
