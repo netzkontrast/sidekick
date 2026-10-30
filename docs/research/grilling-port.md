@@ -26,7 +26,7 @@ deren tatsächliche Grenzen gelten vor der Skill-Anweisung.
 ## Persistenz
 
 [Fragenablage](../fragen/README.md): kanonische Fragen mit Antwortverlauf, kompakter
-Themenindex und Runden mit Tool-Feld-Mapping. Herkunft und sachliche Gründe dokumentieren,
+Themenindex ohne doppelte Statusfelder und Runden mit Tool-Feld-Mapping bei Tool-Zustellung. Chat-Runden dürfen kompakt im Themenindex bleiben. Herkunft und sachliche Gründe dokumentieren,
 keine privaten Gedankengänge. Zwei Folgefragen vorbereitet, nicht als gestellte Fragen ausgegeben.
 
 ## Discovery und Integration
@@ -36,21 +36,24 @@ Codex-Metadaten erlauben implizites Laden; das Standard-Frontmatter bleibt porta
 Automatisches Laden hängt vom Client und Einstellungen ab, nicht allein vom Dateinamen.
 Skill und Referenzen enthalten alle nötigen Abläufe; kein Wrapper muss andere Skills laden.
 
-PR #4 ist unabhängig und noch nicht vorausgesetzt. Nach dessen Übernahme können
-Research-, Planungs- und Review-Skills bei echten Nutzerentscheidungen auf grilling
-verweisen; reine Recherche bleibt Recherche. Befugnisse kommen weiter aus Projektregeln.
-Die Fragenablage erweitert die bestehende Dokumentation innerhalb des vom Nutzer
-beauftragten Umfangs und ersetzt keine Entscheidungsprotokolle.
+Die drei portablen Skills aus PR #4 sind bereits auf main. Grilling ergänzt eine Zeile
+im vorhandenen Skill-Router. Recherche, Planung und Entscheidungsreview können bei
+echten Nutzerentscheidungen darauf zurückgreifen; reine Recherche bleibt Recherche.
+Befugnisse kommen weiter aus Projektregeln. Die Fragenablage ersetzt keine Entscheidungsprotokolle.
+
+## Beauftragter Umfang
+
+Der Owner hat ausdrücklich einen Workflow im Verzeichnis beauftragt, in dem Fragen,
+Antworten, offene Punkte und die Gründe hinter Fragen abgelegt werden. Die Anlage von
+`docs/fragen/` setzt diesen Auftrag um; sie erfordert keine erneute Zustimmung.
+Derselbe Auftrag enthielt den Abgleich aller PRs. Dieser Abgleich wurde berichtet;
+ein separater zeitgebundener PR-Reviewbericht gehört nicht zum Grilling-Feature.
 
 ## Prüfung
 
-[Evaluationsfälle](grilling-evaluation.json) decken Trigger, Abhängigkeiten, Tool-Fallback,
-Teilantworten, Korrekturen, Wiederaufnahme, sensible Daten und Abschluss ab.
-Statische Validierung bestanden: YAML/Frontmatter, Symlink, Referenz-/Dateilinks, eindeutige unbeantwortete Frage-IDs und 14 Evaluationsfixtures. Vier synthetische Abhängigkeitsszenarien wurden deterministisch geprüft; das ist kein Modell-Verhaltenstest.
-Live-AskUser/Client-Discovery sind damit nicht nachgewiesen und benötigen einen echten Client-Lauf.
-
-## PR-Abgleich
-
-[PR #1–#4 geprüft](sidekick-pr-review-2026-10-30.md). Grilling benötigt PR #4 nicht;
-beim Zusammenführen beide AGENTS-Router erhalten. PR #3 ist Planungsinput und entscheidet
-weder Runtime noch Normativität der eingebetteten Spec.
+[Evaluationsfälle](grilling-evaluation.json) trennen natürliche Trigger-Prompts von
+Verhaltensszenarien einer bereits laufenden Session. Ein Verhaltensfall ist kein
+Nachweis automatischer Auswahl.
+Statische Prüfungen: Frontmatter, Referenz-/Dateilinks, Symlink, eindeutige Frage-IDs,
+eine Statusquelle und Form der Evaluationsfälle. Live-AskUser/Client-Discovery und
+Modellverhalten benötigen weiterhin einen echten Client-Lauf und sind ungetestet.

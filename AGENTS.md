@@ -82,13 +82,14 @@ Vor Abschluss relative Links und Konsistenz zwischen Dossier und Backlog prüfen
 Keine Secrets oder unbearbeiteten sensiblen Logs einchecken. Im PR neue Befunde,
 verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
-## Offene Fragen klären
+## Wiederverwendbare Skills
 
-Bei entscheidungsrelevanter Unklarheit den Skill [grilling](.agents/skills/grilling/SKILL.md)
-bedarfsweise laden: verfügbare AskUser-Tools nach deren Regeln nutzen, sonst Chat.
-Ablage: [docs/fragen/](docs/fragen/README.md). Fakten selbst recherchieren, bestätigte
-Antworten wiederverwenden; Antworten sind keine Ausführungsfreigaben. Keine bloß
-vorsorglichen Interviews für bereits klare Aufgaben starten.
+Passende Abläufe bedarfsweise aus `.agents/skills/` laden: `researching-repositories`
+für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Planung,
+`reviewing-decision-gates` für Entscheidungsreife.
+`grilling` für entscheidungsrelevante Rückfragen mit AskUser-Tools; Ablage: [docs/fragen/](docs/fragen/README.md).
+Nur den passenden Skill lesen,
+Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
 
 ## Code-Navigation mit CodeGraph
 

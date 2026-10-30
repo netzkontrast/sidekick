@@ -10,11 +10,13 @@ Session: active
 Ziel / Nicht-Ziele:
 Kontext: <Spec/Plan/Commit>
 Bearbeiter:
-| ID / Datei | Kurzfrage | Status | needs_review | Voraussetzung | Blockiert |
-|---|---|---|---|---|---|
+| ID / Datei | Kurzfrage |
+|---|---|
+Status und Abhängigkeiten ausschließlich in den Frage-Dateien führen.
 Nächste Runde / Forschungsblockade:
 Zusammenfassung: <Link oder ausstehend>
 Bestätigung: <tatsächliche Quelle oder ausstehend>
+Chat-Runden (optional): <R-ID, Frage-ID/Version, tatsächliche Frage, Zustellung, Antwortverweise>
 ```
 
 ## Kanonische Frage
@@ -54,7 +56,9 @@ Folgen / Rückfragen:
 - <Zeit, Änderung, Grund, Quelle>
 ```
 
-## Runde
+## Runde bei Tool-Zustellung
+
+Für Chat-Runden genügt derselbe Nachweis kompakt im Themenindex; keine Extra-Datei nötig.
 
 ```markdown
 # R-<eindeutig>

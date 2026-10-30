@@ -6,10 +6,10 @@ Konfigurierte Projektablage verwenden. Sidekick: `docs/fragen/`.
 - `README.md`: Einstieg und Themenlinks.
 - `<thema>/index.md`: Ziel/Umfang, Kontextversionen, Bearbeiter, Sessionstatus, Frageübersicht, nächste Runde.
 - `<thema>/questions/<id>.md`: kanonische Frage einschließlich Antwortverlauf.
-- `<thema>/rounds/<round-id>.md`: gestellte Fragen, Tool-Feld-Zuordnung und Antwortquelle.
+- `<thema>/rounds/<round-id>.md`: nur bei Tool-Zustellung; gestellte Fragen, Feld-Zuordnung und Antwortquelle. Chat-Runden kompakt im Themenindex protokollieren.
 
-Keine getrennten Antwortkopien oder parallelen offenen-Fragen-Dateien. Der Themenindex ist eine kurze Sicht auf kanonische Fragen. Abweichungen anhand der Einträge abgleichen.
-IDs z. B. `Q-20261030-143000-k7` und `R-20261030-143100-k7`; einmal vergeben, nie umnummerieren. Vor Anlage Kollision prüfen; bei paralleler Arbeit eindeutiges Suffix wählen. Konflikte beim Commit nicht durch Überschreiben lösen.
+Keine getrennten Antwortkopien oder parallelen offenen-Fragen-Dateien. Der Themenindex listet nur Links und Kurzfragen. Status, Prüfbedarf und Abhängigkeiten stehen ausschließlich in den Frage-Dateien; Sessionstatus nur im Themenindex.
+IDs folgen `Q-<YYYYMMDD>-<eindeutiges Suffix>` bzw. `R-<YYYYMMDD>-<eindeutiges Suffix>`. Das Suffix darf sprechend sein, etwa `input-expiry`, oder Uhrzeit plus Zufallsteil enthalten, etwa `143000-k7`. IDs einmal vergeben, nie umnummerieren. Vor Anlage Kollision prüfen; bei paralleler Arbeit eindeutiges Suffix wählen. Konflikte beim Commit nicht durch Überschreiben lösen.
 
 ## Zustände
 
@@ -30,8 +30,8 @@ Session: `active | waiting_user | blocked_research | paused | awaiting_confirmat
 1. Kontextstand und vorhandene Antworten prüfen, neue Fragen erfassen.
 2. Voraussetzungen sind erfüllt, wenn alle genannten Frage-IDs beantwortet und nicht prüfpflichtig sind; erforderliche Sachbelege ebenfalls prüfen. Zyklen oder fehlende IDs sichtbar reparieren.
 3. Fragbare Menge nach Priorität sortieren. Bei Tool-Limits in unabhängige Teilrunden aufteilen, statt Folgeantworten zu erraten.
-4. Runde als `prepared` mit Frageversionen und Mapping anlegen; Fragen bleiben open. Tool nach Schema aufrufen.
-5. Nach tatsächlicher Zustellung Runde `sent`, Fragen asked. Bei Toolfehler Runde `failed`, noch nicht gestellte Fragen bleiben open; ggf. Chat-Fallback mit eigener Runde.
+4. Bei Tool-Zustellung eine Runde als `prepared` mit Frageversionen und Feld-Mapping anlegen; Fragen bleiben open. Im Chat genügt ein kompakter Eintrag im Themenindex mit R-ID und Frageversionen. Tool nach Schema aufrufen bzw. im Chat fragen.
+5. Nach tatsächlicher Zustellung Runde `sent`, Fragen asked. Bei Toolfehler Runde `failed`, noch nicht gestellte Fragen bleiben open; ggf. Chat-Fallback mit eigener R-ID im Themenindex.
 Bei Unterbrechung zwischen Aufruf und Ergebnis ist Zustellung unbekannt: vorhandene Tool-/Chat-Spuren abgleichen, nicht automatisch erneut senden oder eine Antwort erfinden.
 6. Antwortquelle mit Tool/Message-ID und Zeitpunkt vermerken, soweit verfügbar; sonst fehlende IDs offen benennen. Tatsächlichen Wortlaut oder eindeutig als sinngemäß markierte Antwort erfassen. Nur betroffene Fragen auf answered setzen; Runde bei Teilantworten `partial`.
 7. Empfehlung und Antwort getrennt halten. Bei ausbleibender Antwort warten oder unabhängige Arbeit fortsetzen. Keine automatischen Defaults.

@@ -16,6 +16,7 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] P1 Pi und DeepSeek: RPC/SDK und Plugin-Lifecycle als spätere Harness-Referenz.
 - [ ] P1 LibreChat/assistant-ui: UI-Komponenten statt zweites Backend.
 - [ ] Workflow/Transport/Hosting anhand Fault-Tests entscheiden.
+- [ ] Vorschläge P1–P9 aus der [Reflexion zur ChatGPT-Spec](../inputs/2026-10-30-reflexion-chatgpt-spec.md#4-konsequenzen-für-die-planung-vorschläge) mit dem Owner klären; offen sind vor allem P3 (Goose als Vertrags-Runtime) und P8 (eigenes Implementierungs-Repo).
 
 ## Entscheidungstore
 

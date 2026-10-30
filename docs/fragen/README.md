@@ -14,11 +14,12 @@ AskUser-Werkzeugen, soweit verfügbar und zulässig, andernfalls im Chat.
 
 Der [Workflow](../../.agents/skills/grilling/references/workflow.md) definiert Zustände,
 Wiederaufnahme und Korrekturen. [Formate](../../.agents/skills/grilling/references/records.md)
-dienen als Vorlage. Thema, Fragen und Runden werden erst bei realem Bedarf angelegt.
+dienen als Vorlage. Themen und Fragen erst bei realem Bedarf anlegen. Separate Runden-Dateien sind nur bei
+Tool-Zustellung nötig; Chat-Runden kompakt im Themenindex protokollieren.
 
-| Thema | Status | Inhalt |
-|---|---|---|
-| [Human-Input-Vertrag](human-input/index.md) | pausiert | Vorbereitete Fragen für Phase 0b; noch nicht gestellt |
+| Thema | Inhalt |
+|---|---|
+| [Human-Input-Vertrag](human-input/index.md) | Vorbereitete Fragen für Phase 0b; noch nicht gestellt |
 
 Die Ablage ist öffentlich. Keine Secrets, persönlichen Rohdaten oder ungefilterten
 Chat-/Tool-Protokolle committen. Gründe bedeuten kurze sachliche Anlässe, Quellen und
