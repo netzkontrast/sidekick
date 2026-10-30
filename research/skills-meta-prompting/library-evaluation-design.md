@@ -3,6 +3,7 @@
 > Stand 30.10.2026 · Ergebnis von SL1 im [Library-Research-Plan](library-research-plan.md) · **Entwurf zur Review**.
 > Baut auf der [Bestandsaufnahme (SL0)](library-inventory.md) auf. Es wurde **kein** Modelllauf gestartet, kein Score erhoben, kein Skill geändert.
 > Alles hier ist ein prüfbarer Vorschlag. Das Review kann ihn bestätigen oder begründet ändern, bevor Läufe stattfinden (SL5).
+> **Überarbeitet nach dem [Review vom 30.10.2026](https://github.com/netzkontrast/sidekick/pull/10#issuecomment-6529553999)** (getrennte Session): B0-Isolation, `--bare`, E3-Budget, M2/M3-Trennung, Herkunftsfeld, Statistik, Rubrik-Stichprobe. Änderungen sind mit „(Review)“ markiert.
 
 ## 1. Ziel und Grenzen
 
@@ -19,7 +20,7 @@ Jede Ebene wird getrennt berichtet (K1.5, WEB-R2). Eine bestandene Ebene sagt ni
 |---|---|---|---|
 | **M0 Format** | Erfüllt das Paket die Spezifikation? | Validator, ohne Modell | deterministisch |
 | **M1 Discovery** | Steht der Skill dem Client zur Verfügung? | Capability-Check C0 (§4) | deterministisch |
-| **M2 Auswahl** | Wird er bei passenden Aufgaben geladen und bei unpassenden nicht? | Frische Session ohne expliziten Aufruf; Skill-Aufruf in der Ereignisspur beobachten | deterministisch aus der Spur |
+| **M2 Auswahl** | Wird er bei passenden Aufgaben geladen und bei unpassenden nicht? | Frische Session ohne expliziten Aufruf; Skill-Aufruf in der Ereignisspur beobachten. Ein Read auf eine `SKILL.md` zählt als eigene Kategorie „manuell geladen“, nicht als Auswahl (Review) | deterministisch aus der Spur |
 | **M3 Verhalten** | Hält der geladene Skill seine Assertions ein? | Skill wird ausdrücklich geladen (so ausgewiesen); Ausgabe und gespeicherte Artefakte gegen Assertions prüfen | deterministisch wo möglich, sonst Rubrik |
 | **M4 Wirkung** | Ist das Ergebnis besser als ohne Skill bzw. mit Baseline-Version? | Gleiche Aufgabe, gleiche Runtime, nur eine Variable geändert (K5.7) | Rubrik plus deterministische Assertions |
 | **M5 Komposition** | Kommen Übergaben zwischen Schritten korrekt an? | Kette mit definierten Artefakten je Schritt; Fehler je Übergabe lokalisieren | deterministisch je Übergabe |
@@ -29,7 +30,7 @@ Jede Ebene wird getrennt berichtet (K1.5, WEB-R2). Eine bestandene Ebene sagt ni
 
 | ID | Variante | Zweck |
 |---|---|---|
-| **B0** | Keine Skills (`claude -p --disable-slash-commands`; laut `claude --help` „Disable all skills and commands“) | Referenz für M4: Was leistet das Modell ohne Skill? |
+| **B0** | Keine Skills: `claude -p --disable-slash-commands` **in einem Messverzeichnis ohne Skill-Dateien und ohne Projektregeln** (Review). Im Repo könnte das Modell `.agents/skills/*/SKILL.md` per Read öffnen, weil `AGENTS.md` die Pfade nennt; dann wäre B0 nicht skillfrei | Referenz für M4: Was leistet das Modell ohne Skill? |
 | **B1** | Die vier Skills am eingefrorenen Commit, unverändert | Baseline für jede spätere Änderung |
 | **K*n*** | Ein Kandidat mit genau einer Änderung gegenüber B1 | Nur in SL5/E3, nur nach Review dieses Designs |
 
@@ -49,8 +50,9 @@ Was C0 klären muss und was heute bekannt ist (Claude Code 2.1.314, lokal instal
 | Usage und Kosten im Ergebnis | *offen*; `--output-format json` und `--max-budget-usd` sind laut `--help` vorhanden | welche Usage-Felder (Input, Output, Cache) geliefert werden. Fehlende Werte bleiben „unbekannt“ (K7.6) |
 | AskUser-Werkzeug im headless Lauf | *offen*; interaktiv in dieser Session *praktisch beobachtet* | ob es in `-p` verfügbar ist. Wenn nicht, misst E1 Grilling-Verhalten über den Chat-Fallback (B05) und weist das aus |
 | Konkurrierende Skills | Dieser Container hat zusätzlich viele Plugin- und Nutzer-Skills | Messverzeichnis und `--setting-sources project` so wählen, dass nur die Prüflinge sichtbar sind; C0 listet, was tatsächlich sichtbar war |
+| Isolation über `--bare` (Review) | *dokumentiert* in `claude --help` 2.1.314: schaltet CLAUDE.md-Autodiscovery, Plugin-Sync, Hooks und Auto-Memory ab; Anmeldung nur über `ANTHROPIC_API_KEY`/`apiKeyHelper`, OAuth wird nie gelesen; „Skills still resolve via /skill-name“ | ob das Modell Skills unter `--bare` noch selbst auswählt (sonst nur für M3, nicht für M2 tauglich) und welcher Anmelde- und Abrechnungsweg gilt. Ohne API-Schlüssel: als Blockade dokumentieren |
 
-**Störgröße Projektregeln:** `AGENTS.md` nennt die vier Skills ausdrücklich. Wer im Repo misst, misst Discovery über Beschreibung **plus** Hinweis
+**Störgröße Projektregeln:** `AGENTS.md` nennt die vier Skills ausdrücklich, mit Pfad. Wer im Repo misst, misst Discovery über Beschreibung **plus** Hinweis
 in den Projektregeln. Vorschlag: M2 in einem isolierten Messverzeichnis ohne diese Hinweise (nur `.claude/skills/` mit den Prüflingen),
 optional eine zweite Reihe im Repo. Beide getrennt berichten.
 
@@ -67,6 +69,10 @@ Vorhandene Fälle behalten ihren Inhalt; sie bekommen nur stabile IDs für die R
 | `grilling-evaluation.json` Trigger, 6 Fälle | `GT-01`…`GT-06` (Reihenfolge der Datei) | M2 |
 | `grilling-evaluation.json` Verhalten B01–B11 | unverändert `B01`…`B11`, B06/B10 nach §6 | M3 |
 | `skill-evaluation.json`, 9 Fälle | `ST-01`…`ST-09` (Reihenfolge der Datei); jeder Fall prüft Auswahl (M2) und, wo eine Assertion steht, Verhalten (M3) | M2, M3 |
+
+**M2 und M3 im selben Lauf (Review):** Ein Lauf ohne expliziten Aufruf liefert M2. Er liefert M3 nur dann, wenn der Skill in diesem Lauf tatsächlich ausgewählt wurde. Sonst braucht M3 einen eigenen Lauf mit ausdrücklichem Aufruf, und das Budget muss ihn enthalten.
+
+**Kodierung (Review):** „Kein Skill“ steht in `skill-evaluation.json` als `null`, in `grilling-evaluation.json` als `"none"`. Bei der ID-Vergabe einheitlich auf `null` abbilden.
 
 ### 5.2 Ergänzungen für M2
 
@@ -103,6 +109,7 @@ Bis SL3 einen Kompositionsvertrag liefert, steuert der Mensch die Kette ausdrüc
 ### 5.5 Splits
 
 Zuordnung **vor** jedem Lauf, nach Ursprungsaufgabe. Paraphrasen und Sprachpaare bleiben im Split ihres Ursprungs.
+Dafür bekommt jeder Fall ein Feld `origin` (Review). Ohne dieses Feld lässt sich die Regel nicht prüfen. Beispiel: ST-08 („Korrigiere diesen Tippfehler“) und GT-06 („Korrigiere den Tippfehler in der Überschrift“) haben denselben Ursprung und gehören in denselben Split.
 
 | Split | Zweck | Wer darf hineinsehen |
 |---|---|---|
@@ -126,7 +133,7 @@ Nur Vorschlag. Die Fixture-Datei ändert sich erst nach Review.
 ## 7. Metriken
 
 Zählen statt Prozente vortäuschen: Bei wenigen Fällen werden Trefferzahlen als „k von n“ berichtet. Prozentwerte nur ab n ≥ 20 je Zelle,
-dann mit exaktem 95-%-Konfidenzintervall (Clopper-Pearson).
+dann mit exaktem 95-%-Konfidenzintervall (Clopper-Pearson). Mit dem Budget von ~40 Läufen wird n ≥ 20 in keiner Zelle erreicht: **SL5 berichtet ausschließlich „k von n“** (Review).
 
 | Ebene | Metrik |
 |---|---|
@@ -138,7 +145,7 @@ dann mit exaktem 95-%-Konfidenzintervall (Clopper-Pearson).
 | Aufwand | Input-, Output-, Cache-Lese-/Schreib-Tokens laut Client; Latenz; Anzahl Läufe; Nacharbeit. Kosten je akzeptiertem Ergebnis (K7.7), fehlende Werte als „unbekannt“ |
 
 **Rubrik:** eine Rubrik, versioniert (K5.6), mit festen Kriterien je Skill. Ein Modellurteil darf bewerten, wenn Modell und Version fixiert sind
-und der Mensch eine Stichprobe von mindestens 20 % nachprüft. Der Autor eines Kandidaten bewertet ihn nicht als alleiniger Nachweis.
+und der Mensch eine Stichprobe von 20 %, mindestens aber 3 Urteilen nachprüft (Review). Der Autor eines Kandidaten bewertet ihn nicht als alleiniger Nachweis.
 
 ## 8. Rohresultate und Versionsbindung
 
@@ -171,7 +178,7 @@ Vorschlag zur Verteilung, ausgeführt erst in SL5:
 | E1 Auswahl | 18 | 6 GT + 9 ST + 3 der neuen Grenzfälle, je einmal, in B1 |
 | E1 Verhalten | 4 | B02, B03, B06a, B10a |
 | E2 Komposition | 5 | C-01 bis C-04; C-02 braucht zwei Sessions |
-| E3 Lernschritt | 9 | 1 Kandidat, select- und test-Split gegen B1 |
+| E3 Lernschritt | 9 | 1 Kandidat für eine **Auswahlregel** (M2), nur Kandidatenläufe; Baseline sind die B1-Läufe aus E1 auf denselben Fällen (Review) |
 | Reserve | 2 | nur für Läufe, die vor dem ersten Test abbrechen |
 | **Summe** | **40** | |
 
@@ -179,18 +186,21 @@ Je Lauf `--max-budget-usd` als Sicherung. Der Betrag wird vor SL5 nach einem C0-
 Einzelläufe je Fall: Das reicht, um grobe Fehler und Auswahlprobleme zu sehen. Für statistisch belastbare Unterschiede reicht es **nicht**.
 Ergebnisse werden entsprechend als Hinweise berichtet, nicht als Wirkungsnachweis.
 
+**E3 und Budget (Review):** M4 ist paarweise (B1 und Kandidat je Fall). Mit 9 Läufen blieben für select und test zusammen höchstens 4 Fallpaare; der test-Split allein hätte bei ~39 Fällen und 30 % rund 11 Fälle, also ~22 Läufe. Deshalb misst E3 in diesem Budget nur eine Änderung an der **Auswahlregel** (M2): Die B1-Läufe aus E1 auf denselben select- und test-Fällen sind die Baseline, nur der Kandidat kostet Läufe. Eine Wirkungsmessung (M4) für Skill-Inhalte braucht ein eigenes, größeres Budget und wird hier nicht versprochen. Alternativen, falls der Owner anders entscheidet: E2 verkleinern zugunsten von E3, oder E3 nur als Ablauftest ohne Wirkungsaussage.
+
 ## 10. Erfolgs- und Abbruchkriterien (vor den Läufen festgelegt)
 
 - **E1** ist erfolgreich, wenn alle positiven Fälle und alle negativen Fälle einzeln berichtet sind, mit beobachteter oder als nicht beobachtbar markierter Auswahl.
   Ein Schwellenwert für „gut genug“ wird hier bewusst nicht gesetzt; das entscheidet das Review nach den Zahlen, nicht der Autor.
 - **E3**: Ein Kandidat gilt nur als besser, wenn er im test-Split in keinem R-Fall verstößt und in M4 mehr Fälle verbessert als verschlechtert.
   „Kein Vorteil“ ist ein gültiges Ergebnis.
-- **Abbruch**: Fehlt in C0 die Beobachtbarkeit von Skill-Aufrufen, entfällt die automatische M2-Messung. Dann wird E1 als Protokoll mit manueller Sichtung ausgeführt und so gekennzeichnet.
+- **Abbruch**: Fehlt in C0 die Beobachtbarkeit von Skill-Aufrufen, entfällt die automatische M2-Messung. Dann wird E1 als Protokoll mit manueller Sichtung ausgeführt und so gekennzeichnet. In diesem Fall entfällt auch E3 in der Form oben, weil seine Messgröße M2 ist.
 
 ## 11. Unabhängigkeit
 
 Dieses Design hat dieselbe Session geschrieben, die SL0 erstellt hat. Das ist kein unabhängiger Nachweis.
 Vorschlag: Der Owner reviewt das Design im PR. Vor E3 prüft eine getrennte Session, die nur Design und Fälle sieht, die Split-Datei.
+Stand: Eine getrennte Session hat das Design am 30.10.2026 reviewt ([PR-Kommentar](https://github.com/netzkontrast/sidekick/pull/10#issuecomment-6529553999)); dasselbe Modell, daher keine volle Unabhängigkeit. Das Owner-Review steht aus.
 
 ## 12. Offen nach SL1
 
