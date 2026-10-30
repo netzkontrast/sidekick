@@ -11,6 +11,7 @@ Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine 
 
 ## Organisation
 
+- [Unabhängige Primärquellenprüfung SL0/SL1](../../docs/research/skill-library-primaerquellen-2026-10-30.md) mit [Prüfmanifest](../../docs/research/skill-library-source-audit.json) und [GEPA/gskill-Dossier](repos/gepa-gskill.md)
 - [Synthese: Konzeptkarte und Anforderungen](synthese.md)
 - [Clean-Room-Plan](clean-room-plan.md)
 - [Web-Gegenprüfung mit Primärquellen](web-recherche-2026-10-30.md) (S1–S12, Anforderungen WEB-R1–R10)

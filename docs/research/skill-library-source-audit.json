@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-10-30",
+  "sidekick_commit": "38f4c73ecbcbe0bc10706c52c87186a77af7c11b",
+  "scope": "Static checks and primary source review; no model or SDK runtime execution",
+  "primary_sources": [
+    {
+      "repo": "agentskills/agentskills",
+      "commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "read_files": [
+        "docs/specification.mdx",
+        "docs/client-implementation/adding-skills-support.mdx",
+        "docs/skill-creation/evaluating-skills.mdx",
+        "docs/skill-creation/optimizing-descriptions.mdx",
+        "docs/LICENSE"
+      ]
+    },
+    {
+      "repo": "anthropics/claude-agent-sdk-python",
+      "commit": "1ea8cb74ddcdadbfaa9b20dfa8268e18047851e7",
+      "read_files": [
+        "examples/tool_permission_callback.py",
+        "e2e-tests/test_tool_permissions.py",
+        "src/claude_agent_sdk/types.py",
+        "src/claude_agent_sdk/_internal/transport/subprocess_cli.py"
+      ]
+    },
+    {
+      "repo": "stanfordnlp/dspy",
+      "commit": "25162c4fc05c2d2d019b0ffb5b6b2a9f315ec007",
+      "read_files": [
+        "docs/docs/learn/evaluation/data.md",
+        "docs/docs/api/optimizers/GEPA/overview.md"
+      ]
+    },
+    {
+      "repo": "gepa-ai/gepa",
+      "commit": "02ea4152ff6e512484cb5298046bfe967aea4735",
+      "read_files": [
+        "docs/docs/guides/gskill.md",
+        "docs/docs/guides/claude-cli-as-proposer.md",
+        "src/gepa/gskill/gskill/train_optimize_anything.py",
+        "src/gepa/gskill/gskill/evaluate/claude_code_skills.py",
+        "docs/docs/blog/posts/2026-02-18-automatically-learning-skills-for-coding-agents/index.md",
+        "LICENSE"
+      ]
+    }
+  ],
+  "method": {
+    "utf8Bytes": "Sum 1/2/3/4 bytes per Unicode codepoint",
+    "words": "trim and split on JavaScript whitespace",
+    "frontmatter": "Extract scalar name/description lines from these four simple fixtures; not a complete YAML parser",
+    "links": "Normalize relative Markdown paths against recursive Git tree",
+    "symlinks": "Git mode presence only; no independent target resolution",
+    "discovery": "Not run",
+    "model_calls": 0
+  },
+  "skill_checks": [
+    {
+      "name": "grilling",
+      "path": ".agents/skills/grilling/SKILL.md",
+      "utf8Bytes": 3409,
+      "words": 387,
+      "descriptionChars": 342,
+      "nameMatchesDirectory": true,
+      "validName": true,
+      "descriptionWithinLimit": true,
+      "missingReferences": [],
+      "claudeLinkMode": "120000",
+      "implicitAllowed": true
+    },
+    {
+      "name": "planning-work-packages",
+      "path": ".agents/skills/planning-work-packages/SKILL.md",
+      "utf8Bytes": 1872,
+      "words": 214,
+      "descriptionChars": 273,
+      "nameMatchesDirectory": true,
+      "validName": true,
+      "descriptionWithinLimit": true,
+      "missingReferences": [],
+      "claudeLinkMode": "120000",
+      "implicitAllowed": true
+    },
+    {
+      "name": "researching-repositories",
+      "path": ".agents/skills/researching-repositories/SKILL.md",
+      "utf8Bytes": 1791,
+      "words": 201,
+      "descriptionChars": 264,
+      "nameMatchesDirectory": true,
+      "validName": true,
+      "descriptionWithinLimit": true,
+      "missingReferences": [],
+      "claudeLinkMode": "120000",
+      "implicitAllowed": true
+    },
+    {
+      "name": "reviewing-decision-gates",
+      "path": ".agents/skills/reviewing-decision-gates/SKILL.md",
+      "utf8Bytes": 1753,
+      "words": 198,
+      "descriptionChars": 267,
+      "nameMatchesDirectory": true,
+      "validName": true,
+      "descriptionWithinLimit": true,
+      "missingReferences": [],
+      "claudeLinkMode": "120000",
+      "implicitAllowed": true
+    }
+  ]
+}

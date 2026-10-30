@@ -6,6 +6,8 @@
 > Evidenz wie in `AGENTS.md`: *dokumentiert*, *im Code gefunden*, *praktisch nachgewiesen*, *offen*. Hier gibt es keinen Code; „lokal geprüft“ heißt
 > eine Prüfung mit eigenem Skript an den Dateien dieses Branches.
 
+> Unabhängige Gegenprüfung vom 30.10.2026: [Originalquellen, statische Nachmessung und Konsequenzen](../../docs/research/skill-library-primaerquellen-2026-10-30.md). Die Größenwerte sind bestätigt; Runtime-/Lernverhalten bleibt offen.
+
 ## 1. Kurzfassung
 
 - Es gibt vier Skills. Formal sind sie sauber (lokal geprüft, §2.2). Ob ein Client sie findet, auswählt und ob sie das Ergebnis verbessern, ist **nicht gemessen**.
@@ -40,8 +42,8 @@ Rumpf 11–13 Zeilen (Empfehlung < 500), alle Referenzlinks existieren, alle vie
 Das offizielle `skills-ref validate` wurde **nicht** ausgeführt; es wäre eine neue Dependency.
 
 **Dokumentiert** ([Claude-Code-Skills](https://code.claude.com/docs/en/skills), abgerufen 30.10.2026): Claude Code lädt Projekt-Skills aus `.claude/skills/`.
-Ein Eintrag darf ein Symlink sein. Beschreibungen stehen dauerhaft im Kontext (gekürzt auf 1536 Zeichen), der Rumpf erst beim Aufruf.
-`.agents/skills/` wird auf dieser Seite nicht erwähnt. Für Claude Code trägt also nur der Symlink.
+Ein Eintrag darf ein Symlink sein. Beschreibungen dienen der Auswahl, der Rumpf wird bei Aktivierung geladen. Das konkrete Katalog-/Kontextbudget muss C0 mit der tatsächlich eingesetzten Clientversion prüfen; ein pauschales Zeichenbudget ist kein portabler Vertrag.
+`.agents/skills/` wird auf dieser Seite nicht erwähnt. Der Symlink ist damit der hier dokumentierte Claude-Zugang; die Gegenprüfung bestätigt keinen Ausschluss weiterer Pfade in anderen Clientversionen.
 
 **Laut Repo-Doku, nicht neu geprüft:** Codex liest die optionalen Metadaten in `agents/openai.yaml`. Alle vier setzen `allow_implicit_invocation: true`
 ([wiederverwendbare-skills.md](../../docs/research/wiederverwendbare-skills.md)).
@@ -90,7 +92,7 @@ Sie gehören in SL3 (Komposition) und SL7 (erste Version, Stufen 0–2).
 
 ## 4. Getrennte Ebenen von „Skill funktioniert“
 
-Diese Trennung trägt das Evaluationsdesign (SL1). Heute ist keine Ebene für diese Skills praktisch nachgewiesen.
+Diese Trennung trägt das Evaluationsdesign (SL1). Formatmerkmale sind statisch geprüft; Auswahl, Verhalten, Wirkung und Komposition dieser Skills sind nicht praktisch nachgewiesen.
 
 | Ebene | Frage | Stand |
 |---|---|---|
