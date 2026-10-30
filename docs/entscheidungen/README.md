@@ -12,6 +12,13 @@ Die [Vision](../vision.md) bleibt als Ausgangsdokument unverändert. Was hier en
 
 Status: `offen` → `in Prüfung` → `entschieden` (oder `weiterer Spike nötig`).
 
+## Grundsatzentscheidungen des Owners
+
+| Datum | Entscheidung | Begründung / Folge |
+|---|---|---|
+| 30.10.2026 | **Erste Runtime ist Claude Code**, sowohl für Adaptervertrag als auch MVP-Abnahme. Goose folgt als zweite Runtime (Phase 2). | Bestätigt Vision §26. Damit liegt Tor B (Auth-Pfad, Nutzungsbedingungen) auf dem kritischen Pfad. Vorschlag P3 der [Reflexion zur ChatGPT-Spec](../../research/agent-hub/inputs/2026-10-30-reflexion-chatgpt-spec.md) ist damit abgelehnt. |
+| 30.10.2026 | **Recherche, Spec und Implementierung bleiben in diesem Repo** (`netzkontrast/sidekick`). | Clean-Room wird über Regeln gesichert, nicht über Repo-Trennung: kein Fremdcode, keine fremden Prompts/Fixtures; `research/` bleibt außerhalb von Build- und Testpfaden. Vorschlag P8 ist damit entschieden. |
+
 ## Aufbau eines Protokolls
 
 1. **Frage** und Bezug zur Analyse
