@@ -1,0 +1,88 @@
+{
+  "id": "E1-AUSWAHL-1",
+  "status": "vorab festgelegt, vor dem ersten Start committet",
+  "date": "2026-10-30",
+  "design": "research/skills-meta-prompting/library-evaluation-design.md §9 (E1 Auswahl, 12 Starts)",
+  "variant": "B1",
+  "baseline_snapshot": "research/skills-meta-prompting/skill-pilot-baseline-v2.json",
+  "baseline_package_set_sha256": "712b6bd8c279513e332a33f5b9ed5dffa6bba9ec2251f3aaf892fc40807c0f9f",
+  "client": "claude 2.1.314, -p, stream-json, --setting-sources project, --max-budget-usd 0.30, --permission-prompts none, --no-session-persistence, bereinigte Umgebung (env -i)",
+  "workspace": "isoliertes Verzeichnis nur mit .claude/skills/ (Kopien der acht Skills), keine AGENTS.md/CLAUDE.md, keine Fixture-Dateien",
+  "metric": "M2: erster Skill-Aufruf in der Spur (Skill-Tool-Ereignis) gegen expected_skill; Read auf SKILL.md als manuell geladen; keine Qualitätsbewertung",
+  "limits": "1 Start je Fall, keine Wiederholung; Fehlstart zählt; Gesamtbudget nach diesem Block: 14 von ~40",
+  "caveat": "Fixtures (Dateien) werden nicht bereitgestellt; gemessen wird nur die Auswahl auf den Prompt. Fälle sind öffentlich, kein Holdout. Einzelstarts: nur k von n.",
+  "cases": [
+    {
+      "id": "ST-01",
+      "prompt": "Untersuche, ob Bibliothek X Wiederaufnahme nach Prozessabsturz unterstützt.",
+      "expected_skill": "researching-repositories",
+      "prompt_sha256": "5048f564eeef50e7dc4039ce5a9b25ba91d89d41382fc64ada83604f05f93223"
+    },
+    {
+      "id": "ST-04",
+      "prompt": "Break this into tasks.",
+      "expected_skill": "planning-work-packages",
+      "prompt_sha256": "704d9a6ad1c5e6c1dcaed0c245ba9c022bca8a7e9cc4b6318fed685ca89e66a5"
+    },
+    {
+      "id": "ST-05",
+      "prompt": "Sind wir bereit, Anbieter A verbindlich auszuwählen?",
+      "expected_skill": "reviewing-decision-gates",
+      "prompt_sha256": "1a69610e712b8c22c41132cbeade65bccf1395a72bac271589e16c6f0714a699"
+    },
+    {
+      "id": "ST-08",
+      "prompt": "Was ist ein Git-Commit?",
+      "expected_skill": null,
+      "prompt_sha256": "21c0989ee7a55ea6f3760c13abaddee43e74c829d21538acf3ca3e171c6ce66b"
+    },
+    {
+      "id": "GT-02",
+      "prompt": "Hinterfrage unsere Anforderungen und frag mich nach den fehlenden Vorgaben.",
+      "expected_skill": "grilling",
+      "prompt_sha256": "4b8daa77dd14a5e3de0b70af9cd62c82462fce2b66fdb44540068ae3ed9d1add"
+    },
+    {
+      "id": "GT-07",
+      "prompt": "Welche der beiden Optionen empfiehlst du anhand der Belege?",
+      "expected_skill": "reviewing-decision-gates",
+      "prompt_sha256": "f10ba7d085c401eae9e753046ddf00523cc52f6d72d12b49cafae1d4b23b38db"
+    },
+    {
+      "id": "SB-01",
+      "prompt": "Spezifiziere, wie sich ein Skill-Aufruf bei ungültiger Eingabe, Rückfrage und Abbruch verhält.",
+      "expected_skill": "specifying-behavior",
+      "prompt_sha256": "6f5b279176527c68feb6c5b258216a656d1137e070595adbd6a336e7d41d1fae"
+    },
+    {
+      "id": "SB-N1",
+      "prompt": "Implementiere V0-FALL-12 laut gemergter Spec.",
+      "expected_skill": null,
+      "prompt_sha256": "6a14017c6703d29c4cff03cfe46751ff45defa0e4c2fb5304e91dc8538a6df59"
+    },
+    {
+      "id": "RW-01",
+      "prompt": "Mach weiter, wo die letzte Session aufgehört hat.",
+      "expected_skill": "resuming-work",
+      "prompt_sha256": "b525f481684a75907290481819ab048fa855f77bad9317a87c2d6c155f857d39"
+    },
+    {
+      "id": "RW-N1",
+      "prompt": "Setzen wir das Anforderungsinterview von gestern mit den offenen Fragen fort.",
+      "expected_skill": "grilling",
+      "prompt_sha256": "aa5288c373582c36dc66cae1923360a9edb18d7726d9d7a1a42474869c3a96fd"
+    },
+    {
+      "id": "TB-P1",
+      "prompt": "Leite aus dieser Spec Ausfalltests für doppelte Zustellung und verlorene Effektantwort ab.",
+      "expected_skill": "testing-system-boundaries",
+      "prompt_sha256": "14f045e60ac1fe26885aa8614f140c43100cb860b9a576d082903719a0c2140a"
+    },
+    {
+      "id": "EC-P1",
+      "prompt": "Ist die neue Skill-Beschreibung besser als die alte? Hier sind die Ergebnisse.",
+      "expected_skill": "evaluating-changes",
+      "prompt_sha256": "4b2ca8fd2ef91baa53aae3ca47102805c44216735cb306b2a70fffedc075d56a"
+    }
+  ]
+}
