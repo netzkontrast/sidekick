@@ -4,6 +4,7 @@
 > Status 30.10.2026: SL0 und SL1 geliefert; SL1 nach Review einer getrennten Session überarbeitet, Owner-Review offen. Owner-Wahl des nächsten Abschnitts: SL1 korrigieren, dann C0 ([Q-20261030-sl-naechster-abschnitt](../../docs/fragen/skill-library/questions/Q-20261030-sl-naechster-abschnitt.md)). C0 vorbereitet, Starts blockiert (Anmelde-/Abrechnungsweg ungeklärt): [C0-Vorprüfung](eval-runs/C0-vorpruefung-2026-10-30.md). Verbrauchte CLI-Starts: 0 von ~40. SL2–SL7 geplant. Kein Skill geändert.
 > Owner-Antworten zu Live-Budget, Reichweite, Feedbackdaten und Aktivierung: [docs/fragen/skill-library](../../docs/fragen/skill-library/index.md).
 > Nächster Schritt: Owner wählt einen Weg aus der C0-Vorprüfung §4 (eigener Rechner, API-Schlüssel als Secret oder ausdrücklich freigegebener Lauf hier). SL2 kann unabhängig davon beginnen, wenn der Owner das will.
+> Ergänzende Vorbereitung im Work-Executor: [Pilot-Artefakte](library-experiments.md) mit eingefrorener Baseline, zwei getrennten Kandidaten und zwölf synthetischen Fällen. C0 hier lokal blockiert, weil die CLI fehlt; 0 Modellstarts. 14 Hilfsprogrammtests bestanden. Die Kandidaten sind nicht aktiv und ihre Wirkung ist ungemessen; SL5 gilt damit nicht als durchgeführt.
 > Dieser Plan ist die einzige Statusablage für SL0–SL7. Bestehende Hub-Pakete bleiben im [Hub-Plan](../agent-hub/operations/PLAN.md).
 > Einstieg: [vorhandene Synthese K1–K8](synthese.md), [Clean-Room-Plan](clean-room-plan.md), [Vision v5](../../docs/vision-v5-entwurf.md), [Projektregeln](../../AGENTS.md).
 

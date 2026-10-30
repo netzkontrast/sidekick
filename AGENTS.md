@@ -5,7 +5,7 @@ Produktüberblick: [README.md](README.md). Hier steht nur, was sich nicht aus de
 
 ## Projektstand
 
-- Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält bisher nur Markdown.
+- Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält Planungsdokumente und isolierte Research-Hilfsprogramme, noch keine Produktlaufzeit.
   Maßgeblich: [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md) für Vorgehen
   und Prioritäten, [docs/vision.md](docs/vision.md) für das Produktziel.
 - Recherche-Zeit auf P0-Fragen konzentrieren (Analyse §5, §9); keine Feature-Listen für P1/P2 vor dem MVP.

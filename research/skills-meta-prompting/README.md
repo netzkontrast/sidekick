@@ -9,6 +9,10 @@ gelisteten Repos so integrieren, dass ein Clean-Room-Rewrite ihre wesentlichen A
 
 Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine Kernfähigkeit innerhalb Sidekicks und ein lernbares Prompt-Framework. Ausführungseinstieg für Claude und einzige Statusablage SL0–SL7: [Library-Research-Plan](library-research-plan.md). Erster Ausführungsauftrag: ausschließlich SL0/SL1, danach Review des Evaluationsdesigns; SL2–SL7 bleiben als Folgepakete geplant. Er nutzt die bestehenden Dossiers und K1–K8, erweitert sie auf neun Skill-Bereiche und trennt Inhaltsoptimierung, Auswahl, Komposition und Modelltraining. Recherche ist beauftragt; Laufzeitarchitektur und Dependencies bleiben zu prüfen.
 
+## Pilot-Vorbereitung und lokaler C0-Befund
+
+[Ausführungsprotokoll](library-experiments.md): eingefrorene Baseline, zwölf synthetische Fälle, zwei nicht aktive Änderungskandidaten und ein getesteter manueller Hilfsrunner. Im Work-Executor fehlt die Claude CLI; keine Modellläufe. Die separate [Claude-C0-Vorprüfung](eval-runs/C0-vorpruefung-2026-10-30.md) bleibt maßgeblich für deren Anmelde-/Abrechnungsblockade. Nach der dokumentierten Owner-Wahl sind zunächst nur die zwei C0-Starts auszuführen, danach Ergebnis vorlegen.
+
 ## Organisation
 
 - [Unabhängige Primärquellenprüfung SL0/SL1](../../docs/research/skill-library-primaerquellen-2026-10-30.md) mit [Prüfmanifest](../../docs/research/skill-library-source-audit.json) und [GEPA/gskill-Dossier](repos/gepa-gskill.md)
