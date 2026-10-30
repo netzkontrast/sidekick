@@ -67,7 +67,7 @@ In allen Varianten wertet M2 ein Read auf eine `SKILL.md` als eigene Kategorie *
 **Zwei Isolationswege, in C0 verglichen** (Punkt 2): (a) isoliertes Verzeichnis mit `--setting-sources project`, (b) `--bare --add-dir <Messverzeichnis>`.
 Laut `claude --help` (2.1.314) schaltet `--bare` unter anderem CLAUDE.md-Autodiscovery, Plugin-Sync, Hooks und Auto-Memory ab; Skills lassen sich weiter per
 `/skill-name` aufrufen. Offen ist, ob das Modell unter `--bare` Skills noch **selbst** auswählt; wenn nicht, taugt (b) für M3, aber nicht für M2.
-Laut Review gilt unter `--bare` nur API-Key-Anmeldung, nicht OAuth. Das ändert Anmeldung und Abrechnung und damit die Kostenfelder (§8).
+Ebenfalls laut `--help`: Unter `--bare` gilt nur `ANTHROPIC_API_KEY` oder `apiKeyHelper`; OAuth und Keychain werden nie gelesen. Das ändert Anmeldung und Abrechnung und damit die Kostenfelder (§8).
 C0 hält je Weg fest: sichtbare Skills, ob Auto-Auswahl stattfindet, Anmeldeweg.
 
 Codex, die Claude-App und andere Oberflächen: in der ersten Messreihe **nicht** enthalten. Ergebnisse gelten nur für den gemessenen Client und dessen Version.
