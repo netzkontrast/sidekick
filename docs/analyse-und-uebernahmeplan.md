@@ -1,6 +1,8 @@
 # Agent Hub: Visionsanalyse, Repo-Recherche und Übernahmeplan
 
 > Stand: 30.10.2026 · Grundlage: [Agent Hub – Vision, Version 4](vision.md)
+>
+> Umsetzung im Repo: Entscheidungstore unter [`entscheidungen/`](entscheidungen/), Dossier-Vorlage unter [`research/dossiers/`](research/dossiers/), [Herkunftsregister](herkunftsregister.md).
 
 ## 1. Entscheidungsempfehlung
 
@@ -113,7 +115,7 @@ Connector hält einen lokalen dauerhaften Journal-/Outbox-Speicher, beispielswei
 
 ### Tor D: Workflow, Hosting und Artefaktspeicher
 
-Vercel Workflow, Trigger.dev und Restate zunächst anhand Restart, langlebiger Freigabe-Wartezeit, Idempotenz, Export, Self-hosting und Betriebsaufwand vergleichen. Nur die zwei passendsten praktisch testen. Keine drei Engines implementieren.
+[Vercel Workflow](https://github.com/vercel/workflow), [Trigger.dev](https://github.com/triggerdotdev/trigger.dev) und [Restate](https://github.com/restatedev/restate) zunächst anhand Restart, langlebiger Freigabe-Wartezeit, Idempotenz, Export, Self-hosting und Betriebsaufwand vergleichen. Nur die zwei passendsten praktisch testen. Keine drei Engines implementieren.
 
 Vor Vercel-Festlegung ein vollständiges privates Betriebsprofil beschreiben. Objektstore hinter eigenem Adapter; „Vercel Blob nutzt S3“ nicht als Nachweis für S3-API-Kompatibilität behandeln. Private Artefakte, autorisierte Downloads, Hash-Prüfung und Backup/Restore sind Pflichtkriterien. Aktuelle WS-Verfügbarkeit, Function-Limits, MCP-Auth und Anbieterbedingungen am Umsetzungstag prüfen.
 
@@ -182,14 +184,14 @@ MVP bewusst reduzieren: ein Owner, ein Projekt, ein Gerät, `code-change`, eine 
 
 Die Vision selbst ist die Produktquelle. Für aktuelle Projektbefunde wurden folgende offizielle Quellen genutzt; sämtliche Portierungsentscheidungen bleiben bis zur Commit-Prüfung vorläufig.
 
-- Paperclip Adapter-Dokumentation: Adapter und Full-auto-Verhalten.
-- Paperclip Budget-Dokumentation: Budget- und Agent-Verwaltung.
-- OpenHands README: Agent Canvas, mehrere Runtimes und lokale/Remote-Backends.
-- Happy Privacy: verschlüsselte Inhalte und sichtbare Metadaten.
-- Goose CLI: ACP und Keyring-Hinweis.
-- Claude ACP README und Permissions: SDK-Basis, Session-Funktionen und Permission-Grenzen.
-- Pi: minimale Harness, Erweiterungen, RPC/SDK.
-- DeepSeek Harness: Plugin-Ansatz und Developer-Preview-Status.
-- Vibe Kanban Releases: Hinweis auf Unternehmensschließung; kein Beweis, dass jede Community-Arbeit beendet ist.
-- Vercel Blob: S3 als Infrastruktur ist keine automatisch gleiche öffentliche API.
-- MCP Authorization SDK: CIMD und Authorization-Metadaten. Tatsächliche Client-Kompatibilität gesondert testen.
+- [Paperclip Adapter-Dokumentation](https://github.com/paperclipai/paperclip-docs/blob/main/docs/guides/org/agent-adapters.md): Adapter und Full-auto-Verhalten.
+- [Paperclip Budget-Dokumentation](https://github.com/paperclipai/paperclip-docs/blob/main/docs/guides/org/agents.md): Budget- und Agent-Verwaltung.
+- [OpenHands README](https://github.com/OpenHands/OpenHands): Agent Canvas, mehrere Runtimes und lokale/Remote-Backends.
+- [Happy Privacy](https://github.com/slopus/happy/blob/main/PRIVACY.md): verschlüsselte Inhalte und sichtbare Metadaten.
+- [Goose CLI](https://github.com/aaif-goose/goose/blob/main/documentation/docs/guides/goose-cli-commands.md): ACP und Keyring-Hinweis.
+- [Claude ACP README](https://github.com/agentclientprotocol/claude-agent-acp/blob/main/README.md) und [Permissions](https://github.com/agentclientprotocol/claude-agent-acp/blob/main/docs/permission-extension.md): SDK-Basis, Session-Funktionen und Permission-Grenzen.
+- [Pi](https://github.com/earendil-works/pi): minimale Harness, Erweiterungen, RPC/SDK.
+- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): Plugin-Ansatz und Developer-Preview-Status.
+- [Vibe Kanban Releases](https://github.com/BloopAI/vibe-kanban/releases): Hinweis auf Unternehmensschließung; kein Beweis, dass jede Community-Arbeit beendet ist.
+- [Vercel Blob](https://vercel.com/docs/vercel-blob): S3 als Infrastruktur ist keine automatisch gleiche öffentliche API.
+- [MCP Authorization SDK](https://apps.extensions.modelcontextprotocol.io/api/documents/authorization.html): CIMD und Authorization-Metadaten. Tatsächliche Client-Kompatibilität gesondert testen.

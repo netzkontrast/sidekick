@@ -5,8 +5,10 @@ Produktüberblick: [README.md](README.md). Hier steht nur, was sich nicht aus de
 
 ## Projektstand
 
-- Phase 0a/0b: Das Repo enthält bisher nur Markdown. Maßgeblich sind
-  [docs/vision.md](docs/vision.md) und [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md).
+- Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält bisher nur Markdown.
+  Maßgeblich: [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md) für Vorgehen
+  und Prioritäten, [docs/vision.md](docs/vision.md) für das Produktziel.
+- Recherche-Zeit auf P0-Fragen konzentrieren (Analyse §5, §9); keine Feature-Listen für P1/P2 vor dem MVP.
 - Spec-driven: Verhaltensänderungen beginnen in der Spec unter `docs/`, erst danach folgt Code.
 - Sprache von Doku, Specs und PR-Beschreibungen: Deutsch. Code, Bezeichner und Commit-Messages: Englisch.
 
@@ -19,10 +21,16 @@ Typecheck und Lint mit exakten Flags.
 
 - `research_notes/` und `reports/` sind lokale Arbeitsordner (gitignored).
   Fertige Recherchen werden nach `docs/research/` übernommen.
-- Offene Entscheidungen nicht stillschweigend festlegen, sondern in
-  [docs/vision.md §26](docs/vision.md#26-offene-entscheidungen) eintragen bzw. dort abhaken.
-- Aussagen über Fremd-Repos als *dokumentiert*, *im Code gefunden*, *praktisch nachgewiesen*
-  oder *offen* kennzeichnen (siehe Analyse §6).
+- `docs/vision.md` bleibt als Ausgangsvision unverändert. Wo die Analyse (§3) sie korrigiert
+  oder ein Protokoll in `docs/entscheidungen/` etwas entschieden hat, gilt das vor der Vision.
+- Offene Entscheidungen nicht stillschweigend festlegen, sondern im passenden Protokoll unter
+  `docs/entscheidungen/` festhalten (Status `offen` → `in Prüfung` → `entschieden`).
+- Repo-Dossiers nach `docs/research/dossiers/_vorlage.md` anlegen, immer mit Commit-SHA.
+  Aussagen als *dokumentiert*, *im Code gefunden*, *praktisch nachgewiesen* oder *offen* kennzeichnen.
+  Ein README-Satz allein ist nie ein Nachweis für Zuverlässigkeit.
+- Clean-Room: Fremd-Repos untersuchen, aber in Specs nur beobachtbares Verhalten und eigene
+  Anforderungen beschreiben. Keinen Fremdcode kopieren; Ausnahmen nur nach Entscheidung und mit
+  Eintrag in `docs/herkunftsregister.md`.
 
 ## Code-Navigation mit CodeGraph
 

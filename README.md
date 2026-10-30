@@ -2,7 +2,7 @@
 
 > **Ein gemeinsamer Arbeitsraum für Menschen und ihre vorhandenen Agents – mit verbindlichen Aufträgen, kontrollierter Delegation und überprüfbaren Ergebnissen.**
 
-**Status:** Vision (vor Spec) · private Instanz (self-hosted, Open Source) · erste Runtime: Claude Code
+**Status:** Phase 0 – Recherche und Entscheidungstore (vor Spec) · private Instanz (self-hosted, Open Source) · erste Runtime: Claude Code
 
 Die vollständige Vision steht in [`docs/vision.md`](docs/vision.md), die kritische Analyse samt Repo-Recherche und Übernahmeplan in [`docs/analyse-und-uebernahmeplan.md`](docs/analyse-und-uebernahmeplan.md). Dieses README fasst beides zusammen und beschreibt, wie im Repo gearbeitet wird.
 
@@ -78,7 +78,21 @@ Kein weiterer Chat-Client · kein eigener Coding-Agent · kein Modell-Hosting ·
 | **4 – Komfort** | Hub-Assistenz, PWA + Push, Intake | Auftrag aus Issue, Freigabe vom Telefon |
 | **5 – Cloud & Netz** | Hub-Runtime in der Sandbox, A2A | Externer A2A-Agent liefert ab |
 
-Offene Entscheidungen sind in [`docs/vision.md` §26](docs/vision.md#26-offene-entscheidungen) gelistet.
+### Phase 0 im Detail
+
+Nach dem [Übernahmeplan §9](docs/analyse-und-uebernahmeplan.md#9-umfang-und-reihenfolge); Zeitboxen sind Planungsannahmen für einen Entwickler.
+
+| Schritt | Zeitbox | Inhalt | Ergebnis |
+|---|---|---|---|
+| 1 | 0,5 Tag | Anforderungen festziehen: Begriffe, Garantien, Betriebsprofil, Managed- vs. Attached-Modus, Grenzen von `local-only` | Präzisierte Anforderungen (Vision bleibt unverändert) |
+| 2 | 2–3 Tage | Dossiers zu Paperclip, OpenHands, Claude ACP; Happy für Pairing/Freigabe/Reconnect; identischer Nordstern-Test | [Tor A](docs/entscheidungen/tor-a-erweiterung-oder-eigener-kern.md), [Tor B](docs/entscheidungen/tor-b-claude-anbindung.md) |
+| 3 | 1–2 Tage | Fake-Runtime, Claim/Effekt-Fehlermatrix, lokale Outbox, Transportprobe, Workflow-Shortlist | [Tor C](docs/entscheidungen/tor-c-transport-und-haltbarkeit.md), [Tor D](docs/entscheidungen/tor-d-workflow-hosting-artefakte.md) |
+| 4 | 0,5–1 Tag | Spec: Commands, Events, Grants, Effekte, Runtime-Vertrag, Connector-Journal; [Herkunftsregister](docs/herkunftsregister.md) | Spec reviewt (Phase 0b) |
+| 5 | – | Vertikaler MVP: Auftrag → Claude → Diff → Checks → Review → Abnahme → PR | Phase 1 |
+
+**MVP bewusst klein:** ein Owner, ein Projekt, ein Gerät, Playbook `code-change`, eine Runtime, Reviewer als separater Run, menschliche Abnahme, PR-Erstellung als einziger externer Effekt.
+
+Offene Entscheidungen der Vision ([§26](docs/vision.md#26-offene-entscheidungen)) werden in [`docs/entscheidungen/`](docs/entscheidungen/) protokolliert.
 
 ---
 
@@ -91,8 +105,11 @@ Offene Entscheidungen sind in [`docs/vision.md` §26](docs/vision.md#26-offene-e
 ├── CLAUDE.md         Importiert AGENTS.md, plus Claude-Code-spezifische Hinweise
 ├── docs/
 │   ├── vision.md                     Vollständige Produktvision (v4)
-│   ├── analyse-und-uebernahmeplan.md Visionsanalyse, Repo-Recherche, Entscheidungstore
+│   ├── analyse-und-uebernahmeplan.md Visionsanalyse, Repo-Recherche, Übernahmeplan
+│   ├── entscheidungen/               Entscheidungstore A–D (Protokolle)
+│   ├── herkunftsregister.md          Fremdsoftware: Quelle, Lizenz, Kategorie
 │   └── research/                     Abgeschlossene Recherchen
+│       └── dossiers/                 Repo-Dossiers (Vorlage: _vorlage.md)
 └── .codegraph/       Lokaler CodeGraph-Index (nicht eingecheckt, nur .gitignore)
 ```
 
