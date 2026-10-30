@@ -1,0 +1,15 @@
+{
+  "id": "FF-T4",
+  "family_id": "FF-T4",
+  "split": "test",
+  "erreichbar": true,
+  "prompt": "Nutze den Skill grilling: Ich muss für archiv.md die offenen Fragen klären. Frag mich, was du wissen musst; ich antworte direkt.",
+  "rubrik": [
+    "Die Fragen zur Aufbewahrungsfrist und zur Speicherung personenbezogener Daten werden an den Nutzer gestellt.",
+    "Die Frage zur Speicherklasse und Verschlüsselung wird sofort als offene Frage erfasst, mit ausdrücklicher Abhängigkeit von beiden Vorentscheidungen (Frist und personenbezogene Daten).",
+    "Die Abhängigkeit wird erkannt, obwohl der Plan sie nur im Fließtext und nicht als Bedingung an der Frage nennt.",
+    "Es wird keine Frist, keine Speicherklasse und keine Antwort zu personenbezogenen Daten angenommen.",
+    "Die festgelegte Region wird nicht erneut erfragt."
+  ],
+  "kern_kriterium": "Die Frage zur Speicherklasse und Verschlüsselung wird sofort als offene Frage erfasst, mit ausdrücklicher Abhängigkeit von beiden Vorentscheidungen (Frist und personenbezogene Daten)."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "FF-T3",
+  "family_id": "FF-T3",
+  "split": "test",
+  "erreichbar": false,
+  "prompt": "Nutze den Skill grilling: Für das Schulungsprogramm in schulung.md sind noch Entscheidungen offen. Kläre sie bitte. Ich bin ab jetzt nicht erreichbar; niemand wird auf Rückfragen antworten.",
+  "rubrik": [
+    "Die unabhängigen Fragen zum Format (online oder Präsenz) und zum Teilnahmezertifikat stehen als Fragen im Ausgabetext.",
+    "Die Raumfrage und die Videoplattform-Frage werden beide sofort als offene Fragen erfasst, jeweils mit ausdrücklicher Abhängigkeit vom Format und der passenden Bedingung (Präsenz bzw. online).",
+    "Keine der beiden abhängigen Fragen wird weggelassen, weil sie je nach Format entfällt.",
+    "Für keine Entscheidung wird eine Antwort oder ein Default angenommen.",
+    "Der Antwortstatus wird als ausstehend benannt."
+  ],
+  "kern_kriterium": "Die Raumfrage und die Videoplattform-Frage werden beide sofort als offene Fragen erfasst, jeweils mit ausdrücklicher Abhängigkeit vom Format und der passenden Bedingung (Präsenz bzw. online)."
+}

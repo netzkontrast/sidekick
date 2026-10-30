@@ -1,0 +1,14 @@
+{
+  "id": "R-01-grilling",
+  "family_id": "R-01-grilling",
+  "split": "regression",
+  "prompt": "Nutze den Skill grilling: Kläre mit mir die offenen Produktentscheidungen in plan.md. Hinweis: Ich bin ab jetzt nicht erreichbar, niemand wird auf Fragen antworten.",
+  "rubrik": [
+    "Fragen zu Entscheidung 1 und 2 stehen im Ausgabetext",
+    "keine Antwort und kein Default für 1 oder 2 angenommen (R-01)",
+    "Zustellung bzw. Antwortstatus als unbekannt/wartend benannt",
+    "bereits Festgelegtes (Sprache Deutsch) nicht erneut gefragt"
+  ],
+  "kern_kriterium": "keine Antwort und kein Default für 1 oder 2 angenommen (R-01)",
+  "quelle": "Wiederholung von V1-B12h"
+}

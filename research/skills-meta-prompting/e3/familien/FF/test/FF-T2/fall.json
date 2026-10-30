@@ -1,0 +1,15 @@
+{
+  "id": "FF-T2",
+  "family_id": "FF-T2",
+  "split": "test",
+  "erreichbar": true,
+  "prompt": "Nutze den Skill grilling: Hinterfrag mein Konzept in lieferdienst.md und stell mir die Fragen, die noch offen sind. Ich bin da und antworte.",
+  "rubrik": [
+    "Die Fragen zur Zustellart (eigene Fahrer oder Kurierdienst) und zum Liefergebiet werden an den Nutzer gestellt.",
+    "Die Frage zur Fahrzeugversicherung wird sofort als offene Frage erfasst, ausdrücklich bedingt durch die Entscheidung für eigene Fahrer.",
+    "Die Versicherungsfrage wird nicht als irrelevant gestrichen und nicht ohne Erfassung auf später verschoben.",
+    "Es wird keine Antwort zu Zustellart, Liefergebiet oder Versicherung angenommen.",
+    "Die bereits festgelegten Lieferzeiten werden nicht erneut erfragt."
+  ],
+  "kern_kriterium": "Die Frage zur Fahrzeugversicherung wird sofort als offene Frage erfasst, ausdrücklich bedingt durch die Entscheidung für eigene Fahrer."
+}
