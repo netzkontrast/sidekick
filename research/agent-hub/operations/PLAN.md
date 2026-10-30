@@ -18,6 +18,16 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] Workflow/Transport/Hosting anhand Fault-Tests entscheiden.
 - [ ] Vorschläge P1–P9 aus der [Reflexion zur ChatGPT-Spec](../inputs/2026-10-30-reflexion-chatgpt-spec.md#4-konsequenzen-für-die-planung-vorschläge) mit dem Owner klären; offen sind vor allem P3 (Goose als Vertrags-Runtime) und P8 (eigenes Implementierungs-Repo).
 
+## Neuer Planungsinput: Vision v5
+
+- [x] Offline-/Geräte-/Sprach-/Gedächtnisrichtung mit elf fixierten GitHub-Quellen und Selfplay abgleichen; [fertiger Befund](../../../docs/research/vision-v5-machbarkeit.md).
+- [x] Separaten [Vision-Entwurf](../../../docs/vision-v5-entwurf.md) und [Claude-Bauauftrag](../../../docs/claude-startauftrag-vision-v5.md) vorlegen; v4 unverändert lassen.
+- [ ] V0: Produktänderungen reviewen und betroffene Tore A–D fortschreiben. Keine Forschungsoption als beschlossen behandeln.
+- [ ] Vor dem Geräte-Prototyp: Offline-/Origin-Zugriff, Vercel-Instanzwechsel und dauerhafte Zustellung praktisch prüfen; Polling/SSE gegen erneuerbares WSS vergleichen.
+- [ ] N0: Frühen Needle-Baseline-/Fine-Tune-Versuch mit synthetischen deutschen Beispielen spezifizieren; tatsächliche GPU-Zeit und Nutzen auf Zielhardware messen.
+
+Die frühen Inventarbefunde oben beschreiben ihren damaligen Stand; inzwischen existieren AGENTS.md und weitere Planungsdokumente. Der neue Input ergänzt die offenen P0-Prüfungen und ersetzt sie nicht.
+
 ## Entscheidungstore
 
 A: Paperclip/OpenHands erweitern oder eigener Kern. Gewichte: Domäne 25, Rechte/Effekte 25, Recovery 20, Adapter 15, Betrieb/Export 10, UI 5. Keine Scores ohne Belege.
