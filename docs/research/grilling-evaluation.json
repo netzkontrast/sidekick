@@ -19,11 +19,11 @@
     },
     {
       "prompt": "Welche Version verwendet das Repo?",
-      "expected_skill": "none"
+      "expected_skill": null
     },
     {
       "prompt": "Korrigiere den Tippfehler in der Überschrift.",
-      "expected_skill": "none"
+      "expected_skill": null
     }
   ],
   "behavior_cases": [
@@ -58,10 +58,16 @@
       "assertion": "Chat-Fallback, keine Werkzeugnamen erfinden oder Regeln umgehen."
     },
     {
-      "id": "B06",
+      "id": "B06a",
       "session": "grilling already active",
-      "event": "Zwei offene Fragen.",
-      "assertion": "Session paused, Stand sichern, nicht weiterfragen."
+      "event": "Zwei offene Fragen; Nutzer sagt „später“ oder bricht ab.",
+      "assertion": "Session paused; beide Fragen bleiben open/asked, Stand gesichert, keine weitere Frage."
+    },
+    {
+      "id": "B06b",
+      "session": "grilling already active",
+      "event": "Zwei offene, voneinander unabhängige Fragen.",
+      "assertion": "Beide in einer Runde fragen (begrenzt durch Tool-Schema); keine Pause ohne Auslöser."
     },
     {
       "id": "B07",
@@ -82,10 +88,16 @@
       "assertion": "Bestätigung speichern; keine zusätzliche pauschale Freigabe erzwingen."
     },
     {
-      "id": "B10",
+      "id": "B10a",
       "session": "grilling already active",
-      "event": "Alle bisherigen Fragen beantwortet.",
-      "assertion": "Neue ID und Voraussetzungen erfassen, nächste Runde bilden."
+      "event": "Alle Fragen beantwortet, keine neue Lücke.",
+      "assertion": "Keine neue Frage; Zusammenfassung zur Bestätigung vorlegen."
+    },
+    {
+      "id": "B10b",
+      "session": "grilling already active",
+      "event": "Eine Antwort deckt eine belegte neue Lücke auf.",
+      "assertion": "Neue Frage mit eigener ID; Anlass verweist auf die Antwort; Voraussetzungen erfasst."
     },
     {
       "id": "B11",
