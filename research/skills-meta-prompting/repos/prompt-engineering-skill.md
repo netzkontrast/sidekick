@@ -8,10 +8,11 @@
 | Feld | Wert |
 |---|---|
 | Fork (gelesen) | https://github.com/netzkontrast/prompt-engineering-skill |
-| Upstream (laut Doku) | nicht angegeben; Commit-Autor `kongyo2` (Vermutung: github.com/kongyo2/prompt-engineering-skill, *offen*) |
+| Upstream (laut Doku) | nicht angegeben; Commit-Autor im Git-Log: `kongyo2` |
+| Eigentümer | Projekt-Owner (Aussage des Owners vom 2026-10-30); eigenes Werk |
 | Commit-SHA | `eec9ca5c9c99c9baaa1e5104374139771224fd3f` |
 | Letzter Commit | 2025-10-17 (Commit-Message „99“; insgesamt 2 Commits) |
-| Lizenz | **keine** – weder LICENSE-Datei noch README noch `license`-Feld im Frontmatter; auch keine Copyright-Zeile |
+| Lizenz | keine LICENSE-Datei; als eigenes Werk des Projekt-Owners nicht fremd lizenzpflichtig |
 | Art | Skill · Prompt-Bibliothek |
 | Geprüft am / von | 2026-10-30 / Claude Code (Dokumentenlektüre) |
 
@@ -52,9 +53,9 @@ zu optimieren und zu prüfen. Kein Code, keine Skripte, kein README *(im Code ge
 
 ## Grenzen und Risiken
 
-- **Lizenz fehlt:** Ohne Lizenz bestehen keine Nutzungsrechte an Text oder Struktur. Nur Ideen und allgemein
-  bekannte Techniken dürfen in eigenen Worten aufgegriffen werden; keine Passagen, Tabellen oder Beispiele übernehmen.
-- Herkunft unklar (kein README, kein Upstream-Hinweis, Commit-Message ohne Aussage).
+- **Eigenes Werk:** Laut Owner stammt das Repo von ihm. Die Clean-Room-Pflicht für Fremdcode greift daher nicht;
+  Inhalte dürfen direkt übernommen werden. Für spätere Veröffentlichung trotzdem eine LICENSE-Datei ergänzen.
+- Keine README und nichtssagende Commit-Message erschweren die Nachvollziehbarkeit.
 - Viele Techniken sind Allgemeingut (Chain-of-Thought, Few-Shot, Tree of Thoughts); Quellen werden nicht zitiert.
 - Rein instruktiver Skill: Ablauf und Validierung hängen vollständig von der Befolgung durch das Modell ab.
 
@@ -65,11 +66,11 @@ zu optimieren und zu prüfen. Kein Code, keine Skripte, kein README *(im Code ge
 - **Anforderung R3:** Eine einzige, versionierte Qualitätsrubrik mit einsatzabhängigen Gewichten und Testfall-Set (Normalfall, Randfall, Fehlfall); keine konkurrierenden Rubriken.
 - **Anforderung R4:** Anti-Pattern-Prüfliste als maschinenlesbare Regeln (z. B. Widerspruch, fehlendes Erfolgskriterium, Überladung), soweit automatisierbar.
 - **Anforderung R5:** Prompt-Artefakte mit Versionshistorie, Begründung und bekannten Grenzen ablegen.
-- Nicht übernommen: sämtliche Texte, Muster, Beispiele (keine Lizenz).
-- Kategorie: **Verhalten neu implementieren** (nur Konzepte); Übernahme von Inhalten **zurückstellen**, bis eine Lizenz vorliegt.
+- Übernahme: Texte, Muster und Beispiele dürfen als eigenes Material direkt einfließen; Herkunft im Commit vermerken.
+- Kategorie: **Eigenes Material übernehmen** (kein Fremdcode, daher kein Eintrag als Fremdquelle im Herkunftsregister nötig).
 
 ## Offene Punkte
 
-- Upstream-Repo und Lizenzstatus beim Autor klären (Issue oder Anfrage); bis dahin Clean-Room strikt.
+- LICENSE-Datei und kurze README im Repo ergänzen.
 - Rubrik gegen die Bewertung aus prompt-architect abgleichen und eine eigene, belegte Rubrik spezifizieren.
 - Wirkungstest (Skill vs. ohne Skill) mit festem Prompt-Set – benötigt API-Aufrufe, nicht ausgeführt.
