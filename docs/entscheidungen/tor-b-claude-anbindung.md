@@ -36,7 +36,4 @@ Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachg
 
 ## Offene Punkte
 
-- Offen, 30.10.2026: Für die [Library-Recherche](../../research/skills-meta-prompting/library-research-plan.md) Repo-Discovery, Sidekick-Auswahl, Skill-Komposition und Tool-/AskUser-Capabilities im konkreten Client getrennt nachweisen. Adapter exportieren dieselben portablen Skills; kein automatischer Client-Support unterstellt.
-
-
 - Offen, 30.10.2026: Den [frühen Needle-Versuch N0](../claude-startauftrag-vision-v5.md) und lokale ASR-/Inferenzdienste als zusätzliche Gerätefähigkeiten prüfen. Lokale Modelle über den Connector waren bereits in v4 vorgesehen; neu sind insbesondere Training/Fine-Tuning und der konkretisierte Betrieb. Die Claude-Anbindung bleibt der bestehende P0-Vergleich.

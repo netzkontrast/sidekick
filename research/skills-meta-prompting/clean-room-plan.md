@@ -96,7 +96,7 @@ Der Owner hat den Ort der Library festgelegt. Die übrigen Fragen bleiben offen;
 
 ## Nächster Schritt
 
-SL0/SL1 im [Library-Research-Plan](library-research-plan.md) beginnen und die verbleibenden offenen Entscheidungen gezielt bearbeiten. Die Spec-Vorbereitung nutzt die folgenden bestehenden Versuche: Die kleinen Versuche aus der
+Nur SL0/SL1 im [Library-Research-Plan](library-research-plan.md) bearbeiten und deren Bestandsaufnahme/Evaluationsdesign zur Review vorlegen. SL2–SL7 folgen erst nach diesem Review; verbleibende offene Entscheidungen gezielt bearbeiten. Die Spec-Vorbereitung nutzt die folgenden bestehenden Versuche: Die kleinen Versuche aus der
 Web-Gegenprüfung (§8: Grilling-Auswahl, Grilling-Verhalten, Kompression im Vergleich) passen als erste Fälle in
 Stufe 2. Nicht ausgeführte Versuche aus den Dossiers, die die Planung beeinflussen:
 

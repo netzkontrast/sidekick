@@ -5,11 +5,17 @@
 > Dieser Plan ist die einzige Statusablage für SL0–SL7. Bestehende Hub-Pakete bleiben im [Hub-Plan](../agent-hub/operations/PLAN.md).
 > Einstieg: [vorhandene Synthese K1–K8](synthese.md), [Clean-Room-Plan](clean-room-plan.md), [Vision v5](../../docs/vision-v5-entwurf.md), [Projektregeln](../../AGENTS.md).
 
-## /goal
+## /goal – erste Ausführung: nur SL0 und SL1
 
-Erarbeite eine belegte, umsetzbare Spezifikation für eine vollständig aufeinander aufbauende, projektagnostische Skill-Library als Kernfähigkeit von Sidekick. Skills bilden ein versioniertes Prompt- und Verhaltensframework: auswählbar, kombinierbar, prüfbar und anhand geeigneter Erfahrungen optimierbar.
+Erstelle eine belegte Bestandsaufnahme und ein reviewbares Evaluationsdesign für Sidekicks lernbare Skill-Library. Bearbeite ausschließlich SL0 und SL1. Liefere `library-inventory.md` und `library-evaluation-design.md` als überprüfbare Änderungen auf diesem PR-Branch; aktualisiere die PR-Beschreibung um Ergebnisse, Quellen und offene Nachweise.
 
-Zeige an einem kleinen durchgängigen Fall, wie ein Auftrag passende Skills nutzt, ihre Ergebnisse weitergibt, eine Unterbrechung übersteht und überprüftes Feedback einen besseren Skill-Kandidaten hervorbringt. Formuliere anschließend den kleinsten Implementierungsauftrag. Erfinde keinen Lernerfolg.
+Die Bestandsaufnahme ordnet alle neun Bereiche bestehenden Skills und K1–K8 zu. Das Evaluationsdesign definiert Baseline, Metriken, getrennte Splits, Client-Capabilities und die Korrekturvorschläge zu B06/B10. Keine Skill-Kandidaten optimieren, keine Lernexperimente ausführen und SL2–SL7 noch nicht beginnen. Abschluss dieser ersten Ausführung ist das Review der zwei Artefakte; danach wird der nächste begrenzte Abschnitt festgelegt.
+
+## Gesamtziel der Forschungsreihe
+
+Erarbeite über SL0–SL7 eine belegte, umsetzbare Spezifikation für eine vollständig aufeinander aufbauende, projektagnostische Skill-Library als Kernfähigkeit von Sidekick. Skills bilden ein versioniertes Prompt- und Verhaltensframework: auswählbar, kombinierbar, prüfbar und anhand geeigneter Erfahrungen optimierbar.
+
+Die späteren Pakete zeigen an einem kleinen durchgängigen Fall, wie ein Auftrag passende Skills nutzt, Ergebnisse weitergibt, eine Unterbrechung übersteht und überprüftes Feedback einen besseren Kandidaten hervorbringt. Daraus entsteht ein kleiner Implementierungsauftrag. Das ist das Ziel der Forschungsreihe, nicht der Auftrag für eine einzelne Sitzung. Erfinde keinen Lernerfolg.
 
 ## 1. Was jetzt vorgegeben ist
 
@@ -21,6 +27,14 @@ Zeige an einem kleinen durchgängigen Fall, wie ein Auftrag passende Skills nutz
 
 Dieser Auftrag autorisiert Recherche, eigene Specs, synthetische Fixtures und Vorschläge im PR. Er ist kein Auftrag zur sofortigen Installation aller Kandidaten, zum produktiven Selbsttraining, Deployment oder Merge. Neue Dependencies und externe kostenpflichtige Läufe werden mit konkretem Versuch und Budget zur Entscheidung vorgelegt. Unabhängige Recherche läuft weiter.
 
+### Priorität und Verhältnis zum MVP
+
+Bei knapper gemeinsamer Arbeitszeit haben blockierende Hub-P0-Prüfungen zu Paperclip/OpenHands und der Claude-Anbindung Vorrang. Der nächste begrenzte Library-Auftrag umfasst SL0/SL1 mit vorhandenen Artefakten; dafür werden weder P0-Pakete als erledigt erklärt noch zusätzliche Installationen vorausgesetzt. Priorität und Ergebnisse dieses Plans werden hier gepflegt, nicht in AGENTS.md.
+
+SL2–SL7 bleiben Teil des vollständigen Forschungsumfangs und werden erst nach Review des SL0-/SL1-Ergebnisses in begrenzten Folgeaufträgen bearbeitet. Eine Unterbrechung beendet den Gesamtauftrag nicht; sie hinterlässt den nächsten überprüfbaren Schritt.
+
+Dieser Rechercheplan erweitert die V1-Abnahme nicht. Sie richtet sich nach der dazu reviewten Spec und deren Contract-Tests. V1 kann die vier vorhandenen Skills unverändert nutzen; die lernbare Library ist das Produktziel für spätere geprüfte Schritte, keine neue Voraussetzung für den ersten funktionierenden Hub-Ablauf.
+
 ## 2. Ausgangslage und Wiederverwendung
 
 Vorhanden sind vier Skills unter `.agents/skills/`: grilling, researching-repositories, planning-work-packages und reviewing-decision-gates. Claude-Zugänge liegen als Symlinks unter `.claude/skills/`; optionale Client-Metadaten erlauben implizite Auswahl. Eine funktionierende Auswahl im konkreten Client muss dennoch gemessen werden.
@@ -29,14 +43,17 @@ Die Evaluationsfälle in `docs/research/skill-evaluation.json` und `grilling-eva
 
 Die zwölf vorhandenen Dossiers und die [Web-Gegenprüfung](web-recherche-2026-10-30.md) zuerst nutzen. Nicht zwölf Untersuchungen neu beginnen. Für jede neue Behauptung Quelle, Lesedatum, tatsächlichen Commit und Evidenzstufe erfassen. Stände nach diesem Planungscommit beim Start abgleichen.
 
-## Aktueller Abgleich vor dem PR
+## Aktualisierter Abgleich nach dem Review
 
-Gelesen am 30.10.2026: main `38333a40c5287de034a3fe1d84bd869bffb7ebf0`, nach Merge von PR #9. Offener Nachbar-PR: [#8 – V0-Spec](https://github.com/netzkontrast/sidekick/pull/8), geprüfter Kopf `2c4733e0a0b52e801fe940d7e3889bdb7dfb9ac1`. Beim Ausführungsstart erneut abgleichen.
+Gelesen am 30.10.2026: main `38333a40c5287de034a3fe1d84bd869bffb7ebf0`, nach Merge von PR #9. Offener Nachbar-PR: [#8 – V0-Spec](https://github.com/netzkontrast/sidekick/pull/8), aktuell geprüfter Kopf `02a175c715c52812a403e0fd7fba2e0f7670ac99`. Änderung gegenüber dem ersten Plan: fünf Folgecommits von PR #8 über Dateivergleich geprüft; der V0-Spec-Text und der Fragenindex sind gegenüber dem zuerst gelesenen Stand unverändert. Beim Ausführungsstart erneut abgleichen.
 
 - **Neu in main:** [UI-Synthese](../ui-synthese.md). Sie verlangt eigene Bedienmuster für Rückfragen, Freigaben und unklare Ausgänge sowie getrennte Skill-Discovery-/Wirkungsnachweise. Es sind Dokumentenbefunde und Designhypothesen; keine Usability-Tests. Die private Canvas wurde für diesen Plan nicht geöffnet und wird nicht als geprüfte Quelle behandelt.
 - **V0 liegt als Entwurf in PR #8 vor:** Begriffe, elf Invarianten, Zustandsautomaten, fünf Schemas und Fallmatrix `V0-FALL-01…17` sowie `V0-ABL-01`. Vorhandene Vertragsbegriffe und Fixtures als Ausgangspunkt prüfen; keine konkurrierende Library-Auftrags-/Effekt-/Erinnerungswelt erfinden. Bis Merge/Review bleiben sie Vorschläge.
 - **Dort dokumentierte Owner-Antworten:** Kontinuität mit Vertrag/Journal/Tor, lokale Inferenz und Offline-Frontend im Schema vorsehen, erster Ablauf `research-report`. Der Fragenindex steht noch auf `awaiting_confirmation`; vorhandene Antworten respektieren, keine erneute Interviewrunde nur wegen dieses Plans auslösen.
 - **Überschneidungen:** PR #8 bearbeitet Tore A–D und den Hub-Plan. Änderungen dieses PRs nur additiv einbringen, beim späteren Merge Sachstände zusammenführen. V0 nicht erneut schreiben und hier keinen Status von V0/V1 auf abgeschlossen setzen.
+
+- **PR #11 ist ebenfalls offen:** [Owner-Entscheidungen](https://github.com/netzkontrast/sidekick/pull/11), Kopf `de8e6ae1023634998f992d8656a48d168563a152`. Er dokumentiert Claude Code als erste echte Runtime, die Fake-Runtime für Vertragstests und den Verbleib aller Arbeit im Repo. Sein Owner-Abschnitt wurde gelesen; dieser Plan schreibt ihn nicht parallel neu. Der Library-Discovery-Eintrag wurde aus Tor B in SL1/SL3 verlagert.
+- **Integrationsreihenfolge:** Für die vollständige Integration PR #8 vor PR #10 bevorzugen; PR #11 und #10 können danach in beliebiger Reihenfolge integriert werden, wenn der zweite die gemeinsamen Dateien abgleicht. SL0/SL1 können die offenen Entwürfe schon prüfen; SL7 darf keinen ungeprüften Spec-Entwurf als verbindlichen Vertrag voraussetzen. Dieser Auftrag mergt keinen dieser PRs.
 
 Folgerung: Die Library baut auf der entstehenden V0-Domäne auf. E2 verwendet den Rechercheablauf und seine Vertragsfälle; E3 prüft Skill-Kandidaten als Artefakte mit denselben Wirkungstoren.
 
@@ -137,19 +154,21 @@ Needle bleibt ein früher eigenständiger Versuch N0 aus dem Hub-Plan. Prüfe hi
 | Paket | Status | Voraussetzung | Ergebnis / vorgeschlagene Ablage | Abnahme |
 |---|---|---|---|---|
 | **SL0 Bestand und Verträge** | offen | Dieser Auftrag | `library-inventory.md`: vier Skills, bestehende K1–K8/WEB-IDs, neun Bereiche, Lücken und Abgrenzungen | Jeder Bereich zugeordnet; vorhandene Ergebnisse wiederverwendet; Client- und App-Discovery getrennt |
-| **SL1 Forschungsbaseline** | offen | SL0 | `library-evaluation-design.md`: Fälle, Splits, Metriken, Versionierung, Budgetvorschlag | Positive/negative Trigger, Verhalten, Rechte-/Antwortregeln und Komposition enthalten; Widersprüche B06/B10 geklärt |
-| **SL2 Bereichsrecherche** | offen | SL0; Versuche nach SL1 | Neun `area-*.md`, ergänzte Dossiers nur bei Auswahlbedarf | Für A01–A09 Fragen, Quellen, Minimalversuch und begründete Umsetzungskategorie vorhanden |
-| **SL3 Kompositionsvertrag** | offen | SL1 und relevante SL2-Befunde | `library-composition.md`: Datenmodell, Schichten, Versionen, Übergaben, Fehler- und Offline-Verträge | Ein vollständiger Beispielablauf plus Ablehnung von Zyklus, falscher Ausgabe und inkompatibler Version; Anforderungen gegen K1–K8 rückverfolgbar |
-| **SL4 Lernvertrag** | offen | SL1/SL3 | `library-learning.md`: Inhalts-/Auswahl-/Kompositionsoptimierung, Datenwege, Aktivierung und Rücknahme | Kandidat verändert aktive Library nicht; Testsatz bleibt unabhängig; Grenzen von Modelltraining klar |
-| **SL5 Minimalnachweise** | offen | SL1–SL4, notwendige Zugänge | `library-experiments.md` mit Rohartefaktverweisen und tatsächlichen Befehlen | Drei unten beschriebene Versuche ausgeführt oder jeweils konkrete Blockade dokumentiert; keine simulierten Erfolgszahlen |
-| **SL6 Synthese und Entscheidungen** | offen | SL2–SL5 | Bestehende `synthese.md` und `clean-room-plan.md` fortschreiben; passende Tore A/B/D aktualisieren | Jede Anforderung belegt oder eigene Vorgabe; Empfehlung gegen Status quo; keine doppelten Backlogs |
-| **SL7 Implementierungsübergabe** | offen | SL6 | Eigene ergänzende Spec unter `docs/` und kleiner erster Implementierungsauftrag; PR #8s Spec-Konventionen nach Review/Merge übernehmen | Ausgangsstand, Inputs, Kriterien, Tests, offene Fragen und Rücknahme enthalten; Forschungsbelege nicht als Laufzeitgarantie verkauft |
+| **SL1 Forschungsbaseline** | offen | SL0 | `library-evaluation-design.md`: Fälle, Splits, Metriken, Versionierung, Budgetvorschlag | Positive/negative Trigger, Verhalten, Rechte-/Antwortregeln und Komposition enthalten; Widersprüche B06/B10 geklärt; Repo-Discovery, App-Auswahl, Komposition sowie Tool-/AskUser-Capabilities getrennt beschrieben |
+| **SL2 Bereichsrecherche** | geplant; nach SL0/SL1-Review | Review von SL0/SL1; Versuche nach dessen Design | Neun `area-*.md`, ergänzte Dossiers nur bei Auswahlbedarf | Für A01–A09 Fragen, Quellen, Minimalversuch und begründete Umsetzungskategorie vorhanden |
+| **SL3 Kompositionsvertrag** | geplant; nach SL0/SL1-Review | SL1 und relevante SL2-Befunde | `library-composition.md`: Datenmodell, Schichten, Versionen, Übergaben, Fehler- und Offline-Verträge | Ein vollständiger Beispielablauf plus Ablehnung von Zyklus, falscher Ausgabe und inkompatibler Version; Anforderungen gegen K1–K8 rückverfolgbar |
+| **SL4 Lernvertrag** | geplant; nach SL0/SL1-Review | SL1/SL3 | `library-learning.md`: Inhalts-/Auswahl-/Kompositionsoptimierung, Datenwege, Aktivierung und Rücknahme | Kandidat verändert aktive Library nicht; Testsatz bleibt unabhängig; Grenzen von Modelltraining klar |
+| **SL5 Minimalnachweise** | geplant; nach SL0/SL1-Review | SL1–SL4, notwendige Zugänge | `library-experiments.md` mit Rohartefaktverweisen und tatsächlichen Befehlen | Drei unten beschriebene Versuche ausgeführt oder jeweils konkrete Blockade dokumentiert; keine simulierten Erfolgszahlen |
+| **SL6 Synthese und Entscheidungen** | geplant; nach SL0/SL1-Review | SL2–SL5 | Bestehende `synthese.md` und `clean-room-plan.md` fortschreiben; passende Tore A/B/D aktualisieren | Jede Anforderung belegt oder eigene Vorgabe; Empfehlung gegen Status quo; keine doppelten Backlogs |
+| **SL7 Implementierungsübergabe** | geplant; nach SL0/SL1-Review | SL6 | Eigene ergänzende Spec unter `docs/` und kleiner erster Implementierungsauftrag; PR #8s Spec-Konventionen nach Review/Merge übernehmen | Ausgangsstand, Inputs, Kriterien, Tests, offene Fragen und Rücknahme enthalten; Forschungsbelege nicht als Laufzeitgarantie verkauft |
 
-Reihenfolge: SL0 → SL1 → SL2 → SL3 → SL4 → SL5 → SL6 → SL7. Unabhängige Quellenlektüre innerhalb SL2 ist möglich; dieser Plan verlangt keine Subagents. Eine vorhandene, belegte Antwort wird übernommen statt erneut erzeugt.
+Reihenfolge: SL0 → SL1 → Review → SL2 → SL3 → SL4 → SL5 → SL6 → SL7. Unabhängige Quellenlektüre innerhalb SL2 ist möglich; dieser Plan verlangt keine Subagents. Eine vorhandene, belegte Antwort wird übernommen statt erneut erzeugt.
 
-Erst alle neun Bereiche knapp abdecken, dann entscheidende Lücken vertiefen. Kein generisches Framework implementieren, bevor Vertrag und Baseline stehen. Keine Aufwands-/Kostenersparnis vor Messung zusagen.
+In SL0 zunächst alle neun Bereiche inventarisieren; die eigentliche Bereichsrecherche folgt nach Review in SL2. Danach entscheidende Lücken vertiefen. Kein generisches Framework implementieren, bevor Vertrag und Baseline stehen. Keine Aufwands-/Kostenersparnis vor Messung zusagen.
 
-## 9. Drei erste durchgängige Versuche
+## 9. Drei spätere durchgängige Versuche (SL5)
+
+SL1 entwirft diese Versuche; ausgeführt werden sie erst in SL5. Für spätere Kandidatensuche sind Baseline, Rubrik und Entwicklungs-/Auswahldaten vorher versioniert festzuhalten. Eine getrennte Review-Person oder -Session prüft das Evaluationsdesign; eine neue Session allein beweist keine Unabhängigkeit. Finale Testinhalte bleiben vom Optimierungsprozess getrennt. Ein Autor bewertet seine eigenen Varianten nicht als alleiniger unabhängiger Nachweis.
 
 **E1 – Auswahl und Interview:** vorhandenes Grilling unverändert als Baseline. Frische Client-Sessions mit passenden und unpassenden Aufgaben; danach getrennt Verhalten bei Teilantwort, Korrektur und fehlendem Tool prüfen. Erfassen: sichtbare Discovery, Auswahl, gespeicherte Antworten, unnötige Nachfragen, Usage soweit verfügbar. Fehlende Observability nicht durch Vermutung ersetzen.
 
@@ -163,13 +182,21 @@ Ohne Live-Client oder Budget: Schemas, deterministische Fixtures und ein ausfüh
 
 1. Branch dieses PRs übernehmen; neuesten main-Stand und insbesondere PR #8 auf Überschneidungen prüfen. Falls V0 inzwischen gemergt ist, dessen Specs und synthetische Fixtures verwenden. Keine fremde Arbeit überschreiben.
 2. AGENTS.md und diesen Plan lesen, vorhandene Synthese und vier Skill-Pakete prüfen. SL0 bearbeiten, nur dessen Status hier aktualisieren.
-3. SL1 als erstes prüfbares Ergebnis liefern. Danach alle neun Bereiche in SL2 bearbeiten; relevante Originalquellen und fixierte GitHub-Stände belegen.
+3. SL1 als erstes prüfbares Ergebnis liefern. Quellstände, Annahmen und Messplan belegen. Keine neun Bereichsberichte und keine SL5-Experimente in diesem ersten Auftrag erstellen.
 4. Offene Präferenzen mit dem Grilling-Ablauf und einem verfügbaren nativen AskUser-Werkzeug klären. `docs/fragen/` nutzen. Technische Fakten selbst recherchieren. Bereits vorgegeben ist der Ort innerhalb Sidekicks; diese Frage nicht erneut stellen.
 5. Konkrete offene Entscheidungen: Reichweite der ersten Version, zulässige Feedbackdaten, Aktivierungsbefugnis, externe Laufbudgets und Dependencies. Nur jeweils tatsächlich blockierende Punkte fragen; unabhängige Arbeit fortführen.
-6. SL3–SL7 durchführen, soweit Nachweise und Zugänge reichen. Bei Unterbrechung Paketstand, Belegverweise und genau nächsten Schritt in dieser Datei sichern; keine neue NOW-/Statusdatei anlegen.
+6. Nach SL0/SL1 den Stand samt Artefaktverweisen zur Review vorlegen. SL2–SL7 auf geplant belassen; keine automatische Weiterführung in derselben Sitzung. Bei Unterbrechung Paketstand und genau nächsten Schritt hier sichern; keine neue NOW-/Statusdatei anlegen.
 7. PR-Beschreibung um tatsächliche Befunde und Checks aktualisieren. Klar trennen: Plan, recherchiert, lokal getestet, im Client gemessen und nicht ausgeführt. Nicht selbst mergen.
 
-## Definition of Done der Recherche
+## Abnahme der ersten Ausführung (SL0/SL1)
+
+- Bestandsaufnahme deckt vier vorhandene Skills, neun Bereiche und K1–K8/WEB-Verweise ab; sie berücksichtigt offene PRs ohne deren Aussagen als entschieden auszugeben.
+- Evaluationsdesign trennt Discovery, Auswahl, Verhalten und Komposition sowie Entwurfs-, Auswahl- und Testdaten. B06 erhält einen expliziten Pausen-/Abbruchauslöser; B10 verlangt eine belegte neue Lücke statt automatisch weitere Fragen.
+- Metriken, Versionsbindung, Rohresultatformat, Client-Capability-Nachweise und Ressourcenbedarf sind als prüfbare Vorschläge vorhanden.
+- Review kann das Design bestätigen oder begründet ändern, bevor Kandidaten oder Ergebnisse entstehen. SL0/SL1 werden erst mit tatsächlichen Artefaktbelegen als abgeschlossen geführt; SL2–SL7 bleiben bis zum Review geplant.
+- Es wird kein Baseline-Score, kein Tokengewinn und kein Lernerfolg behauptet, solange die dafür nötigen Versuche nicht ausgeführt sind.
+
+## Definition of Done der gesamten Forschungsreihe
 
 - Alle neun Bereiche haben begründete Empfehlungen; ein fehlender neuer Skill ist kein Fehler, sofern die Fähigkeit sinnvoll anders abgedeckt ist.
 - Der Zusammenhang von Basisfertigkeiten, Komposition, Auswahl und Lernschleife ist spezifiziert und anhand eigener Fixtures prüfbar.

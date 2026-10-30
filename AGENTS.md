@@ -82,10 +82,6 @@ Vor Abschluss relative Links und Konsistenz zwischen Dossier und Backlog prüfen
 Keine Secrets oder unbearbeiteten sensiblen Logs einchecken. Im PR neue Befunde,
 verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
-## Aktueller Research-Auftrag: Skill-Library
-
-Owner-Vorgabe vom 30.10.2026: aufeinander aufbauende, portable Skills als lernbares Prompt-Framework innerhalb Sidekicks erforschen. Maßgeblicher Ablauf und einzige Statusablage SL0–SL7: [Library-Research-Plan](research/skills-meta-prompting/library-research-plan.md). Bestehende Dossiers/K1–K8 wiederverwenden. Diese Forschung ist ausdrücklich beauftragt; Hub-P0-Prüfungen bleiben offen. Inhaltsoptimierung, Auswahl, Komposition und Modelltraining unterscheiden. Keine neue Dependency oder produktive Selbständerung aus dem Plan ableiten. Bestehende Skills bleiben bis zu geprüften Änderungen bedarfsweise geladen, ohne implizite Aufrufkaskaden.
-
 ## Wiederverwendbare Skills
 
 Passende Abläufe bedarfsweise aus `.agents/skills/` laden: `researching-repositories`
@@ -94,6 +90,7 @@ für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Plan
 `grilling` für entscheidungsrelevante Rückfragen mit AskUser-Tools; Ablage: [docs/fragen/](docs/fragen/README.md).
 Nur den passenden Skill lesen,
 Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
+Laufende Skill-Library-Recherche und Priorität: [Library-Research-Plan](research/skills-meta-prompting/library-research-plan.md).
 
 ## Code-Navigation mit CodeGraph
 

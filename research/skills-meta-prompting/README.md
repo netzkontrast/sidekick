@@ -7,7 +7,7 @@ gelisteten Repos so integrieren, dass ein Clean-Room-Rewrite ihre wesentlichen A
 
 ## Aktueller Auftrag: lernbare Library im Anwendungskern
 
-Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine Kernfähigkeit innerhalb Sidekicks und ein lernbares Prompt-Framework. Ausführungseinstieg für Claude und einzige Statusablage SL0–SL7: [Library-Research-Plan](library-research-plan.md). Er nutzt die bestehenden Dossiers und K1–K8, erweitert sie auf neun Skill-Bereiche und trennt Inhaltsoptimierung, Auswahl, Komposition und Modelltraining. Recherche ist beauftragt; Laufzeitarchitektur und Dependencies bleiben zu prüfen.
+Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine Kernfähigkeit innerhalb Sidekicks und ein lernbares Prompt-Framework. Ausführungseinstieg für Claude und einzige Statusablage SL0–SL7: [Library-Research-Plan](library-research-plan.md). Erster Ausführungsauftrag: ausschließlich SL0/SL1, danach Review des Evaluationsdesigns; SL2–SL7 bleiben als Folgepakete geplant. Er nutzt die bestehenden Dossiers und K1–K8, erweitert sie auf neun Skill-Bereiche und trennt Inhaltsoptimierung, Auswahl, Komposition und Modelltraining. Recherche ist beauftragt; Laufzeitarchitektur und Dependencies bleiben zu prüfen.
 
 ## Organisation
 
