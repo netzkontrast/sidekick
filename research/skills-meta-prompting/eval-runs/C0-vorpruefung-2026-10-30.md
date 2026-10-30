@@ -21,6 +21,13 @@ weil der Anmelde- und Abrechnungsweg in dieser Umgebung nicht geklärt ist (SL1 
 | Anmeldeweg dieser Session | Umgebungsvariablen (nur Namen) | Vom Host verwaltet: `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST`, Proxy über `ANTHROPIC_BASE_URL`, dazu sitzungsgebundene Variablen (`CLAUDE_CODE_SESSION_ID`, `CLAUDE_CODE_MESSAGING_SOCKET`, `CLAUDE_CODE_TEE_SDK_STDOUT`, Ingress-Token) | lokal geprüft |
 | Konkurrierende Skills | Dateisystem | Nutzer-Skills unter `~/.claude/skills/` (`session-start-hook`, `synced`) und synchronisierte Plugins unter `~/.claude/plugins/` vorhanden | lokal geprüft |
 
+### Nachtrag: Discovery im interaktiven Client beobachtet
+
+In dieser interaktiven Claude-Code-Session (Cloud, Client 2.1.314) meldete der Client neue Projekt-Skills als verfügbar, sobald ihre Symlinks unter
+`.claude/skills/` angelegt waren: zuerst die vier vorhandenen beim Wechsel ins Repo, später die vier neuen aus SL2 ohne Neustart.
+**Praktisch beobachtet** ist damit nur Ebene M1 (Discovery) im interaktiven Modus und mit Projektregeln im Kontext. Auswahl (M2), headless-Verhalten und
+Isolation von Nutzer-/Plugin-Skills bleiben offen. Kein CLI-Start wurde dafür verbraucht.
+
 ## 2. Vorbereiteter Messbestand
 
 Im Session-Scratchpad, nicht im Repo:

@@ -86,7 +86,9 @@ verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
 Passende Abläufe bedarfsweise aus `.agents/skills/` laden: `researching-repositories`
 für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Planung,
-`reviewing-decision-gates` für Entscheidungsreife.
+`reviewing-decision-gates` für Entscheidungsreife, `specifying-behavior` für Verhaltens-Specs mit IDs und Fällen,
+`resuming-work` für Übergaben und Wiederaufnahme, `testing-system-boundaries` für Ausfallmatrizen,
+`evaluating-changes` für Vergleiche gegen eine eingefrorene Baseline.
 `grilling` für entscheidungsrelevante Rückfragen mit AskUser-Tools; Ablage: [docs/fragen/](docs/fragen/README.md).
 Nur den passenden Skill lesen,
 Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
