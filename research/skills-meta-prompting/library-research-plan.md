@@ -1,7 +1,9 @@
 # Research-Plan: lernbare Skill-Library im Anwendungskern
 
 > Auftrag des Owners vom 30.10.2026 · Ausführung durch Claude, Ergebnisse agentenunabhängig.
-> Status: Plan erstellt; Forschungspakete noch nicht ausgeführt.
+> Status 30.10.2026: SL0 und SL1 als Entwurf geliefert, Review offen. SL2–SL7 geplant. Kein Modelllauf, kein Skill geändert.
+> Owner-Antworten zu Live-Budget, Reichweite, Feedbackdaten und Aktivierung: [docs/fragen/skill-library](../../docs/fragen/skill-library/index.md).
+> Nächster Schritt: Review beider Artefakte; danach legt der Owner den nächsten begrenzten Abschnitt fest.
 > Dieser Plan ist die einzige Statusablage für SL0–SL7. Bestehende Hub-Pakete bleiben im [Hub-Plan](../agent-hub/operations/PLAN.md).
 > Einstieg: [vorhandene Synthese K1–K8](synthese.md), [Clean-Room-Plan](clean-room-plan.md), [Vision v5](../../docs/vision-v5-entwurf.md), [Projektregeln](../../AGENTS.md).
 
@@ -153,8 +155,8 @@ Needle bleibt ein früher eigenständiger Versuch N0 aus dem Hub-Plan. Prüfe hi
 
 | Paket | Status | Voraussetzung | Ergebnis / vorgeschlagene Ablage | Abnahme |
 |---|---|---|---|---|
-| **SL0 Bestand und Verträge** | offen | Dieser Auftrag | `library-inventory.md`: vier Skills, bestehende K1–K8/WEB-IDs, neun Bereiche, Lücken und Abgrenzungen | Jeder Bereich zugeordnet; vorhandene Ergebnisse wiederverwendet; Client- und App-Discovery getrennt |
-| **SL1 Forschungsbaseline** | offen | SL0 | `library-evaluation-design.md`: Fälle, Splits, Metriken, Versionierung, Budgetvorschlag | Positive/negative Trigger, Verhalten, Rechte-/Antwortregeln und Komposition enthalten; Widersprüche B06/B10 geklärt; Repo-Discovery, App-Auswahl, Komposition sowie Tool-/AskUser-Capabilities getrennt beschrieben |
+| **SL0 Bestand und Verträge** | Entwurf geliefert: [library-inventory.md](library-inventory.md); Review offen | Dieser Auftrag | `library-inventory.md`: vier Skills, bestehende K1–K8/WEB-IDs, neun Bereiche, Lücken und Abgrenzungen | Jeder Bereich zugeordnet; vorhandene Ergebnisse wiederverwendet; Client- und App-Discovery getrennt |
+| **SL1 Forschungsbaseline** | Entwurf geliefert: [library-evaluation-design.md](library-evaluation-design.md); Review offen | SL0 | `library-evaluation-design.md`: Fälle, Splits, Metriken, Versionierung, Budgetvorschlag | Positive/negative Trigger, Verhalten, Rechte-/Antwortregeln und Komposition enthalten; Widersprüche B06/B10 geklärt; Repo-Discovery, App-Auswahl, Komposition sowie Tool-/AskUser-Capabilities getrennt beschrieben |
 | **SL2 Bereichsrecherche** | geplant; nach SL0/SL1-Review | Review von SL0/SL1; Versuche nach dessen Design | Neun `area-*.md`, ergänzte Dossiers nur bei Auswahlbedarf | Für A01–A09 Fragen, Quellen, Minimalversuch und begründete Umsetzungskategorie vorhanden |
 | **SL3 Kompositionsvertrag** | geplant; nach SL0/SL1-Review | SL1 und relevante SL2-Befunde | `library-composition.md`: Datenmodell, Schichten, Versionen, Übergaben, Fehler- und Offline-Verträge | Ein vollständiger Beispielablauf plus Ablehnung von Zyklus, falscher Ausgabe und inkompatibler Version; Anforderungen gegen K1–K8 rückverfolgbar |
 | **SL4 Lernvertrag** | geplant; nach SL0/SL1-Review | SL1/SL3 | `library-learning.md`: Inhalts-/Auswahl-/Kompositionsoptimierung, Datenwege, Aktivierung und Rücknahme | Kandidat verändert aktive Library nicht; Testsatz bleibt unabhängig; Grenzen von Modelltraining klar |
