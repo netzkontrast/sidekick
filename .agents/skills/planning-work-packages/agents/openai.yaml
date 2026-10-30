@@ -1,0 +1,6 @@
+interface:
+  display_name: "Arbeitspakete planen"
+  short_description: "Ziele in ausführbare Arbeitspakete zerlegen"
+  default_prompt: "Nutze $planning-work-packages, um das Ziel in überprüfbare Arbeitspakete zu zerlegen."
+policy:
+  allow_implicit_invocation: true
