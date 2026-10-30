@@ -9,7 +9,7 @@
 |---|---|
 | Fork (gelesen) | https://github.com/netzkontrast/prompt-engineering-skill |
 | Upstream (laut Doku) | nicht angegeben; Commit-Autor im Git-Log: `kongyo2` |
-| Eigentümer | Projekt-Owner (Aussage des Owners vom 2026-10-30); eigenes Werk |
+| Eigentümer | Projekt-Owner; laut Owner (2026-10-30) gehören die Accounts `kongyo2` und `netzkontrast` beide ihm. Eigenes Werk |
 | Commit-SHA | `eec9ca5c9c99c9baaa1e5104374139771224fd3f` |
 | Letzter Commit | 2025-10-17 (Commit-Message „99“; insgesamt 2 Commits) |
 | Lizenz | keine LICENSE-Datei; als eigenes Werk des Projekt-Owners nicht fremd lizenzpflichtig |
