@@ -32,6 +32,56 @@ Typecheck und Lint mit exakten Flags.
   Anforderungen beschreiben. Keinen Fremdcode kopieren; Ausnahmen nur nach Entscheidung und mit
   Eintrag in `docs/herkunftsregister.md`.
 
+## Arbeit mit dem Research-Ordner
+
+Einstieg ist [research/README.md](research/README.md), danach
+[research/agent-hub/README.md](research/agent-hub/README.md) und
+[operations/PLAN.md](research/agent-hub/operations/PLAN.md) lesen.
+Dort stehen laufende Untersuchungen, Prioritäten und der nächste Schritt.
+
+| Pfad unter `research/agent-hub/` | Zweck |
+|---|---|
+| `operations/PLAN.md` | Durchführung, Backlog und Entscheidungstore A–D |
+| `repos/<repo>.md` | Laufende Repo-Dossiers, Befunde, Quellen und offene Prüfungen |
+| `experiments/north-star.md` | Gemeinsamer Nordstern-Ablauf und Ausfalltests |
+| `decisions/README.md` | Einstieg in die Bewertung von Entscheidungs- und Übernahmekandidaten |
+
+### Ablauf einer Untersuchung
+
+1. Analyse und Produktziel unter `docs/` sowie die relevanten bestehenden Dossiers lesen.
+2. Einen offenen P0-Punkt aus dem Arbeitsplan bearbeiten; keine parallelen Backlogs für dasselbe Thema anlegen.
+3. Offizielle Quellen bevorzugen und untersuchten Commit, Datum sowie genaue Fundstellen erfassen.
+   Codebefunde mit Permalinks auf die tatsächlich gelesene Commit-Fassung belegen.
+4. Beobachtung und Schlussfolgerung trennen. Evidenz als *dokumentiert*, *im Code gefunden*,
+   *praktisch nachgewiesen* oder *offen* kennzeichnen; keine Tests oder Garantien aus README-Aussagen ableiten.
+5. Experimente mit Versionen, Voraussetzungen, Befehlen, erwartetem und tatsächlichem Ergebnis
+   sowie Einschränkungen unter `experiments/` dokumentieren. Nicht ausgeführte Tests bleiben offen.
+6. Dossier und Backlog aktualisieren; bei verändertem Gesamtstand auch den Research-Einstieg.
+   Einen konkreten nächsten Schritt und mögliche Blockaden hinterlassen.
+
+### Verhältnis zur bestehenden Dokumentation
+
+`research/agent-hub/` dient der laufenden Organisation und Durchführung; die bestehende
+Zielablage für fertige Recherchen bleibt `docs/research/`. Bei Übernahme eines fertigen
+Befunds dort die Vorlage verwenden und im laufenden Dossier auf die kanonische Fassung verweisen,
+statt widersprüchliche Kopien zu pflegen. Verbindliche Architekturentscheidungen bleiben
+unter `docs/entscheidungen/`, Herkunft und bewusste Übernahmen unter `docs/herkunftsregister.md`.
+Das Research-Entscheidungsregister verweist darauf; es ersetzt diese Ablagen nicht.
+
+### Übernahme und Validierung
+
+Für Kandidaten unterscheiden: integrieren, Dependency nutzen, Verhalten neu implementieren,
+lizenziert übernehmen oder zurückstellen. Quelle, Commit/Version, Lizenz/Notices und
+Update-Aufwand erfassen. Die bestehenden Clean-Room-Regeln gelten auch für Research.
+
+Paperclip und OpenHands anhand desselben Nordstern-Auftrags vergleichen. Besonders prüfen:
+Claims/Fencing, aktionsgebundene Freigaben, Credential-Grenzen, Wiederverbindung versus
+Prozess-Wiederaufnahme und Abgleich unklarer Effekte. Worktrees sind keine Rechte-Sandbox.
+
+Vor Abschluss relative Links und Konsistenz zwischen Dossier und Backlog prüfen.
+Keine Secrets oder unbearbeiteten sensiblen Logs einchecken. Im PR neue Befunde,
+verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
+
 ## Code-Navigation mit CodeGraph
 
 Das Repo ist für [CodeGraph](https://github.com/colbymchenry/codegraph) eingerichtet.
