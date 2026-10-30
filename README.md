@@ -87,15 +87,18 @@ Offene Entscheidungen sind in [`docs/vision.md` §26](docs/vision.md#26-offene-e
 ```
 .
 ├── README.md         Überblick (diese Datei)
+├── AGENTS.md         Regeln für Coding-Agents (u. a. wann und wie CodeGraph)
+├── CLAUDE.md         Importiert AGENTS.md, plus Claude-Code-spezifische Hinweise
 ├── docs/
 │   ├── vision.md                     Vollständige Produktvision (v4)
-│   └── analyse-und-uebernahmeplan.md Visionsanalyse, Repo-Recherche, Entscheidungstore
+│   ├── analyse-und-uebernahmeplan.md Visionsanalyse, Repo-Recherche, Entscheidungstore
+│   └── research/                     Abgeschlossene Recherchen
 └── .codegraph/       Lokaler CodeGraph-Index (nicht eingecheckt, nur .gitignore)
 ```
 
 ### CodeGraph
 
-Das Repo ist für [CodeGraph](https://www.npmjs.com/package/@colbymchenry/codegraph) eingerichtet, damit Agents Code über einen Symbol-Graphen statt per grep erkunden. Die Datenbank ist lokal und wird nicht committet.
+Das Repo ist für [CodeGraph](https://www.npmjs.com/package/@colbymchenry/codegraph) eingerichtet, damit Agents Code über einen Symbol-Graphen statt per grep erkunden. Die Datenbank ist lokal und wird nicht committet. Wann Agents CodeGraph und wann grep/Read nutzen, regelt [`AGENTS.md`](AGENTS.md); Hintergrund in [`docs/research/agents-md-und-codegraph.md`](docs/research/agents-md-und-codegraph.md).
 
 Index anlegen bzw. neu aufbauen:
 
