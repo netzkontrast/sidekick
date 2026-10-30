@@ -16,8 +16,8 @@ skills-optimizer `f8082b57`, GEPA `02ea4152`; DSPy-Doku `25162c4f` über die [Pr
 Owner-Vorgaben: [Feedbackdaten](../../docs/fragen/skill-library/questions/Q-20261030-sl-feedbackdaten.md), [Aktivierung](../../docs/fragen/skill-library/questions/Q-20261030-sl-aktivierung.md),
 [Reichweite](../../docs/fragen/skill-library/questions/Q-20261030-sl-reichweite.md), [Live-Läufe](../../docs/fragen/skill-library/questions/Q-20261030-sl-live-laeufe.md); Index noch `awaiting_confirmation`.
 
-**Voraussetzungslücke:** SL3 (`library-composition.md`) existiert noch nicht. Alles zur Komposition (§2.3, §5 abhängige Skills) ist
-deshalb nur vorläufig und wird nach SL3 nachgezogen.
+**Voraussetzung SL3:** Ein [SL3-Entwurf](library-composition.md) entstand parallel und ist noch nicht committet oder reviewt. Er deklariert
+Beziehungen (`requires`/`alternative`/`recommends`) und lehnt Zyklen ab. §2.3 und §5.3 stützen sich darauf nur vorläufig; nach dessen Review abgleichen.
 
 **Neuer lokaler Befund (lokal geprüft per Hashvergleich, kein Modell):** Die eingefrorene Pilot-Baseline (`d1a04e26…`, Quellcommit `de8efef5`)
 stimmt mit dem Branch nicht mehr überein. 9 von 13 eingefrorenen Dateien wurden durch SL2 geändert, vier Skills kamen hinzu.
@@ -53,13 +53,13 @@ dspy-advanced-prompting setzt eine feste Qualität und gibt den Ausgangsprompt z
 | Zulässige Verfahren | Manuelle Beschreibungsänderung (wie K-DESC); APE-artige Induktion von Beschreibungen aus dev-Fällen; Beschreibungsoptimierung nach Agent-Skills-Leitfaden (P2, *dokumentiert*) mit Schlussrubrik vor dem Test eingefroren; später ein lokaler Router nur über §2.4 |
 | Ausdrücklich nicht | Rumpf und Beschreibung im selben Kandidaten ändern; Geräte-/Capability-Filter lernen (das ist deterministisch); Auswahl als Rechtevergabe behandeln |
 
-### 2.3 Komposition (vorläufig bis SL3)
+### 2.3 Komposition (vorläufig bis SL3-Review)
 
 | Aspekt | Festlegung |
 |---|---|
 | Darf sich ändern | Reihenfolge, Übergabeartefakte, Kontextbudget einer **explizit deklarierten** Kette |
 | Messgröße | M5 je Übergabe, M4 des Endergebnisses gegen Einzelschritte, Fehlerfortpflanzung, Abbruchverhalten, Aufwand |
-| Zulässige Verfahren | Nur manuelle Regeländerung an einer deklarierten Kette; Optimierer erst, wenn SL3 einen prüfbaren Kettenvertrag liefert |
+| Zulässige Verfahren | Nur manuelle Regeländerung an einer deklarierten Kette; Optimierer erst, wenn der SL3-Kettenvertrag reviewt und prüfbar ist |
 | Ausdrücklich nicht | Implizite Skill-Kaskaden, automatisch erzeugte Ketten, Ändern mehrerer Skills plus Kette in einem Kandidaten. Außerhalb der V1-Reichweite (Stufe 4) |
 
 ### 2.4 Modellparameter
@@ -134,8 +134,8 @@ Weitere Regeln:
    = getesteter Kandidatenhash, und Baseline-Hash im Hauptzweig vor dem Merge = Kandidat-Baseline (Compare-and-swap, K6.4, SO-R4).
    Weicht eines ab, ist der Kandidat `veraltet`; getestete und aktive Version sind dann nicht dieselbe.
 2. **Pfadgrenze:** Ein Aktivierungs-PR ändert nur Skill-Dateien der genannten Dimension, nie Rubrik, Fälle, Splits oder Judge-Konfiguration (§8).
-3. **Abhängige Skills:** Bis SL3 Abhängigkeiten deklariert, listet der Bericht Skills und Ketten, die den geänderten Skill nennen oder seine Ausgabe
-   verwenden (*Ableitung*; heute nur per Textsuche). Ihre Fälle laufen als Regression mit. Laufende Runs behalten ihre fixierte Version (Plan §6).
+3. **Abhängige Skills:** Der Bericht listet Skills und Abläufe, die über `requires` auf Artefakte des geänderten Skills angewiesen sind
+   (SL3-Entwurf; bis zu dessen Implementierung nur per Textsuche, *Ableitung*). Ihre Fälle laufen als Regression mit. Laufende Runs behalten ihre fixierte Version (Plan §6).
 4. **Beobachtung:** Fenster, Prüfsuite (Pflichtregression plus ausgewählte synthetische Fälle) und Abbruchsignal stehen vor dem Merge fest.
    Beobachtet wird nur auf zulässigen Daten (§3), nicht auf persönlichen Sessions.
 5. **Rücknahme:** Revert des Aktivierungs-PR durch den Owner. Danach deterministisch prüfen: aktiver Hash = Vorgängerhash; abhängige Skills
@@ -190,7 +190,7 @@ Ein nach Testeinsicht geänderter Maßstab macht den Test zum Entwicklungsdatum 
 
 | Kriterium | Erfüllt durch | Stand |
 |---|---|---|
-| Inhalts-, Auswahl-, Kompositionsoptimierung beschrieben | §2.1–2.3 (plus Modellparameter §2.4) | spezifiziert; Komposition vorläufig bis SL3 |
+| Inhalts-, Auswahl-, Kompositionsoptimierung beschrieben | §2.1–2.3 (plus Modellparameter §2.4) | spezifiziert; Komposition vorläufig bis SL3-Review |
 | Datenwege | §3 inkl. A09-Abgrenzung | spezifiziert nach Owner-Vorgabe |
 | Aktivierung und Rücknahme | §5, Zustände in §4 | spezifiziert; nicht durchgespielt |
 | Kandidat verändert aktive Library nicht | Invariante L1, Zustand `veraltet`, Pfadgrenze §5.2 | spezifiziert; Baseline-Bindung im Helfer *im Code gefunden*; §1-Befund zeigt, dass manuelle Änderungen daneben laufen |
@@ -211,7 +211,7 @@ Praktisch nachgewiesen ist davon nichts. Die Abnahme bestätigt nur Vollständig
 | Zustandsautomat, Compare-and-swap, Pfadgrenze, Revert-Prüfung | nein | Empfehlung mit Rücknahmepfad und abhängigen Skills |
 
 **Offen:**
-- SL3 fehlt: Abhängigkeitsdeklaration und Kettenvertrag für §2.3 und §5.3.
+- SL3 nur als unreviewter Entwurf: §2.3 und §5.3 nach dessen Review abgleichen.
 - Pilot-Baseline und K-DESC/K-PORTABLE sind veraltet (§1); vor E1/E3 neu einfrieren. K-PORTABLE ist durch SL2 praktisch ungemessen übernommen.
 - E3-Budget: Zusatzfreigabe oder Umschichtung (§6) – Owner-Entscheidung, sinnvoll als Frage unter `docs/fragen/skill-library/`.
 - Form und Ort des Feedback-Manifests und wer es bestätigt (Vorschlag: Owner im PR).
