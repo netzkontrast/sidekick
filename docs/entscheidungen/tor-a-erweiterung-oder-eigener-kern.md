@@ -36,3 +36,5 @@ Winziges Testrepo, benannter Ausgangscommit, Änderung an zwei Dateien, bewusst 
 ## Entscheidung
 
 ## Offene Punkte
+
+- Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md) (§8): Der erste durchgängige Ablauf ist `research-report` mit Fake-Runtime, nicht `code-change` ([A-20261030-v0-erster-auftrag](../fragen/v0-ziel-und-vertraege/questions/Q-20261030-v0-erster-auftrag.md)). Der Testauftrag oben bleibt `code-change`; die Kandidaten werden zusätzlich daran gemessen, ob sie die Zustände und Fallmatrix der V0-Spec (V0-FALL-01 bis -17) abbilden können.

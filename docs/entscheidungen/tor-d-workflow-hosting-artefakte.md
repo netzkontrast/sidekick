@@ -37,3 +37,5 @@ Grundsatz: Postgres-Transaktionen definieren fachliche Übergänge. Die Workflow
 ## Entscheidung
 
 ## Offene Punkte
+
+- Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md) (§8): Vercel als erster Hub mit dauerhafter Zustellung außerhalb des Instanz-RAM (V0-FALL-11); statisches Frontend als PWA von stabiler HTTPS-Adresse; Ablage für gesondert löschbare Inhaltsobjekte (V0-INV-11) neben dem Artefaktspeicher.

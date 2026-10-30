@@ -20,6 +20,7 @@ Tool-Zustellung nötig; Chat-Runden kompakt im Themenindex protokollieren.
 | Thema | Inhalt |
 |---|---|
 | [Human-Input-Vertrag](human-input/index.md) | Vorbereitete Fragen für Phase 0b; noch nicht gestellt |
+| [V0 – Ziel und Verträge](v0-ziel-und-vertraege/index.md) | Drei Vorentscheidungen zur V0-Spec (Vision v5) |
 
 Die Ablage ist öffentlich. Keine Secrets, persönlichen Rohdaten oder ungefilterten
 Chat-/Tool-Protokolle committen. Gründe bedeuten kurze sachliche Anlässe, Quellen und

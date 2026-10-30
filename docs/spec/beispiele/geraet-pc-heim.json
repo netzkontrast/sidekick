@@ -1,0 +1,43 @@
+{
+  "schema_version": "0.1",
+  "id": "g-pc-heim",
+  "name": "pc-heim",
+  "art": "connector",
+  "pairing": {
+    "zustand": "paired",
+    "bestaetigt_von": "owner",
+    "bestaetigt_am": "2026-10-29T18:00:00Z"
+  },
+  "verbindung": {
+    "zustand": "offline",
+    "zuletzt_gesehen": "2026-10-30T09:12:00Z",
+    "cursor": "a-beispiel-1:4"
+  },
+  "capabilities": [
+    {
+      "art": "runtime",
+      "name": "fake-runtime",
+      "version": "0.1.0",
+      "quelle": "nachgewiesen",
+      "datenklassen": [
+        "public",
+        "internal"
+      ],
+      "bestaetigt_am": "2026-10-30T09:05:00Z"
+    },
+    {
+      "art": "local_model",
+      "name": "needle3",
+      "version": "unbekannt",
+      "quelle": "behauptet",
+      "datenklassen": [
+        "public",
+        "internal",
+        "confidential",
+        "local-only"
+      ],
+      "local_only": true,
+      "bestaetigt_am": "2026-10-30T09:05:00Z"
+    }
+  ]
+}
