@@ -1,0 +1,144 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "E3-FF-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "E3-FF-S1-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "E3-FF-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "E3-FF-S2-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "E3-MA-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "E3-MA-S1-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "E3-MA-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "E3-MA-S2-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 9,
+      "trial_id": "E3-FF-T1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 10,
+      "trial_id": "E3-FF-T1-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 11,
+      "trial_id": "E3-MA-T1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 12,
+      "trial_id": "E3-MA-T1-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 13,
+      "trial_id": "E3-FF-T2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 14,
+      "trial_id": "E3-FF-T2-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 15,
+      "trial_id": "E3-MA-T2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 16,
+      "trial_id": "E3-MA-T2-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 17,
+      "trial_id": "E3-FF-T3-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 18,
+      "trial_id": "E3-FF-T3-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 19,
+      "trial_id": "E3-MA-T3-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 20,
+      "trial_id": "E3-MA-T3-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 21,
+      "trial_id": "E3-FF-T4-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 22,
+      "trial_id": "E3-FF-T4-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 23,
+      "trial_id": "E3-MA-T4-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 24,
+      "trial_id": "E3-MA-T4-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 25,
+      "trial_id": "E3-R-01-grilling-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 26,
+      "trial_id": "E3-R-05-grilling-K-FOLGEFRAGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 27,
+      "trial_id": "E3-R-02-research-K-MELDEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 28,
+      "trial_id": "E3-R-03-research-K-MELDEN",
+      "status": "reserved_before_start"
+    }
+  ]
+}
