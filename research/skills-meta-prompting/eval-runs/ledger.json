@@ -1,0 +1,74 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "C0-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "C0-B0",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "E1-ST-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "E1-ST-04",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "E1-ST-05",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "E1-ST-08",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "E1-GT-02",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "E1-GT-07",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 9,
+      "trial_id": "E1-SB-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 10,
+      "trial_id": "E1-SB-N1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 11,
+      "trial_id": "E1-RW-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 12,
+      "trial_id": "E1-RW-N1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 13,
+      "trial_id": "E1-TB-P1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 14,
+      "trial_id": "E1-EC-P1",
+      "status": "reserved_before_start"
+    }
+  ]
+}

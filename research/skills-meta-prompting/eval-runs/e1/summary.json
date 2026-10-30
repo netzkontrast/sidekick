@@ -1,0 +1,150 @@
+[
+  {
+    "id": "ST-01",
+    "expected": "researching-repositories",
+    "observed_first": null,
+    "all_confirmed": [],
+    "manual_skill_reads": 0,
+    "match": false,
+    "status": "completed",
+    "cost_usd": 0.0968204,
+    "observability": "not_established"
+  },
+  {
+    "id": "ST-04",
+    "expected": "planning-work-packages",
+    "observed_first": "planning-work-packages",
+    "all_confirmed": [
+      "planning-work-packages"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.1145526,
+    "observability": "events_observed"
+  },
+  {
+    "id": "ST-05",
+    "expected": "reviewing-decision-gates",
+    "observed_first": "reviewing-decision-gates",
+    "all_confirmed": [
+      "reviewing-decision-gates"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.11695679999999999,
+    "observability": "events_observed"
+  },
+  {
+    "id": "ST-08",
+    "expected": null,
+    "observed_first": null,
+    "all_confirmed": [],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.07156320000000001,
+    "observability": "not_established"
+  },
+  {
+    "id": "GT-02",
+    "expected": "grilling",
+    "observed_first": "grilling",
+    "all_confirmed": [
+      "grilling"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.1458122,
+    "observability": "events_observed"
+  },
+  {
+    "id": "GT-07",
+    "expected": "reviewing-decision-gates",
+    "observed_first": null,
+    "all_confirmed": [],
+    "manual_skill_reads": 0,
+    "match": false,
+    "status": "completed",
+    "cost_usd": 0.0836472,
+    "observability": "not_established"
+  },
+  {
+    "id": "SB-01",
+    "expected": "specifying-behavior",
+    "observed_first": "specifying-behavior",
+    "all_confirmed": [
+      "specifying-behavior"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.17891059999999998,
+    "observability": "events_observed"
+  },
+  {
+    "id": "SB-N1",
+    "expected": null,
+    "observed_first": null,
+    "all_confirmed": [],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.0910938,
+    "observability": "not_established"
+  },
+  {
+    "id": "RW-01",
+    "expected": "resuming-work",
+    "observed_first": "resuming-work",
+    "all_confirmed": [
+      "resuming-work"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.0966962,
+    "observability": "events_observed"
+  },
+  {
+    "id": "RW-N1",
+    "expected": "grilling",
+    "observed_first": "grilling",
+    "all_confirmed": [
+      "grilling"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.1109232,
+    "observability": "events_observed"
+  },
+  {
+    "id": "TB-P1",
+    "expected": "testing-system-boundaries",
+    "observed_first": "testing-system-boundaries",
+    "all_confirmed": [
+      "testing-system-boundaries"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.1056876,
+    "observability": "events_observed"
+  },
+  {
+    "id": "EC-P1",
+    "expected": "evaluating-changes",
+    "observed_first": "evaluating-changes",
+    "all_confirmed": [
+      "evaluating-changes"
+    ],
+    "manual_skill_reads": 0,
+    "match": true,
+    "status": "completed",
+    "cost_usd": 0.1071504,
+    "observability": "events_observed"
+  }
+]
