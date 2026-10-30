@@ -62,7 +62,7 @@ ChatGPT empfiehlt Goose über ACP als erste Runtime. In der Vision ist entschied
 - **Goose als erste Vertrags-Runtime.** Goose ist Apache-lizenziert und ACP-nativ. Die Frage nach Abo und Nutzungsbedingungen stellt sich nicht. Damit eignet es sich ideal, um Adaptervertrag, Capabilities, Abbruch und Resume gegen eine echte Runtime zu testen, ohne Tor B (Auth-Grenzen) auf den kritischen Pfad zu legen.
 - **Claude Code als erste Produkt-Runtime.** Die MVP-Abnahme (Nordstern) läuft mit Claude Code, weil das der tatsächliche Alltag des Owners ist.
 
-Das entkoppelt die Risiken, kostet aber einen zweiten Adapter früh. Wenn nur einer möglich ist, würde ich bei Claude Code bleiben und Goose direkt danach nehmen. **Bitte entscheiden.**
+Das entkoppelt die Risiken, kostet aber einen zweiten Adapter früh. Wenn nur einer möglich ist, würde ich bei Claude Code bleiben und Goose direkt danach nehmen. **Entschieden (30.10.2026): Claude Code zuerst, auch für die Vertragstests; Goose in Phase 2.**
 
 ### 3.5 OpenHands verschwindet ohne Begründung
 
@@ -114,12 +114,12 @@ Die Abschlussformel „dokumentiert / implementiert / bestanden / Grenzen“ ble
 |---|---|---|---|
 | P1 | Harte Kriterien aus ChatGPT §6 (kein Kern-Fork, keine internen Tabellen, keine zweite Auftragswahrheit) und Credential-Upload als möglichen Ausschluss in Tor A aufnehmen | `docs/entscheidungen/tor-a-…` | vorgeschlagen |
 | P2 | OpenHands: ½-Tag-Papierprüfung statt vollem Prototyp | Arbeitsplan, Tor A | vorgeschlagen |
-| P3 | Goose als Vertrags-Runtime neben Claude Code als Produkt-Runtime | Tor B, Vision §26 | **Owner-Entscheidung** |
+| P3 | Goose als Vertrags-Runtime neben Claude Code als Produkt-Runtime | Tor B, Vision §26 | **entschieden 30.10.: abgelehnt**, Claude Code zuerst, Goose in Phase 2 |
 | P4 | Testmatrix um T11–T13, T15–T20 erweitern; IDs T01–T20 als gemeinsame Nummerierung verwenden | Nordstern-Test, Analyse §8 | vorgeschlagen |
 | P5 | ChatGPT §9–§19 als Ausgangstext der normativen Spec nutzen, korrigiert um Übernahme-Schritt (3.1), Schritt/Playbook im Datenmodell (3.2) und Datenklassen-Policy (3.3) | Phase 0b | vorgeschlagen |
 | P6 | MVP: Datenmodell für mehrere Geräte und Workspaces, Abnahme mit einem Gerät; kein Chat | README/MVP | vorgeschlagen |
 | P7 | Startauftrag in drei getrennte Aufträge teilen | Phase 0 → 1 | vorgeschlagen |
-| P8 | Vor Phase 1 entscheiden: eigenes Implementierungs-Repo oder strikte Trennung von `research/` | Clean-Room | **Owner-Entscheidung** |
+| P8 | Vor Phase 1 entscheiden: eigenes Implementierungs-Repo oder strikte Trennung von `research/` | Clean-Room | **entschieden 30.10.:** alles bleibt in diesem Repo, `research/` außerhalb von Build/Test |
 | P9 | Berichtsformat „dokumentiert / implementiert / bestanden / Grenzen“ als Konvention in AGENTS.md | AGENTS.md | vorgeschlagen |
 
 Keiner dieser Vorschläge ist umgesetzt. Sie werden erst wirksam, wenn der Owner zustimmt und sie in die jeweiligen Dokumente übernommen werden.

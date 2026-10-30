@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/ereignis.schema.json",
+  "title": "Journal-Ereignis – V0",
+  "description": "Umschlag eines append-only Journal-Ereignisses (V0-INV-02, -06, -11). Inhalt nur minimiert oder per Referenz.",
+  "type": "object",
+  "required": ["schema_version", "id", "strom", "seq", "typ", "zeit", "akteur", "idempotenz_key"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^ev-[a-z0-9-]+$" },
+    "strom": { "type": "string", "description": "Auftrags-, Geräte- oder Erinnerungs-ID." },
+    "seq": { "type": "integer", "minimum": 1, "description": "Vom Kern vergebene, lückenlose Position im Strom." },
+    "typ": {
+      "type": "string",
+      "pattern": "^(task|claim|run|input|effect|device|memory|draft)\\.[a-z_]+$",
+      "examples": ["task.drafted", "claim.granted", "input.answered", "effect.intent", "claim.rejected_stale_epoch"]
+    },
+    "zeit": { "type": "string", "format": "date-time" },
+    "akteur": {
+      "type": "object",
+      "required": ["art", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "art": { "enum": ["owner", "run", "geraet", "kern", "effekt_adapter"] },
+        "id": { "type": "string" },
+        "geraet_id": { "type": "string" }
+      }
+    },
+    "auftrag_version": { "type": "integer", "minimum": 1 },
+    "epoch": { "type": "integer", "minimum": 1 },
+    "idempotenz_key": { "type": "string", "minLength": 8 },
+    "ursache": { "type": ["string", "null"], "description": "ID des auslösenden Ereignisses oder Commands." },
+    "quellsequenz": { "type": "integer", "description": "Lokale Sequenz des Connectors für nachgelieferte Ereignisse (V0-FALL-03)." },
+    "daten": { "type": "object", "description": "Minimierte, nicht sensible Felder." },
+    "inhalt_ref": { "type": ["string", "null"], "description": "Referenz auf gesondert löschbares Inhaltsobjekt." }
+  }
+}
