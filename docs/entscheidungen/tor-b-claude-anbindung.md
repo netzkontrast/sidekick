@@ -6,6 +6,8 @@
 
 Über welchen Weg bindet der Connector Claude Code an: [Claude ACP](https://github.com/agentclientprotocol/claude-agent-acp), Claude Agent SDK direkt oder die dokumentierte strukturierte CLI-Schnittstelle? Claude ACP nutzt selbst das Agent SDK; der Vergleich betrifft daher auch Abstraktion, Versionsrisiko und Funktionsabdeckung.
 
+**Vorentscheidung (30.10.2026):** Claude Code ist die erste Runtime, auch für den Test des Adaptervertrags (siehe [Grundsatzentscheidungen](README.md#grundsatzentscheidungen-des-owners)). Offen bleibt hier nur der Anbindungsweg. Weil keine zweite Runtime die Vertragstests absichert, braucht Tor B früh eine deterministische Fake-Runtime.
+
 ## Adapter-Matrix
 
 | Fähigkeit | Claude ACP | Agent SDK | Strukturierte CLI |
