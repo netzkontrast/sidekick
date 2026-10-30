@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/skill-package.schema.json",
+  "title": "Skill-Paket: Registry-Datensatz – Skill-Library V0",
+  "description": "Laufzeitdaten zu einem portablen Skill-Paket (docs/spec/skill-library-v0.md §4.2, SLV0-PKG-10…24). Liegt neben dem Paket und ändert dessen Inhaltshash nicht. Beschreibt den Status, bewirkt ihn nicht (SLV0-INV-01). Feldnamen nach SL3 (offen: O-8).",
+  "type": "object",
+  "required": ["schema_version", "skill_id", "version", "content_hash", "package_path", "inputs", "outputs", "requires_capabilities", "effects_requested", "relations", "provenance", "test_refs", "status", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "skill_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stabil, gleich `name` im Frontmatter und Ordnername (SLV0-PKG-03, -11)."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z.+-]{1,32}$",
+      "description": "Lesbares Label. Identität ist content_hash; gleiche skill_id+version mit anderem Hash ist ein Fehler (SLV0-INV-02)."
+    },
+    "content_hash": {
+      "type": "object",
+      "required": ["algorithm", "profile", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "profile": { "type": "string", "pattern": "^sl-hash-v[0-9]+$", "description": "Hash-Profil (§4.3); V0-Vorschlag sl-hash-v0, offen O-1." },
+        "value": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "package_path": {
+      "type": "string",
+      "pattern": "^\\.agents/skills/[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Repo-relativer Paketordner, POSIX-Trenner."
+    },
+    "inputs": { "type": "array", "items": { "$ref": "#/$defs/artifact_port" } },
+    "outputs": { "type": "array", "items": { "$ref": "#/$defs/artifact_port" } },
+    "requires_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "capability": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$", "description": "z. B. ask_user, repo_read, store_write." },
+          "required": { "type": "boolean" },
+          "fallback": { "type": ["string", "null"], "description": "Im Skill dokumentierter Ersatz, nur bei required=false." }
+        }
+      }
+    },
+    "effects_requested": {
+      "type": "array",
+      "description": "Antrag, kein Recht (SLV0-PKG-13, SL3-R08).",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$" }
+    },
+    "relations": {
+      "type": "array",
+      "description": "Daten; V0 wertet sie nicht aus (SLV0-INV-07).",
+      "items": {
+        "type": "object",
+        "required": ["kind", "target"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "enum": ["requires", "alternative", "recommends"] },
+          "target": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "artifact_type": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["origin", "author", "source_commit", "license"],
+      "additionalProperties": false,
+      "properties": {
+        "origin": { "enum": ["eigen", "lizenziert_uebernommen", "synthetisch"] },
+        "author": { "type": "string", "minLength": 1 },
+        "source_commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "license": { "type": "string", "minLength": 1 },
+        "herkunftsregister_ref": { "type": ["string", "null"], "description": "Pflicht-Verweis auf docs/herkunftsregister.md bei origin=lizenziert_uebernommen." }
+      },
+      "if": { "properties": { "origin": { "const": "lizenziert_uebernommen" } } },
+      "then": { "required": ["herkunftsregister_ref"], "properties": { "herkunftsregister_ref": { "type": "string", "minLength": 1 } } }
+    },
+    "test_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "family_id", "split"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": { "type": "string", "minLength": 1 },
+          "family_id": { "type": "string", "minLength": 1 },
+          "split": { "enum": ["dev", "select", "test", "regression"] }
+        }
+      }
+    },
+    "status": {
+      "enum": ["candidate", "approved", "withdrawn"],
+      "description": "Nur Owner per PR-Merge am Hash ändert den Status (SLV0-PKG-12)."
+    },
+    "status_evidence": {
+      "type": ["object", "null"],
+      "required": ["merge_commit", "decided_by"],
+      "additionalProperties": false,
+      "properties": {
+        "merge_commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "decided_by": { "const": "owner" },
+        "decided_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "enum": ["approved", "withdrawn"] } } },
+      "then": { "required": ["status_evidence"], "properties": { "status_evidence": { "type": "object" } } }
+    }
+  ],
+  "$defs": {
+    "artifact_port": {
+      "type": "object",
+      "required": ["type", "type_version", "required"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "Artefakttyp nach SL3 §4, z. B. answer-set, finding." },
+        "type_version": { "type": "integer", "minimum": 1, "description": "Major-Typversion; Kompatibilität ist Stufe 3 (O-3)." },
+        "required": { "type": "boolean" }
+      }
+    }
+  }
+}

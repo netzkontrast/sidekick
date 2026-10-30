@@ -6,6 +6,7 @@ Vision und Recherche begründen; hier steht, was das System tun muss und woran d
 | Spec | Inhalt | Status |
 |---|---|---|
 | [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) | Begriffe, Invarianten, Zustandsautomaten, Fallmatrix, erster Ablauf | Entwurf |
+| [Skill-Library V0](skill-library-v0.md) | Paketvertrag, Registry-Datensatz, Inhaltshash, Validator, Token-Zählung, Eval-Harness (Stufen 0–2); IDs `SLV0-<Bereich>-<nn>` | Entwurf |
 
 ## Konventionen
 
