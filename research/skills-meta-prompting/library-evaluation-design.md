@@ -32,7 +32,7 @@ Jede Ebene wird getrennt berichtet (K1.5, WEB-R2). Eine bestandene Ebene sagt ni
 | ID | Variante | Zweck |
 |---|---|---|
 | **B0** | Keine offengelegten/aktivierten Skills im kontrollierten Messbestand. CLI-Flag aus lokalem `--help` erst nach C0 verwenden; alternativ prüfbare SDK-Skill-Liste, falls die freigegebene Runtime sie unterstützt | Referenz für M4; gleiche Tools und sonstiges Gerüst wie B1, tatsächlich sichtbaren Katalog und Dateizugriff mitprüfen |
-| **B1** | Die vier Skills am eingefrorenen Commit, unverändert | Baseline für jede spätere Änderung |
+| **B1** | Eingefrorene Skill-Suite mit Paket-Hash (`skill-pilot-baseline-v2.json`, acht Skills nach SL2). Der Stand vor SL2 (`skill-pilot-baseline.json`, vier Skills) heißt **B1-alt**; der Schritt B1-alt → B1 ändert mehrere Dimensionen zugleich und ist deshalb kein zuschreibbarer Vergleich (Review 30.10.2026, S1) | Baseline für jede spätere Änderung |
 | **K*n*** | Ein Kandidat mit genau einer Änderung gegenüber B1 | Nur in SL5/E3, nur nach Review dieses Designs |
 
 Konstant über einen Vergleich: Client und Version, Modell, Werkzeuge, Eingabedateien, Arbeitsverzeichnis, Rubrikversion.

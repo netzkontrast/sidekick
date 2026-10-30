@@ -19,7 +19,8 @@
     {
       "prompt": "Setzen wir das Anforderungsinterview von gestern mit den offenen Fragen fort.",
       "expected_skill": "grilling",
-      "id": "GT-04"
+      "id": "GT-04",
+      "family_id": "GT-04"
     },
     {
       "prompt": "Welche Version verwendet das Repo?",
@@ -64,7 +65,8 @@
         "planning-work-packages"
       ],
       "assertion": "Konkurrenzfall: zulässige Menge `{grilling, planning-work-packages}`",
-      "source": "research/skills-meta-prompting/area-grilling.md §11"
+      "source": "research/skills-meta-prompting/area-grilling.md §11",
+      "family_id": "GT-10"
     }
   ],
   "behavior_cases": [

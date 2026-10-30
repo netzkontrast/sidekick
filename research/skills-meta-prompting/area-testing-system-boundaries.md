@@ -87,7 +87,7 @@ description: Leite aus Spezifikationen prüfbare Ausfall- und Grenztests für zu
 
 Referenz `references/failure-matrix.md` (Entwurf): Spalten Fall-ID · Anforderungs-ID · Störungsklasse · Injektionspunkt · Soll Zustellung · Soll Lauf · Soll Wirkung · Umgebung (Fake/isoliert/Testziel) · Assertion · Rohbelegort · Status. Störungsklassen: Duplikat, Umordnung, Verlust Anfrage, Verlust Antwort, veraltete Identität, Widerruf, Partition, Prozessabsturz, Neustart Vermittler, nebenläufige Änderung. Injektionspunkte: vor/nach Zusage, vor/nach Wirkung, vor/nach Bestätigung.
 
-Evaluationsfälle (Felder wie `skill-evaluation.json`; `fixture` entspricht dort `input`). IDs nach SL1-Schema: SBT-P1, SBT-P2, SBT-N1, SBT-N2.
+Evaluationsfälle (Felder wie `skill-evaluation.json`; `fixture` entspricht dort `input`). IDs nach SL1-Schema: TB-P1, TB-P2, TB-N1, TB-N2.
 
 ```json
 [

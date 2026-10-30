@@ -39,6 +39,14 @@ Bei Unterbrechung zwischen Aufruf und Ergebnis ist Zustellung unbekannt: vorhand
 7. Empfehlung und Antwort getrennt halten. Bei ausbleibender Antwort warten oder unabhängige Arbeit fortsetzen. Keine automatischen Defaults.
 8. Nach Korrektur alte Antwort behalten, neue Antwort anhängen; transitive Folgefragen und verlinkte Entscheidungen zur Prüfung markieren. Keine entschiedene ADR still ändern.
 
+## Ohne Rückkanal
+
+Ist im Lauf kein Mensch erreichbar (nicht interaktiv, kein AskUser, kein Chat-Rückkanal): nicht warten und nichts annehmen. Fragen ausgeben und speichern, Zustellung als `unbekannt` führen, Session `waiting_user`; unabhängige Arbeit fortsetzen, abhängige als blockiert melden.
+
+## Versionen, Doppelantworten, Fristen
+
+Ändert sich eine gestellte Frage, neue Version anlegen; Antworten bleiben an ihre Version gebunden, die Frage wird prüfpflichtig. Mehrere Antworten auf dieselbe Version: die zuerst bestätigte gilt, weitere als Konflikt sichtbar machen und nachfragen. Ein vereinbartes Verhalten bei Fristablauf darf nur blockieren oder vertagen und wird nie als Antwort gespeichert.
+
 ## Abschluss und Übergabe
 
 Zusammenfassung mit geklärten IDs, offenen/vertagten Punkten, Restannahmen und Auswirkungen vorlegen. Bestätigung samt Quelle speichern. Bei begrenztem Umfang Grenzen nennen; kein Interview ohne Abbruchmöglichkeit.

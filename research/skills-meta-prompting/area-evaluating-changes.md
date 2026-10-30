@@ -88,7 +88,7 @@ description: Bewerte, ob eine einzelne Änderung an Prompts, Skills, Auswahlrege
 
 Referenz `references/comparison-report.md` (Entwurf): Kopf mit Baseline-/Kandidatenhash, geänderter Dimension, Hypothese, Eval-/Rubrikversion, Client/Modell. Je Ebene: k/n, Familien, Wiederholungen, nicht beobachtbar. Harte Regeln: Verstöße mit Fall-ID. Aufwand: Werte mit Quelle (gemeldet/geschätzt/unbekannt). Leck- und Vergleichbarkeitsprüfung. Empfehlung, Rücknahmepfad, benötigte neue Fälle.
 
-Evaluationsfälle (Felder wie `skill-evaluation.json`; `fixture` entspricht dort `input`). IDs: ECH-P1, ECH-P2, ECH-N1, ECH-N2.
+Evaluationsfälle (Felder wie `skill-evaluation.json`; `fixture` entspricht dort `input`). IDs: EC-P1, EC-P2, EC-N1, EC-N2.
 
 ```json
 [
