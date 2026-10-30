@@ -15,3 +15,7 @@ coverage/
 .vercel/
 *.log
 .DS_Store
+
+# Recherche-Arbeitsdateien (Berichte werden nach docs/research/ übernommen)
+research_notes/
+reports/
