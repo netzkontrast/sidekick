@@ -49,6 +49,7 @@ Zeit / beantwortet von / Quelle:
 Bezug: Frageversion und Runde
 Antwort: <wörtlich oder als sinngemäß markiert>
 Ersetzt Antwort: <ID oder keine>
+Konflikt mit: <Antwort-ID oder keiner>
 Folgen / Rückfragen:
 -->
 

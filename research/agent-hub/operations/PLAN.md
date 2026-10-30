@@ -31,6 +31,10 @@ Dieser PLAN ist die maßgebliche Statusablage auch für V0–V6/N0. Der Bauauftr
 
 N0 folgt dem ausdrücklichen neuen Owner-Ziel eines frühen Lernversuchs. Es ist als begrenzter, unabhängiger Research-Spike vorgesehen und erklärt keine P0-Prüfung zu Paperclip/OpenHands/Claude für erledigt. Der neue Input ergänzt diese Prüfungen. v5 bleibt bis zu einer gesonderten Entscheidung Ergänzungsentwurf; der Merge ersetzt v4 nicht.
 
+## Schnittstelle zur Skill-Library
+
+Der neue Owner-Auftrag untersucht die Library als Kernfähigkeit innerhalb Sidekicks. Ablauf, Status und nächste Schritte SL0–SL7 stehen ausschließlich im [Library-Research-Plan](../../skills-meta-prompting/library-research-plan.md). Dieser Hub-Plan führt keine Kopie dieser Pakete. N0 kann später Auswahl-/Routingmodelle prüfen; die Library-Recherche setzt dafür kein Fine-Tuning voraus. Hub-Rechte, Geräteverbindung und fachliche Zustände bleiben bei den bestehenden Toren.
+
 ## Entscheidungstore
 
 A: Paperclip/OpenHands erweitern oder eigener Kern. Gewichte: Domäne 25, Rechte/Effekte 25, Recovery 20, Adapter 15, Betrieb/Export 10, UI 5. Keine Scores ohne Belege.

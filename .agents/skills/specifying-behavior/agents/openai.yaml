@@ -1,0 +1,6 @@
+interface:
+  display_name: "Verhalten spezifizieren"
+  short_description: "Beobachtbares Verhalten als prüfbare Spec mit IDs und Fällen"
+  default_prompt: "Nutze $specifying-behavior, um das Verhalten mit Anforderungs-IDs, Fehlerfällen und Vertragsfällen zu spezifizieren."
+policy:
+  allow_implicit_invocation: true

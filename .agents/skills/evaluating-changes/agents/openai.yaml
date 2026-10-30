@@ -1,0 +1,6 @@
+interface:
+  display_name: "Änderungen evaluieren"
+  short_description: "Kandidat gegen eingefrorene Baseline fair vergleichen"
+  default_prompt: "Nutze $evaluating-changes, um den Kandidaten gegen die Baseline zu vergleichen und eine Empfehlung mit Rücknahmepfad zu geben."
+policy:
+  allow_implicit_invocation: true

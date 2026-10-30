@@ -5,8 +5,17 @@ Stand 2026-10-30. Forschungsergebnisse sind keine Implementierungsentscheidungen
 **Forschungsfrage:** Wie lassen sich die Skills und Meta-Prompting-Konzepte aus den unten
 gelisteten Repos so integrieren, dass ein Clean-Room-Rewrite ihre wesentlichen Aspekte abdeckt?
 
+## Aktueller Auftrag: lernbare Library im Anwendungskern
+
+Owner-Vorgabe vom 30.10.2026: Die aufeinander aufbauende Skill-Library ist eine Kernfähigkeit innerhalb Sidekicks und ein lernbares Prompt-Framework. Ausführungseinstieg für Claude und einzige Statusablage SL0–SL7: [Library-Research-Plan](library-research-plan.md). Erster Ausführungsauftrag: ausschließlich SL0/SL1, danach Review des Evaluationsdesigns; SL2–SL7 bleiben als Folgepakete geplant. Er nutzt die bestehenden Dossiers und K1–K8, erweitert sie auf neun Skill-Bereiche und trennt Inhaltsoptimierung, Auswahl, Komposition und Modelltraining. Recherche ist beauftragt; Laufzeitarchitektur und Dependencies bleiben zu prüfen.
+
+## Pilot-Vorbereitung und lokaler C0-Befund
+
+[Ausführungsprotokoll](library-experiments.md): eingefrorene Baseline, zwölf synthetische Fälle, zwei nicht aktive Änderungskandidaten und ein getesteter manueller Hilfsrunner. Im Work-Executor fehlt die Claude CLI; keine Modellläufe. Die separate [Claude-C0-Vorprüfung](eval-runs/C0-vorpruefung-2026-10-30.md) bleibt maßgeblich für deren Anmelde-/Abrechnungsblockade. Nach der dokumentierten Owner-Wahl sind zunächst nur die zwei C0-Starts auszuführen, danach Ergebnis vorlegen.
+
 ## Organisation
 
+- [Unabhängige Primärquellenprüfung SL0/SL1](../../docs/research/skill-library-primaerquellen-2026-10-30.md) mit [Prüfmanifest](../../docs/research/skill-library-source-audit.json) und [GEPA/gskill-Dossier](repos/gepa-gskill.md)
 - [Synthese: Konzeptkarte und Anforderungen](synthese.md)
 - [Clean-Room-Plan](clean-room-plan.md)
 - [Web-Gegenprüfung mit Primärquellen](web-recherche-2026-10-30.md) (S1–S12, Anforderungen WEB-R1–R10)
@@ -43,4 +52,4 @@ Upstream, Herkunft und Evidenz stehen jeweils im Dossier.
   - offline-Auswertungen bei meta-prompting, APE und dspy-advanced-prompting.
 - Kein Fremdcode wurde für Benchmarks ausgeführt, keine API wurde aufgerufen. Benchmarkzahlen aus den READMEs gelten als unbelegt.
 - Ergebnis: [Synthese](synthese.md) mit Konzeptkarte K1–K8 und [Clean-Room-Plan](clean-room-plan.md) mit Stufen und offenen Entscheidungen.
-- Nächster Schritt: offene Entscheidungen im Clean-Room-Plan klären, danach die Spec für Stufe 0 schreiben.
+- Nächster Schritt: SL0/SL1 im [Library-Research-Plan](library-research-plan.md) bearbeiten. Die bisherige Repo-Ortsfrage ist durch den Owner-Auftrag geklärt; übrige offene Entscheidungen mit konkreten Vorlagen bearbeiten.

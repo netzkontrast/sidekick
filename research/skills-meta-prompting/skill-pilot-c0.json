@@ -1,0 +1,9 @@
+{
+  "helper_version": "skill-pilot-v1",
+  "cli_path": null,
+  "model_starts": 0,
+  "auth_probed": false,
+  "status": "blocked_missing_client",
+  "live_ready": false,
+  "reason": "Claude CLI not found"
+}

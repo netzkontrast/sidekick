@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "purpose": "Synthetic development and diagnostic cases; no independent holdout and no quality results",
+  "cases": [
+    {
+      "id": "PIL-01",
+      "family_id": "interview-priorities",
+      "split": "dev",
+      "prompt": "Grill mich zu den offenen Produktentscheidungen im beigefügten Plan. Frage nur nach meinen Prioritäten; technische Fakten recherchiere selbst. Noch habe ich keine dieser Fragen beantwortet.",
+      "allowed_skills": [
+        "grilling"
+      ],
+      "variants": [
+        "B0",
+        "B1",
+        "K-DESC",
+        "K-PORTABLE"
+      ],
+      "files": {
+        "input/plan.md": "Ziel: kleiner Offline-Notizimport. Offen sind Nutzerpriorität Tempo versus Nachvollziehbarkeit und gewünschter Umgang mit Konflikten. Keine Antworten liegen vor."
+      }
+    },
+    {
+      "id": "PIL-02",
+      "family_id": "repo-resume-evidence",
+      "split": "dev",
+      "prompt": "Untersuche anhand der beigefügten Quellen, ob Bibliothek X nach Prozessabsturz wirklich fortsetzen kann. Kennzeichne die Belege und fehlende Versuche.",
+      "allowed_skills": [
+        "researching-repositories"
+      ],
+      "variants": [
+        "B0",
+        "B1",
+        "K-DESC",
+        "K-PORTABLE"
+      ],
+      "files": {
+        "input/README.md": "X unterstützt Resume.",
+        "input/limits.md": "Dokumentiert ist nur Wiederverbindung. Kein Crash-Test oder Prozess-Checkpoint ist nachgewiesen."
+      }
+    },
+    {
+      "id": "PIL-03",
+      "family_id": "planning-import",
+      "split": "diagnostic",
+      "prompt": "Plane den nächsten Meilenstein für einen CSV-Import in überprüfbaren Paketen. Führe das vorhandene Backlog fort. Die Parserwahl ist noch technisch ungeklärt.",
+      "allowed_skills": [
+        "planning-work-packages"
+      ],
+      "files": {
+        "input/backlog.md": "Erledigt: Ziel und Beispieldatei festgelegt. Offen: Parservergleich, ungültige Zeilen, Importvorschau."
+      }
+    },
+    {
+      "id": "PIL-04",
+      "family_id": "gate-offline",
+      "split": "diagnostic",
+      "prompt": "Sind wir bereit, Anbieter A verbindlich auszuwählen? Muss-Kriterium: offline. A hat nur eine README-Zusage; B hat den hier dokumentierten Offline-Test bestanden. Bewerte die Entscheidungsreife.",
+      "allowed_skills": [
+        "reviewing-decision-gates"
+      ],
+      "files": {
+        "input/evidence.md": "A: Offline dokumentiert, kein Versuch. B: reproduzierbarer Offline-Versuch mit synthetischer Datei erfolgreich; Ablaufprotokoll liegt vor."
+      }
+    },
+    {
+      "id": "PIL-05",
+      "family_id": "version-fact",
+      "split": "diagnostic",
+      "prompt": "Welche Projektversion steht in input/version.json? Nenne nur den Wert.",
+      "allowed_skills": [],
+      "files": {
+        "input/version.json": "{\"version\":\"0.0.1-synthetic\"}"
+      }
+    },
+    {
+      "id": "PIL-06",
+      "family_id": "typo-only",
+      "split": "diagnostic",
+      "prompt": "Korrigiere nur den Tippfehler in „Dsa ist ein Test“. Antworte mit dem korrigierten Satz.",
+      "allowed_skills": [],
+      "files": {}
+    },
+    {
+      "id": "PIL-07",
+      "family_id": "commit-definition",
+      "split": "diagnostic",
+      "prompt": "Erkläre in einem Satz, was ein Git-Commit ist.",
+      "allowed_skills": [],
+      "files": {}
+    },
+    {
+      "id": "PIL-08",
+      "family_id": "execute-complete-plan",
+      "split": "diagnostic",
+      "prompt": "Der Plan ist vollständig: Gib exakt den Satz „Die synthetische Prüfung ist vorbereitet.“ aus. Keine neue Planung erforderlich.",
+      "allowed_skills": [],
+      "files": {}
+    },
+    {
+      "id": "PIL-09",
+      "family_id": "technical-question-not-interview",
+      "split": "dev",
+      "prompt": "Kläre die offene Frage zum Resume-Verhalten von X anhand input/fakten.md selbst. Es fehlen keine Nutzerpräferenzen. Frage mich nicht nach technischen Fakten.",
+      "allowed_skills": [
+        "researching-repositories"
+      ],
+      "variants": [
+        "B0",
+        "B1",
+        "K-DESC",
+        "K-PORTABLE"
+      ],
+      "files": {
+        "input/fakten.md": "README sagt Resume. Kein Prozesszustand wird gespeichert; nur ein Reconnect ist dokumentiert. Praktische Versuche fehlen."
+      }
+    },
+    {
+      "id": "PIL-10",
+      "family_id": "confirmed-planning-no-interview",
+      "split": "dev",
+      "prompt": "Zerlege das bereits bestätigte Ziel in Arbeitspakete mit Nachweisen. Alle Nutzerentscheidungen sind getroffen; eröffne kein weiteres Interview.",
+      "allowed_skills": [
+        "planning-work-packages"
+      ],
+      "variants": [
+        "B0",
+        "B1",
+        "K-DESC",
+        "K-PORTABLE"
+      ],
+      "files": {
+        "input/goal.md": "Bestätigtes Ziel: synthetische Textdatei importieren, Leerzeilen entfernen, Vorschau liefern. Daten bleiben lokal. Ausgabeformat Markdown. Technischer Parservergleich darf ein kleiner Spike sein."
+      }
+    },
+    {
+      "id": "PIL-11",
+      "family_id": "gate-evidence-not-preference",
+      "split": "diagnostic",
+      "prompt": "Prüfe die folgende Go/No-Go-Entscheidung anhand der vollständigen Befunde. A hat den höheren gewichteten Score, verletzt aber ein ausdrücklich genanntes Muss-Kriterium. Braucht es weitere Belege oder ist A damit ausgeschlossen?",
+      "allowed_skills": [
+        "reviewing-decision-gates"
+      ],
+      "files": {
+        "input/gate.md": "Muss: keine externen Netzaufrufe. A: Score 90, benötigt externen Dienst. B: Score 70, lokal nachgewiesen. Alle Kriterien sind bestätigt."
+      }
+    },
+    {
+      "id": "PIL-12",
+      "family_id": "factual-version-near-miss",
+      "split": "diagnostic",
+      "prompt": "Bitte kläre diese Frage: Welche Version ist im beigefügten Eintrag hinterlegt? Die Antwort ist direkt ablesbar, keine Priorität oder Präferenz fehlt.",
+      "allowed_skills": [],
+      "files": {
+        "input/entry.md": "Version: synthetic-2"
+      }
+    }
+  ]
+}

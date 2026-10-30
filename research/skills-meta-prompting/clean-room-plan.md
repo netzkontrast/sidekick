@@ -3,6 +3,10 @@
 Stand 2026-10-30. Dies ist ein **Vorschlag**, keine Entscheidung. Verbindliche Festlegungen gehören nach
 `docs/entscheidungen/`, Übernahmen nach `docs/herkunftsregister.md`.
 
+## Neuer Owner-Auftrag vom 30.10.2026
+
+Die Skill-Library soll innerhalb Sidekicks eine Kernfähigkeit der Anwendung bilden und als aufeinander aufbauendes, lernbares Prompt-Framework untersucht werden. Die frühere Empfehlung eines separaten Repos unten ist dadurch ersetzt. Portable Skill-Pakete und austauschbare Adapter bleiben Ziel. Der [Library-Research-Plan](library-research-plan.md) ist jetzt die maßgebliche Ausführungs- und Statusplanung für SL0–SL7. Die Stufen 0–7 in diesem Dokument bleiben fachliche Referenz für K1–K8, kein zweiter aktiver Backlog. Die konkrete Laufzeitarchitektur und Dependencies sind weiterhin offen.
+
 ## Antwort auf die Forschungsfrage (Kurzfassung)
 
 Die wesentlichen Aspekte der zwölf Repos lassen sich in einem eigenen System mit sieben Bausteinen abdecken.
@@ -78,13 +82,13 @@ prüfbares Ergebnis.
    und K5.4), code2prompt als CLI oder Python-SDK (für frühe K4-Experimente) und eine Tokenizer-Bibliothek
    (K7.1).
 
-## Offene Entscheidungen
+## Vorgaben und offene Entscheidungen
 
-Diese Fragen kann nur der Owner beantworten. Bis dahin bleibt der Plan ein Vorschlag.
+Der Owner hat den Ort der Library festgelegt. Die übrigen Fragen bleiben offen; der Entwurf legt ihre Antwort nicht fest.
 
 | Frage | Optionen | Empfehlung und Grund |
 |---|---|---|
-| Wo lebt der Rewrite? | Im sidekick-Repo als Teil des Hubs · eigenes Repo · Ausbau von `prompt-engineering-skill` | Eigenes Repo oder `prompt-engineering-skill`. Die Bausteine sind unabhängig vom Agent-Hub; sidekick würde sie über K1 und K3 nur konsumieren. |
+| Wo lebt der Rewrite? | **Owner-Vorgabe, 30.10.2026:** innerhalb Sidekicks als Kernfähigkeit der Anwendung | Die frühere Empfehlung eines separaten Repos ist überholt. Eigenständige portable Pakete bleiben Ziel; konkrete Einbettung nach SL3 prüfen. |
 | Laufzeit und Sprache? | TypeScript (passt zur sidekick-Planung) · Python (näher an DSPy und den Eval-Werkzeugen) | Offen. Hängt an der Entscheidung zu DSPy als Dependency. |
 | DSPy als Dependency? | Ja für Signaturen und Optimierer · Nein, eigene schlanke Umsetzung | Erst nach Stufe 2 entscheiden, mit Messung. |
 | Umfang der ersten Version? | Stufen 0–3 · 0–5 · alles | 0–4: Damit sind Messung, Auswahl und sichere Änderung früh abgedeckt. |
@@ -92,7 +96,7 @@ Diese Fragen kann nur der Owner beantworten. Bis dahin bleibt der Plan ein Vorsc
 
 ## Nächster Schritt
 
-Die offenen Entscheidungen klären, danach die Spec für Stufe 0 schreiben. Die kleinen Versuche aus der
+Nur SL0/SL1 im [Library-Research-Plan](library-research-plan.md) bearbeiten und deren Bestandsaufnahme/Evaluationsdesign zur Review vorlegen. SL2–SL7 folgen erst nach diesem Review; verbleibende offene Entscheidungen gezielt bearbeiten. Die Spec-Vorbereitung nutzt die folgenden bestehenden Versuche: Die kleinen Versuche aus der
 Web-Gegenprüfung (§8: Grilling-Auswahl, Grilling-Verhalten, Kompression im Vergleich) passen als erste Fälle in
 Stufe 2. Nicht ausgeführte Versuche aus den Dossiers, die die Planung beeinflussen:
 

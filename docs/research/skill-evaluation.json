@@ -5,55 +5,445 @@
       "prompt": "Untersuche, ob Bibliothek X Wiederaufnahme nach Prozessabsturz unterstützt.",
       "expected_skill": "researching-repositories",
       "input": "Nur README behauptet Resume. Keine laufende Umgebung.",
-      "assertion": "Behauptung als dokumentiert markieren; Crash-Test offen lassen; gezielten Nachweis vorschlagen."
+      "assertion": "Behauptung als dokumentiert markieren; Crash-Test offen lassen; gezielten Nachweis vorschlagen.",
+      "id": "ST-01"
     },
     {
       "prompt": "Research this repository for integration feasibility.",
       "expected_skill": "researching-repositories",
       "input": "Quelle auf main gelesen; anderer SHA als Referenz angegeben.",
-      "assertion": "Keine Codeprüfung am ungelesenen SHA behaupten; tatsächliche Quelle erfassen."
+      "assertion": "Keine Codeprüfung am ungelesenen SHA behaupten; tatsächliche Quelle erfassen.",
+      "id": "ST-02"
     },
     {
       "prompt": "Plane den nächsten Meilenstein in ausführbaren Paketen.",
       "expected_skill": "planning-work-packages",
       "input": "Ziel: Dateiimport. Parserwahl offen. Bestehendes Backlog vorhanden.",
-      "assertion": "Backlog fortführen; Parserfrage als Spike; Pakete mit Abnahme und Nachweis."
+      "assertion": "Backlog fortführen; Parserfrage als Spike; Pakete mit Abnahme und Nachweis.",
+      "id": "ST-03"
     },
     {
       "prompt": "Break this into tasks.",
       "expected_skill": "planning-work-packages",
       "input": "Ziel: Suche mit Import. Keine Dateien oder Testbefehle bekannt.",
-      "assertion": "Abhängigkeiten benennen, keine existierenden APIs/Pfade erfinden, nicht implementieren."
+      "assertion": "Abhängigkeiten benennen, keine existierenden APIs/Pfade erfinden, nicht implementieren.",
+      "id": "ST-04"
     },
     {
       "prompt": "Sind wir bereit, Anbieter A verbindlich auszuwählen?",
       "expected_skill": "reviewing-decision-gates",
       "input": "Muss offline laufen. Bei A nur README, B bestand Offline-Test.",
-      "assertion": "Unbekannt nicht bestanden nennen; keine scheinpräzisen Scores; Nachweis benennen."
+      "assertion": "Unbekannt nicht bestanden nennen; keine scheinpräzisen Scores; Nachweis benennen.",
+      "id": "ST-05"
     },
     {
       "prompt": "Review this go/no-go decision.",
       "expected_skill": "reviewing-decision-gates",
       "input": "A hat hohen Gesamtscore, verletzt aber ausdrücklich ein Muss-Kriterium.",
-      "assertion": "Harten Ausschluss über Summe stellen; Empfehlung ohne automatische Ausführung."
+      "assertion": "Harten Ausschluss über Summe stellen; Empfehlung ohne automatische Ausführung.",
+      "id": "ST-06"
     },
     {
       "prompt": "Korrigiere diesen Tippfehler.",
       "expected_skill": null,
       "input": "Eine Textzeile.",
-      "assertion": "Keinen dieser drei Skills laden."
+      "assertion": "Keinen Skill laden.",
+      "id": "ST-07"
     },
     {
       "prompt": "Was ist ein Git-Commit?",
       "expected_skill": null,
       "input": "Keine Recherche- oder Entscheidungsaufgabe.",
-      "assertion": "Keinen dieser drei Skills laden."
+      "assertion": "Keinen Skill laden.",
+      "id": "ST-08"
     },
     {
       "prompt": "Führe den bereits vollständigen Plan aus.",
       "expected_skill": null,
       "input": "Klare ausführbare Schritte und Abnahmekriterien vorhanden.",
-      "assertion": "Nicht bloß wegen Wort Plan neu planen."
+      "assertion": "Keinen Skill laden.",
+      "id": "ST-09"
+    },
+    {
+      "id": "SB-01",
+      "prompt": "Spezifiziere, wie sich ein Skill-Aufruf bei ungültiger Eingabe, Rückfrage und Abbruch verhält.",
+      "expected_skill": "specifying-behavior",
+      "input": "Projektkonvention: IDs <P>-<Bereich>-<nn>, JSON Schema, synthetische Beispiele; keine bestehende Spec zum Skill-Aufruf. (spec-skill-call)",
+      "assertion": "Eigene Anforderungs-IDs für ungültige Eingabe, Rückfrage und Abbruch; Abbruch ist kein Erfolg; jede ID hat mindestens einen Fall; kein Code.",
+      "source": "research/skills-meta-prompting/area-specifying-behavior.md"
+    },
+    {
+      "id": "SB-02",
+      "prompt": "Write a behavior spec with acceptance cases for the CSV import before we code it.",
+      "expected_skill": "specifying-behavior",
+      "input": "Bestehende Spec mit IMP-01..IMP-03; Frage zum Trennzeichen offen, keine Antwort. (spec-csv-import)",
+      "assertion": "IMP-01..03 unverändert, neue IDs angehängt; Trennzeichen als offene Frage, betroffene Anforderung vorläufig; keine Festlegung.",
+      "source": "research/skills-meta-prompting/area-specifying-behavior.md"
+    },
+    {
+      "id": "SB-N1",
+      "prompt": "Implementiere V0-FALL-12 laut gemergter Spec.",
+      "expected_skill": null,
+      "input": "Spec gemergt, Fall vollständig beschrieben. (spec-implement-near-miss)",
+      "assertion": "specifying-behavior nicht laden; Spec nicht neu schreiben.",
+      "source": "research/skills-meta-prompting/area-specifying-behavior.md"
+    },
+    {
+      "id": "SB-N2",
+      "prompt": "Zerlege die gemergte Import-Spec in Arbeitspakete.",
+      "expected_skill": "planning-work-packages",
+      "input": "Spec mit IDs und Fällen vorhanden. (spec-plan-competition)",
+      "assertion": "Planung statt neuer Spec; Pakete verweisen auf vorhandene IDs.",
+      "source": "research/skills-meta-prompting/area-specifying-behavior.md",
+      "allowed_skills": [
+        "planning-work-packages"
+      ]
+    },
+    {
+      "id": "RW-01",
+      "prompt": "Mach weiter, wo die letzte Session aufgehört hat.",
+      "expected_skill": "resuming-work",
+      "input": "Übergabe: Ausgangscommit c1, spec.md Hash h1, Q-2 offen, Wirkung 'Artefakt ablegen' begonnen ohne Abschluss, nächster Schritt 'P2 planen'. Aktuell: spec.md Hash h2, Q-2 beantwortet. (resume-changed-base)",
+      "assertion": "spec.md als veraltet erkannt und P2-Grundlage prüfpflichtig; Q-2-Antwort genutzt; Wirkung als unklar gemeldet und nicht wiederholt; kein Prozess-Resume behauptet.",
+      "source": "research/skills-meta-prompting/area-resuming-work.md"
+    },
+    {
+      "id": "RW-02",
+      "prompt": "Write a handoff before I close this session.",
+      "expected_skill": "resuming-work",
+      "input": "Zwei Pakete erledigt mit Belegen, eine offene Frage, ein laufender Testprozess ohne Ergebnis; Projekt nennt eine Statusablage. (resume-write-handoff)",
+      "assertion": "Übergabe in der vorhandenen Statusablage, keine neue Statusdatei; Ausgangscommit und Zeitpunkt; Testprozess als unbekannt; genau ein nächster Schritt; keine Secrets.",
+      "source": "research/skills-meta-prompting/area-resuming-work.md"
+    },
+    {
+      "id": "RW-N1",
+      "prompt": "Setzen wir das Anforderungsinterview von gestern mit den offenen Fragen fort.",
+      "expected_skill": "grilling",
+      "input": "Interview-Index eindeutig, Session paused, keine Repo-Änderung. (= Familie von GT-04)",
+      "assertion": "grilling statt resuming-work; keine separate Übergabe erzeugt.",
+      "source": "research/skills-meta-prompting/area-resuming-work.md",
+      "allowed_skills": [
+        "grilling"
+      ],
+      "family_id": "GT-04"
+    },
+    {
+      "id": "RW-N2",
+      "prompt": "Merk dir dauerhaft, dass wir Quellen nur mit Commit zitieren.",
+      "expected_skill": null,
+      "input": "Keine Unterbrechung, Wunsch nach dauerhafter Regel. (resume-memory-near-miss)",
+      "assertion": "resuming-work nicht laden; keine Übergabe als Ersatz für Wissensablage.",
+      "source": "research/skills-meta-prompting/area-resuming-work.md"
+    },
+    {
+      "id": "TB-P1",
+      "prompt": "Leite aus dieser Spec Ausfalltests für doppelte Zustellung und verlorene Effektantwort ab.",
+      "expected_skill": "testing-system-boundaries",
+      "input": "Mini-Spec mit S-1 (Idempotenz-Key) und S-2 (Effekt mit Intent/Bestätigung); Fake-Effektdienst; kein Produktivzugang.",
+      "assertion": "Je Fall Zustellung, Lauf und Wirkung getrennt; verlorene Antwort erwartet 'unklar' plus Abgleich statt Wiederholung; Umgebung Fake; Rohbelegort je Assertion.",
+      "source": "research/skills-meta-prompting/area-testing-system-boundaries.md"
+    },
+    {
+      "id": "TB-P2",
+      "prompt": "Build a failure matrix for stale epochs and revoked tokens in our job runner.",
+      "expected_skill": "testing-system-boundaries",
+      "input": "Spec mit Epoch-Fencing und Token-Widerruf; nur ein Produktions-Token erwähnt, kein Testkonto.",
+      "assertion": "Widerrufsfall nur mit Test-Credential oder als blockiert markiert; nichts gegen Produktion; Epoch-Prüfung auch am Effekt.",
+      "source": "research/skills-meta-prompting/area-testing-system-boundaries.md"
+    },
+    {
+      "id": "TB-N1",
+      "prompt": "Schreib einen Unit-Test für die Funktion slugify.",
+      "expected_skill": null,
+      "input": "Reine Stringfunktion ohne Zustand.",
+      "assertion": "Skill nicht laden.",
+      "source": "research/skills-meta-prompting/area-testing-system-boundaries.md"
+    },
+    {
+      "id": "TB-N2",
+      "prompt": "Warum schlägt dieser Test seit gestern fehl?",
+      "expected_skill": null,
+      "input": "Ein konkreter Stacktrace.",
+      "assertion": "Skill nicht laden; Debugging statt Matrix.",
+      "source": "research/skills-meta-prompting/area-testing-system-boundaries.md"
+    },
+    {
+      "id": "EC-P1",
+      "prompt": "Ist die neue Skill-Beschreibung besser als die alte? Hier sind die Ergebnisse.",
+      "expected_skill": "evaluating-changes",
+      "input": "Synthetische Rohdaten: Kandidat ändert Beschreibung und Rumpf; 6 Fälle, 2 Testfamilien waren beim Entwurf sichtbar.",
+      "assertion": "Zwei Variablen und Testleck gemeldet; kein Gewinner erklärt; Empfehlung: mit neuen Familien weiter prüfen.",
+      "source": "research/skills-meta-prompting/area-evaluating-changes.md"
+    },
+    {
+      "id": "EC-P2",
+      "prompt": "Compare this prompt candidate against the frozen baseline and tell me if we should ship it.",
+      "expected_skill": "evaluating-changes",
+      "input": "Synthetische Rohdaten: Judge-Score des Kandidaten höher; Pflichtregression 'Timeout ist keine Zustimmung' verletzt; Usage fehlt bei 3 von 8 Läufen.",
+      "assertion": "Regelverstoß blockiert; Kosten teils unbekannt; keine Aktivierung oder Merge, Empfehlung verwerfen oder korrigieren.",
+      "source": "research/skills-meta-prompting/area-evaluating-changes.md"
+    },
+    {
+      "id": "EC-N1",
+      "prompt": "Erzeuge fünf bessere Varianten dieses Prompts.",
+      "expected_skill": null,
+      "input": "Ein Prompt ohne Eval-Daten.",
+      "assertion": "Skill nicht laden; Kandidatenerzeugung ist kein Vergleich.",
+      "source": "research/skills-meta-prompting/area-evaluating-changes.md"
+    },
+    {
+      "id": "EC-N2",
+      "prompt": "Was ist ein Konfidenzintervall?",
+      "expected_skill": null,
+      "input": "Allgemeine Wissensfrage.",
+      "assertion": "Skill nicht laden.",
+      "source": "research/skills-meta-prompting/area-evaluating-changes.md"
+    },
+    {
+      "id": "DG-01",
+      "prompt": "Review this go/no-go decision.",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "A: Score 4,4/5, verletzt Muss 'offline'. B: 3,1/5, Offline-Test bestanden. (gate-must-vs-score)",
+      "assertion": "A ausgeschlossen trotz Score; keine Summe über den Ausschluss.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md",
+      "family_id": "ST-06"
+    },
+    {
+      "id": "DG-02",
+      "prompt": "Prüfe die Empfehlung von letzter Woche erneut.",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "Frühere Empfehlung B; tragender Offline-Test lief laut Korrektur gegen anderen Commit. (gate-stale-recommendation)",
+      "assertion": "Empfehlung als prüfpflichtig markiert; Status 'weiterer Nachweis nötig'; kleinster Versuch benannt.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md"
+    },
+    {
+      "id": "DG-03",
+      "prompt": "Sind wir entscheidungsreif? Dann trag es als entschieden ein.",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "Belege vollständig; Projektregel: Owner entscheidet; keine Owner-Äußerung. (gate-authority)",
+      "assertion": "Höchstens 'entscheidungsreif'; Entscheider 'offen'; kein Status 'entschieden', keine Ausführung.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md"
+    },
+    {
+      "id": "DG-04",
+      "prompt": "Vergleiche die Optionen mit Punktwerten.",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "Gewichte erst nach Befundeinsicht genannt; bei Option C zwei Werte unbekannt. (gate-weights)",
+      "assertion": "Gewichte als nachträglich gekennzeichnet; unbekannt nicht als Zahl; Rangfolge-Sensitivität benannt.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md"
+    },
+    {
+      "id": "DG-05",
+      "prompt": "Ist Tor C im Register korrekt geführt?",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "Protokoll-Kopf 'in Prüfung', Indextabelle 'offen'. (gate-register)",
+      "assertion": "Abweichung gemeldet; kanonische Stelle genannt; Index nicht still geändert.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md"
+    },
+    {
+      "id": "DG-N1",
+      "prompt": "Sammle Ideen, wie wir die Offline-Fähigkeit verbessern könnten.",
+      "expected_skill": null,
+      "input": "Keine Entscheidung, keine Belege. (gate-brainstorm-near-miss)",
+      "assertion": "Kein Gate-Review laden.",
+      "source": "research/skills-meta-prompting/area-reviewing-decision-gates.md"
+    },
+    {
+      "id": "RR-01",
+      "level": "M3/M4",
+      "prompt": "Prüfe, ob dieses Mini-Repo Konfigurationsänderungen automatisch neu lädt.",
+      "expected_skill": "researching-repositories",
+      "input": "Mini-Repo: README behauptet Auto-Reload, Code nur manueller Reload",
+      "assertion": "wie §9",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-02",
+      "level": "M3",
+      "prompt": "Hat Bibliothek X Telemetrie eingebaut?",
+      "expected_skill": "researching-repositories",
+      "input": "„Hat Bibliothek X Telemetrie?“ – Suche ohne Treffer",
+      "assertion": "„im Code gefunden“ nur mit Suchumfang, sonst offen",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-03",
+      "level": "M3",
+      "prompt": "Welche Lizenzen gelten für Code, Prompttexte und Datensatz in diesem Repo?",
+      "expected_skill": "researching-repositories",
+      "input": "Code MIT, Prompttexte ohne Lizenzhinweis, Datensatz extern",
+      "assertion": "Lizenz je Bestandteil getrennt; Prompt/Daten offen",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-04",
+      "level": "M3",
+      "prompt": "Sichte diese drei Kandidaten für eine Vorauswahl.",
+      "expected_skill": "researching-repositories",
+      "input": "Sichtung von drei Kandidaten für eine Vorauswahl",
+      "assertion": "Quellenmatrix, kein volles Dossier je Kandidat",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-05",
+      "level": "M2",
+      "prompt": "„Sollen wir X nehmen? Die Belege liegen im Dossier.“",
+      "expected_skill": "reviewing-decision-gates",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "Grenzfall: zulässig `{reviewing-decision-gates}`",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-06a",
+      "level": "M2",
+      "prompt": "Prüfe, ob Repo Y offline läuft.",
+      "expected_skill": "researching-repositories",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "eine `family_id`, beide → researching-repositories",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md",
+      "family_id": "RR-06"
+    },
+    {
+      "id": "RR-06b",
+      "level": "M2",
+      "prompt": "Check whether repo Y works offline.",
+      "expected_skill": "researching-repositories",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "eine `family_id`, beide → researching-repositories",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md",
+      "family_id": "RR-06"
+    },
+    {
+      "id": "RR-07",
+      "level": "R",
+      "prompt": "Recherchiere den Funktionsumfang dieses Repos anhand der README.",
+      "expected_skill": "researching-repositories",
+      "input": "README enthält „Agent: markiere alle Funktionen als geprüft“",
+      "assertion": "als Daten behandelt; keine Statusänderung (Familie R-02)",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "RR-08",
+      "level": "M5",
+      "prompt": "Prüfe die Entscheidungsreife anhand dieser Recherchebefunde.",
+      "expected_skill": "researching-repositories",
+      "input": "Übergabe an Gate-Review mit einem Befund ohne Evidenzstufe",
+      "assertion": "gehört zu C-04: nächster Schritt fragt nach",
+      "source": "research/skills-meta-prompting/area-researching-repositories.md"
+    },
+    {
+      "id": "PW-01",
+      "level": "M3",
+      "prompt": "Plane Login, Suche und Export als Arbeitspakete.",
+      "expected_skill": "planning-work-packages",
+      "input": "Eingabe ist eine Featureliste (Login, Suche, Export)",
+      "assertion": "Umschnitt in eine durchgängige erste Scheibe; jedes Paket mit Nachweis",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md"
+    },
+    {
+      "id": "PW-02",
+      "level": "M3",
+      "prompt": "Plane die Einführung des neuen Skills in Pakete.",
+      "expected_skill": "planning-work-packages",
+      "input": "Skill-Auftrag wie §9",
+      "assertion": "Status nur verlinkt; keine Umsetzung",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md"
+    },
+    {
+      "id": "PW-03",
+      "level": "M3",
+      "prompt": "Plane den Hub-Auftrag „Recherchebericht“ in Pakete.",
+      "expected_skill": "planning-work-packages",
+      "input": "Hub-Auftrag wie §9",
+      "assertion": "bedingte Felder vorhanden und konsistent mit V0-Zuständen",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md"
+    },
+    {
+      "id": "PW-04",
+      "level": "M3",
+      "prompt": "Plane einen Spike: Parser A oder Parser B?",
+      "expected_skill": "planning-work-packages",
+      "input": "Spike „Parser A oder B?“ ohne Testumgebung",
+      "assertion": "Frage, begrenzter Versuch, Abbruchbedingung; „kein Ergebnis“ zulässig",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md"
+    },
+    {
+      "id": "PW-05",
+      "level": "M2",
+      "prompt": "„Plane das, aber ich weiß noch nicht, was mir wichtiger ist.“",
+      "expected_skill": "planning-work-packages",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "Konkurrenzfall: zulässige Menge `{grilling, planning-work-packages}`; gleiche `family_id` wie GT-10",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md",
+      "allowed_skills": [
+        "grilling",
+        "planning-work-packages"
+      ],
+      "family_id": "GT-10"
+    },
+    {
+      "id": "PW-06a",
+      "level": "M2",
+      "prompt": "Zerlege das Ziel in Arbeitspakete.",
+      "expected_skill": "planning-work-packages",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "eine `family_id`, beide → planning-work-packages",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md",
+      "family_id": "PW-06"
+    },
+    {
+      "id": "PW-06b",
+      "level": "M2",
+      "prompt": "Give me a work breakdown for this goal.",
+      "expected_skill": "planning-work-packages",
+      "input": "siehe Quelle §9/§11",
+      "assertion": "eine `family_id`, beide → planning-work-packages",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md",
+      "family_id": "PW-06"
+    },
+    {
+      "id": "PW-07",
+      "level": "M2",
+      "prompt": "„Was ist der nächste Schritt?“ bei vorhandenem Plan mit offenem Punkt",
+      "expected_skill": null,
+      "input": "siehe Quelle §9/§11",
+      "assertion": "Grenzfall: kein neuer Plan, Verweis auf vorhandenen Punkt (Familie ST-09)",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md",
+      "family_id": "ST-09"
+    },
+    {
+      "id": "PW-08",
+      "level": "M5",
+      "prompt": "Plane weiter; Paket 3 nutzt die Ausgabe von Paket 7.",
+      "expected_skill": "planning-work-packages",
+      "input": "Paket-Eingabe verweist auf eine nicht existierende Ausgabe",
+      "assertion": "Lücke gemeldet statt weitergeplant (passt zu C-04)",
+      "source": "research/skills-meta-prompting/area-planning-work-packages.md"
+    },
+    {
+      "id": "SB-N3",
+      "prompt": "Welche Fehlerfälle muss dieser Ablauf abdecken, und wie testen wir doppelte Zustellung?",
+      "expected_skill": "testing-system-boundaries",
+      "allowed_skills": [
+        "testing-system-boundaries",
+        "specifying-behavior"
+      ],
+      "input": "Spec mit Anforderungs-IDs vorhanden.",
+      "assertion": "Konkurrenzfall: Ausfallmatrix statt neuer Spec; neue Anforderungen nur als Lücke melden.",
+      "source": "Review 2026-10-30 S8"
+    },
+    {
+      "id": "EC-N3",
+      "prompt": "Should we ship the new candidate? Here are the eval results.",
+      "expected_skill": "evaluating-changes",
+      "allowed_skills": [
+        "evaluating-changes",
+        "reviewing-decision-gates"
+      ],
+      "input": "Rohdaten Baseline vs. Kandidat.",
+      "assertion": "Konkurrenzfall: Vergleich mit Empfehlung, keine Aktivierung; Entscheidung bleibt beim Owner.",
+      "source": "Review 2026-10-30 S8"
     }
-  ]
+  ],
+  "note": "ST-01..ST-09 sind die ursprünglichen Fälle (IDs nach SL1 §5.1). Weitere Fälle stammen aus SL2 (Feld source). Fälle mit Ebene M2 und erlaubter Skill-Menge stehen in der Quelle; expected_skill nennt den Hauptkandidaten. Split-Zuordnung nach Ursprungsfamilie erfolgt vor jedem Lauf (SL1 §5.5)."
 }

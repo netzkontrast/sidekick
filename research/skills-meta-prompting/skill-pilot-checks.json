@@ -1,0 +1,40 @@
+{
+  "helper_tests": 14,
+  "model_starts": 0,
+  "baseline_sha256": "d1a04e2631f55cd9f14d52db535d32c410b42a26641ddc4e41bfc3a9d4ea38c4",
+  "candidate_checks": [
+    {
+      "id": "K-DESC",
+      "changed_files": [
+        ".agents/skills/grilling/SKILL.md"
+      ],
+      "source_bytes": 3409,
+      "candidate_bytes": 3340,
+      "static_valid": true
+    },
+    {
+      "id": "K-PORTABLE",
+      "changed_files": [
+        ".agents/skills/grilling/SKILL.md",
+        ".agents/skills/grilling/references/workflow.md"
+      ],
+      "source_bytes": 7938,
+      "candidate_bytes": 7957,
+      "static_valid": true
+    }
+  ],
+  "yaml_validator": "already installed PyYAML; helper does not depend on it",
+  "python_version": "3.12.14",
+  "test_command": "python -m unittest -v test_skill_pilot.py",
+  "helper_test_result": "14 tests passed; no model invocation",
+  "prepared_configurations": 24,
+  "artifact_sha256": {
+    "skill_pilot.py": "132c27ba5dde88ba2bf21d4a29055e548f6503e6719e07ba536f5fcef2ae9db1",
+    "test_skill_pilot.py": "b5ca825632aef822a4f350a7395beb0a79c0cb520e8c86bc18c010e87c9e8421",
+    "skill-pilot-baseline.json": "dab0c863c045748c788daee4fcb4fb0ffc008234c00b47dd67d0f257406643a8",
+    "skill-pilot-candidates.json": "1024f4745af896a3393f9db473970c0702dcb48bb85e3c6f13d63c3639fa87d6",
+    "skill-pilot-cases.json": "340f6ebc6c46201c4b3563ff4eb68ab973e718f55d7765328a9637e24d77896b",
+    "skill-pilot-c0.json": "0ccf648a15fee6fc41cbc3c7b3a5957ce7a01c1af9ac4bfbc7469a64f4d7c2e3"
+  }
+}
+

@@ -5,7 +5,7 @@ Produktüberblick: [README.md](README.md). Hier steht nur, was sich nicht aus de
 
 ## Projektstand
 
-- Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält bisher nur Markdown.
+- Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält Planungsdokumente und isolierte Research-Hilfsprogramme, noch keine Produktlaufzeit.
   Maßgeblich: [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md) für Vorgehen
   und Prioritäten, [docs/vision.md](docs/vision.md) für das Produktziel.
 - Recherche-Zeit auf P0-Fragen konzentrieren (Analyse §5, §9); keine Feature-Listen für P1/P2 vor dem MVP.
@@ -86,10 +86,13 @@ verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
 Passende Abläufe bedarfsweise aus `.agents/skills/` laden: `researching-repositories`
 für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Planung,
-`reviewing-decision-gates` für Entscheidungsreife.
+`reviewing-decision-gates` für Entscheidungsreife, `specifying-behavior` für Verhaltens-Specs mit IDs und Fällen,
+`resuming-work` für Übergaben und Wiederaufnahme, `testing-system-boundaries` für Ausfallmatrizen,
+`evaluating-changes` für Vergleiche gegen eine eingefrorene Baseline.
 `grilling` für entscheidungsrelevante Rückfragen mit AskUser-Tools; Ablage: [docs/fragen/](docs/fragen/README.md).
 Nur den passenden Skill lesen,
 Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
+Laufende Skill-Library-Recherche und Priorität: [Library-Research-Plan](research/skills-meta-prompting/library-research-plan.md).
 
 ## Code-Navigation mit CodeGraph
 
