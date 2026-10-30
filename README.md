@@ -4,7 +4,7 @@
 
 **Status:** Vision (vor Spec) · private Instanz (self-hosted, Open Source) · erste Runtime: Claude Code
 
-Die vollständige Vision steht in [`docs/vision.md`](docs/vision.md). Dieses README fasst sie zusammen und beschreibt, wie im Repo gearbeitet wird.
+Die vollständige Vision steht in [`docs/vision.md`](docs/vision.md), die kritische Analyse samt Repo-Recherche und Übernahmeplan in [`docs/analyse-und-uebernahmeplan.md`](docs/analyse-und-uebernahmeplan.md). Dieses README fasst beides zusammen und beschreibt, wie im Repo gearbeitet wird.
 
 ---
 
@@ -70,7 +70,7 @@ Kein weiterer Chat-Client · kein eigener Coding-Agent · kein Modell-Hosting ·
 
 | Phase | Ziel | Exit-Kriterium |
 |---|---|---|
-| **0a – Machbarkeit** | Bauen oder erweitern (Paperclip, Happy, Goose + ACP)? | Entscheidungsdokument |
+| **0a – Machbarkeit** | Bauen oder erweitern (Paperclip, OpenHands; Happy, Claude ACP als Referenz)? Siehe [Entscheidungstore A–D](docs/analyse-und-uebernahmeplan.md#6-rechercheverfahren-und-entscheidungstore) | Entscheidungsdokument |
 | **0b – Spec** | Zustandsautomaten, Fehlerfälle, Domain Events, Playbook-Schema, Hub-API, MCP-Tools, Threat Model | Spec reviewt |
 | **1 – Kern** | Nordstern-Ablauf | MVP-Abnahme inkl. Chaos-Tests grün |
 | **2 – Breite** | Weitere Runtimes und Auftragstypen | 3 Runtimes, 3 Auftragstypen |
@@ -88,7 +88,8 @@ Offene Entscheidungen sind in [`docs/vision.md` §26](docs/vision.md#26-offene-e
 .
 ├── README.md         Überblick (diese Datei)
 ├── docs/
-│   └── vision.md     Vollständige Produktvision (v4)
+│   ├── vision.md                     Vollständige Produktvision (v4)
+│   └── analyse-und-uebernahmeplan.md Visionsanalyse, Repo-Recherche, Entscheidungstore
 └── .codegraph/       Lokaler CodeGraph-Index (nicht eingecheckt, nur .gitignore)
 ```
 
