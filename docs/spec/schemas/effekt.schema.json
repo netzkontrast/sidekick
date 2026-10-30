@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/effekt.schema.json",
+  "title": "Effekt – V0",
+  "description": "Typisierter Effekt mit Freigabebindung. Siehe §4.4, V0-INV-04 und V0-INV-05.",
+  "type": "object",
+  "required": ["schema_version", "id", "auftrag_id", "auftrag_version", "epoch", "typ", "ziel", "parameter", "parameter_hash", "idempotenz_key", "zustand"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^e-[a-z0-9-]+$" },
+    "auftrag_id": { "type": "string" },
+    "auftrag_version": { "type": "integer", "minimum": 1 },
+    "epoch": { "type": "integer", "minimum": 1, "description": "Claim-Epoch zum Zeitpunkt des Vorschlags; wird unmittelbar am Effekt erneut geprüft." },
+    "typ": { "type": "string", "examples": ["artifact.store", "github.open_pr"] },
+    "ziel": { "type": "string" },
+    "parameter": { "type": "object", "description": "Kanonische Parameter; Grundlage des Hashes." },
+    "parameter_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "artefakt_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "idempotenz_key": { "type": "string", "minLength": 8 },
+    "zustand": { "enum": ["proposed", "approval_pending", "approved", "invalidated", "intent_recorded", "done", "failed", "outcome_unknown", "reconciled", "rejected"] },
+    "freigabe": {
+      "type": ["object", "null"],
+      "required": ["entschieden_von", "entschieden_am", "geraet_id", "gebunden_an"],
+      "additionalProperties": false,
+      "properties": {
+        "entschieden_von": { "type": "string" },
+        "entschieden_am": { "type": "string", "format": "date-time" },
+        "geraet_id": { "type": "string" },
+        "gueltig_bis": { "type": "string", "format": "date-time" },
+        "gebunden_an": {
+          "type": "object",
+          "required": ["parameter_hash", "ziel", "auftrag_version", "epoch"],
+          "additionalProperties": false,
+          "properties": {
+            "parameter_hash": { "type": "string" },
+            "artefakt_hash": { "type": "string" },
+            "ziel": { "type": "string" },
+            "auftrag_version": { "type": "integer" },
+            "epoch": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "abgleich": {
+      "type": ["object", "null"],
+      "description": "Nur nach outcome_unknown.",
+      "additionalProperties": false,
+      "properties": {
+        "ergebnis": { "enum": ["eingetreten", "nicht_eingetreten", "unbestimmbar"] },
+        "methode": { "type": "string" },
+        "am": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

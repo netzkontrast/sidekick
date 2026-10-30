@@ -6,6 +6,8 @@
 
 Über welchen Weg bindet der Connector Claude Code an: [Claude ACP](https://github.com/agentclientprotocol/claude-agent-acp), Claude Agent SDK direkt oder die dokumentierte strukturierte CLI-Schnittstelle? Claude ACP nutzt selbst das Agent SDK; der Vergleich betrifft daher auch Abstraktion, Versionsrisiko und Funktionsabdeckung.
 
+**Vorentscheidung (30.10.2026):** Claude Code ist die erste Runtime, auch für den Test des Adaptervertrags (siehe [Grundsatzentscheidungen](README.md#grundsatzentscheidungen-des-owners)). Offen bleibt hier nur der Anbindungsweg. Weil keine zweite Runtime die Vertragstests absichert, braucht Tor B früh eine deterministische Fake-Runtime.
+
 ## Adapter-Matrix
 
 | Fähigkeit | Claude ACP | Agent SDK | Strukturierte CLI |
@@ -37,3 +39,5 @@ Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachg
 ## Offene Punkte
 
 - Offen, 30.10.2026: Den [frühen Needle-Versuch N0](../claude-startauftrag-vision-v5.md) und lokale ASR-/Inferenzdienste als zusätzliche Gerätefähigkeiten prüfen. Lokale Modelle über den Connector waren bereits in v4 vorgesehen; neu sind insbesondere Training/Fine-Tuning und der konkretisierte Betrieb. Die Claude-Anbindung bleibt der bestehende P0-Vergleich.
+
+- Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md) (§4.6, §8): Der gewählte Adapter ersetzt die Fake-Runtime aus V0-ABL-01 und meldet sich als Capability der Art `runtime`. Lokale Modelle werden als Capability `local_model` modelliert ([A-20261030-v0-lokal-offline](../fragen/v0-ziel-und-vertraege/questions/Q-20261030-v0-lokal-offline.md)); ob dafür ein eigener Adapter nötig ist, bleibt offen.

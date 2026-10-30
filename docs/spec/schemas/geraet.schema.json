@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/geraet.schema.json",
+  "title": "Gerät – V0",
+  "description": "Gepairtes Gerät mit Capabilities. Pairing und Verbindung sind getrennt (§4.6). Presence ist kein Prozessnachweis (V0-INV-08).",
+  "type": "object",
+  "required": ["schema_version", "id", "name", "art", "pairing", "verbindung", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^g-[a-z0-9-]+$" },
+    "name": { "type": "string" },
+    "art": { "enum": ["connector", "browser"] },
+    "pairing": {
+      "type": "object",
+      "required": ["zustand"],
+      "additionalProperties": false,
+      "properties": {
+        "zustand": { "enum": ["pairing_pending", "paired", "revoked"] },
+        "bestaetigt_von": { "type": "string" },
+        "bestaetigt_am": { "type": "string", "format": "date-time" },
+        "widerrufen_am": { "type": "string", "format": "date-time" }
+      }
+    },
+    "verbindung": {
+      "type": "object",
+      "required": ["zustand", "zuletzt_gesehen"],
+      "additionalProperties": false,
+      "properties": {
+        "zustand": { "enum": ["online", "degraded", "offline", "revoked"] },
+        "zuletzt_gesehen": { "type": "string", "format": "date-time" },
+        "cursor": { "type": "string", "description": "Letzte vom Gerät bestätigte Journal-Position." }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["art", "name", "version", "quelle", "datenklassen", "bestaetigt_am"],
+        "additionalProperties": false,
+        "properties": {
+          "art": { "enum": ["runtime", "local_model", "asr", "check"] },
+          "name": { "type": "string", "examples": ["fake-runtime", "claude-code", "needle3"] },
+          "version": { "type": "string" },
+          "quelle": { "enum": ["behauptet", "nachgewiesen"], "description": "Nachgewiesen erst durch erfolgreichen Run bzw. Check." },
+          "datenklassen": { "type": "array", "items": { "enum": ["public", "internal", "confidential", "local-only"] }, "uniqueItems": true },
+          "local_only": { "type": "boolean", "description": "true nur, wenn Inferenz und Daten das Gerät nicht verlassen (V0-INV-09)." },
+          "bestaetigt_am": { "type": "string", "format": "date-time" },
+          "befund": { "type": "string", "description": "Letzter Fehlerbefund, z. B. nach V0-FALL-17." }
+        }
+      }
+    }
+  }
+}

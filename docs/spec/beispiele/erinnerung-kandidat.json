@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "id": "m-beispiel-1",
+  "version": 1,
+  "ersetzt": null,
+  "art": "projektregel",
+  "zusammenfassung": "Für Vergleiche zuerst einen kleinen messbaren Versuch planen.",
+  "inhalt_ref": "obj:m-beispiel-1-v1",
+  "quellen": [
+    {
+      "art": "auftrag",
+      "ref": "a-beispiel-1"
+    },
+    {
+      "art": "rueckfrage",
+      "ref": "q-beispiel-1",
+      "fundstelle": "Antwort B"
+    }
+  ],
+  "datenklasse": "internal",
+  "geltungsbereich": {
+    "ebene": "projekt",
+    "ref": "sidekick"
+  },
+  "gueltig_bis": null,
+  "zustand": "candidate",
+  "konflikt_mit": [],
+  "trainingsfreigabe": false,
+  "erstellt_am": "2026-10-30T09:45:00Z",
+  "entschieden": null
+}
