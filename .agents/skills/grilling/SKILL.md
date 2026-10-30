@@ -1,0 +1,17 @@
+---
+name: grilling
+description: Kläre entscheidungsrelevante offene Fragen zu Ideen, Plänen und Anforderungen durch ein strukturiertes Interview. Nutze bei „grill mich“, „hinterfrage den Plan“, „kläre offene Fragen“, Anforderungsinterviews oder „stress-test this idea“. Nicht für reine Faktenrecherche, triviale Änderungen oder bereits eindeutig beantwortete Entscheidungen.
+---
+
+# Entscheidungen durch Fragen klären
+
+1. Lies Arbeitsregeln, Ziel, vorhandene Antworten und Entscheidungen. Recherchiere zugängliche Fakten selbst; frage nach Präferenzen, Prioritäten und nicht ableitbaren Vorgaben. Prüfe Annahmen kritisch, ohne bestätigte Antworten grundlos erneut abzufragen.
+2. Nutze die konfigurierte Fragenablage; in Sidekick gilt `docs/fragen/`. Andernorts bestehende Ablage übernehmen. Lies vor dem ersten Schreiben [Workflow](references/workflow.md) und bei neuen Datensätzen [Formate](references/records.md). Lade später nur Themenindex, offene IDs und benötigte Einträge.
+3. Erfasse Fragen mit stabiler ID, Abhängigkeiten, Priorität und sachlichem Anlass: Quelle, Lücke/Widerspruch, betroffene Entscheidung, Folgen unterschiedlicher Antworten. Speichere keine privaten Denkprotokolle; dokumentiere überprüfbare Gründe und ausdrücklich markierte Annahmen.
+4. Wähle nur Fragen, deren Voraussetzungen beantwortet oder belegt sind. Priorisiere Blockierendes. Frage voneinander unabhängige Punkte gemeinsam, begrenzt durch Tool-Schema und gewünschte Bedienlast; abhängige Fragen folgen später. Erzeuge weitere relevante Fragen aus Antworten, bis der vereinbarte Umfang geklärt ist.
+5. Verwende ein verfügbares natives AskUser-Werkzeug, etwa `AskUserQuestion`, `request_user_input` oder ein entsprechendes Client-Tool, sofern es diese Frage erlaubt. Beachte dessen tatsächliches Schema, Modus und Berechtigungsgrenzen; keine erfundenen Tools oder Vorabfreigaben. Sonst stelle dieselbe Frage im Chat. Erkläre kurz die Entscheidung, biete unterscheidbare Optionen samt Folgen und eine begründete Empfehlung; lasse freie Antworten zu. Keine suggestive Ja-Vorgabe.
+6. Speichere vor Tool-Aufrufen Fragen und Feld-Mapping; im Chat genügt ein kompakter Rundeneintrag. Erfasse danach die tatsächlich gestellten Fragen, Antworten und Quelle. Teilantworten gelten nur für zugeordnete IDs. Schweigen, Timeout oder übersprungene Felder sind keine Zustimmung. Unklare Zuordnung gezielt nachfragen. Sichere vor Wartepausen den Stand; blockiere nur abhängige Arbeit.
+7. Ergänze Antworten nachvollziehbar statt frühere zu überschreiben. Bei Korrekturen markiere betroffene Folgefragen und Entscheidungen als erneut prüfpflichtig. Prüfe danach offene Abhängigkeiten, Widersprüche und nächste Fragerunde.
+8. Schließe mit kurzer Zusammenfassung, verbleibenden Unsicherheiten und dem nächsten Schritt. Ein leeres aktuell fragbares Set kann durch Forschung oder Abhängigkeiten blockiert sein. Erkläre das statt Vollständigkeit zu behaupten. Lasse den Nutzer die gemeinsame Zusammenfassung bestätigen; eine schon ausdrücklich gegebene Bestätigung nicht erneut verlangen. Bestätigung der Inhalte erteilt keine Ausführungsrechte. Respektiere bestehende Autorisierung und den Arbeitsauftrag.
+
+Bei Abbruch: Stand als `paused` speichern, Fragen erhalten. Niemals Antworten erfinden oder ungefragt Architektur, Skills oder Code aus einem Interview implementieren.
