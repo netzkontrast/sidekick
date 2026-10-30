@@ -30,6 +30,10 @@ Welcher Transport verbindet Connector, Hub und Browser, und wie bleibt der lokal
 
 ## Befunde
 
+- Dokumentiert, abgerufen am 30.10.2026: [Vercel meldet WebSocket-GA seit 20.10.2026](https://vercel.com/changelog/websocket-support-is-now-generally-available). [Verbindungen sind an die Laufzeit ihrer Function-Instanz gebunden](https://vercel.com/kb/guide/do-vercel-serverless-functions-support-websocket-connections); Folge-Verbindungen können andere Instanzen erreichen. Das ermöglicht WSS als Kandidaten, entscheidet aber den Transport nicht. Konkrete Laufzeitwerte pro Plan und ihre Kosten bleiben für unseren Versuch offen.
+
 ## Entscheidung
 
 ## Offene Punkte
+
+- Offen, 30.10.2026: Erneuerbares WSS anhand des [Vercel-Befunds](../research/vision-v5-machbarkeit.md#vercel-hub-ja-unendlicher-prozess-nein) gegen Polling/Event-Upload/SSE messen. Instanzwechsel, dauerhafte Zustellung, Reconnect, Offline-/Origin-Zugriff und Kosten nachweisen; Ausgangshypothese bis zur Entscheidung unverändert.

@@ -4,6 +4,8 @@
 > Grundlage: [Machbarkeitsbericht](research/vision-v5-machbarkeit.md), bestehende [Analyse](analyse-und-uebernahmeplan.md) und [Entscheidungstore](entscheidungen/README.md).
 > Dieser Auftrag legt keine neue Dependency fest und autorisiert kein Deployment, keinen Merge oder Betrieb auf dem Nutzer-PC.
 
+Der Dateiname adressiert den vom Owner gewünschten Claude-Start. Die fachlichen Pakete sind runtime- und agentenunabhängig; andere Coding-Agents können denselben Auftrag nutzen. Ihr Ausführungsstatus wird ausschließlich im [zentralen Arbeitsplan](../research/agent-hub/operations/PLAN.md) gepflegt. Die Tabelle hier beschreibt die Abnahmekriterien, keinen zweiten Status-Backlog.
+
 ## Dein Ziel
 
 Baue auf einen persönlichen Arbeitsraum hin, der Vorhaben über Geräte und Unterbrechungen trägt. Beweise zuerst einen kleinen vollständigen Ablauf und einen frühen lokalen Lernversuch. Die Vision beschreibt das Erlebnis; Vertrag, Journal und Freigabetor sichern es ab.
