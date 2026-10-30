@@ -12,6 +12,7 @@ Bearbeiter: Claude Code (Session), Owner beantwortet.
 | [Q-20261030-sl-feedbackdaten](questions/Q-20261030-sl-feedbackdaten.md) | Welche Daten dürfen als Feedback für Lernkandidaten dienen? |
 | [Q-20261030-sl-aktivierung](questions/Q-20261030-sl-aktivierung.md) | Wer darf eine neue Skill-Version aktivieren? |
 | [Q-20261030-sl-naechster-abschnitt](questions/Q-20261030-sl-naechster-abschnitt.md) | Welcher begrenzte Abschnitt folgt nach dem SL0/SL1-Review? |
+| [Q-20261030-sl-code-sprache](questions/Q-20261030-sl-code-sprache.md) | In welcher Sprache und an welchem Ort entstehen die Library-Werkzeuge der ersten Version? (offen, aus SL7) |
 
 Status, Abhängigkeiten und Prüfbedarf stehen ausschließlich in den Frage-Dateien.
 

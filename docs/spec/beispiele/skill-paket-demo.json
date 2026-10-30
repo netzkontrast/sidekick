@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "skill_id": "demo-skill",
+  "version": "0.1.0",
+  "content_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "1c91a9a986cc8d5440b8fe1335f2ef6c029c4651f6cf0b19ec50cefb474f9ca6"
+  },
+  "package_path": ".agents/skills/demo-skill",
+  "inputs": [
+    { "type": "answer-set", "type_version": 1, "required": false }
+  ],
+  "outputs": [
+    { "type": "finding", "type_version": 1, "required": true }
+  ],
+  "requires_capabilities": [
+    { "capability": "repo_read", "required": true, "fallback": null },
+    { "capability": "ask_user", "required": false, "fallback": "Rückfrage im Chat" }
+  ],
+  "effects_requested": [],
+  "relations": [
+    { "kind": "recommends", "target": "reviewing-decision-gates", "artifact_type": "finding" }
+  ],
+  "provenance": {
+    "origin": "synthetisch",
+    "author": "spec-beispiel",
+    "source_commit": "06869bc6",
+    "license": "keine (synthetisches Beispiel)",
+    "herkunftsregister_ref": null
+  },
+  "test_refs": [
+    { "case_id": "DEMO-01", "family_id": "F-DEMO-1", "split": "dev" }
+  ],
+  "status": "candidate",
+  "status_evidence": null,
+  "created_at": "2026-10-30T20:00:00Z"
+}

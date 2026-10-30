@@ -105,3 +105,53 @@ Stufe 2. Nicht ausgeführte Versuche aus den Dossiers, die die Planung beeinflus
 - Hold-out-Test für SOPT.
 - Build und Start von CPM.
 - `cargo test` für C2P.
+
+## Stand nach SL0–SL5
+
+> Stand 30.10.2026 · SL6 im [Library-Research-Plan](library-research-plan.md). Status und nächste Schritte führt nur der Plan (§8); dieser Abschnitt hält Vorgaben, überholte Empfehlungen und den fachlichen Stufenplan fest.
+> Zuordnung der Anforderungen und Empfehlung: [Synthese, Fortschreibung](synthese.md#fortschreibung-nach-sl0sl5-skill-library).
+
+### Owner-Vorgaben
+
+| Vorgabe | Quelle | Folge für diesen Plan |
+|---|---|---|
+| Die Library lebt in Sidekick und ist Kernfähigkeit der Anwendung; portable Pakete und austauschbare Adapter bleiben Ziel | [Plan §1](library-research-plan.md#1-was-jetzt-vorgegeben-ist) | Kein separates Repo. Recherche, Spec und Implementierung bleiben in diesem Repo; Clean-Room wird über Regeln gesichert ([Grundsatzentscheidungen](../../docs/entscheidungen/README.md#grundsatzentscheidungen-des-owners)) |
+| Reichweite der ersten Version: Stufen 0–2 (Paketvertrag, Validator, Token-Zählung, Eval-Harness mit Baseline) | [Q-20261030-sl-reichweite](../../docs/fragen/skill-library/questions/Q-20261030-sl-reichweite.md) | Änderungspipeline, Komposition und Optimierer liegen außerhalb der ersten Version |
+| Aktivierung nur durch den Owner am Kandidaten-Hash, im Repo per PR-Merge | [Q-20261030-sl-aktivierung](../../docs/fragen/skill-library/questions/Q-20261030-sl-aktivierung.md) | Kein eigener Apply-Befehl in V1; Merge ist Aktivierung, Revert ist Rücknahme ([SL4 §5](library-learning.md#5-aktivierung-und-rücknahme)) |
+| Feedback nur aus synthetischen Fällen und freigegebenen Repo-Artefakten | [Q-20261030-sl-feedbackdaten](../../docs/fragen/skill-library/questions/Q-20261030-sl-feedbackdaten.md) | Keine Rohsessions in Git oder an Optimierungsdienste ([SL4 §3](library-learning.md#3-datenwege-für-feedbackfälle)) |
+| Bis ~40 headless Läufe, nur synthetische Eingaben | [Q-20261030-sl-live-laeufe](../../docs/fragen/skill-library/questions/Q-20261030-sl-live-laeufe.md) | 14 verbraucht (C0, E1-Auswahl); E3 passt nicht in den Rest ohne Owner-Entscheidung ([SL4 §6](library-learning.md#6-budgets-und-e3-plan)) |
+| Claude Code ist die erste Runtime | [Grundsatzentscheidungen](../../docs/entscheidungen/README.md#grundsatzentscheidungen-des-owners) | Erster Messclient; Ergebnisse gelten nur für ihn |
+
+### Überholte Empfehlungen in diesem Dokument
+
+| Stelle oben | Frühere Empfehlung | Jetzt |
+|---|---|---|
+| „Vorgaben und offene Entscheidungen“, Zeile Umfang | Erste Version Stufen 0–4 | Owner-Vorgabe 0–2 |
+| Reihenfolge, Stufe 3 | Technik-Katalog und Auswahl (K2.1–K2.4) | Technik-Katalog für die Library verworfen; Auswahl misst M2 auf den Skills selbst. K2.4 lebt als typisierte Übergabeartefakte weiter (SL3 §4) |
+| Reihenfolge, Stufe 6 | Registry, Sandbox-Templating, Hot-Reload, Ketten | Registry gehört zum Paketvertrag (Stufe 0, SL3 §2); Templating verworfen; Hot-Reload ersetzt durch Versionsbindung ohne stillen Wechsel (SL3-R02); Ketten → neue Stufe 4 |
+| Reihenfolge, Stufe 5 | Optimierer zuerst APE-artig mit Bandit | Zuerst ein manueller Kandidat mit einer Dimension; Optimierer-Adapter erst, wenn dieser gemessen ist (SL4 §2.1, §10) |
+| Reihenfolge, Stufe 2 | Erste Fälle: Grilling-Auswahl und -Verhalten (PR #5) | Ersetzt durch den Fallkatalog aus SL1 §5 und E1. C0 und E1-Auswahl sind gelaufen ([Ergebnis](eval-runs/C0-E1-ergebnis-2026-10-30.md)) |
+| Zielarchitektur | Änderungspipeline mit eigenem Apply/Restore | In V1 übernimmt Git diese Rolle: PR-Merge am Hash, Revert, Hashgleichheit deterministisch geprüft (SL4 §5) |
+| „Nächster Schritt“ | Nur SL0/SL1 bearbeiten | Erledigt; maßgeblich ist der nächste Schritt im Plan |
+
+Weiter gültig: Clean-Room-Verfahren Punkte 1–6, die Ausschlüsse (AHP, SOPT, Datensätze ohne Lizenz) und die offenen Fragen zu Sprache und DSPy. C0 und E1 haben keinen Fremdcode und keine Fremdtexte verwendet, nur eigene Fixtures und die öffentliche CLI; ein Eintrag im Herkunftsregister ist dafür nicht nötig.
+
+### Stufenplan, aktualisiert
+
+Stufen 0–2 behalten ihre Bedeutung aus der Owner-Antwort. Ab Stufe 3 gilt die neue Reihenfolge; die Spalte „früher“ verweist auf die Tabelle oben.
+
+| Stufe | Inhalt | Anforderungen | In der ersten Version | Vorarbeit vorhanden | früher |
+|---|---|---|---|---|---|
+| 0 | Spec: Paketvertrag mit Registry-Datensatz, Hash-Identität, Artefakttypen, Run-Manifest, Aktivierungsregel | K1.1, K3.1, K5.7, KL-01–KL-05, KL-11 | ja | Entwürfe SL3 §2–§5, SL4 §4–§5; Spec folgt in SL7 | 0, Teil von 6 |
+| 1 | Validator, kanonischer Hash, Token-Zählung | K1.2, K7.1, KL-02 | ja | Ad-hoc-Prüfungen und Pilot-Helfer `skill_pilot.py` (Research, kein Produktcode) | 1 |
+| 2 | Eval-Harness: Ebenen M0–M5/R, Capability-Check, Spurnormalisierung, Ledger, Splits mit Familien | K1.5, K5.1–K5.3, K5.5, K7.6, KL-07, KL-08, KL-13 | ja | C0/E1-Auswahl gelaufen; Rubriken je Skill fehlen | 2 |
+| 3 | Kandidatenlebenszyklus mit `veraltet`, Pfadgrenze, Beobachtung und Rücknahme | K6.1–K6.6, KL-10, KL-12 | nein; bis dahin manuell per PR | SL4 §4–§5 | 4 |
+| 4 | Explizite L2-Abläufe mit Übergabe- und Fehlerverträgen | K3.3, K3.4, KL-03–KL-06 | nein | SL3 §3–§10; E2 offen | 6 |
+| 5 | Optimierer-Adapter (APE-artig, GEPA/DSPy) | K5.4, K5.8 | nein | SL4 §2.1 | 5 |
+| 6 | Router oder Vorschlagsmodell (N0) | SL4 §2.4 | nein | Hub-Plan N0 | – |
+
+Entfallen: früher Stufe 3 (Technik-Katalog, verworfen) und Stufe 7 (Kontext-Builder und Zerlegung; ohne Library-Bezug, bleibt fachliche Referenz). Die deterministischen Anteile der Bereiche (KL-14) gehören in die Stufen 1–3 bzw. in die Contract-Tests des Hub-Kerns.
+
+### Keine doppelten Backlogs
+
+Pakete, Status und nächste Schritte führt nur der [Library-Research-Plan](library-research-plan.md) (§8). Der [Hub-Plan](../agent-hub/operations/PLAN.md) verweist nur darauf. Die Tore unter `docs/entscheidungen/` erhalten nur Verweise auf Befunde, keine Library-Aufgaben. Diese Tabelle ist fachliche Reihenfolge, kein Backlog. Die nicht ausgeführten Dossier-Versuche aus dem Abschnitt „Nächster Schritt“ oben bleiben offen; für die Stufen 0–2 wird keiner davon gebraucht.

@@ -1,0 +1,38 @@
+[
+ {
+  "paar": "P-T1-1",
+  "aufgabe": "M4-T1",
+  "links": "X896",
+  "rechts": "X318"
+ },
+ {
+  "paar": "P-T1-2",
+  "aufgabe": "M4-T1",
+  "links": "X905",
+  "rechts": "X784"
+ },
+ {
+  "paar": "P-T2-1",
+  "aufgabe": "M4-T2",
+  "links": "X220",
+  "rechts": "X322"
+ },
+ {
+  "paar": "P-T2-2",
+  "aufgabe": "M4-T2",
+  "links": "X955",
+  "rechts": "X610"
+ },
+ {
+  "paar": "P-T3-1",
+  "aufgabe": "M4-T3",
+  "links": "X509",
+  "rechts": "X944"
+ },
+ {
+  "paar": "P-T3-2",
+  "aufgabe": "M4-T3",
+  "links": "X542",
+  "rechts": "X199"
+ }
+]

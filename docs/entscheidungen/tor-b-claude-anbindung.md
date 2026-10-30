@@ -34,6 +34,8 @@ Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachg
 
 ## Befunde
 
+- Aus der Skill-Library-Recherche, 30.10.2026 ([C0/E1-Ergebnis](../../research/skills-meta-prompting/eval-runs/C0-E1-ergebnis-2026-10-30.md)), nur für die strukturierte CLI (`claude -p`, headless, OAuth-Abo, ein Modell): Projekt-Skills werden gefunden, und ihr Aufruf erscheint als eigenes Werkzeugereignis in der Spur; Usage-Felder werden geliefert (*praktisch nachgewiesen*). Ein AskUser-Werkzeug fehlt headless (*praktisch nachgewiesen*); Rückfragen brauchen dort einen anderen Kanal. Das füllt keine Zelle der Matrix; Agent SDK und ACP sind dazu *offen*.
+
 ## Entscheidung
 
 ## Offene Punkte

@@ -1,0 +1,194 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "C0-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "C0-B0",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "E1-ST-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "E1-ST-04",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "E1-ST-05",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "E1-ST-08",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "E1-GT-02",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "E1-GT-07",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 9,
+      "trial_id": "E1-SB-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 10,
+      "trial_id": "E1-SB-N1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 11,
+      "trial_id": "E1-RW-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 12,
+      "trial_id": "E1-RW-N1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 13,
+      "trial_id": "E1-TB-P1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 14,
+      "trial_id": "E1-EC-P1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 15,
+      "trial_id": "E1V-V1-B12h",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 16,
+      "trial_id": "E1V-V1-B12h",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 17,
+      "trial_id": "E1V-V2-B12",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 18,
+      "trial_id": "E1V-V3-RW-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 19,
+      "trial_id": "E1V-V4-TB-P1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 20,
+      "trial_id": "E1V-V5-R-02",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 21,
+      "trial_id": "E1V-V6-EC-P1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 22,
+      "trial_id": "E1V-C-01",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 23,
+      "trial_id": "E1V-C-02a",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 24,
+      "trial_id": "E1V-C-04",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 25,
+      "trial_id": "E1V-C-02a",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 26,
+      "trial_id": "E1V-C-02b",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 27,
+      "trial_id": "M4-M4-T1-B0-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 28,
+      "trial_id": "M4-M4-T1-B0-r2",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 29,
+      "trial_id": "M4-M4-T1-B1-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 30,
+      "trial_id": "M4-M4-T1-B1-r2",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 31,
+      "trial_id": "M4-M4-T2-B0-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 32,
+      "trial_id": "M4-M4-T2-B0-r2",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 33,
+      "trial_id": "M4-M4-T2-B1-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 34,
+      "trial_id": "M4-M4-T2-B1-r2",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 35,
+      "trial_id": "M4-M4-T3-B0-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 36,
+      "trial_id": "M4-M4-T3-B0-r2",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 37,
+      "trial_id": "M4-M4-T3-B1-r1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 38,
+      "trial_id": "M4-M4-T3-B1-r2",
+      "status": "reserved_before_start"
+    }
+  ]
+}

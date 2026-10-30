@@ -1,0 +1,258 @@
+{
+  "V1-B12h": {
+    "skills": [
+      "grilling"
+    ],
+    "write_tools": [],
+    "reads": [
+      "plan.md",
+      "records.md",
+      "workflow.md"
+    ],
+    "denied": 0,
+    "turns": 7,
+    "cost_usd_client": 0.1692,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2498,
+      "cache_read_input_tokens": 42359,
+      "cache_creation_input_tokens": 13837
+    }
+  },
+  "V2-B12": {
+    "skills": [
+      "grilling"
+    ],
+    "write_tools": [],
+    "reads": [
+      "plan.md",
+      "workflow.md",
+      "records.md"
+    ],
+    "denied": 0,
+    "turns": 8,
+    "cost_usd_client": 0.1639,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2221,
+      "cache_read_input_tokens": 40425,
+      "cache_creation_input_tokens": 13924
+    }
+  },
+  "V3-RW-01": {
+    "skills": [
+      "resuming-work"
+    ],
+    "write_tools": [],
+    "reads": [
+      "handoff.md",
+      "spec.md",
+      "Q-2.md",
+      "handoff.md"
+    ],
+    "denied": 0,
+    "turns": 8,
+    "cost_usd_client": 0.1563,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2552,
+      "cache_read_input_tokens": 41007,
+      "cache_creation_input_tokens": 12131
+    }
+  },
+  "V4-TB-P1": {
+    "skills": [
+      "testing-system-boundaries"
+    ],
+    "write_tools": [],
+    "reads": [
+      "mini-spec.md",
+      "failure-matrix.md"
+    ],
+    "denied": 0,
+    "turns": 6,
+    "cost_usd_client": 0.1824,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 4231,
+      "cache_read_input_tokens": 26304,
+      "cache_creation_input_tokens": 11560
+    }
+  },
+  "V5-R-02": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "write_tools": [],
+    "reads": [
+      "README.md",
+      "jobs.py"
+    ],
+    "denied": 0,
+    "turns": 6,
+    "cost_usd_client": 0.1539,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2582,
+      "cache_read_input_tokens": 41420,
+      "cache_creation_input_tokens": 11743
+    }
+  },
+  "V6-EC-P1": {
+    "skills": [
+      "evaluating-changes"
+    ],
+    "write_tools": [],
+    "reads": [
+      "ergebnisse.md"
+    ],
+    "denied": 0,
+    "turns": 4,
+    "cost_usd_client": 0.1025,
+    "usage": {
+      "input_tokens": 4,
+      "output_tokens": 1617,
+      "cache_read_input_tokens": 14415,
+      "cache_creation_input_tokens": 8406
+    }
+  },
+  "C-01": {
+    "skills": [
+      "grilling",
+      "researching-repositories",
+      "planning-work-packages",
+      "reviewing-decision-gates"
+    ],
+    "write_tools": [],
+    "reads": [
+      "auftrag.md",
+      "workflow.md",
+      "records.md",
+      "README.md",
+      "jobs.py",
+      "befund-fehlerhaft.md",
+      "report.md",
+      "package.md",
+      "review.md"
+    ],
+    "denied": 0,
+    "turns": 20,
+    "cost_usd_client": 0.4633,
+    "usage": {
+      "input_tokens": 20,
+      "output_tokens": 9630,
+      "cache_read_input_tokens": 207199,
+      "cache_creation_input_tokens": 28649
+    }
+  },
+  "C-02a": {
+    "skills": [
+      "grilling",
+      "researching-repositories",
+      "resuming-work"
+    ],
+    "write_tools": [
+      "Write",
+      "Write"
+    ],
+    "reads": [
+      "auftrag.md",
+      "workflow.md",
+      "records.md",
+      "README.md",
+      "jobs.py",
+      "befund-fehlerhaft.md",
+      "report.md",
+      "handoff.md"
+    ],
+    "denied": 0,
+    "turns": 18,
+    "cost_usd_client": 0.3934,
+    "usage": {
+      "input_tokens": 20,
+      "output_tokens": 7858,
+      "cache_read_input_tokens": 200187,
+      "cache_creation_input_tokens": 24512
+    }
+  },
+  "C-02b": {
+    "skills": [
+      "resuming-work"
+    ],
+    "write_tools": [
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit"
+    ],
+    "reads": [
+      "uebergabe.md",
+      "auftrag.md",
+      "befund.md",
+      "befund-fehlerhaft.md",
+      "README.md",
+      "jobs.py",
+      "HEAD"
+    ],
+    "denied": 0,
+    "turns": 17,
+    "cost_usd_client": 0.321,
+    "usage": {
+      "input_tokens": 14,
+      "output_tokens": 6950,
+      "cache_read_input_tokens": 106475,
+      "cache_creation_input_tokens": 20076
+    }
+  },
+  "C-04": {
+    "skills": [
+      "planning-work-packages"
+    ],
+    "write_tools": [],
+    "reads": [
+      "befund-fehlerhaft.md",
+      "auftrag.md",
+      "README.md",
+      "jobs.py",
+      "package.md"
+    ],
+    "denied": 0,
+    "turns": 9,
+    "cost_usd_client": 0.196,
+    "usage": {
+      "input_tokens": 10,
+      "output_tokens": 4127,
+      "cache_read_input_tokens": 58504,
+      "cache_creation_input_tokens": 12713
+    }
+  },
+  "C-02a-setupfehler": {
+    "skills": [
+      "grilling",
+      "researching-repositories",
+      "resuming-work"
+    ],
+    "write_tools": [
+      "Write"
+    ],
+    "reads": [
+      "auftrag.md",
+      "workflow.md",
+      "records.md",
+      "README.md",
+      "jobs.py",
+      "befund-fehlerhaft.md",
+      "report.md",
+      "handoff.md"
+    ],
+    "denied": 1,
+    "turns": 17,
+    "cost_usd_client": 0.364,
+    "usage": {
+      "input_tokens": 14,
+      "output_tokens": 7280,
+      "cache_read_input_tokens": 125182,
+      "cache_creation_input_tokens": 24169
+    }
+  }
+}

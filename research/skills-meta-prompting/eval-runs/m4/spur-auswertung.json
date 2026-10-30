@@ -1,0 +1,209 @@
+{
+  "M4-T1-B0-r1": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Glob",
+      "Read",
+      "Read",
+      "Read"
+    ],
+    "turns": 6,
+    "cost_usd_client": 0.0771,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 2040,
+      "cache_read_input_tokens": 15420,
+      "cache_creation_input_tokens": 4155
+    }
+  },
+  "M4-T1-B0-r2": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Glob",
+      "Read",
+      "Read",
+      "Read"
+    ],
+    "turns": 6,
+    "cost_usd_client": 0.0821,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 2296,
+      "cache_read_input_tokens": 15403,
+      "cache_creation_input_tokens": 4138
+    }
+  },
+  "M4-T1-B1-r1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "tools": [
+      "Skill",
+      "Glob",
+      "Read",
+      "Read",
+      "Read"
+    ],
+    "turns": 7,
+    "cost_usd_client": 0.1521,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2387,
+      "cache_read_input_tokens": 41504,
+      "cache_creation_input_tokens": 12000
+    }
+  },
+  "M4-T1-B1-r2": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "tools": [
+      "Skill",
+      "Glob",
+      "Read",
+      "Read",
+      "Read"
+    ],
+    "turns": 7,
+    "cost_usd_client": 0.1512,
+    "usage": {
+      "input_tokens": 8,
+      "output_tokens": 2330,
+      "cache_read_input_tokens": 41564,
+      "cache_creation_input_tokens": 12027
+    }
+  },
+  "M4-T2-B0-r1": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Read"
+    ],
+    "turns": 3,
+    "cost_usd_client": 0.0538,
+    "usage": {
+      "input_tokens": 4,
+      "output_tokens": 1270,
+      "cache_read_input_tokens": 8909,
+      "cache_creation_input_tokens": 3326
+    }
+  },
+  "M4-T2-B0-r2": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Read"
+    ],
+    "turns": 3,
+    "cost_usd_client": 0.0588,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 1464,
+      "cache_read_input_tokens": 15113,
+      "cache_creation_input_tokens": 3310
+    }
+  },
+  "M4-T2-B1-r1": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Read",
+      "Read"
+    ],
+    "turns": 4,
+    "cost_usd_client": 0.1409,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 1862,
+      "cache_read_input_tokens": 27965,
+      "cache_creation_input_tokens": 12255
+    }
+  },
+  "M4-T2-B1-r2": {
+    "skills": [
+      "grilling"
+    ],
+    "tools": [
+      "Skill",
+      "Glob",
+      "Read",
+      "Read"
+    ],
+    "turns": 6,
+    "cost_usd_client": 0.1775,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 2626,
+      "cache_read_input_tokens": 30151,
+      "cache_creation_input_tokens": 14865
+    }
+  },
+  "M4-T3-B0-r1": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Read"
+    ],
+    "turns": 3,
+    "cost_usd_client": 0.0467,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 955,
+      "cache_read_input_tokens": 14684,
+      "cache_creation_input_tokens": 3085
+    }
+  },
+  "M4-T3-B0-r2": {
+    "skills": [],
+    "tools": [
+      "Glob",
+      "Read"
+    ],
+    "turns": 3,
+    "cost_usd_client": 0.0446,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 849,
+      "cache_read_input_tokens": 14675,
+      "cache_creation_input_tokens": 3082
+    }
+  },
+  "M4-T3-B1-r1": {
+    "skills": [
+      "evaluating-changes"
+    ],
+    "tools": [
+      "Skill",
+      "Glob",
+      "Read"
+    ],
+    "turns": 5,
+    "cost_usd_client": 0.095,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 1037,
+      "cache_read_input_tokens": 26361,
+      "cache_creation_input_tokens": 8625
+    }
+  },
+  "M4-T3-B1-r2": {
+    "skills": [
+      "evaluating-changes"
+    ],
+    "tools": [
+      "Skill",
+      "Glob",
+      "Read"
+    ],
+    "turns": 5,
+    "cost_usd_client": 0.1234,
+    "usage": {
+      "input_tokens": 6,
+      "output_tokens": 1304,
+      "cache_read_input_tokens": 29178,
+      "cache_creation_input_tokens": 11437
+    }
+  }
+}

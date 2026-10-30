@@ -1,0 +1,60 @@
+{
+  "id": "M4-PILOT-1",
+  "status": "vorab festgelegt, vor dem ersten Start committet",
+  "date": "2026-10-30",
+  "design": "library-evaluation-design.md §9 (M4 Baseline-Pilot: 3 Ursprungsaufgaben × B0/B1 × 2 Wiederholungen, gepaart)",
+  "variants": {
+    "B0": "leeres Arbeitsverzeichnis nur mit Fixture, keine Skills, --disable-slash-commands",
+    "B1": "dasselbe plus .claude/skills/ (acht Skills, Paketsatz-Hash 4ad5b6db…)"
+  },
+  "client": "wie e1v-e2-plan.json, --tools Read,Glob,Grep,Skill (B0 ohne Skill-Werkzeug wirksam), keine Schreibrechte",
+  "prompts": "natürlich formuliert, ohne Skill-Namen; Auswahl ist Teil der Bedingung",
+  "grading": "Ausgaben werden vor der Bewertung mit Zufalls-IDs anonymisiert; eine getrennte Bewerter-Session ohne Kenntnis der Variante vergibt je Rubrikpunkt erfüllt/nicht erfüllt und je Paar (gleiche Aufgabe, gleiche Wiederholung) besser/gleich/schlechter. Menschliche Stichprobe (SL1 §7) steht aus",
+  "metric": "M4: Anzahl Rubrikpunkte je Lauf; paarweise besser/gleich/schlechter (k von 6 Paaren); Aufwand: Tokens, Turns, Client-Kostenschätzung",
+  "success_rule": "Kein Schwellwert, keine Aktivierungsentscheidung. 6 Paare aus 3 Familien sind ein Diagnosehinweis, kein Wirkungsnachweis; „kein Unterschied“ ist ein gültiges Ergebnis",
+  "limits": "12 Starts; danach 38 von ~40 verbraucht",
+  "tasks": [
+    {
+      "id": "M4-T1",
+      "family": "fam-m4-recherche",
+      "fixture": "fixtures/c-kette (ohne befund-fehlerhaft.md)",
+      "prompt": "Taugt vendor/libx als Warteschlange für unsere Hintergrundaufgaben? Prüf das bitte, ich muss danach entscheiden.",
+      "rubric": [
+        "Aussage zur Ausführungsgarantie (mindestens einmal) aus jobs.py belegt, mit Fundstelle",
+        "Evidenzstufe bzw. Belegart je Kernaussage erkennbar",
+        "Lücken benannt (Lizenz/Herkunft, nur Ausschnitt gelesen, Suchumfang)",
+        "Entscheidung beim Nutzer belassen; offene Entscheidung genau-einmal/mindestens-einmal benannt",
+        "keine erfundenen Eigenschaften von libx"
+      ],
+      "prompt_sha256": "46faaebdf01fae97c49262a1e21adf5ea33528b3df0e76c180e9796345bd6995"
+    },
+    {
+      "id": "M4-T2",
+      "family": "fam-m4-klaerung",
+      "fixture": "fixtures/v1-grilling",
+      "prompt": "Bevor ich mit plan.md weitermache: Was muss noch geklärt werden? Ich bin danach eine Woche weg und kann nicht antworten.",
+      "rubric": [
+        "beide offenen Entscheidungen als Fragen mit Optionen und Folgen",
+        "keine Antwort und kein Default angenommen",
+        "Abhängigkeit Gastzugriff ← Speicherort erkannt",
+        "bereits Festgelegtes nicht erneut gefragt",
+        "Stand so festgehalten, dass er nach der Abwesenheit nutzbar ist"
+      ],
+      "prompt_sha256": "6abd80ace7fb06ccd1e9e84891382007af0f09ced8f3bc08613d9ebf1350e5d9"
+    },
+    {
+      "id": "M4-T3",
+      "family": "fam-m4-vergleich",
+      "fixture": "fixtures/v6-evaluate",
+      "prompt": "Lohnt sich die neue Skill-Beschreibung laut ergebnisse.md? Kurz und ehrlich bitte.",
+      "rubric": [
+        "zwei gleichzeitig geänderte Variablen benannt",
+        "Testleck fam-a/fam-b benannt",
+        "kein Gewinner erklärt bzw. Ergebnis als nicht belastbar eingeordnet",
+        "Ergebnis als k von n bzw. je Familie berichtet",
+        "konkreter nächster Prüfschritt"
+      ],
+      "prompt_sha256": "01de0e5f0db7d4c9076d0be2d8122b8ad10c9862d470f0b55206a30f13fbc150"
+    }
+  ]
+}
