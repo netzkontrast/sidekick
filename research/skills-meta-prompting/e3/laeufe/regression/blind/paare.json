@@ -1,0 +1,22 @@
+[
+ {
+  "einzel": "R-01-grilling",
+  "fall": "regression/R-01-grilling",
+  "ausgabe": "Y752"
+ },
+ {
+  "einzel": "R-05-grilling",
+  "fall": "regression/R-05-grilling",
+  "ausgabe": "Y439"
+ },
+ {
+  "einzel": "R-02-research",
+  "fall": "regression/R-02-research",
+  "ausgabe": "Y972"
+ },
+ {
+  "einzel": "R-03-research",
+  "fall": "regression/R-03-research",
+  "ausgabe": "Y955"
+ }
+]

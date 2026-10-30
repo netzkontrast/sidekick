@@ -1,0 +1,146 @@
+{
+  "FF-T1-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1953,
+    "output_tokens": 2808
+  },
+  "FF-T1-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1924,
+    "output_tokens": 2501
+  },
+  "FF-T2-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1566,
+    "output_tokens": 2717
+  },
+  "FF-T2-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.2036,
+    "output_tokens": 3083
+  },
+  "FF-T3-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 6,
+    "cost_usd_client": 0.1561,
+    "output_tokens": 2557
+  },
+  "FF-T3-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1713,
+    "output_tokens": 2349
+  },
+  "FF-T4-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1884,
+    "output_tokens": 2220
+  },
+  "FF-T4-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1981,
+    "output_tokens": 2852
+  },
+  "MA-T1-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.116,
+    "output_tokens": 1656
+  },
+  "MA-T1-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1181,
+    "output_tokens": 1842
+  },
+  "MA-T2-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1212,
+    "output_tokens": 1994
+  },
+  "MA-T2-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 6,
+    "cost_usd_client": 0.1496,
+    "output_tokens": 2287
+  },
+  "MA-T3-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 8,
+    "cost_usd_client": 0.1243,
+    "output_tokens": 1898
+  },
+  "MA-T3-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1247,
+    "output_tokens": 2182
+  },
+  "MA-T4-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1153,
+    "output_tokens": 1770
+  },
+  "MA-T4-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1273,
+    "output_tokens": 2163
+  }
+}

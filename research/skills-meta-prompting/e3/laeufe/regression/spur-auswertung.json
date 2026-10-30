@@ -1,0 +1,38 @@
+{
+  "R-01-grilling-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1959,
+    "output_tokens": 2785
+  },
+  "R-05-grilling-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1901,
+    "output_tokens": 3387
+  },
+  "R-02-research-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1655,
+    "output_tokens": 3110
+  },
+  "R-03-research-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1367,
+    "output_tokens": 1694
+  }
+}
