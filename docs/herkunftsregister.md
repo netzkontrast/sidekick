@@ -10,3 +10,15 @@ Lizenzen, Assets und Notices werden am gewählten Commit inventarisiert. Dies is
 | – | – | – | – | – | – | – |
 
 Code aus fremden Repos wird nur in der Kategorie *Lizenziert übernehmen* und nach separater Entscheidung kopiert; die Herkunft steht dann zusätzlich im Commit und am Code.
+
+## Grilling: eigenständige Verhaltensumsetzung
+
+| Quelle | Version/Commit | Lizenz | Kategorie | Eigener Vertrag / Schnittstelle | Update-Verantwortung | Entscheidung |
+|---|---|---|---|---|---|---|
+| [mattpocock/skills](https://github.com/mattpocock/skills/tree/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa) | a496f5513d4a4cf889bc48e189e579f4b0bdf6aa | MIT, Copyright Matt Pocock 2026 | Verhalten neu implementieren | grilling + AskUser + versionierte Fragenablage | Maintainer des Skills | Eigenständige Neuformulierung, keine Fremdimplementierung oder Texte kopiert |
+
+Geprüft: `skills/productivity/grilling/SKILL.md`, `docs/productivity/grilling.md`,
+`skills/engineering/grill-with-docs/SKILL.md`, `LICENSE` am genannten Commit.
+[Abdeckung und Abweichungen](research/grilling-port.md). „Clean-Room“ bezeichnet hier
+die eigenständige Umsetzung nach einer Verhaltensbeschreibung, keine personell getrennte
+juristische Clean-Room-Zertifizierung. Der implementierende Agent hat die Quelle gelesen.

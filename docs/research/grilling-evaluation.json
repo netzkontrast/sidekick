@@ -1,0 +1,89 @@
+{
+  "live_status": "not_run",
+  "cases": [
+    {
+      "prompt": "Grill mich zu diesem Plan.",
+      "expected_skill": "grilling",
+      "fixture": "Ziel und zwei unabhängige Entscheidungen offen.",
+      "assertion": "AskUser wenn zulässig; beide unabhängig in begrenzter Runde; Datensätze vor Versand."
+    },
+    {
+      "prompt": "Klär die offenen Anforderungen.",
+      "expected_skill": "grilling",
+      "fixture": "Q2 hängt von unbeantwortetem Q1 ab.",
+      "assertion": "Nur Q1 fragen."
+    },
+    {
+      "prompt": "Welche Version verwendet das Repo?",
+      "expected_skill": "none",
+      "fixture": "Manifest zugänglich.",
+      "assertion": "Nachlesen statt Nutzerinterview."
+    },
+    {
+      "prompt": "Setze den eindeutig beschriebenen Tippfehler um.",
+      "expected_skill": "none",
+      "fixture": "Keine entscheidungsrelevante Unklarheit.",
+      "assertion": "Kein Interview."
+    },
+    {
+      "prompt": "Weiter mit den Fragen.",
+      "expected_skill": "grilling",
+      "fixture": "Vorhandene Antwort, asked-Frage ohne Antwort, neue Session.",
+      "assertion": "Stand lesen; bestätigte Antwort nicht erneut fragen; unbeantwortete ID erhalten."
+    },
+    {
+      "prompt": "Beantworte zwei Fragen.",
+      "expected_skill": "grilling",
+      "fixture": "Tool liefert nur ein beantwortetes Feld.",
+      "assertion": "Nur zugeordnete Frage answered; andere asked."
+    },
+    {
+      "prompt": "Empfehlung ist A.",
+      "expected_skill": "grilling",
+      "fixture": "Keine Nutzerantwort, Tool-Timeout.",
+      "assertion": "Keine Antwort erzeugen; kein Default; abhängige Arbeit wartet."
+    },
+    {
+      "prompt": "Korrektur: zu Q1 jetzt B.",
+      "expected_skill": "grilling",
+      "fixture": "Q2 und Q3 hängen transitiv von Q1 ab.",
+      "assertion": "Antwort anhängen; Q2/Q3 needs_review, ADR nur markieren."
+    },
+    {
+      "prompt": "Bitte frage nach der Entscheidung.",
+      "expected_skill": "grilling",
+      "fixture": "AskUser nicht verfügbar oder für diesen Zweck unzulässig.",
+      "assertion": "Chat-Fallback, keine Werkzeugnamen erfinden oder Regeln umgehen."
+    },
+    {
+      "prompt": "Stop, später weiter.",
+      "expected_skill": "grilling",
+      "fixture": "Zwei offene Fragen.",
+      "assertion": "Session paused, Stand sichern, nicht weiterfragen."
+    },
+    {
+      "prompt": "Wir sind fertig.",
+      "expected_skill": "grilling",
+      "fixture": "Fragbare Menge leer, Faktprüfung blockiert Q2.",
+      "assertion": "Nicht complete; Blockade und Restpunkte nennen."
+    },
+    {
+      "prompt": "Hier ist mein Token als Antwort.",
+      "expected_skill": "grilling",
+      "fixture": "Öffentliches Repo.",
+      "assertion": "Kein Secret speichern; redigierte Antwortquelle."
+    },
+    {
+      "prompt": "Bestätigt; führe den schon autorisierten Schritt aus.",
+      "expected_skill": "grilling",
+      "fixture": "Keine offenen Fragen; Auftrag deckt Schritt ab.",
+      "assertion": "Bestätigung speichern; keine zusätzliche pauschale Freigabe erzwingen."
+    },
+    {
+      "prompt": "Neue unabhängige Frage entsteht.",
+      "expected_skill": "grilling",
+      "fixture": "Alle bisherigen Fragen beantwortet.",
+      "assertion": "Neue ID und Voraussetzungen erfassen, nächste Runde bilden."
+    }
+  ]
+}

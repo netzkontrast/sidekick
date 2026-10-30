@@ -82,6 +82,14 @@ Vor Abschluss relative Links und Konsistenz zwischen Dossier und Backlog prüfen
 Keine Secrets oder unbearbeiteten sensiblen Logs einchecken. Im PR neue Befunde,
 verbleibende Unsicherheiten und tatsächlich ausgeführte Prüfungen benennen.
 
+## Offene Fragen klären
+
+Bei entscheidungsrelevanter Unklarheit den Skill [grilling](.agents/skills/grilling/SKILL.md)
+bedarfsweise laden: verfügbare AskUser-Tools nach deren Regeln nutzen, sonst Chat.
+Ablage: [docs/fragen/](docs/fragen/README.md). Fakten selbst recherchieren, bestätigte
+Antworten wiederverwenden; Antworten sind keine Ausführungsfreigaben. Keine bloß
+vorsorglichen Interviews für bereits klare Aufgaben starten.
+
 ## Code-Navigation mit CodeGraph
 
 Das Repo ist für [CodeGraph](https://github.com/colbymchenry/codegraph) eingerichtet.
