@@ -174,7 +174,7 @@ Zurückgestellt bleiben ein eigener Universal-Agent, dauerndes Mithören, unkont
 
 | Vorschlag | Bedeutung für bestehende Tore |
 |---|---|
-| Lokale Modelle als Gerätefähigkeit | Erweitert v4s Nicht-Ziel „kein Modell-Hosting“ um bewusst betriebene lokale Inferenz; Tor A/B |
+| Lokale Inferenzdienste und frühes Fine-Tuning konkretisieren | Lokale Modelle über den Connector sind bereits in v4 vorgesehen; neu sind insbesondere Training/Fine-Tuning und der konkretisierte Betrieb eigener Inferenzdienste; Tor A/B |
 | Statisches Offline-Frontend, Vercel als erster Hub | Konkretisiert den Hostingwunsch; privat bedeutet hier private Instanz, noch nicht rein lokale Infrastruktur; Tor D |
 | Erneuerbare WSS-Geräteverbindung | Gegenüber dem bisherigen Polling/SSE-Start eine zu prüfende Option; Tor C |
 | Gedächtnis und Träumen als spätere Auftragsarten | Gemeinsamen Kern verwenden, Zugriffs-/Löschregeln ergänzen; Tor A/D |

@@ -18,7 +18,7 @@ Zusätzlich berücksichtigt: [PR #5](https://github.com/netzkontrast/sidekick/pu
 
 ## GitHub-Quellenmatrix
 
-Jeder Link zeigt auf die gelesene README-Fassung. Aussagen sind **dokumentiert**; die letzte Spalte enthält unsere eigene Ableitung. Ein Commit ist keine getestete oder empfohlene Produktionsversion.
+Gemeinsames Lesedatum aller Matrixeinträge: 30.10.2026. Jeder Link zeigt auf die gelesene README-Fassung. Aussagen sind **dokumentiert**; die letzte Spalte enthält unsere eigene Ableitung. Ein Commit ist keine getestete oder empfohlene Produktionsversion.
 
 | Quelle | Gelesener Commit | Dokumentierter Ansatz | Ableitung für Sidekick |
 |---|---|---|---|
@@ -34,15 +34,17 @@ Jeder Link zeigt auf die gelesene README-Fassung. Aussagen sind **dokumentiert**
 | [letta-ai/letta-code](https://github.com/letta-ai/letta-code/blob/ebc496e532f1a34da9ac8d7e2da41c5920ea77e6/README.md) | `ebc496e532f1a34da9ac8d7e2da41c5920ea77e6` | Persistenter Agentenkontext, Memory/Skills, Reflection/Dreaming | Beobachtbare Gedächtnisabläufe als Inspiration; keine automatische Selbständerung übernehmen. |
 | [omacom/omarchy](https://github.com/omacom/omarchy/blob/717175d4a8c5a12f6c0fff10dcc3c1c08ef3a0d1/README.md) | `717175d4a8c5a12f6c0fff10dcc3c1c08ef3a0d1` | Linux-Arbeitsplatz und Diktierintegration | Betriebsumgebung des Nutzers; lokales Diktieren ausdrücklich auswählen. |
 
+Vor einer tatsächlichen Auswahl in V0/N0 ist für jeden weiterverfolgten Kandidaten ein Dossier nach [Projektvorlage](dossiers/_vorlage.md) anzulegen bzw. unter `research/agent-hub/repos/` fortzuführen. Das betrifft insbesondere Needle, whisper.cpp und den gewählten lokalen Speicherkandidaten Dexie oder PGlite. Die Matrix ersetzt diese Dossiers nicht.
+
 Lizenzgrenze: Keine dieser Implementierungen wird hier übernommen und keine Dependency installiert. Vor Auswahl Lizenzdatei, transitive Pakete, Modellgewichte, Stimmen, Engine-Binaries und Notices versionsgenau inventarisieren. Die [Needle3-Modellkarte](https://huggingface.co/Cactus-Compute/needle3) nennt Apache-2.0; daraus folgt keine pauschale Freigabe anderer Artefakte oder Cloud-Dienste. Clean-Room betrifft den eigenen Fachkern. Standardkomponenten können nach Entscheidung reguläre Dependencies werden.
 
 ## Vercel: Hub ja, unendlicher Prozess nein
 
-**Dokumentiert:** [WebSockets sind seit 20.10.2026 allgemein verfügbar](https://vercel.com/changelog/websocket-support-is-now-generally-available). Die [offizielle Betriebsbeschreibung](https://vercel.com/kb/guide/do-vercel-serverless-functions-support-websocket-connections) erklärt die Bindung einer Verbindung an eine Function-Instanz und deren Laufzeitgrenze; eine spätere Verbindung kann eine andere Instanz erreichen. Alte Aussagen „Vercel kann keine WebSockets“ sind damit überholt.
+**Dokumentiert, Webquellen abgerufen am 30.10.2026:** [WebSockets sind seit 20.10.2026 allgemein verfügbar](https://vercel.com/changelog/websocket-support-is-now-generally-available). Die [offizielle Betriebsbeschreibung](https://vercel.com/kb/guide/do-vercel-serverless-functions-support-websocket-connections) erklärt die Bindung einer Verbindung an eine Function-Instanz und deren Laufzeitgrenze; eine spätere Verbindung kann eine andere Instanz erreichen. Alte Aussagen „Vercel kann keine WebSockets“ sind damit überholt.
 
 **Ableitung:** Der Connector öffnet ausgehend WSS/TLS. Geräteidentität und Pairing sind von der Transportverbindung getrennt. Aufträge, Freigaben und bestätigte Checkpoints liegen dauerhaft, etwa transaktional in Postgres. Ein gemeinsamer Zustellmechanismus erreicht Verbindungen auf unterschiedlichen Instanzen; eine Map im RAM reicht nicht. Presence hat eine TTL und ist kein Nachweis für einen lebenden Agentenprozess.
 
-Jede Nachricht braucht Version, ID, Ablauf und passenden Kontext. Wiederverbindung verwendet Backoff, Cursor und Abgleich. Empfangsbestätigung, gültiger Claim, gestarteter Run und ausgeführter Effekt bleiben getrennte Tatsachen. Die konkreten Planlimits und laufenden Verbindungskosten werden vor Tor D erneut geprüft und gemessen.
+Jede Nachricht braucht Version, ID, Ablauf und passenden Kontext. Wiederverbindung verwendet Backoff, Cursor und Abgleich. Empfangsbestätigung, gültiger Claim, gestarteter Run und ausgeführter Effekt bleiben getrennte Tatsachen. **Offen:** konkrete maximale Verbindungsdauer für den gewählten Plan und die eingesetzte Runtime sowie laufende Verbindungskosten. Hier wird kein numerischer Laufzeitwert festgelegt. Diese Werte müssen vor dem Versuch in Tor C/D aus aktueller Dokumentation erhoben und praktisch geprüft werden.
 
 **Offener Vergleich für Tor C:** bestehenden HTTPS-Polling/Event-Upload/SSE-Ansatz gegen erneuerbares WSS messen. Vercel-Präferenz ist gegeben; ein bestimmter Transport ist noch keine Entscheidung. Ein lang laufender lokaler Modellprozess wird nicht in eine Hub-Function verlegt.
 
@@ -60,7 +62,7 @@ Eine Browser-App kann bei geschlossenem oder suspendiertem Browser weder den PC-
 
 **Dokumentiert:** Browser-[SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition) ist nicht überall verfügbar und kann einen entfernten Erkennungsdienst verwenden. Offline-ASR darf daraus nicht stillschweigend abgeleitet werden.
 
-Die [Omarchy-Diktierdokumentation](https://github.com/omacom/omarchy/blob/717175d4a8c5a12f6c0fff10dcc3c1c08ef3a0d1/manual/11-text-extraction-dictation.md) beschreibt Superwhisper als Standard sowie Voxtype als lokale Option. Sprache und Modell müssen passend eingerichtet werden.
+Die [Omarchy-Diktierdokumentation](https://github.com/omacom/omarchy/blob/717175d4a8c5a12f6c0fff10dcc3c1c08ef3a0d1/manual/11-text-extraction-dictation.md) beschreibt Superwhisper als Standard mit Cloud-Verarbeitung auf frischen Installationen sowie Voxtype als lokale Option. Voxtype lädt zunächst ein englisches Basismodell von ungefähr 150 MB. Vor dem deutschen Diktatversuch mit `voxtype setup model` ein deutschfähiges Modell auswählen und die Sprache konfigurieren; Modellfassung, Sprachkonfiguration und tatsächlichen Datenweg im Messprotokoll festhalten.
 
 **Ableitung:** Push-to-talk, sichtbare Aufnahme, editierbares Transkript, Textfallback. Desktop zuerst bestehendes lokales Diktieren oder whisper.cpp prüfen. Needle/Whistle oder sherpa-onnx nur bei belegtem Vorteil ergänzen. Kein permanentes Mithören. TTS, Wakeword und Telefonbetrieb kommen später.
 

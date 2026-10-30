@@ -6,7 +6,7 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 
 ## Backlog
 
-- [x] Sidekick inventarisieren: nur README, keine AGENTS.md oder bestehenden Research-Vorgaben im main-Baum.
+- [x] Sidekick inventarisieren (Erstaufnahme am 30.10.2026, vor den Setup-Merges): damals nur README, keine AGENTS.md oder bestehenden Research-Vorgaben im main-Baum.
 - [x] Paperclip und OpenHands Quellstände bestimmen und erste Dokumente lesen.
 - [ ] P0 Paperclip: atomare Claims, Rechte und Tool-Freigaben, Budgets, Restart, Plugin-Grenzen.
 - [ ] P0 OpenHands: SDK/Server und Automation separat prüfen, ACP-Permissions und Persistenz.
@@ -27,7 +27,9 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] Vor dem Geräte-Prototyp: Offline-/Origin-Zugriff, Vercel-Instanzwechsel und dauerhafte Zustellung praktisch prüfen; Polling/SSE gegen erneuerbares WSS vergleichen.
 - [ ] N0: Frühen Needle-Baseline-/Fine-Tune-Versuch mit synthetischen deutschen Beispielen spezifizieren; tatsächliche GPU-Zeit und Nutzen auf Zielhardware messen.
 
-Die frühen Inventarbefunde oben beschreiben ihren damaligen Stand; inzwischen existieren AGENTS.md und weitere Planungsdokumente. Der neue Input ergänzt die offenen P0-Prüfungen und ersetzt sie nicht.
+Dieser PLAN ist die maßgebliche Statusablage auch für V0–V6/N0. Der Bauauftrag beschreibt die Pakete und ihre Abnahme, ohne separaten Ausführungsstatus. V0 liegt als Spec-Entwurf vor (Review offen); V1–V6 und N0 sind noch nicht begonnen.
+
+N0 folgt dem ausdrücklichen neuen Owner-Ziel eines frühen Lernversuchs. Es ist als begrenzter, unabhängiger Research-Spike vorgesehen und erklärt keine P0-Prüfung zu Paperclip/OpenHands/Claude für erledigt. Der neue Input ergänzt diese Prüfungen. v5 bleibt bis zu einer gesonderten Entscheidung Ergänzungsentwurf; der Merge ersetzt v4 nicht.
 
 ## Entscheidungstore
 

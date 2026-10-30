@@ -30,10 +30,12 @@ Welcher Transport verbindet Connector, Hub und Browser, und wie bleibt der lokal
 
 ## Befunde
 
-- *dokumentiert*: Vercel unterstützt laut Changelog WebSockets allgemein; eine Verbindung ist an eine Function-Instanz mit Laufzeitgrenze gebunden, eine spätere Verbindung kann eine andere Instanz treffen. Konkrete Grenzen und Kosten sind *offen*. Quelle und Ableitung: [Machbarkeit v5 – Vercel](../research/vision-v5-machbarkeit.md#vercel-hub-ja-unendlicher-prozess-nein). Die Ausgangshypothese oben bleibt bis zur Messung bestehen.
+- Dokumentiert, abgerufen am 30.10.2026: [Vercel meldet WebSocket-GA seit 20.10.2026](https://vercel.com/changelog/websocket-support-is-now-generally-available). [Verbindungen sind an die Laufzeit ihrer Function-Instanz gebunden](https://vercel.com/kb/guide/do-vercel-serverless-functions-support-websocket-connections); Folge-Verbindungen können andere Instanzen erreichen. Das ermöglicht WSS als Kandidaten, entscheidet aber den Transport nicht. Konkrete Laufzeitwerte pro Plan und ihre Kosten bleiben für unseren Versuch offen.
 
 ## Entscheidung
 
 ## Offene Punkte
+
+- Offen, 30.10.2026: Erneuerbares WSS anhand des [Vercel-Befunds](../research/vision-v5-machbarkeit.md#vercel-hub-ja-unendlicher-prozess-nein) gegen Polling/Event-Upload/SSE messen. Instanzwechsel, dauerhafte Zustellung, Reconnect, Offline-/Origin-Zugriff und Kosten nachweisen; Ausgangshypothese bis zur Entscheidung unverändert.
 
 - Aus der [V0-Spec](../spec/v0-ziel-und-vertraege.md): Transport muss V0-FALL-03, -11 und -12 erfüllen (Nachlieferung per Cursor, Instanzwechsel, doppelt gesendete Offline-Entwürfe). Lokale Entwürfe des Browsers (§4.7) brauchen dieselbe Idempotenz wie die Connector-Outbox.
