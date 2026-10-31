@@ -1,7 +1,7 @@
 // `eval` subcommands (docs/spec/skill-library-v0.md §7). No command starts a client or model and
 // none uses the network (SLV0-INV-04). Writing commands (prepare, ledger init|reserve|result,
-// split access|select) write only to paths given explicitly and never overwrite.
-// Artifact commands (freeze, split manifest, normalize, raw, report) print the artifact itself on
+// split access|select, context-pack --output) write only to paths given explicitly and never overwrite.
+// Artifact commands (freeze, split manifest, normalize, raw, report, context-pack) print the artifact itself on
 // stdout; all other commands print a JSON envelope. Exit: 0 ok, 1 refused (§8 code), 2 usage error.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,6 +21,8 @@ import { loadCaseDir, loadCaseDirs } from './casedir.js';
 import { nullRun, checkWorkspace, b1Precheck } from './checks.js';
 import { findingsCheck } from './findings.js';
 import { citeCheck } from './citecheck.js';
+import { buildContextPack, renderBundle, writeBundle } from './contextpack.js';
+import { ESTIMATORS } from '../tokens.js';
 import { requireDir } from './tree.js';
 import { validateProject } from '../project.js';
 
@@ -50,16 +52,18 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval nullrun --cases FALLORDNER|VERZ
   eval nullrun --b1-kern KERNURTEILE.json
   eval findings --case FALLORDNER AUSGABE.md...
-  eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]`;
+  eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]
+  eval context-pack --allowlist DATEI [--root VERZ] [--deny MUSTER]... [--estimator utf8-bytes-div-4@1]
+                    [--output NEUE-DATEI.md]                                    Datensatz (stdout)`;
 
 const VALUE_OPTS = new Set([
   '--root', '--source-commit', '--source', '--snapshot', '--candidates', '--id', '--cases', '--project-config',
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
   '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
-  '--repo', '--commit', '--github',
+  '--repo', '--commit', '--github', '--allowlist', '--estimator',
 ]);
-const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope']);
+const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope', '--deny']);
 const FLAG_OPTS = new Set(['--verify-git']);
 
 function parse(argv) {
@@ -367,6 +371,29 @@ const SUB = {
       github: a.opts['--github'] ?? null,
     });
     return { out: { checked_level: 'Belegabdeckung am Commit (SLV0-EVAL-28…30)', ...result }, code };
+  },
+
+  'context-pack'(a) {
+    expect(a, ['--allowlist', '--root', '--deny', '--estimator', '--output'], ['--allowlist']);
+    const estimator = a.opts['--estimator'] ?? null;
+    if (estimator !== null && !Object.hasOwn(ESTIMATORS, estimator)) {
+      throw new UsageError(`unbekannter Schätzer ${estimator}; verfügbar: ${Object.keys(ESTIMATORS).join(', ')}`);
+    }
+    const file = a.opts['--allowlist'];
+    let allowlistBytes;
+    try { allowlistBytes = fs.readFileSync(file); } catch (err) {
+      if (err.code === 'ENOENT' || err.code === 'EISDIR') throw new UsageError(`${file}: Datei nicht gefunden`);
+      throw err;
+    }
+    const { record, contents } = buildContextPack({
+      root: path.resolve(requireDir(a.opts['--root'] ?? process.cwd(), '--root')),
+      allowlistBytes,
+      allowlistLabel: displayPath(process.cwd(), file),
+      extraDeny: a.multi['--deny'] ?? [],
+      estimator,
+    });
+    if (a.opts['--output'] !== undefined) record.bundle = writeBundle(a.opts['--output'], renderBundle(record, contents));
+    return { artifact: record };
   },
 };
 

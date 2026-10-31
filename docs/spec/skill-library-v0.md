@@ -8,6 +8,7 @@
 > Version 0.2 · 31.10.2026 · Ergänzung **SLV0-EVAL-13…18** (Rubrik je Skill nach K5.6, Querprüfungen Ledger/Manifest/Git) und Fälle **SLV0-FALL-38…46**; bestehende IDs unverändert.
 > Version 0.3 · 31.10.2026 · Ergänzung **SLV0-EVAL-19…27** nach den Paketen P1–P3 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`, Research-Branch `research/e3-runde-2`, PR #20): belegpflichtige Bewertungen, Nulllauf-Trennschärfe mit Gegenkriterium und B1-Vorlauf, erwartete Befunde mit Überberichtung; Formate §7.2–§7.4, Fälle **SLV0-FALL-48…59** (§9.1). Bestehende IDs unverändert.
 > Version 0.4 · 31.10.2026 · Ergänzung **SLV0-EVAL-28…30** nach Paket P5 des Portierungsplans (Abdeckungsnachweis über ein Segmentregister, Konzept aus recursive-decomposition-skill): `eval cite-check` prüft die Zitate eines Berichts gegen einen Git-Commit; Format §7.5, Fälle **SLV0-FALL-60…65** (§9.2); O-13 teilweise gelöst. Bestehende IDs unverändert.
+> Version 0.5 · 31.10.2026 · Ergänzung **SLV0-EVAL-31…34** nach Paket P11 des Portierungsplans (Kontextpaket als Datensatz, Konzept aus code2prompt, bei uns fail-closed): `eval context-pack` wählt Dateien nur über eine Allowlist, bricht bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink, Ausbruch oder verbotenem Pfad ab und gibt einen Datensatz mit Hashes aus; Format §7.6, Fälle **SLV0-FALL-66…72** (§9.3), offener Punkt O-14. Bestehende IDs unverändert.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -175,6 +176,10 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-28 | **Segmentregister am Commit:** Der Suchraum eines Berichts wird einmal aufgezählt: alle regulären Dateien (Git-Modus `100644` oder `100755`; keine Symlinks, keine Submodule) im Baum des angegebenen Commits, optional eingeschränkt durch Bereiche (`--scope`: Pfadpräfix oder Glob mit `*`, `**`, `?`; §7.5). Ein Segment ist eine Datei mit ihren Zeilen 1…n (Zeilenzählung wie §7.4). Der Commit wird als 7–40 Hex-Zeichen angegeben und über Git aufgelöst; nennt er keinen eindeutigen Commit → `commit_unknown`, kein Register (Exit 1). Ein Bereich, der keine Datei trifft, ein unsicherer Bereich, ein Verzeichnis ohne Git-Repository oder eine andere Commit-Schreibweise (z. B. `HEAD`) sind Bedienfehler (Exit 2). Gelesen wird nur über das Git-Modul aus SLV0-EVAL-18 mit den lesenden Unterbefehlen `rev-parse`, `ls-tree` und `cat-file`; Arbeitsbaum, Index und Refs bleiben unverändert. | fehlt (Konzept RD: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren) |
 | SLV0-EVAL-29 | **Zitate und ihre Gültigkeit:** Zitate eines Markdown-Berichts sind GitHub-Permalinks `https://github.com/<o>/<r>/blob/<ref>/<pfad>` mit optionalem Anker `#L<a>` oder `#L<a>-L<b>` und Fundstellen `pfad:zeile`, `pfad:von-bis`, `pfad#Lx`, `pfad#Lx-Ly` (Erkennung wie §7.4), die sich auf den angegebenen Commit beziehen. Ein Permalink, dessen `<ref>` keine Commit-ID aus 7–40 Hex-Zeichen ist → `ref_not_pinned`; dessen Commit Git nicht eindeutig kennt → `commit_unknown`; der einen anderen Commit als den angegebenen nennt → `sha_mismatch`. Ein Pfad, den es am Commit nicht als reguläre Datei gibt → `path_missing`; eine Fundstelle, die auf keinen Pfad genau, aber mit ihrem Pfadende auf mehrere Dateien passt → `path_ambiguous`; eine Zeile außerhalb von 1…n der Datei oder `bis` < `von` → `range_out_of_bounds`. Permalinks prüfen den Pfad genau, Fundstellen genau oder über das Pfadende ab einer Segmentgrenze. Mit `--github <o>/<r>` gelten Permalinks auf andere Repos als `fremd` und werden nicht geprüft. Jedes Hex-Wort im übrigen Text (Erkennung wie §7.4) wird in Git als Commit nachgeschlagen; unbekannt → Warnung `commit_unverified`, weil ein Hex-Wort auch ein anderer Hash sein kann. | fehlt (`eval findings` prüft nur gegen den Fixture-Text, O-13) |
 | SLV0-EVAL-30 | **Abdeckung und `eval cite-check`:** Eine Registerdatei ist **belegt**, wenn mindestens ein gültiges Zitat sie nennt; ein gültiges Zitat auf eine Datei außerhalb der Bereiche zählt als `ausserhalb_bereich` und belegt nichts. Die Ausgabe nennt Commit, Bereiche, Registergröße Y, die belegten Dateien (X) mit zusammengeführten Zeilenbereichen und Zahl der belegten Zeilen, die vollständige Liste der nicht belegten Dateien, den Satz „X von Y Dateien belegt; nicht belegt: …“, jedes Zitat mit Berichtszeile und Ergebnis, die nachgeschlagenen Commit-Wörter sowie Zählungen. Exit 1, sobald ein Zitat ungültig ist (SLV0-EVAL-29, ohne die Warnung); nicht belegte Dateien sind ein Messwert und ändern den Exit-Code nicht. Das Werkzeug weiß nicht, was gelesen wurde, nur was belegt ist. Liest nur. | fehlt |
+| SLV0-EVAL-31 | **Allowlist und Muster:** Ein Kontextpaket entsteht nur aus einer Allowlist-Datei nach [eval-context-allowlist.schema.json](schemas/eval-context-allowlist.schema.json) (§7.6): `ziel`, optional `rolle`, `eingaben` (mindestens ein Eintrag aus `muster` und optional `wofuer`) und optional `sperre`. Ein Muster ist ein Pfad oder ein Glob mit `*`, `?` und `**` relativ zur Wurzel (Syntax §7.6). Ein Muster mit unzulässiger Syntax (leer, leeres oder `.`-Segment, `/` am Ende, `**` nicht als ganzes Segment, Steuerzeichen, reservierte Zeichen `[ ] { } ! \`, nur Platzhalter) → `pattern_invalid`; ein absolutes Muster oder eines mit `..`-Segment → `path_escapes_root`. Diese Prüfung läuft vor jedem Dateizugriff; ist ein Muster ungültig, wird nichts ausgewählt. | fehlt (code2prompt: ungültige Muster werden übergangen, *im Konzept* fail-open) |
+| SLV0-EVAL-32 | **Auswahl fail-closed:** Jedes Muster muss mindestens eine reguläre Datei treffen. Ein Pfad-Muster ohne Datei (auch bei abweichender Groß- und Kleinschreibung) → `file_missing`; ein Pfad-Muster auf ein Verzeichnis oder eine andere Nicht-Datei → `not_regular_file`; ein Glob ohne Treffer → `pattern_unmatched`. Ein Symlink im Pfad eines Treffers oder ein Symlink, den ein Glob trifft oder durchlaufen müsste → `symlink_in_pack`; Symlinks werden nie verfolgt. Liegt ein Treffer unter einem gesperrten Pfad (§7.6: Standardsperren `**/.git`, `**/.env*`, `**/kandidaten`, ergänzt durch `sperre` und `--deny`, nie verkleinert) → `path_forbidden`, ohne die Datei zu lesen; liegt er unter einem Unterordner mit eigenem `.git` (fremdes oder eingebettetes Repository) → `nested_repository`. Eine Datei, die kein UTF-8-Text ist (ungültige Folge oder NUL-Byte) → `file_not_text`. Alle Meldungen werden gesammelt; schon eine führt zu Exit 1 ohne Datensatz und ohne Darstellung. Es gibt weder ein leeres Paket noch ein Paket „alles“. | fehlt |
+| SLV0-EVAL-33 | **Datensatz:** Bei Erfolg gibt `eval context-pack` den Datensatz nach [eval-context-pack.schema.json](schemas/eval-context-pack.schema.json) auf stdout aus: Hash der Allowlist-Datei, `ziel`, `rolle`, Muster mit Trefferzahl, wirksame Sperrliste, je Datei Pfad (relativ zur Wurzel, `/`), SHA-256 der unveränderten Bytes, Bytes, Zeilen, Tokenzahl nach SLV0-TOK-01/-04 (ohne `--estimator` `unbekannt`, sonst `geschaetzt` mit Methode) und die Indizes der Muster, die sie treffen; Dateien kommen je nur einmal vor und sind nach Codepoint sortiert. `kontextpaket_sha256` ist der Hash nach der Formel aus SLV0-PKG-22 über `{<Pfad>: <Dateihash>}`. Der Datensatz enthält keinen Zeitstempel und keinen absoluten Pfad; gleiche Eingabebytes ergeben einen byte-gleichen Datensatz (SLV0-INV-03). Die Tokenzahl ist eine Schätzung, kein Messwert (SLV0-TOK-07). | fehlt |
+| SLV0-EVAL-34 | **Darstellung erst nach dem Datensatz:** Mit `--output DATEI` wird zusätzlich ein Markdown-Bündel nach §7.6 geschrieben, und zwar nur aus dem fertigen Datensatz und nur, wenn die Auswahl vollständig gelungen ist. Die Datei wird exklusiv neu angelegt; existiert der Pfad schon (auch als Symlink) → `output_exists`, nichts wird geschrieben oder überschrieben. Der Datensatz nennt dann Format, SHA-256 und Bytes des Bündels, nicht dessen Pfad. Außer dieser Datei schreibt der Befehl nichts; ohne `--output` liest er nur. | fehlt |
 
 ### 7.1 Rubrikformat (SLV0-EVAL-13)
 
@@ -280,6 +285,66 @@ gilt dieser, sonst das Pfadende ab einer Segmentgrenze. **Commit-Wörter** wie �
 Gelesen wird `git ls-tree -r -z --full-tree <commit>` für das Register und `git cat-file blob <objekt>` nur für zitierte Dateien (Zeilenzahl).
 Zeilenbereiche einer Datei werden zusammengeführt, wenn sie sich überlappen oder aneinandergrenzen. Pfade werden nach Codepoint sortiert ausgegeben (SLV0-INV-03).
 
+### 7.6 Kontextpaket (SLV0-EVAL-31…34)
+
+`eval context-pack --allowlist DATEI [--root VERZ] [--deny MUSTER]... [--estimator utf8-bytes-div-4@1] [--output NEUE-DATEI.md]`.
+Zweck: Clean-Room-Sessions (Implementierung, Familienautor, Bewerter) erhalten nur ein geprüftes Paket, z. B. nie `kandidaten/` und nie ein fremdes Repository.
+Erst entsteht die Auswahl als Datensatz, dann – falls verlangt – die Darstellung. Jede Unklarheit bricht ab; nichts wird übergangen.
+
+**Allowlist-Datei** (`sl-context-allowlist@1`): die maschinenlesbare Form einer Inputliste, wie sie eine Übergabe für die implementierende Session führt
+(Vorbild: Implementierungsübergabe §3 „Inputs für die implementierende Session“, Spalten *Input* und *Wofür*; im Ablauf `resuming-work` das aktuelle
+Kontextpaket mit Ziel). Abschnittsangaben wie „§3–§6“ sind dort Lesehinweise; die Allowlist wählt ganze Dateien, und `wofuer` trägt den Hinweis als Text.
+
+| Feld | Inhalt |
+|---|---|
+| `schema_version`, `format` | `1` und `sl-context-allowlist@1` |
+| `ziel` | Wofür das Paket gebaut wird, eine Zeile (Auftrag, Paket, Fall) |
+| `rolle` | optional: Session, die das Paket erhält, z. B. `implementierung`, `familienautor`, `bewerter` (nur Daten) |
+| `eingaben[]` | je Eintrag `muster` (Pflicht) und optional `wofuer` (eine Zeile, nur Daten) |
+| `sperre[]` | optional: zusätzliche Sperrmuster; sie ergänzen die Standardsperren, ersetzen sie nie |
+
+**Mustersyntax:** relativer POSIX-Pfad aus Segmenten, getrennt durch `/`. `*` trifft beliebig viele Zeichen außer `/`, `?` genau eines außer `/`;
+`**` ist nur als ganzes Segment erlaubt und trifft beliebig viele Segmente, am Ende des Musters mindestens eines (`docs/**` trifft alles unter `docs/`,
+nicht `docs` selbst; `a/**/b.md` trifft auch `a/b.md`). `*` und `?` treffen auch einen führenden Punkt. Ohne `*` und `?` ist das Muster ein **Pfad** und
+muss genau eine reguläre Datei bezeichnen; ein Verzeichnis als Pfad wählt nichts aus (`not_regular_file`), dafür gibt es `verz/**`. Unzulässig sind
+leere Muster, leere oder `.`-Segmente, `/` am Ende, `***` und `**` innerhalb eines Segments, Steuerzeichen, die reservierten Zeichen `[ ] { } ! \`
+(keine Zeichenklassen, Klammern oder Negation) und Muster nur aus `*`, `?` und `/` (`pattern_invalid`). Absolute Muster (`/…`, Laufwerksbuchstabe)
+und `..`-Segmente sind `path_escapes_root`. Groß- und Kleinschreibung zählen; jedes Segment eines Pfad-Musters muss mit genau diesem Namen im
+Verzeichnis stehen.
+
+**Sperren:** gleiche Syntax wie Muster, ohne die Regel „nur Platzhalter“. Ein Pfad ist gesperrt, wenn ein Sperrmuster ihn oder einen seiner
+übergeordneten Ordner trifft, ohne Beachtung der Groß- und Kleinschreibung. Standardsperren, immer wirksam: `**/.git` (Git-Daten, auch eingebetteter
+Repositories), `**/.env*` (Umgebungsdateien mit möglichen Secrets), `**/kandidaten` (Kandidatenordner, die eine Clean-Room-Session nicht sehen darf).
+Weitere Sperren kommen aus `sperre` der Allowlist und aus `--deny` (wiederholbar); der Datensatz nennt jede Sperre mit Quelle (`standard`,
+`allowlist`, `aufruf`). Gesperrte Treffer eines Globs werden je gesperrtem Ordner zusammengefasst gemeldet; ihr Inhalt wird nie gelesen.
+
+**Fremde Repositories:** Ein Treffer, in dessen übergeordnetem Ordner unterhalb der Wurzel ein Eintrag `.git` (Ordner oder Datei) liegt, gehört zu
+einem anderen Repository → `nested_repository`. Die Wurzel selbst darf ein Repository sein.
+
+**Durchlauf:** Ein Glob beginnt bei seinen führenden Pfadsegmenten ohne Platzhalter; fehlt dieser Ordner, ist das `pattern_unmatched`, ist er oder einer
+seiner Teile ein Symlink, `symlink_in_pack`. Verzeichnisse werden nach Codepoint sortiert und ohne Symlink-Folgen gelesen; betreten wird ein Ordner nur,
+wenn das Muster darunter noch etwas treffen kann. Ein Symlink, den das Muster trifft oder betreten müsste, ist `symlink_in_pack`. Mehrere Muster dürfen
+dieselbe Datei treffen; sie steht einmal im Paket, mit allen Musterindizes.
+
+**Datensatz** (`sl-context-pack@1`, Felder siehe Schema): `allowlist.sha256` über die Bytes der Allowlist-Datei; `muster[]` in Allowlist-Reihenfolge
+mit `index`, `art` (`pfad`, `glob`), `wofuer` und Trefferzahl; `sperrliste[]`; `dateien[]` nach Codepoint; `summe` (Dateien, Bytes, Zeilen, Tokens nach
+SLV0-TOK-05); `schaetzer`; `bundle` (`null` ohne `--output`). Zeilen zählen wie §7.4.
+
+**Markdown-Bündel** (`sl-context-bundle@1`): UTF-8, LF, in dieser Reihenfolge:
+
+1. `# Kontextpaket`, Leerzeile, dann je eine Zeile `- Format: \`sl-context-bundle@1\``, `- Kontextpaket-Hash (sha256, sl-hash-v0): \`<hash>\``,
+   `- Ziel: <ziel>`, `- Rolle: <rolle oder –>`, `- Dateien: <n> · Bytes: <b> · Tokens: <Tokenangabe>`; Leerzeile; der Satz
+   „Nur die folgenden Dateien gehören zum Paket. Tokenzahlen sind Schätzungen, keine Messwerte.“
+2. Je Datei in Datensatzreihenfolge: Leerzeile, `## <i>. <Pfad als Inline-Code>`, Leerzeile, `- sha256: \`<hash>\` · Bytes: <b> · Tokens: <Tokenangabe>`,
+   Leerzeile, ein Codeblock aus Backticks (mindestens drei, eins mehr als die längste Backtick-Folge der Datei), darin die unveränderten Bytes der
+   Datei, gefolgt von einem Zeilenumbruch, falls die Datei nicht mit einem endet, dann der schließende Zaun.
+
+Die Tokenangabe lautet `<wert> (Schätzung <methode>)` bzw. `unbekannt`. Pfade und Hashes im Bündel sind die des Datensatzes; der Datensatz nennt den
+SHA-256 des Bündels. Ein Leser kann so jede Datei aus dem Bündel lösen und gegen den Datensatz prüfen.
+
+**Bedienfehler (Exit 2):** Allowlist fehlt, ist kein JSON oder verletzt ihr Schema; `--root` ist kein Verzeichnis (auch kein Symlink darauf);
+unbekannter Schätzer; der Ordner von `--output` fehlt. Ein Muster ist kein Bedienfehler, sondern Inhalt der Allowlist: seine Fehler sind Codes mit Exit 1.
+
 ## 8. Fehlerfälle
 
 Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und, wo sinnvoll, Zeile.
@@ -298,6 +363,7 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Belege, Trennschärfe | `evidence_not_found`, `evidence_missing` · Warnung `evidence_unquoted` (SLV0-EVAL-21) · Warnung `no_discriminating_check` (SLV0-EVAL-23/-24) · `family_not_discriminating`, `core_verdict_unclear` (SLV0-EVAL-25) | Belegprüfung fehlgeschlagen bzw. kein Kandidatenstart in select (Exit 1); Warnungen ändern den Exit-Code nicht; nichts wird korrigiert oder neu bewertet |
 | Befund (Messwert) | `ueberberichtung` mit Grund `pfad_fehlt`, `zeile_ausserhalb` oder `commit_unbekannt` (SLV0-EVAL-27) | Teil des Ergebnisses von `eval findings`, keine Ablehnung (Exit 0) |
 | Zitate am Commit | `commit_unknown` (auch für `--commit`: dann Abbruch ohne Register), `sha_mismatch`, `ref_not_pinned`, `path_missing`, `path_ambiguous`, `range_out_of_bounds` · Warnung `commit_unverified` (SLV0-EVAL-28/-29) | Zitat ungültig, belegt nichts, Exit 1; nichts wird korrigiert. Nicht belegte Dateien sind ein Messwert, kein Code |
+| Kontextpaket | `pattern_invalid`, `path_escapes_root` (SLV0-EVAL-31) · `pattern_unmatched`, `file_missing`, `not_regular_file`, `symlink_in_pack`, `path_forbidden`, `nested_repository`, `file_not_text` (SLV0-EVAL-32) · `output_exists` (SLV0-EVAL-34) | Abbruch mit Exit 1, alle Meldungen gesammelt; kein Datensatz, kein Bündel, keine Teilauswahl |
 
 Kein Fehler wird still zu einer Warnung herabgestuft, und kein Werkzeug „repariert“ Eingaben (SLV0-INV-08).
 
@@ -390,6 +456,21 @@ Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/
 | SLV0-FALL-64 | Nicht belegte Dateien und Bereiche: Bericht belegt nur `src/a.js` und zitiert `README.md:1`; ohne `--scope`; `--scope src/`; `--scope '**/*.md'`; `--scope fehlt/`; `--scope ../x`; Permalink auf ein anderes Repo mit `--github` | 2 von 4, nicht belegt `docs/guide.md`, `src/b.js`, Exit 0; 1 von 2 und `README.md` `ausserhalb_bereich`; 1 von 2 (`README.md`), `docs/guide.md` nicht belegt; Exit 2 (2×); `fremd`, nicht geprüft | EVAL-28/-30 |
 | SLV0-FALL-65 | Commit-Wörter und Bedienung: C2 als Hex-Wort im Text; unbekanntes Hex-Wort; Verzeichnis ohne Git; `--commit HEAD`; Bericht fehlt; zwei Berichte. Git-Status, Refs, Index und Bericht vor und nach dem Lauf | bekannt; Warnung `commit_unverified`, Exit 0; Exit 2 (4×); unverändert | EVAL-28/-29, INV-04 |
 
+### 9.3 Fälle zu SLV0-EVAL-31…34
+
+Jeder Test legt einen synthetischen Dateibaum in einem temporären Verzeichnis an und entfernt ihn danach. Ausgangslage: `docs/spec.md`, `docs/notes.md`,
+`src/a.js`, `src/lib/b.js`, `research/kandidaten/K-1/SKILL.md`, `.env`, `.git/config` (als Ordner, die Wurzel ist ein Repository).
+
+| ID | Fall | Erwartung | Deckt |
+|---|---|---|---|
+| SLV0-FALL-66 | Allowlist `docs/spec.md`, `src/**/*.js`, `docs/*.md` (überlappend), zweimal ausgeführt, beim zweiten Mal mit anderem Arbeitsverzeichnis und in anderer Reihenfolge angelegten Dateien; dritter Lauf nach Änderung eines Bytes in `src/a.js` | Exit 0; Dateien `docs/notes.md`, `docs/spec.md`, `src/a.js`, `src/lib/b.js` nach Codepoint, `docs/spec.md` mit zwei Musterindizes; `kontextpaket_sha256` gleich dem unabhängig nach SLV0-PKG-22 berechneten Wert; beide Datensätze byte-gleich; dritter Lauf anderer Hash. Ohne `--estimator` Tokens `unbekannt`, mit Schätzer `geschaetzt` | EVAL-33, INV-03, TOK-04 |
+| SLV0-FALL-67 | Tippfehler und Syntax: `src/**/*.sj` (trifft nichts); `docs/spek.md` (fehlt); `Docs/spec.md` (Schreibweise); `src/***`; `**`; `docs/`; `docs/[ab].md`; `!docs/spec.md`; Tippfehler neben gültigen Mustern | `pattern_unmatched`; `file_missing` (2×); `pattern_invalid` (5×); je Exit 1, kein Datensatz, auch nicht für die gültigen Muster (ein leeres Muster verletzt schon das Schema, Exit 2) | EVAL-31/-32 |
+| SLV0-FALL-68 | Gesperrte Pfade: `research/**/*.md` trifft `research/kandidaten/K-1/SKILL.md`; Pfad `.env`; Pfad `.git/config`; Sperre `sperre: ["src/lib"]` mit `src/**/*.js`; `--deny docs/notes.md`; Sperre in anderer Schreibweise (`KANDIDATEN`) | je `path_forbidden` (Glob-Treffer zusammengefasst je Ordner), Exit 1; Inhalt der gesperrten Dateien wird nicht gelesen; Standardsperren lassen sich nicht entfernen | EVAL-32 |
+| SLV0-FALL-69 | Fehlende Datei und Nicht-Datei: Pfad `src` (Verzeichnis); Pfad auf eine fehlende Datei neben einem gültigen Muster | `not_regular_file`; `file_missing`; je Exit 1, auch das gültige Muster ergibt kein Teilpaket | EVAL-32 |
+| SLV0-FALL-70 | Symlink und Ausbruch: Pfad auf Datei-Symlink; Glob über einen Ordner, der einen Verzeichnis-Symlink nach außen enthält; Glob, dessen Startordner ein Symlink ist; `../aussen.txt`; `/etc/hosts`; `src/../docs/spec.md`; Unterordner mit eigenem `.git` | `symlink_in_pack` (3×); `path_escapes_root` (3×); `nested_repository`; je Exit 1; außerhalb der Wurzel wird nichts gelesen | EVAL-31/-32 |
+| SLV0-FALL-71 | Darstellung: Lauf mit `--output paket.md`, Datei mit Backtick-Zaun im Inhalt und Datei ohne abschließenden Zeilenumbruch; zweiter Lauf mit demselben `--output`; Lauf mit Fehler und `--output` | Bündel enthält Kopf mit Paket-Hash und je Datei Pfad, Hash und Inhalt in Datensatzreihenfolge; jede herausgelöste Datei hat den Hash aus dem Datensatz; `bundle.sha256` gleich Hash der Datei; zweiter Lauf `output_exists`, Datei unverändert; bei Fehler entsteht keine Datei | EVAL-34 |
+| SLV0-FALL-72 | Bedienung und Lesend: Allowlist fehlt; kein JSON; Schema verletzt (`eingaben` leer); unbekannter Schätzer; `--root` ist Datei; Ordner von `--output` fehlt. Dateibaum vor und nach einem erfolgreichen Lauf ohne `--output` | Exit 2 (6×); Baum unverändert (gleiche Pfade, Bytes) | EVAL-31…34, INV-08 |
+
 ## 10. Abgrenzung
 
 - **Keine Aktivierung durch Code.** Aktivieren heißt im Repo: Owner mergt einen PR am geprüften Hash (SL4 §5). Werkzeuge liefern Belege, keine Freigaben.
@@ -413,6 +494,9 @@ Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/
 | [eval-judgement.schema.json](schemas/eval-judgement.schema.json) | Bewertung mit Belegart je Kriterium (SLV0-EVAL-19, §7.2) | Tests |
 | [eval-case.schema.json](schemas/eval-case.schema.json) | `fall.json` eines Fallordners mit Prüfformat, Kern- und Gegenkriterium und erwarteten Befunden (SLV0-EVAL-22/-24/-26, §7.3/§7.4) | Tests; Fallordner unter `research/skills-meta-prompting/` (Research-Branch) |
 | [eval-b1-vorlauf.schema.json](schemas/eval-b1-vorlauf.schema.json) | Kernurteile von B1 je select-Fall für den B1-Vorlauf (SLV0-EVAL-25) | Tests |
+
+| [eval-context-allowlist.schema.json](schemas/eval-context-allowlist.schema.json) | Allowlist eines Kontextpakets (SLV0-EVAL-31, §7.6) | Tests |
+| [eval-context-pack.schema.json](schemas/eval-context-pack.schema.json) | Datensatz eines Kontextpakets mit Dateihashes, Tokenschätzung und Paket-Hash (SLV0-EVAL-33/-34, §7.6) | Tests |
 
 `eval cite-check` (SLV0-EVAL-28…30) hat keine JSON-Eingabe und daher kein Eingabeschema; Bericht, Commit und Bereiche kommen als Markdown bzw. Optionen (§7.5).
 
@@ -439,6 +523,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-11 | Belegprüfung (SLV0-EVAL-21): Paarurteile (`paare`) und ihre Begründungen werden nicht geprüft; ein `nicht_erfuellt` mit nicht gefundenem Beleg bleibt `nicht_erfuellt` (gemeldet, nicht herabgestuft), obwohl ein erfundener Mangel eine Gegenseite begünstigen kann | Bewerter-Vorgabe „Paarurteil nur mit Kriterienbelegen“ bzw. Regel für unbelegte Mängel, mit E3-Runde 3 entscheiden |
 | O-12 | Trennschärfe (SLV0-EVAL-23/-25): Negativkontroll-Familie je Kandidat (Portierungsplan P2) und Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion; `regex` folgt ECMAScript statt Python | SL4 §4/§6; bei Bedarf eigene Spec-Ergänzung |
 | O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | **Teilweise gelöst** mit P5: `eval cite-check` (SLV0-EVAL-28…30) prüft Permalinks, Fundstellen und Commit-Wörter gegen Git. Offen bleibt: `eval findings` prüft weiter nur gegen den Fixture-Text, weil Fallordner keinen Git-Stand haben; beide erkennen Fundstellen nur mit Dateiendung; `host.tld:port` ohne Schema würde auch in `cite-check` als Fundstelle gelesen (`path_missing`); ein Hex-Wort ist nicht sicher als Commit erkennbar (darum dort nur Warnung) |
+| O-14 | Kontextpaket (SLV0-EVAL-31…34): Das Paket ist ein Datensatz, keine Sperre. Ob eine Session nur das Paket sieht, hängt am Rechteprofil des Laufs (Portierungsplan P12); das Werkzeug bindet die Allowlist nicht an einen Commit, prüft keine erwarteten Dateihashes aus der Übergabe und wählt keine Abschnitte innerhalb einer Datei. Unicode-Normalisierung von Dateinamen (NFC/NFD) wird nicht angeglichen | Mit P12 und der nächsten Übergabe entscheiden; bis dahin `wofuer` als Lesehinweis und Hashvergleich durch den Empfänger |
 
 ## 13. Rückverfolgung
 
@@ -457,6 +542,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | EVAL-25 | E3-Runde 2, Ergebnis §4–§5; Owner-Antwort A-20261031-e3-b1-vorlauf („B1-Vorlauf ist ok, führ ihn mit P2 ein“); SL4 §4/§6 |
 | EVAL-26/-27 | Portierungsplan P3 (Konzept aus skill-optimization: erwartete Befunde, 1:1-Zuordnung, Überberichtung; deren Code ausgeschlossen) |
 | EVAL-28…30 | Portierungsplan P5 (Konzept aus recursive-decomposition-skill, nur *dokumentiert*: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren, Abdeckung vor der Synthese prüfen; Dossier-Anforderung R4); O-13 |
+| EVAL-31…34 | Portierungsplan P11 (Konzept aus code2prompt, nur Konzept: erst Auswahl und Datensatz mit Dateien, Hashes und Tokens, dann Darstellung; dort fail-open, bei uns fail-closed); Implementierungsübergabe §3 (Inputliste der implementierenden Session); `resuming-work` Schritt 8 (Kontextpaket mit Ziel); Clean-Room-Plan |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.
