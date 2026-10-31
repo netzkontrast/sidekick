@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.2",
+  "pruefung_id": "rw-beispiel-1",
+  "artefakt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "auftrag_version": 1,
+  "epoch": 1,
+  "klasse": "angenommen",
+  "bezug_auftrag": null,
+  "bezug_rekonstruktion": 1,
+  "fundstelle": "bericht.md#empfehlung",
+  "inhalt_ref": "fixture:rueckwaerts-befund-1"
+}
