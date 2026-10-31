@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/runtime-adapter/v0/runtime-adapter-profil.schema.json",
+  "title": "Runtime-Adapterprofil – V0",
+  "description": "Deklarative Beschreibung einer Coding-Runtime für den Connector (runtime-adapter-v0.md). Platzhalterprüfung (RTA-PRF-02), Secret-Muster (RTA-PRF-04) und verbotene Flags (RTA-PRF-05) prüft der Loader zusätzlich zum Schema.",
+  "type": "object",
+  "required": ["schema_version", "id", "version", "runtime", "befehl", "session", "ausgabe", "rechte", "arbeitsverzeichnis", "faehigkeiten", "grenzen"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "pattern": "^rta-[a-z0-9-]+$" },
+    "version": { "type": "integer", "minimum": 1, "description": "Steigt bei jeder Änderung; laufende Runs bleiben an ihre Version gebunden (RTA-PRF-08)." },
+    "runtime": {
+      "type": "object",
+      "required": ["name", "programm", "version_bereich"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "programm": { "type": "string", "minLength": 1, "description": "Programmname im PATH oder absoluter Pfad." },
+        "version_bereich": { "type": "string", "minLength": 1, "description": "Versionen, für die das Profil gedacht ist, z. B. 2.x." }
+      }
+    },
+    "befehl": {
+      "type": "object",
+      "required": ["basis", "prompt"],
+      "additionalProperties": false,
+      "properties": {
+        "basis": { "$ref": "#/$defs/baustein_oder_leer" },
+        "prompt": {
+          "type": "object",
+          "required": ["art"],
+          "additionalProperties": false,
+          "properties": {
+            "art": { "enum": ["stdin", "argument"] },
+            "fragment": { "$ref": "#/$defs/baustein" }
+          },
+          "if": { "properties": { "art": { "const": "argument" } } },
+          "then": { "required": ["fragment"] }
+        },
+        "modell_fragment": { "$ref": "#/$defs/baustein" }
+      }
+    },
+    "session": {
+      "type": "object",
+      "required": ["form"],
+      "additionalProperties": false,
+      "properties": {
+        "form": { "enum": ["keine", "idempotent", "paar", "erfasst"] },
+        "fragment": { "$ref": "#/$defs/baustein" },
+        "neu_fragment": { "$ref": "#/$defs/baustein" },
+        "fortsetzen_fragment": { "$ref": "#/$defs/baustein" }
+      },
+      "allOf": [
+        { "if": { "properties": { "form": { "const": "idempotent" } } }, "then": { "required": ["fragment"] } },
+        { "if": { "properties": { "form": { "const": "paar" } } }, "then": { "required": ["neu_fragment", "fortsetzen_fragment"] } },
+        { "if": { "properties": { "form": { "const": "erfasst" } } }, "then": { "required": ["fortsetzen_fragment"] } }
+      ]
+    },
+    "ausgabe": {
+      "type": "object",
+      "required": ["format"],
+      "additionalProperties": false,
+      "properties": {
+        "format": { "enum": ["jsonl", "json", "text"] },
+        "ergebnis_pfad": { "$ref": "#/$defs/pfad" },
+        "session_pfad": { "$ref": "#/$defs/pfad" },
+        "verbrauch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "eingabe_tokens": { "$ref": "#/$defs/pfad" },
+            "ausgabe_tokens": { "$ref": "#/$defs/pfad" },
+            "kosten_usd": { "$ref": "#/$defs/pfad" }
+          }
+        }
+      }
+    },
+    "rechte": {
+      "type": "object",
+      "required": ["stufen", "verbotene_flags"],
+      "additionalProperties": false,
+      "properties": {
+        "stufen": {
+          "type": "object",
+          "description": "Rechtestufe → Argumentbaustein (RTA-RCH-01). Leere Liste heißt: Standardverhalten der Runtime ohne Zusatzflags. Mindestens eine Stufe prüft der Loader (RTA-PRF-07).",
+          "propertyNames": { "pattern": "^[a-z][a-z0-9_]*$" },
+          "additionalProperties": { "$ref": "#/$defs/baustein_oder_leer" }
+        },
+        "verbotene_flags": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "arbeitsverzeichnis": {
+      "type": "object",
+      "required": ["verbotene_flags"],
+      "additionalProperties": false,
+      "properties": {
+        "verbotene_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "faehigkeiten": {
+      "type": "object",
+      "required": ["resume", "abbruch", "rueckfrage", "kosten_meldung", "wiederanbindung"],
+      "additionalProperties": false,
+      "properties": {
+        "resume": { "$ref": "#/$defs/faehigkeit" },
+        "abbruch": { "$ref": "#/$defs/faehigkeit" },
+        "rueckfrage": { "$ref": "#/$defs/faehigkeit" },
+        "kosten_meldung": { "$ref": "#/$defs/faehigkeit" },
+        "wiederanbindung": { "$ref": "#/$defs/faehigkeit" },
+        "modellwahl": { "$ref": "#/$defs/faehigkeit" }
+      }
+    },
+    "grenzen": {
+      "type": "object",
+      "required": ["timeout_s", "max_parallel"],
+      "additionalProperties": false,
+      "properties": {
+        "timeout_s": { "type": "integer", "minimum": 1 },
+        "max_parallel": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "baustein": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "baustein_oder_leer": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "pfad": {
+      "type": "string",
+      "pattern": "^\\$(\\.[A-Za-z_][A-Za-z0-9_]*|\\[-?[0-9]+\\])+$",
+      "description": "Punktpfad in ein JSON-Objekt, z. B. $.result oder $.usage.input_tokens."
+    },
+    "faehigkeit": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["nachgewiesen", "behauptet", "nicht_unterstuetzt", "offen"] },
+        "beleg": { "type": "string", "minLength": 1, "description": "Pfad oder Verweis auf Testlauf mit Version und Datum (RTA-CAP-04)." }
+      },
+      "if": { "properties": { "status": { "const": "nachgewiesen" } } },
+      "then": { "required": ["beleg"] }
+    }
+  }
+}
