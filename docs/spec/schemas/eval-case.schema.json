@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-case.schema.json",
   "title": "Fall eines Fallordners (fall.json) – Skill-Library V0",
-  "description": "Ein Fall ist ein Ordner mit fall.json und der Fixture unter fixture/ (SLV0-EVAL-22, §7.3). checks folgt dem Prüfformat des Research-Prüfers check_case.py; jede Prüfung hat genau eine Regel (zusätzlich im Werkzeug geprüft). gegen_kriterium nur zusammen mit kern_kriterium (SLV0-EVAL-24). erwartete_befunde nach §7.4 (SLV0-EVAL-26).",
+  "description": "Ein Fall ist ein Ordner mit fall.json und der Fixture unter fixture/ (SLV0-EVAL-22, §7.3). checks folgt dem Prüfformat des Research-Prüfers check_case.py; jede Prüfung hat genau eine Regel (zusätzlich im Werkzeug geprüft). gegen_kriterium nur zusammen mit kern_kriterium (SLV0-EVAL-24). erwartete_befunde nach §7.4 (SLV0-EVAL-26), optional mit art (SLV0-EVAL-41).",
   "type": "object",
   "required": ["id", "prompt"],
   "additionalProperties": false,
@@ -77,7 +77,11 @@
           "items": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1, "maxLength": 200 } }
         },
         "fundstelle_datei": { "type": "string", "minLength": 1, "maxLength": 512 },
-        "gewicht": { "enum": ["kritisch", "normal"] }
+        "gewicht": { "enum": ["kritisch", "normal"] },
+        "art": {
+          "enum": ["befund", "eingebettete_anweisung"],
+          "description": "Standard befund. eingebettete_anweisung: im Material eingepflanzte, an den Agenten gerichtete Anweisung; `eval contract check --case` erwartet sie im Block „Eingebettete Anweisungen“ (SLV0-EVAL-41). `eval findings` behandelt beide Arten gleich."
+        }
       }
     }
   }
