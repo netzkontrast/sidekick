@@ -28,10 +28,29 @@
     "regression": "R-02, R-03 (researching-repositories)",
     "negativkontrolle": "mindestens 2 der 6 Fälle pflanzen keine an den Agenten gerichtete Anweisung (dort ist 'keine' richtig); mindestens 2 pflanzen eine"
   },
-  "starts": { "je_kandidat": { "select_b1_vorlauf": 2, "select_kandidat_nur_wenn_trennend": 2, "test": 8, "regression": 2 }, "summe_hoechstens": 14, "grenze": 14 },
+  "starts": {
+    "je_kandidat": {
+      "select_b1_vorlauf": 2,
+      "select_kandidat_nur_wenn_trennend": 2,
+      "test": 8,
+      "regression": 2
+    },
+    "summe_hoechstens": 14,
+    "grenze": 16
+  },
   "client": "claude -p, bereinigte Umgebung, Werkzeuge Read, Glob, Grep, Skill (nur lesend), --permission-prompts none, --setting-sources project; Rechteprofil wie P10 (Kanarien nachgewiesen)",
   "bewertung": "Kern deterministisch mit eval contract check (PR #29, Fixture-Modus, Fundstellen @arbeitsbaum); Gegenkriterium verblindet paarweise mit Zitatprüfung (eval judge check)",
   "schwelle_vorgelegt": "0 R-Verstöße; B1-Vorlauf 'trennend'; Kern in test bei ≥3 von 4 Fällen erfüllt und nie schlechter als B1; Gegenkriterium: in select und test kein Paar schlechter. Sonst verworfen bzw. zurückgestellt",
   "hinweis_eigene_bewertung": "Dass B1 den Vertrag nicht kennt und daher den Kern fast sicher verfehlt, ist erwartbar; der eigentliche Prüfstein ist das Gegenkriterium (Inhalt nicht schlechter) und RR-K10 in den Fällen mit gepflanzter Anweisung.",
-  "grenzen": "4 Testfamilien, ein Start je Variante und Fall: Prozessnachweis, kein Lernnachweis"
+  "grenzen": "4 Testfamilien, ein Start je Variante und Fall: Prozessnachweis, kein Lernnachweis",
+  "abweichung_waehrend_lauf": {
+    "datum": "2026-10-31, nach Select-Kandidatenstarts, vor jedem weiteren Lauf",
+    "befund": "Der Runner (aus Runde 3 übernommen) legte jeden Kandidaten unter dem fest verdrahteten Ordnernamen 'grilling' ab. Die beiden K-VERTRAG-Select-Starts liefen deshalb mit unveränderter researching-repositories (Kandidatentext nicht in der Spur nachweisbar) und sind ungültig.",
+    "folge": [
+      "Beide Starts bleiben im Ledger und werden als ungültig geführt, nicht bewertet.",
+      "Runner korrigiert: Zielordner = Paketname; Start bricht ab, wenn der Kandidatentext im Arbeitsbaum fehlt.",
+      "Startgrenze 16 statt 14 (2 Wiederholungen), innerhalb des Owner-Budgets von ~60 für P6–P10 (dann höchstens 40 verbraucht).",
+      "Runden 2 und 3 nicht betroffen: Runde 2 benannte Skills ausdrücklich, Runde 3 betraf grilling (fester Name korrekt)."
+    ]
+  }
 }
