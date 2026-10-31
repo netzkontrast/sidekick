@@ -39,6 +39,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`
   (nur lesend; der einzige Prozess, den der Harness startet, ist `git`).
 - Research-Helfer-Tests: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
+- Fragen-Ablage (grilling, optional): `node tools/skill-library/cli.js questions <check|status|next|add|ask|answer|…> --root docs/fragen --topic THEMA`;
+  `check` liest nur. Spec: [questions-cli-v0](docs/spec/questions-cli-v0.md); Einzeltests `node --test tools/skill-library/test/questions-*.test.js`.
 
 Details: [tools/skill-library/README.md](tools/skill-library/README.md). Ab Phase 1 (TypeScript/Next.js)
 stehen hier Install, Dev, Build, Einzeltest, Typecheck und Lint mit exakten Flags.

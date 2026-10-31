@@ -7,6 +7,7 @@ Vision und Recherche begründen; hier steht, was das System tun muss und woran d
 |---|---|---|
 | [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) | Begriffe, Invarianten, Zustandsautomaten, Budget-Vorwarnung und Rückwärtsabnahme (seit 0.2), Fallmatrix, erster Ablauf | Entwurf |
 | [Skill-Library V0](skill-library-v0.md) | Paketvertrag, Registry-Datensatz, Inhaltshash, Validator, Token-Zählung, Eval-Harness (Stufen 0–2); IDs `SLV0-<Bereich>-<nn>` | Entwurf |
+| [Fragen-CLI V0](questions-cli-v0.md) | `questions`-CLI für die grilling-Ablage: Befehle, Zustandsinvarianten, Dateiformat, Fehlercodes, Fallmatrix (P9); IDs `QCLI-<Bereich>-<nn>` | Entwurf |
 
 ## Konventionen
 

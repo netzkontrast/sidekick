@@ -6,6 +6,7 @@
 // nothing under .agents/skills/ is written (SLV0-INV-08). Only `eval prepare`, `eval ledger
 // init|reserve|result`, `eval split access|select` and `eval context-pack --output` write, only to
 // explicit paths, never overwriting.
+// `questions …` (lib/questions/, docs/spec/questions-cli-v0.md) writes only below its --root, atomically.
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -18,6 +19,7 @@ import { validateProject, UsageError } from './lib/project.js';
 import { checkRegistry, loadSchema, DEFAULT_SCHEMA_PATH } from './lib/registry.js';
 import { countPackage, runUsageFromTrace, ESTIMATORS } from './lib/tokens.js';
 import { runEval, EVAL_USAGE } from './lib/eval/cli.js';
+import { runQuestions, QUESTIONS_USAGE } from './lib/questions/cli.js';
 
 const USAGE = `Aufruf: node tools/skill-library/cli.js <befehl> [optionen]
 
@@ -31,6 +33,7 @@ const USAGE = `Aufruf: node tools/skill-library/cli.js <befehl> [optionen]
   tokens --trace NORMALISIERTE-SPUR.json
   registry-check DATENSATZ.json... [--root DIR] [--schema-only] [--schema DATEI]
 ${EVAL_USAGE}
+${QUESTIONS_USAGE}
 
 Ausgabe: JSON auf stdout. Exit 0 ohne Fehler, 1 mit Fehler, 2 bei Bedienfehler.`;
 
@@ -239,6 +242,7 @@ const COMMANDS = { validate: cmdValidate, hash: cmdHash, tokens: cmdTokens, 'reg
 export function run(argv) {
   try {
     if (argv[0] === 'eval') return runEval(argv.slice(1));
+    if (argv[0] === 'questions') return runQuestions(argv.slice(1));
     const parsed = parseArgs(argv);
     if (!parsed.command || parsed.command === '--help' || parsed.opts['--help']) {
       return { out: header('help', { usage: USAGE }), code: parsed.command ? 0 : 2 };
