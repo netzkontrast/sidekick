@@ -6,11 +6,11 @@
 | Feld | Wert |
 |---|---|
 | URL | [netzkontrast/context-engineering-dspy-book](https://github.com/netzkontrast/context-engineering-dspy-book) (Fork des Begleitcodes zu „Context Engineering with DSPy“, O’Reilly) |
-| Commit-SHA | [`a633241b242ab777e9b5693f05ca1544e5f4b9fe`](https://github.com/netzkontrast/context-engineering-dspy-book/tree/a633241b242ab777e9b5693f05ca1544e5f4b9fe) |
-| Release / Datum | keine Tags; Merge von PR #12 am 14.09.2026; gepinnt `dspy==3.3.0`, `gepa==0.1.1` |
-| Lizenz(en), Notices, Assets | Code: MIT, „Copyright (c) 2025 Mike Taylor“ ([`LICENSE`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/LICENSE)). Buchtext nicht im Repo. Datensätze gemischt lizenziert (siehe unten). |
+| Commit-SHA | [`92d97caf59d8d09b14d9cfe89d12fce3b9efc38c`](https://github.com/netzkontrast/context-engineering-dspy-book/tree/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c) |
+| Release / Datum | keine Tags; Merge von PR #13 („book-parity-audit“) vom 08.10.2026; gepinnt `dspy==3.3.0`, `gepa==0.1.1`. Fassung 1 dieses Dossiers beruhte auf `a633241` (14.09.2026, 771 Dateien) |
+| Lizenz(en), Notices, Assets | Code: MIT, „Copyright (c) 2025 Mike Taylor“ ([`LICENSE`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/LICENSE)). Buchtext nicht im Repo. Datensätze gemischt lizenziert (siehe unten). |
 | Priorität / Tor | Skill-Library und Eval-Harness (SL-Pakete); keine P0-Hub-Entscheidung |
-| Geprüft am / von | 31.10.2026 · Explorer-Agent (Struktur aller 771 Dateien, Volltext Kap. 5, 6, 8, 11) und Claude Code (Stichproben der unten zitierten Stellen) |
+| Geprüft am / von | 31.10.2026 · Fassung 1: Explorer-Agent am alten Stand. Fassung 2: Claude Code am neuen Stand – Dateibaum (346 Dateien, 58 Notebooks), Kapitel-6-Ergebnisse, `BOOK_NOTES.md`, `data/README.md`, AGENTS.md-Notebook und alle unten zitierten Zeilen nachgeprüft; der Planungsabgleich in [#33](../../../research/skills-meta-prompting/dspy-book-integration-plan.md) las denselben Stand |
 
 ## Kurzfassung
 
@@ -20,7 +20,7 @@ Der Code ist Python mit rund 31 direkten Abhängigkeiten. sidekicks Werkzeuge si
 
 ## Startanleitung
 
-Laut [`README.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/README.md): Python 3.12–3.14, `uv sync`, API-Keys in `.env`, `scripts/check_setup.py` prüft die Umgebung ohne Key-Werte auszugeben (*dokumentiert*). Kapitel 6 läuft per Default ohne API-Aufrufe aus gespeicherten Ergebnissen; Live-Läufe nur mit `CHAPTER06_RUN_LIVE=1` (*dokumentiert*). Nichts davon wurde ausgeführt (*offen*).
+Laut [`README.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/README.md): Python 3.12–3.14, `uv sync`, API-Keys in `.env`, `scripts/check_setup.py` prüft die Umgebung ohne Key-Werte auszugeben (*dokumentiert*). Kapitel 6 läuft per Default ohne API-Aufrufe aus gespeicherten Ergebnissen; Live-Läufe nur mit `CHAPTER06_RUN_LIVE=1` (*dokumentiert*). Nichts davon wurde ausgeführt (*offen*).
 
 ## Öffentliche Verträge
 
@@ -28,11 +28,11 @@ Keine im Sinn einer API. Relevant sind die Verfahren und Formate:
 
 | Verfahren | Fundstelle | Beobachtung | Status |
 |---|---|---|---|
-| Eingefrorener Datensatz | [`chapter06/optimizer_runtime.py` L104](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/optimizer_runtime.py#L104) | Laden prüft SHA-256 und Zeilenzahl gegen ein Manifest und lehnt Paare ab, die über Splits verteilt sind | *im Code gefunden* |
-| Freigabetor Testsatz | [`chapter06/CHAPTER_RESULTS.md` L3](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/CHAPTER_RESULTS.md#L3) | Auswahl nur auf Validierung; der gesperrte Test wird erst nach dem Einfrieren freigegeben | *dokumentiert* |
-| Kostendeckel | [`guardrails.py` L52–L81](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/experiments/gepa_expanded/guardrails.py#L52-L81) | Ledger in Dollar mit Obergrenze; vor jedem Aufruf wird die geplante Ausgabe gegen Rest und Reserve geprüft | *im Code gefunden* |
-| Fehlerklassen, Redaktion | [`guardrails.py` L217, L242](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/experiments/gepa_expanded/guardrails.py#L217) | API-Fehler werden klassifiziert; Secret-Muster vor dem Schreiben entfernt | *im Code gefunden* |
-| Gepaarte Statistik | [`analysis.py` L50, L90](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/experiments/gepa_expanded/analysis.py#L50) | exakter McNemar-Test über diskordante Paare; Bootstrap-Konfidenzintervall mit dem Paar als Ziehungseinheit | *im Code gefunden* |
+| Eingefrorener Datensatz | [`chapter06/optimizer_runtime.py` L121](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/optimizer_runtime.py#L121) | Laden prüft SHA-256 und Zeilenzahl gegen ein Manifest und lehnt Paare ab, die über Splits verteilt sind | *im Code gefunden* |
+| Freigabetor Testsatz | [`chapter06/CHAPTER_RESULTS.md` L3](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/CHAPTER_RESULTS.md#L3) | Auswahl nur auf Validierung; der gesperrte Test wird erst nach dem Einfrieren freigegeben | *dokumentiert* |
+| Kostendeckel | [`guardrails.py` L52–L81](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/experiments/gepa_expanded/guardrails.py#L52-L81) | Ledger in Dollar mit Obergrenze; vor jedem Aufruf wird die geplante Ausgabe gegen Rest und Reserve geprüft | *im Code gefunden* |
+| Fehlerklassen, Redaktion | [`guardrails.py` L217, L242](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/experiments/gepa_expanded/guardrails.py#L217) | API-Fehler werden klassifiziert; Secret-Muster vor dem Schreiben entfernt | *im Code gefunden* |
+| Gepaarte Statistik | [`analysis.py` L50, L90](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/experiments/gepa_expanded/analysis.py#L50) | exakter McNemar-Test über diskordante Paare; Bootstrap-Konfidenzintervall mit dem Paar als Ziehungseinheit | *im Code gefunden* |
 | Judge-Kalibrierung | `chapter05/human-then-llm-judge.ipynb` | Mensch urteilt mit Begründung, daraus wird ein Judge trainiert und auf einem Holdout gegen die menschlichen Urteile gemessen; Ziel 80–90 % Übereinstimmung | *dokumentiert* |
 | Gewichtete Rubrik | `chapter05/rubric-and-multipredictor.ipynb` | mehrere Dimensionen 1–5, normalisiert und gewichtet; Feedback je Pipeline-Schritt | *dokumentiert* |
 | Paarvergleich mit Positionswechsel | `chapter11/landing-page-skill-optimizer.ipynb` | Judges vergleichen Kandidat und Referenz mit zufälliger A/B-Reihenfolge; deterministische Prüfungen zählen 50 %, zwei Judges je 25 % | *dokumentiert* |
@@ -42,17 +42,19 @@ Keine im Sinn einer API. Relevant sind die Verfahren und Formate:
 
 ### Ergebnisse von Kapitel 6
 
-[`CHAPTER_RESULTS.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/CHAPTER_RESULTS.md) meldet für einen KI-Text-Detektor auf 80 gesperrten Testzeilen: Baseline 53,75 %, GEPA 80,00 % (+26,25 pp, 0,58 $ Optimierungskosten), KNNFewShot 72,50 %, Ensemble 70,00 %, MIPROv2 66,25 %, COPRO 50,00 % und SIMBA 47,50 % (beide schlechter als die Baseline). Kosten von COPRO und MIPROv2 sind Untergrenzen (L22). Alles *dokumentiert*, nicht nachgerechnet.
+[`CHAPTER_RESULTS.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/CHAPTER_RESULTS.md) (Tabelle 6-1 des Buches) meldet für einen KI-Text-Detektor auf 80 gesperrten Testzeilen: Baseline 53,75 % (43/80), GEPA 80,00 % (64/80, +26,25 pp, 0,58 $ Optimierungskosten), KNNFewShot 72,50 %, Ensemble 70,00 %, MIPROv2 66,25 %, COPRO 56,25 % (45/80, +2,5 pp) und SIMBA 47,50 % (−6,25 pp, als einziger schlechter als die Baseline). Am alten Stand `a633241` stand COPRO bei 50 % und die Kosten von COPRO und MIPROv2 waren Untergrenzen; der neue Stand führt beide mit vollständigen Kosten (0,82 $ bzw. 0,85 $). Alles *dokumentiert*; die Zähler für Baseline, GEPA, COPRO und SIMBA hat #33 aus den gespeicherten Vorhersagen nachgezählt.
 
-Einschränkung, die das Repo selbst nennt: Der Testsatz ist **bewusst gegen die Baseline vorselektiert** ([`chapter06/README.md` L30](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/README.md#L30); Offenlegung in [`dataset.py` L388](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/experiments/gepa_expanded/dataset.py#L388)). Jeder Uplift ist damit nach oben verzerrt. Lehre für sidekick: Wie eine Testmenge ausgewählt wurde, gehört in den Bericht.
+Einschränkung, die das Repo selbst nennt: Der Testsatz ist **bewusst schwer für die Baseline gewählt** ([`chapter06/README.md` L65](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/README.md#L65); Offenlegung in [`dataset.py` L388](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/experiments/gepa_expanded/dataset.py#L388)). Jeder Uplift ist damit nach oben verzerrt. Lehre für sidekick: Wie eine Testmenge ausgewählt wurde, gehört in den Bericht (SLV0-EVAL-47).
 
 ### Schwäche von Kapitel 11
 
-`test-agents-md.ipynb` misst nach der Optimierung auf denselben 20 Fällen, auf denen optimiert wurde (Zelle 14); es gibt keinen Holdout. Der ausführbare Lauf ist auf 3 Metrikaufrufe begrenzt und erwartet laut Text „little or no improvement“ (Zelle 11); der volle Lauf ist auskommentiert (Zelle 13). Gespeicherte Ergebnisse und Unsicherheitsangaben fehlen (*im Code gefunden*). Das Verfahren ist brauchbar, ein Nachweis fehlt.
+`test-agents-md.ipynb` misst nach der Optimierung auf denselben 20 Fällen, auf denen optimiert wurde (Zelle 14); es gibt keinen Holdout. Am neuen Stand läuft der Compile mit 80 Metrikaufrufen (Zelle 13); am alten Stand war er auf 3 begrenzt und der volle Lauf auskommentiert. Gespeicherte Ergebnisse und Unsicherheitsangaben fehlen weiterhin (*im Code gefunden*). Das Verfahren ist brauchbar, ein Nachweis fehlt.
+
+Neu am Stand `92d97ca`: Das Landing-Page-Notebook bringt seine Gold-Seiten und ein Beispiel-SKILL.md mit (`chapter11/assets/`); Kapitel 5 enthält 50 illustrative Judge-Labels (`judge_labels_sample.csv`), die laut #33 keine dokumentierten menschlichen Gutachten sind; Kapitel 7 hat ein Notebook zu `Flex`; `BOOK_NOTES.md` erklärt Abweichungen zwischen gedruckten Listings und ausführbaren Zellen.
 
 ## Persistenz
 
-Ergebnisse, Prompts, Programme, Vorhersagen, Ledger und Hashes liegen als Dateien unter `chapter06/results/` (92 MB, 643 Dateien) und `chapter06/optimized_programs/` (*im Code gefunden*). Keine Datenbank.
+Ergebnisse, Prompts, Programme, Vorhersagen, Ledger und Hashes liegen als Dateien unter `chapter06/results/` (213 Dateien am neuen Stand; am alten 643 plus `optimized_programs/`) (*im Code gefunden*). Keine Datenbank.
 
 ## Credential-Fluss
 
@@ -68,7 +70,7 @@ Keine Rechte- oder Freigabemodelle. Der MCP-Server in Kapitel 8 ist ein Demo-Too
 |---|---|---|
 | Budget erschöpft | Ledger wirft vor dem Aufruf einen Budgetfehler | *im Code gefunden* |
 | API-Fehler | Klassifikation in Fehlerklassen | *im Code gefunden* |
-| Unparsbare Modellantwort | bleibt als falsch im Nenner (`status: parse_error`), wird nicht verworfen ([CHAPTER_RESULTS L25](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/chapter06/CHAPTER_RESULTS.md#L25)) | *dokumentiert* |
+| Unparsbare Modellantwort | bleibt als falsch im Nenner (`status: parse_error`), wird nicht verworfen ([CHAPTER_RESULTS L27](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/chapter06/CHAPTER_RESULTS.md#L27)) | *dokumentiert* |
 | Netzwerk, Neustart, Doppelzustellung | nicht behandelt (Notebook-Kontext) | *offen* |
 
 ## Tests
@@ -94,30 +96,32 @@ Keine eigenen Läufe. Das Repo hat Tests für Setup, Kapitel 6, 9 und 10; sie wu
 
 **Bewusst nicht übernommen:** Mem0 und automatische Zusammenfassungen als Wissen (widerspricht „Agent-Aussagen werden erst nach Prüfung Wissen“); Optimizer als automatische Schreiber von Skills (laut [Lernschleife](../../../research/skills-meta-prompting/library-learning.md) nur vorschlagend).
 
-## Zuordnung (11 von 11 Kapiteln plus Rahmen)
+## Zuordnung (11 von 11 Kapiteln plus Rahmen, Stand `92d97ca`, 346 Dateien)
 
 | Bereich | Dateien | Inhalt | Nutzen | Entscheidung | Ziel in sidekick |
 |---|---:|---|---|---|---|
 | `chapter01` | 1 | Signatur statt Roh-Prompt | gering | Wissensbasis | dieses Dokument |
 | `chapter02` | 1 | DSPy-Tour bis Router und RLM | gering | Wissensbasis | – |
-| `chapter03` | 2 | acht Schritte; erst Judge, dann Programm optimieren | mittel | Wissensbasis | Hinweis für Judge-Kalibrierung |
-| `chapter04` | 5 | Fehleranalyse, HF/Kaggle-Daten, PII, Synthese | mittel | Wissensbasis; Muster „Fehlerfälle annotieren“ | Lernschleife |
-| `chapter05` | 5 | Metriken, Judge-Kalibrierung, gewichtete Rubrik | hoch | Verhalten neu spezifizieren | AP3, Skill-Kandidat `evaluating-changes` |
+| `chapter03` | 3 | acht Schritte; erst Judge, dann Programm optimieren; Kopie des 20-Zeilen-Datensatzes | mittel | Wissensbasis | Hinweis für Judge-Kalibrierung |
+| `chapter04` | 5 | Fehleranalyse, HF/Kaggle-Daten, PII, Synthese | mittel | Wissensbasis; Muster „Fehlerfälle annotieren“ | Lernschleife, D1 (#33) |
+| `chapter05` | 6 | Metriken, Judge-Kalibrierung mit 50 illustrativen Labels, gewichtete Rubrik | hoch | Verhalten neu spezifizieren | SLV0-EVAL-43 ff., Skill-Kandidat `evaluating-changes` |
 | `chapter06` Notebooks | 13 | zwölf Optimizer plus Experiment | hoch | Wissensbasis (Ergebnisse oben) | – |
-| `chapter06` Laufzeit und Experiment | 29 | Runtime, Guardrails, Analyse, Datensatzsperre, Tests | hoch | Verhalten neu spezifizieren | AP3 |
-| `chapter06/results`, `optimized_programs` | 655 | Ergebnisartefakte | gering | zurückstellen | – |
-| `chapter07` | 10 | Module, Adapter, Multimodal | gering | zurückstellen | – |
+| `chapter06` Laufzeit, Experiment, Tests | 30 | Runtime, Guardrails, Analyse, Datensatzsperre, Ergebnisblöcke, Tests | hoch | Verhalten neu spezifizieren | SLV0-EVAL-43…46 (gemergt, #34) |
+| `chapter06/results` | 213 | Ergebnisartefakte | gering | zurückstellen | – |
+| `chapter07` | 11 | Module, Adapter, Multimodal, `Flex` | gering | zurückstellen | – |
 | `chapter08` | 8 | ReAct, Framework-Vergleich, MCP, RAG, History/Mem0/RLM | mittel | Verdichtungsregeln neu spezifizieren, Rest zurückstellen | AP5 |
-| `chapter09` | 10 | sieben Use Cases; Injection-Erkennung, Trajektorien-Judge | mittel | Trajektorien-Prüfung neu spezifizieren; Injection-Muster nur als eigene Testfälle | AP5 |
+| `chapter09` | 12 | sieben Use Cases; Injection-Erkennung, Trajektorien-Judge | mittel | Trajektorien-Prüfung neu spezifizieren; Injection-Muster nur als eigene Testfälle | AP5 |
 | `chapter10` | 7 | MLflow, FastAPI, Gradio | gering | zurückstellen | – |
-| `chapter11` Notebooks | 5 | Skill-, Bild-CLI-, AGENTS.md-, SOUL.md-Optimierung, Skill-Discovery | hoch | Experiment nachbauen (AGENTS.md); Rest Wissensbasis | AP4 |
-| `chapter11/assets/compacted-dspy-docs.md` | 1 | 163 KB DSPy-Doku-Digest, ohne Herkunft | gering | zurückstellen (Lizenz ungeklärt) | – |
-| `data` | 6 | KI-vs-Mensch-Texte, Split-Manifeste | gering | zurückstellen; nur das Manifest-Muster | – |
+| `chapter11` Notebooks | 5 | Skill-, Bild-CLI-, AGENTS.md-, SOUL.md-Optimierung, Skill-Discovery | hoch | Experiment nachbauen (AGENTS.md); Rest Wissensbasis | AP4, D3 (#33) |
+| `chapter11` Assets und Seiten | 6 | Gold-Landingpages, Beispiel-SKILL.md | gering | nicht übernehmen (Fremdtext) | – |
+| `data` | 7 | KI-vs-Mensch-Texte, Split-Manifeste, `README.md` mit Herkunft | gering | zurückstellen; nur das Manifest-Muster | – |
 | `docs` | 1 | Register duplizierter Symbole | gering | Wissensbasis | – |
-| `scripts`, `tests` | 4 | Setup-Prüfung ohne Key-Ausgabe | gering | Wissensbasis | – |
-| Wurzel (`AGENTS.md`, `README.md`, `pyproject.toml`, `uv.lock`, …) | 8 | Setup, Modellregel | gering | Wissensbasis | – |
+| `scripts`, `tests` | 8 | Setup-Prüfung ohne Key-Ausgabe, Buchabgleich, Notebook-Hygiene | gering | Wissensbasis | – |
+| Wurzel (`AGENTS.md`, `BOOK_NOTES.md`, `README.md`, `pyproject.toml`, `uv.lock`, …) | 9 | Setup, Modellregel, Abweichungen zum Druck | gering | Wissensbasis | – |
 
-Die AGENTS.md des Repos verlangt, vom Autor genannte Modellnamen nie zu „korrigieren“ ([`AGENTS.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/a633241b242ab777e9b5693f05ca1544e5f4b9fe/AGENTS.md)). Bei einem Nachbau bleiben Modellnamen deshalb so, wie sie im Quellmaterial stehen.
+Die frühere Datei `chapter11/assets/compacted-dspy-docs.md` (Herkunft ungeklärt) gibt es am neuen Stand nicht mehr.
+
+Die AGENTS.md des Repos verlangt, die aus dem gedruckten Buch übernommenen Modellnamen in Listings nie zu „korrigieren“; für eigene Läufe dürfen Leser andere Modelle wählen ([`AGENTS.md`](https://github.com/netzkontrast/context-engineering-dspy-book/blob/92d97caf59d8d09b14d9cfe89d12fce3b9efc38c/AGENTS.md)). Bei einem Nachbau bleiben Modellnamen deshalb so, wie sie im Quellmaterial stehen.
 
 ## Datensätze und Lizenzen
 
@@ -130,7 +134,7 @@ Die AGENTS.md des Repos verlangt, vom Autor genannte Modellnamen nie zu „korri
 ## Offene Punkte
 
 1. Ob die Erläuterungstexte in den Notebooks unter MIT stehen oder dem Buch-Urheberrecht unterliegen, ist ungeklärt; deshalb nichts wörtlich übernehmen.
-2. Herkunft von `compacted-dspy-docs.md` und der Regeln im SOUL.md-Notebook ungeklärt.
+2. Herkunft der Regeln im SOUL.md-Notebook ungeklärt (`compacted-dspy-docs.md` ist am neuen Stand entfernt).
 3. Zahlen aus Kapitel 6 sind nicht nachgerechnet; ein Live-Lauf bräuchte Budget und API-Zugang.
 4. Für Judge-Kalibrierung braucht sidekick eine Mindestzahl Labels und ein zufallsbereinigtes Übereinstimmungsmaß; das Buch liefert dafür nur 80/20 auf wenigen Beispielen.
 5. Ein Python-Versuch mit DSPy/GEPA unter `research/` ist eine eigene Owner-Entscheidung (neue Abhängigkeiten, Budget).

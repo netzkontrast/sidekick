@@ -23,7 +23,7 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 Begründung und Kritik: [Plan-Review 31.10.2026](plan-review-2026-10-31.md). Vorschlag „Kern vor Library“:
 
 - [x] AP1–AP3 der Übernahme afs-spec/DSPy-Buch gemergt (#31, #32, #34); MUXI-Dossier und Skill `using-codegraph` gemergt (#36, #35).
-- [ ] N1: Aktualität herstellen – DSPy-Dossier auf `92d97ca`, RS-1 in der Runtime-Adapter-Spec, Präsentation korrigieren. **Nächster Schritt.**
+- [x] N1: DSPy-Dossier auf `92d97ca` (Zahlen, Dateizuordnung 346 Dateien, Kapitel 11), RS-1 als RTA-INV-07, RTA-AUF-07, RTA-LEB-09 mit Fällen 49–51, Präsentation korrigiert (31.10.2026).
 - [ ] N2: Tor B praktisch über die Claude-CLI (≤ 12 Starts, ≤ 3 USD; Owner-Budget und Auth offen).
 - [ ] N3: Fake-Runtime und ausführbare RTA-Fälle (= RS-2; Ablageort offen).
 - [ ] N4: Tor-A-Spike Paperclip/OpenHands lokal mit Docker (Owner-Freigabe offen).
@@ -34,7 +34,7 @@ Begründung und Kritik: [Plan-Review 31.10.2026](plan-review-2026-10-31.md). Vor
 
 Befund aus dem [MUXI-Dossier](../../../docs/research/dossiers/muxi-runtime.md): Eine MUXI-artige Runtime (≈ 184.000 Zeilen, davon ≈ 100.000 Orchestrierung) wird nicht nachgebaut. Gebraucht wird nur das Verhalten ihrer Teile `coding/` und `watch/` (≈ 3.000 Zeilen) als **Run-Supervisor im Connector** nach der [Runtime-Adapter-Spec](../../../docs/spec/runtime-adapter-v0.md). Status: vorgeschlagen, Owner-Freigabe offen.
 
-- [ ] RS-1: Drei MUXI-Befunde in die Runtime-Adapter-Spec (PR #32) einarbeiten: Umgebung des Kindprozesses nur per Positivliste; Negativfall „Rückweg ohne Freigabe oder mit Kanal-Benachrichtigung“; benannter Bezug der Kapazitätsgrenze (Gerät/Owner statt implizit pro Nutzer).
+- [x] RS-1 (erledigt mit N1): Drei MUXI-Befunde in die Runtime-Adapter-Spec (PR #32) einarbeiten: Umgebung des Kindprozesses nur per Positivliste; Negativfall „Rückweg ohne Freigabe oder mit Kanal-Benachrichtigung“; benannter Bezug der Kapazitätsgrenze (Gerät/Owner statt implizit pro Nutzer).
 - [ ] RS-2: Arbeitspaket planen: deterministische Fake-Runtime plus Contract-Tests für RTA-FALL-01…48, ohne echtes Claude Code.
 - [ ] RS-3: Claude-Code-Pfad unter Tor B praktisch prüfen (Resume, Abbruch der Prozessgruppe, Kostenmeldung, Wiederanbindung); Profilfähigkeiten erst danach auf `nachgewiesen`.
 - [ ] RS-4: Supervisor-Code erst ab Phase 1: Profil-Loader, Run-Supervisor, Ausgabe-Parser, Arbeitsbereich, Umgebungsfilter, lokale Outbox (Tor C), Beobachter. Schätzung 1.500–2.500 Zeilen TypeScript ohne Tests, nicht gemessen.

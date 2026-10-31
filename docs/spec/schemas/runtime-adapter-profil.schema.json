@@ -4,7 +4,7 @@
   "title": "Runtime-Adapterprofil – V0",
   "description": "Deklarative Beschreibung einer Coding-Runtime für den Connector (runtime-adapter-v0.md). Platzhalterprüfung (RTA-PRF-02), Secret-Muster (RTA-PRF-04) und verbotene Flags (RTA-PRF-05) prüft der Loader zusätzlich zum Schema.",
   "type": "object",
-  "required": ["schema_version", "id", "version", "runtime", "befehl", "session", "ausgabe", "rechte", "arbeitsverzeichnis", "faehigkeiten", "grenzen"],
+  "required": ["schema_version", "id", "version", "runtime", "befehl", "session", "ausgabe", "rechte", "arbeitsverzeichnis", "umgebung", "faehigkeiten", "grenzen"],
   "additionalProperties": false,
   "properties": {
     "schema_version": { "const": "0.1" },
@@ -95,6 +95,15 @@
       "additionalProperties": false,
       "properties": {
         "verbotene_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "umgebung": {
+      "type": "object",
+      "required": ["erlaubt"],
+      "additionalProperties": false,
+      "description": "Positivliste der Umgebungsvariablen, die der Runtime-Prozess erbt (RTA-AUF-07). Credentials kommen getrennt über den Credential-Speicher des Geräts.",
+      "properties": {
+        "erlaubt": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z_][A-Z0-9_]*$" } }
       }
     },
     "faehigkeiten": {
