@@ -184,7 +184,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | umgesetzt in PR #23 (`eval judge check`; Fix für kurze Innenzitate) |
 | P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | umgesetzt in PR #23 (`eval check`, `eval nullrun`, `--b1-kern`) |
 | P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | umgesetzt in PR #23 (`eval findings`) |
-| P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
+| P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | umgesetzt in PR #28 (gestapelt auf #27; Kostenbilanz, praktisch geprüft an 24 Spuren: `datei_lesen` 51 %, `skill_laden` 28 % der Bytes × spätere Turns) |
 | P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | umgesetzt in PR #25 (gestapelt auf #23; `eval cite-check`) |
 | P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | geplant; E3-Kandidat |
 | P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | abgeschlossen in E3-3: **verworfen, kein Vorteil** (Select ohne Kostenersparnis, Weiche greift nicht) ([Ergebnis](e3/runde-3/E3-3-ergebnis-2026-10-31.md)) |
