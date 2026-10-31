@@ -80,7 +80,7 @@ Reihenfolge nach Hebel: erst die Messung belastbar machen (sonst messen wir alle
 
 **Laufbudget:** P0–P5, P11, P12 brauchen keine Modellläufe. P6–P9 je etwa 14 Starts als E3-Runde. Mit dem Vorteilsfilter aus APE (Kandidat geht nur bei Vorteil in select weiter; Abbruch, sobald die Schwelle unerreichbar ist) hätte E3-Runde 1 bei gleichen Entscheidungen 10 von 28 Starts gespart; er wird ab Runde 3 vorab registriert.
 
-**E3-Runde 2 (K-BELEG, K-WEGE):** abgeschlossen, beide verworfen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)); die Bewertung nutzte bereits die Zitatprüfung (37/37). Folgerung für P2: B1-Vorlauf in Select als Trennschärfe-Vorprüfung. Die Ergebnisse der Deep Research zu Intent Capture, Interviewtechnik und Tree of Thoughts fließen als eigene grilling-Kandidaten in P7–P9 ein, sobald sie vorliegen.
+**E3-Runde 2 (K-BELEG, K-WEGE):** abgeschlossen, beide verworfen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)); die Bewertung nutzte bereits die Zitatprüfung (37/37). Folgerung für P2: B1-Vorlauf in Select als Trennschärfe-Vorprüfung. Die Deep Research zu Intent Capture, Interviewtechnik und Tree of Thoughts ist [ausgewertet](grilling-runde/deep-research/auswertung-2026-10-31.md): Sie liefert den zusätzlichen grilling-Kandidaten K-AUFTEILUNG (Fragenwahl nach Aufteilung der plausiblen Antworten) und begründet, warum keine explizite ToT-Baumsuche übernommen wird.
 
 ## 5. Was sich gegenüber dem bisherigen Plan ändert
 

@@ -194,7 +194,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P11 | Fail-closed `context-pack` (code2prompt) | geplant |
 | P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | Spec-Entwurf V0 0.2 in PR #22 zum Owner-Review (5 vorläufige Festlegungen zur Entscheidung; Schemas folgen nach dem Review) |
 | E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | abgeschlossen: beide **verworfen, kein Vorteil** (Select schlechter, B1 erfüllt den Kern bereits); Abbruch vor Test, 8/30 Starts; Testfamilien ungelaufen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)) |
-| DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | läuft |
+| DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | abgeschlossen: 8 Befunde (18 bestätigt, 7 widerlegt); stärkster Befund Fragenwahl nach Aufteilung der Hypothesen, ToT allein schwächer; neuer Kandidat K-AUFTEILUNG neben P7/P8 ([Auswertung](grilling-runde/deep-research/auswertung-2026-10-31.md)) |
 
 ## 9. Drei spätere durchgängige Versuche (SL5)
 
