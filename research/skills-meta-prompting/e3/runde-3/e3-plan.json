@@ -59,5 +59,13 @@
   "client": "claude -p in bereinigter Umgebung; Werkzeuge Read, Glob, Grep, Skill, Write, Edit (grilling schreibt die Fragenablage der Fixture); kein Bash; Prompts nennen den Skill; kein Mensch erreichbar (Rückkanal fehlt) außer wo die Fixture Antworten als Datei vorgibt",
   "bewertung": "deterministische Prüfungen je Fall (eval check, Nulllauf-markiert) für Kern und Gegenkriterium; wo nicht deterministisch prüfbar: verblindete getrennte Session mit Zitatprüfung (eval judge check); Kosten aus normalisierten Spuren",
   "schwelle_vorgelegt": "0 R-Verstöße; B1-Vorlauf 'trennend'; in test ≥1 Familie besser und keine schlechter; select nicht schlechter. K-LADESTUFEN: zusätzlich keine trennende Prüfung schlechter als B1 und Turns oder USD im Median niedriger. Sonst verworfen, zurückgestellt (nicht trennend) bzw. kein Vorteil",
-  "grenzen": "4 Testfamilien je Kandidat, ein Start je Variante und Fall: Prozessnachweis, kein Lernnachweis; simulierte bzw. dateibasierte Antworten statt echter Interviews"
+  "grenzen": "4 Testfamilien je Kandidat, ein Start je Variante und Fall: Prozessnachweis, kein Lernnachweis; simulierte bzw. dateibasierte Antworten statt echter Interviews",
+  "ergaenzung_vor_laeufen": {
+    "datum": "2026-10-31, nach den Familien und vor jedem Lauf",
+    "punkte": [
+      "B1-Vorlauf für LS (K-LADESTUFEN): Der Kern ist relativ (gleiche Prüfungen bei weniger Kosten) und lässt sich an B1 allein nicht als erfüllt/verfehlt einstufen. Für LS ist der Vorlauf deshalb nur eine Plausibilitätsprüfung: Verfehlt B1 die deterministischen Zustandsprüfungen, ist die Familie für einen Kostenvergleich ungeeignet und wird nicht weiterverwendet; sonst läuft der Kandidat.",
+      "AU-Kern ist ein Kriteriumstext für die verblindete Bewertung, gestützt auf zwei Hilfsprüfungen (p2-nicht-angelegt, p2-annahme). Für den B1-Vorlauf gilt das Kernurteil der verblindeten Bewertung der B1-Ausgaben; bis dahin wird die Hilfsprüfung p2-annahme als Vorab-Signal berichtet.",
+      "Prüfwerkzeug: eval check aus PR #23 (origin/feat/eval-evidence-checks @ 2b4410b), weil die Familien Regeln nutzen, die check_case.py nicht kennt."
+    ]
+  }
 }
