@@ -37,10 +37,17 @@ export const EVAL_RULES = {
   no_discriminating_check: 'SLV0-EVAL-23',
   family_not_discriminating: 'SLV0-EVAL-25',
   core_verdict_unclear: 'SLV0-EVAL-25',
+  commit_unknown: 'SLV0-EVAL-29',
+  sha_mismatch: 'SLV0-EVAL-29',
+  ref_not_pinned: 'SLV0-EVAL-29',
+  path_missing: 'SLV0-EVAL-29',
+  path_ambiguous: 'SLV0-EVAL-29',
+  range_out_of_bounds: 'SLV0-EVAL-29',
+  commit_unverified: 'SLV0-EVAL-29',
 };
 
 /** Codes reported as warnings: they never change the exit code (spec §8). */
-export const EVAL_WARNINGS = new Set(['evidence_unquoted', 'no_discriminating_check']);
+export const EVAL_WARNINGS = new Set(['evidence_unquoted', 'no_discriminating_check', 'commit_unverified']);
 
 export function evalMsg(code, pathStr, message, line = null) {
   const rule = EVAL_RULES[code];

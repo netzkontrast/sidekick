@@ -7,6 +7,7 @@
 > Implementierungsauftrag: [library-implementation-handover.md](../../research/skills-meta-prompting/library-implementation-handover.md).
 > Version 0.2 · 31.10.2026 · Ergänzung **SLV0-EVAL-13…18** (Rubrik je Skill nach K5.6, Querprüfungen Ledger/Manifest/Git) und Fälle **SLV0-FALL-38…46**; bestehende IDs unverändert.
 > Version 0.3 · 31.10.2026 · Ergänzung **SLV0-EVAL-19…27** nach den Paketen P1–P3 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`, Research-Branch `research/e3-runde-2`, PR #20): belegpflichtige Bewertungen, Nulllauf-Trennschärfe mit Gegenkriterium und B1-Vorlauf, erwartete Befunde mit Überberichtung; Formate §7.2–§7.4, Fälle **SLV0-FALL-48…59** (§9.1). Bestehende IDs unverändert.
+> Version 0.4 · 31.10.2026 · Ergänzung **SLV0-EVAL-28…30** nach Paket P5 des Portierungsplans (Abdeckungsnachweis über ein Segmentregister, Konzept aus recursive-decomposition-skill): `eval cite-check` prüft die Zitate eines Berichts gegen einen Git-Commit; Format §7.5, Fälle **SLV0-FALL-60…65** (§9.2); O-13 teilweise gelöst. Bestehende IDs unverändert.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -171,6 +172,9 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-25 | **B1-Vorlauf in select (E3-Form der Nulllauf-Trennschärfe):** Vor jedem Kandidatenstart in select läuft nur B1 auf den select-Fällen des Kandidaten. B1 wird absolut und nur am Kernkriterium bewertet, mit anonymisierten Ausgaben: durch den deterministischen Prüfer des Falls, sonst durch eine getrennte Bewerter-Session mit Belegprüfung (EVAL-21). Erfüllt B1 den Kern in **allen** diesen Fällen, ist die select-Familienmenge `nicht_trennend`: kein Kandidatenstart in select; entweder schreibt eine getrennte Session eine trennende Familie, oder der Kandidat wird zurückgestellt („zurückgestellt, Familie nicht trennend“). Verfehlt B1 den Kern in mindestens einem Fall, ist sie `trennend`; der Kandidat läuft in select, und die B1-Läufe bilden die B1-Seite der Paare (kein zweiter B1-Start). `eval nullrun --b1-kern` bildet die Entscheidung aus den Kernurteilen nach [eval-b1-vorlauf.schema.json](schemas/eval-b1-vorlauf.schema.json): `trennend` mit den trennenden Fall-IDs (Exit 0); `nicht_trennend` mit `family_not_discriminating` (Exit 1); verfehlt B1 keinen Fall, ist aber mindestens ein Urteil `unklar`, `unklar` mit `core_verdict_unclear` (Exit 1). Liest nur und startet nichts. | Owner-Freigabe A-20261031-e3-b1-vorlauf (PR #20); Evidenz E3-Runde 2, Ergebnis §4–§5 |
 | SLV0-EVAL-26 | **Erwartete Befunde mit 1:1-Zuordnung:** Ein Fall darf `erwartete_befunde` tragen: je Befund `id`, `token_gruppen` (Liste von Gruppen, je Gruppe Alternativen), optional `fundstelle_datei` und `gewicht` (`kritisch` oder `normal`, Standard `normal`). Die Ausgabe wird in Einheiten zerlegt (Absätze, Listenpunkte, Tabellenzeilen, Überschriften; §7.4). Ein Befund passt auf eine Einheit, wenn jede Gruppe mit mindestens einer Alternative als ganzes Wort vorkommt (normalisiert nach EVAL-20, ohne Groß- und Kleinschreibung; `*` am Ende einer Alternative erlaubt ein Präfix) und, falls angegeben, `fundstelle_datei` (Pfad oder Dateiname) in derselben Einheit steht. Zuordnung 1:1: jeder Befund höchstens einer Einheit, jede Einheit höchstens einem Befund. Die Zuordnung ist maximal; kritische Befunde werden zuerst zugeordnet, dann alle in Fall-Reihenfolge, Einheiten in Textreihenfolge. | fehlt (Konzept aus skill-optimization, nur Konzept) |
 | SLV0-EVAL-27 | **Überberichtung und `eval findings`:** Jede in der Ausgabe genannte Fundstelle (`pfad:zeile`, `pfad:von-bis`, `pfad#Lx`, `pfad#Lx-Ly`) und jede Commit-ID (7–40 Hex-Zeichen mit mindestens einer Ziffer und einem Buchstaben) wird in der Fixture nachgeschlagen (§7.4). Gibt es keine Datei mit diesem Pfad oder Pfadende, liegt eine genannte Zeile in keiner passenden Datei zwischen 1 und dem Dateiende, oder steht der Commit in keiner Fixture-Datei (auch nicht als Präfix eines dort genannten Commits oder umgekehrt), ist das eine `ueberberichtung` mit Grund und Zeile der Ausgabe. `eval findings` berichtet je Ausgabe getroffene Befunde (mit Einheit und Zeile), verfehlte, kritisch verfehlte und Überberichtungen. Exit 0: das sind Messwerte, keine Ablehnung. Liest nur. | fehlt |
+| SLV0-EVAL-28 | **Segmentregister am Commit:** Der Suchraum eines Berichts wird einmal aufgezählt: alle regulären Dateien (Git-Modus `100644` oder `100755`; keine Symlinks, keine Submodule) im Baum des angegebenen Commits, optional eingeschränkt durch Bereiche (`--scope`: Pfadpräfix oder Glob mit `*`, `**`, `?`; §7.5). Ein Segment ist eine Datei mit ihren Zeilen 1…n (Zeilenzählung wie §7.4). Der Commit wird als 7–40 Hex-Zeichen angegeben und über Git aufgelöst; nennt er keinen eindeutigen Commit → `commit_unknown`, kein Register (Exit 1). Ein Bereich, der keine Datei trifft, ein unsicherer Bereich, ein Verzeichnis ohne Git-Repository oder eine andere Commit-Schreibweise (z. B. `HEAD`) sind Bedienfehler (Exit 2). Gelesen wird nur über das Git-Modul aus SLV0-EVAL-18 mit den lesenden Unterbefehlen `rev-parse`, `ls-tree` und `cat-file`; Arbeitsbaum, Index und Refs bleiben unverändert. | fehlt (Konzept RD: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren) |
+| SLV0-EVAL-29 | **Zitate und ihre Gültigkeit:** Zitate eines Markdown-Berichts sind GitHub-Permalinks `https://github.com/<o>/<r>/blob/<ref>/<pfad>` mit optionalem Anker `#L<a>` oder `#L<a>-L<b>` und Fundstellen `pfad:zeile`, `pfad:von-bis`, `pfad#Lx`, `pfad#Lx-Ly` (Erkennung wie §7.4), die sich auf den angegebenen Commit beziehen. Ein Permalink, dessen `<ref>` keine Commit-ID aus 7–40 Hex-Zeichen ist → `ref_not_pinned`; dessen Commit Git nicht eindeutig kennt → `commit_unknown`; der einen anderen Commit als den angegebenen nennt → `sha_mismatch`. Ein Pfad, den es am Commit nicht als reguläre Datei gibt → `path_missing`; eine Fundstelle, die auf keinen Pfad genau, aber mit ihrem Pfadende auf mehrere Dateien passt → `path_ambiguous`; eine Zeile außerhalb von 1…n der Datei oder `bis` < `von` → `range_out_of_bounds`. Permalinks prüfen den Pfad genau, Fundstellen genau oder über das Pfadende ab einer Segmentgrenze. Mit `--github <o>/<r>` gelten Permalinks auf andere Repos als `fremd` und werden nicht geprüft. Jedes Hex-Wort im übrigen Text (Erkennung wie §7.4) wird in Git als Commit nachgeschlagen; unbekannt → Warnung `commit_unverified`, weil ein Hex-Wort auch ein anderer Hash sein kann. | fehlt (`eval findings` prüft nur gegen den Fixture-Text, O-13) |
+| SLV0-EVAL-30 | **Abdeckung und `eval cite-check`:** Eine Registerdatei ist **belegt**, wenn mindestens ein gültiges Zitat sie nennt; ein gültiges Zitat auf eine Datei außerhalb der Bereiche zählt als `ausserhalb_bereich` und belegt nichts. Die Ausgabe nennt Commit, Bereiche, Registergröße Y, die belegten Dateien (X) mit zusammengeführten Zeilenbereichen und Zahl der belegten Zeilen, die vollständige Liste der nicht belegten Dateien, den Satz „X von Y Dateien belegt; nicht belegt: …“, jedes Zitat mit Berichtszeile und Ergebnis, die nachgeschlagenen Commit-Wörter sowie Zählungen. Exit 1, sobald ein Zitat ungültig ist (SLV0-EVAL-29, ohne die Warnung); nicht belegte Dateien sind ein Messwert und ändern den Exit-Code nicht. Das Werkzeug weiß nicht, was gelesen wurde, nur was belegt ist. Liest nur. | fehlt |
 
 ### 7.1 Rubrikformat (SLV0-EVAL-13)
 
@@ -255,6 +259,27 @@ diesem Pfad oder mit diesem Pfadende ab einer Segmentgrenze. Zeilen zählen ab 1
 sie nicht mit einem Zeilenumbruch endet. **Commit-IDs:** Wörter aus 7–40 Zeichen `0-9a-f` mit mindestens einer Ziffer und einem Buchstaben, nach Abzug
 umgebender Satz- und Auszeichnungszeichen; bekannt ist ein Commit, wenn ein Hex-Wort aus 7–40 Zeichen in einer Fixture-Datei mit ihm beginnt oder er mit ihm.
 
+### 7.5 Belegabdeckung am Commit (SLV0-EVAL-28…30)
+
+`eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope BEREICH]... [--github OWNER/REPO]`. Eingaben sind das untersuchte Repository
+(ein Git-Repository, gelesen nur über Git), der Commit, auf den sich der Bericht bezieht, und genau ein Bericht als Markdown. Es gibt keine JSON-Eingabe.
+
+| Eingabe | Regel |
+|---|---|
+| `--repo` | Verzeichnis eines Git-Repositorys (Arbeitsbaum oder bare); sein Pfad erscheint nicht in der Ausgabe |
+| `--commit` | 7–40 Zeichen `0-9a-f`; wird mit `rev-parse` zu genau einem Commit aufgelöst. Die Ausgabe nennt den vollständigen Hash. |
+| `--scope` | wiederholbar; relativer POSIX-Pfad ohne `..`, `\` und führendes `/`. Ohne `*` und `?` ein Präfix: der Pfad selbst oder alles darunter (ein `/` am Ende ist erlaubt). Mit `*` oder `?` ein Glob über den ganzen Pfad: `*` und `?` treffen kein `/`, `**` trifft beliebig viele Segmente (`**/` auch keines). Eine Datei gehört zum Register, wenn ein Bereich sie trifft; ohne `--scope` alle Dateien. Jeder Bereich muss mindestens eine Datei treffen. |
+| `--github` | `<owner>/<repo>`; Vergleich ohne Groß- und Kleinschreibung. Ohne die Option werden alle GitHub-Permalinks gegen das angegebene Repository geprüft. |
+
+**Permalinks:** `https://github.com/<owner>/<repo>/blob/<ref>/<pfad>`, optional `?…` und Anker `#L<a>[C<n>]` bzw. `#L<a>[C<n>]-L<b>[C<n>]`.
+Der Pfad endet vor Leerraum, `)`, `]`, `>`, `"`, `'`, `` ` ``, `?` oder `#`; ohne Anker entfallen Satzzeichen `. , ; : !` am Ende; Prozentkodierung wird aufgelöst.
+Ein Permalink ohne Anker belegt die ganze Datei. Links auf `tree/`, Links mit anderem Anker und andere Hosts sind keine Zitate.
+**Fundstellen** werden im Text gesucht, nachdem alle URLs ausgeblendet sind; Erkennung und `./`-Präfix wie §7.4. Passt eine Fundstelle genau auf einen Pfad,
+gilt dieser, sonst das Pfadende ab einer Segmentgrenze. **Commit-Wörter** wie §7.4, im Text ohne URLs; bekannt ist ein Wort, das Git zu einem Commit auflöst.
+
+Gelesen wird `git ls-tree -r -z --full-tree <commit>` für das Register und `git cat-file blob <objekt>` nur für zitierte Dateien (Zeilenzahl).
+Zeilenbereiche einer Datei werden zusammengeführt, wenn sie sich überlappen oder aneinandergrenzen. Pfade werden nach Codepoint sortiert ausgegeben (SLV0-INV-03).
+
 ## 8. Fehlerfälle
 
 Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und, wo sinnvoll, Zeile.
@@ -272,6 +297,7 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Querprüfung | `ledger_mismatch`, `case_not_in_manifest`, `case_hash_mismatch`, `source_commit_mismatch`, `worktree_dirty` | Vorgang abgebrochen; Ledger, Manifest und Git-Stand bleiben unverändert |
 | Belege, Trennschärfe | `evidence_not_found`, `evidence_missing` · Warnung `evidence_unquoted` (SLV0-EVAL-21) · Warnung `no_discriminating_check` (SLV0-EVAL-23/-24) · `family_not_discriminating`, `core_verdict_unclear` (SLV0-EVAL-25) | Belegprüfung fehlgeschlagen bzw. kein Kandidatenstart in select (Exit 1); Warnungen ändern den Exit-Code nicht; nichts wird korrigiert oder neu bewertet |
 | Befund (Messwert) | `ueberberichtung` mit Grund `pfad_fehlt`, `zeile_ausserhalb` oder `commit_unbekannt` (SLV0-EVAL-27) | Teil des Ergebnisses von `eval findings`, keine Ablehnung (Exit 0) |
+| Zitate am Commit | `commit_unknown` (auch für `--commit`: dann Abbruch ohne Register), `sha_mismatch`, `ref_not_pinned`, `path_missing`, `path_ambiguous`, `range_out_of_bounds` · Warnung `commit_unverified` (SLV0-EVAL-28/-29) | Zitat ungültig, belegt nichts, Exit 1; nichts wird korrigiert. Nicht belegte Dateien sind ein Messwert, kein Code |
 
 Kein Fehler wird still zu einer Warnung herabgestuft, und kein Werkzeug „repariert“ Eingaben (SLV0-INV-08).
 
@@ -349,6 +375,21 @@ Gleiche Konventionen wie oben; -51 und -54 sind Gleichheitstests auf gespeichert
 | SLV0-FALL-58 | `findings`: eine Einheit passt auf zwei Befunde, davon einer kritisch; ein Befund passt auf zwei Einheiten; eine Token-Gruppe fehlt; Treffer über eine Alternative; `fundstelle_datei` fehlt in der Einheit; Token `9` in „2019“; Präfix `verdoppel*` | die Einheit geht an den kritischen Befund; der Befund zählt einmal; verfehlt; getroffen; verfehlt; kein Treffer; Treffer. Zählung getroffen, verfehlt, kritisch verfehlt | EVAL-26 |
 | SLV0-FALL-59 | Überberichtung: `vendor/a.py:3` vorhanden; `fehlt.py:1`; `a.py:99` hinter dem Dateiende; `a.py#L2-L40`; nur Dateiname `a.py:2`; Präfix eines in der Fixture genannten Commits; unbekannter Commit; Hex-Wort ohne Ziffer; URL mit Port | ok; `pfad_fehlt`; `zeile_ausserhalb` (2×); ok; ok; `commit_unbekannt`; nicht geprüft (2×). Exit 0, Fixture und Ausgabe unverändert | EVAL-27 |
 
+### 9.2 Fälle zu SLV0-EVAL-28…30
+
+Jeder Test legt ein synthetisches Git-Repository in einem temporären Verzeichnis an (`git init`, feste Autor- und Datumsangaben) und entfernt es danach.
+Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/guide.md` (2 Zeilen) und `README.md` (1 Zeile); Commit C2 fügt
+`src/neu.js` hinzu und ändert `README.md`. Geprüft wird gegen C1, wenn nicht anders genannt.
+
+| ID | Fall | Erwartung | Deckt |
+|---|---|---|---|
+| SLV0-FALL-60 | Bericht belegt alle vier Dateien: Permalinks mit `#L2-L4` und `#L1` auf `src/a.js`, Fundstelle `src/b.js:1-3`, `guide.md:2` (nur Pfadende), Permalink ohne Anker auf `README.md` mit abgekürztem C1 | 4 von 4 Dateien belegt; `src/a.js` mit Bereich `[1,4]` (zusammengeführt), 4 belegte Zeilen; `README.md` ganz; keine Meldung; Exit 0 | EVAL-28/-29/-30 |
+| SLV0-FALL-61 | Falscher SHA: Permalink mit unbekanntem Commit; mit C2 statt C1; mit `blob/main/…`; `--commit` unbekannt | `commit_unknown`; `sha_mismatch`; `ref_not_pinned`; Exit 1. Unbekanntes `--commit`: Abbruch `commit_unknown`, kein Register, Exit 1 | EVAL-28/-29 |
+| SLV0-FALL-62 | Bereich hinter dem Dateiende: `src/b.js:4`; Permalink `src/a.js#L4-L6`; `src/a.js:0`; `src/a.js:3-2`; daneben `src/a.js:5` | `range_out_of_bounds` (4×); `src/a.js:5` gültig; Exit 1; ungültige Zitate belegen nichts (`src/b.js` nicht belegt) | EVAL-29 |
+| SLV0-FALL-63 | Datei fehlt am Commit: `src/neu.js:1` (erst in C2); Permalink auf `src/fehlt.js`; Fundstelle `a.js:1`, wenn es `src/a.js` und `lib/a.js` gibt | `path_missing` (2×); `path_ambiguous`; Exit 1 | EVAL-29 |
+| SLV0-FALL-64 | Nicht belegte Dateien und Bereiche: Bericht belegt nur `src/a.js` und zitiert `README.md:1`; ohne `--scope`; `--scope src/`; `--scope '**/*.md'`; `--scope fehlt/`; `--scope ../x`; Permalink auf ein anderes Repo mit `--github` | 2 von 4, nicht belegt `docs/guide.md`, `src/b.js`, Exit 0; 1 von 2 und `README.md` `ausserhalb_bereich`; 1 von 2 (`README.md`), `docs/guide.md` nicht belegt; Exit 2 (2×); `fremd`, nicht geprüft | EVAL-28/-30 |
+| SLV0-FALL-65 | Commit-Wörter und Bedienung: C2 als Hex-Wort im Text; unbekanntes Hex-Wort; Verzeichnis ohne Git; `--commit HEAD`; Bericht fehlt; zwei Berichte. Git-Status, Refs, Index und Bericht vor und nach dem Lauf | bekannt; Warnung `commit_unverified`, Exit 0; Exit 2 (4×); unverändert | EVAL-28/-29, INV-04 |
+
 ## 10. Abgrenzung
 
 - **Keine Aktivierung durch Code.** Aktivieren heißt im Repo: Owner mergt einen PR am geprüften Hash (SL4 §5). Werkzeuge liefern Belege, keine Freigaben.
@@ -373,6 +414,8 @@ Gleiche Konventionen wie oben; -51 und -54 sind Gleichheitstests auf gespeichert
 | [eval-case.schema.json](schemas/eval-case.schema.json) | `fall.json` eines Fallordners mit Prüfformat, Kern- und Gegenkriterium und erwarteten Befunden (SLV0-EVAL-22/-24/-26, §7.3/§7.4) | Tests; Fallordner unter `research/skills-meta-prompting/` (Research-Branch) |
 | [eval-b1-vorlauf.schema.json](schemas/eval-b1-vorlauf.schema.json) | Kernurteile von B1 je select-Fall für den B1-Vorlauf (SLV0-EVAL-25) | Tests |
 
+`eval cite-check` (SLV0-EVAL-28…30) hat keine JSON-Eingabe und daher kein Eingabeschema; Bericht, Commit und Bereiche kommen als Markdown bzw. Optionen (§7.5).
+
 Rohdatensatz und Bericht tragen seit Version 0.3 die optionalen Felder `trennschaerfe` und `rolle` (Assertion) bzw. `nulllauf`, `konjunktiv` und
 `hinweise` (SLV0-EVAL-24). Sie sind optional, damit frühere Rohdatensätze und Berichte gültig bleiben; der Harness setzt sie immer.
 
@@ -395,7 +438,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-10 | Inhalt der Rubriken `@1` (SLV0-EVAL-13): vom Agenten aus dem Rumpf abgeleitet, also nicht unabhängig; Bewerter-Modell und menschliche Stichprobe (SL1 §7) | Owner-Review der Rubrik-PR; bis dahin Entwurf, nicht für Aktivierungsbelege |
 | O-11 | Belegprüfung (SLV0-EVAL-21): Paarurteile (`paare`) und ihre Begründungen werden nicht geprüft; ein `nicht_erfuellt` mit nicht gefundenem Beleg bleibt `nicht_erfuellt` (gemeldet, nicht herabgestuft), obwohl ein erfundener Mangel eine Gegenseite begünstigen kann | Bewerter-Vorgabe „Paarurteil nur mit Kriterienbelegen“ bzw. Regel für unbelegte Mängel, mit E3-Runde 3 entscheiden |
 | O-12 | Trennschärfe (SLV0-EVAL-23/-25): Negativkontroll-Familie je Kandidat (Portierungsplan P2) und Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion; `regex` folgt ECMAScript statt Python | SL4 §4/§6; bei Bedarf eigene Spec-Ergänzung |
-| O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | mit P5 (`cite-check`) gegen Git-Stände erweitern |
+| O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | **Teilweise gelöst** mit P5: `eval cite-check` (SLV0-EVAL-28…30) prüft Permalinks, Fundstellen und Commit-Wörter gegen Git. Offen bleibt: `eval findings` prüft weiter nur gegen den Fixture-Text, weil Fallordner keinen Git-Stand haben; beide erkennen Fundstellen nur mit Dateiendung; `host.tld:port` ohne Schema würde auch in `cite-check` als Fundstelle gelesen (`path_missing`); ein Hex-Wort ist nicht sicher als Commit erkennbar (darum dort nur Warnung) |
 
 ## 13. Rückverfolgung
 
@@ -413,6 +456,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | EVAL-22…24 | Portierungsplan P2 (Idee aus automatic_prompt_engineer: konjunktives Gegenkriterium, Nulllauf); Research-Prüfer `grilling-runde/check_case.py`, Nulllauf-Befund in `grilling-runde/dev-ergebnis.md` (Research-Branch) |
 | EVAL-25 | E3-Runde 2, Ergebnis §4–§5; Owner-Antwort A-20261031-e3-b1-vorlauf („B1-Vorlauf ist ok, führ ihn mit P2 ein“); SL4 §4/§6 |
 | EVAL-26/-27 | Portierungsplan P3 (Konzept aus skill-optimization: erwartete Befunde, 1:1-Zuordnung, Überberichtung; deren Code ausgeschlossen) |
+| EVAL-28…30 | Portierungsplan P5 (Konzept aus recursive-decomposition-skill, nur *dokumentiert*: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren, Abdeckung vor der Synthese prüfen; Dossier-Anforderung R4); O-13 |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.

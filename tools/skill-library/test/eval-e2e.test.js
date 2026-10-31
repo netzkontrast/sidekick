@@ -89,9 +89,11 @@ test('SLV0-EVAL-18 only lib/eval/git.js starts a process, and only `git` via exe
   const calls = [...src.matchAll(/execFileSync\(([^,]+),/g)].map((m) => m[1].trim());
   assert.deepEqual(calls, ["'git'"]);
   assert.ok(!/\bspawn|\bfork\(|(?<![.\w])exec(File|Sync)?\(|shell:\s*true/.test(src), 'no other process API, no shell');
-  // The read-only subcommands are fixed: rev-parse and status, never a writing one.
+  // The read-only subcommands are fixed: rev-parse and status (EVAL-18), ls-tree and cat-file
+  // (cite-check, EVAL-28), never a writing one.
   const subcommands = [...src.matchAll(/git\(root, \['([a-z-]+)'/g)].map((m) => m[1]);
-  assert.deepEqual(subcommands.sort(), ['rev-parse', 'status']);
+  assert.deepEqual([...new Set(subcommands)].sort(), ['cat-file', 'ls-tree', 'rev-parse', 'status']);
+  assert.equal([...src.matchAll(/(?<!function )git\(root, /g)].length, subcommands.length, 'every git call names its subcommand literally');
   assert.match(src, /--no-optional-locks/);
 });
 

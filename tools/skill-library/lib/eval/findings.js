@@ -15,9 +15,9 @@ const LIST_ITEM = /^\s*(?:[-*+]|\d+[.)])\s/;
 const TABLE_ROW = /^\s*\|/;
 const HEADING = /^\s*#/;
 /** `path:line[-end]` or `path#Lx[-[L]y]`; the path needs an extension starting with a letter. */
-const REF = /(?<![\w./-])((?:[\w.-]+\/)*[\w.-]*[\w-]\.[A-Za-z][A-Za-z0-9]*)(?::(\d+)(?:-(\d+))?|#L(\d+)(?:-L?(\d+))?)/g;
+export const REF = /(?<![\w./-])((?:[\w.-]+\/)*[\w.-]*[\w-]\.[A-Za-z][A-Za-z0-9]*)(?::(\d+)(?:-(\d+))?|#L(\d+)(?:-L?(\d+))?)/g;
 /** URLs (`scheme://…` up to the next whitespace) are never checked; masked before scanning. */
-const URL = /[A-Za-z][A-Za-z0-9+.-]*:\/\/\S*/g;
+export const URL = /[A-Za-z][A-Za-z0-9+.-]*:\/\/\S*/g;
 const HEX = /^[0-9a-f]{7,40}$/;
 const EDGE_PUNCT = /^[\s()[\]{}<>"'`,;:!?.…*_|#„“”«»‚‘’]+|[\s()[\]{}<>"'`,;:!?.…*_|#„“”«»‚‘’]+$/gu;
 
@@ -76,7 +76,7 @@ export function assignFindings(befunde, units) {
   return out;
 }
 
-function hexWords(text) {
+export function hexWords(text) {
   return text.split(/\s+/u).map((t) => t.replace(EDGE_PUNCT, '')).filter((t) => HEX.test(t));
 }
 
