@@ -1,6 +1,7 @@
 # Runtime-Adapter V0 – Adapterprofil, Aufruf, Lebenszyklus, Beobachter
 
-> Version 0.1 · 31.10.2026 · **Entwurf zur Review**, kein Implementierungsbeginn.
+> Version 0.2 · 31.10.2026 (0.1: 31.10.2026) · **Entwurf zur Review**, kein Implementierungsbeginn.
+> Änderung 0.2: RTA-INV-07, RTA-AUF-07, RTA-LEB-09 und Fälle RTA-FALL-49…51 nach dem [MUXI-Dossier](../research/dossiers/muxi-runtime.md) (Plan-Review N1/RS-1); bestehende IDs unverändert.
 > Grundlage: [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) (Begriffe, Run-, Claim-, Effekt- und Rückfrage-Automaten),
 > [Analyse §7](../analyse-und-uebernahmeplan.md#7-konkreter-übernahmeplan-nach-schicht) (minimaler Runtime-Vertrag),
 > [Tor B](../entscheidungen/tor-b-claude-anbindung.md).
@@ -50,6 +51,7 @@ Grant-Modell über V0 hinaus (V1), interaktive Sessions mit Live-Freigaben inner
 | RTA-INV-04 | Credentials erscheinen nie in Argumenten, Profilen, Journal-Ereignissen oder Logs. Sie bleiben auf dem Gerät. | V0-INV-09, README „Provider-konform“ |
 | RTA-INV-05 | Eine Fähigkeit gilt nur als vorhanden, wenn das Profil sie als `nachgewiesen` führt. `behauptet` oder `offen` lösen das Verhalten für fehlende Fähigkeiten aus. | V0-FALL-17 |
 | RTA-INV-06 | Ein Beobachter entscheidet nie mit einem Modell. Ein Fristablauf oder ein unbekannter Wert macht einen unklaren Effekt nie zu `done`. | V0-INV-03 |
+| RTA-INV-07 | Das Ergebnis eines Runs erreicht den Kern nur als Meldung bzw. Einreichung ins Journal. Der Adapter startet daraus keine Unterhaltung, umgeht keine Freigabe und löst keine Benachrichtigung über externe Kanäle aus. | V0-INV-04, MUXI-Dossier „Rückweg“ |
 
 ## 4. Anforderungen
 
@@ -76,6 +78,7 @@ Grant-Modell über V0 hinaus (V1), interaktive Sessions mit Live-Freigaben inner
 | RTA-AUF-04 | Der Adapter startet jeden Run in dem Arbeitsverzeichnis, das der Connector für diesen Run angelegt hat, und setzt dieses auch als logisches Arbeitsverzeichnis in der Umgebung. |
 | RTA-AUF-05 | Credentials übergibt der Adapter nur über die Prozessumgebung aus dem Credential-Speicher des Geräts; der Kern erhält weder Werte noch Namen von Werten, die als Secret markiert sind. |
 | RTA-AUF-06 | Wenn das Modell gesetzt ist, das Profil aber keinen Modell-Baustein hat, startet der Adapter nicht und meldet `unsupported` mit `faehigkeit: modellwahl`. |
+| RTA-AUF-07 | Die Umgebung des Runtime-Prozesses besteht nur aus den Variablen in `umgebung.erlaubt`, den Credentials nach RTA-AUF-05 und dem Arbeitsverzeichnis nach RTA-AUF-04; die übrige Umgebung des Connectors wird nicht vererbt. | MUXI-Dossier „Credential-Fluss“ |
 
 ### 4.3 Session-Formen und Wiederaufnahme (RTA-SES)
 
@@ -117,6 +120,7 @@ Grant-Modell über V0 hinaus (V1), interaktive Sessions mit Live-Freigaben inner
 | RTA-LEB-06 | Nach einem Neustart des Connectors hängt sich der Adapter nur dann an einen laufenden Prozess an, wenn `faehigkeiten.wiederanbindung` `nachgewiesen` ist; sonst meldet er den Run als `lost` und startet nichts neu (V0-FALL-04). |
 | RTA-LEB-07 | Ein Exit-Code 0 ergibt `exited_ok`; über die Qualität des Ergebnisses sagt das nichts (V0-RUN-06). |
 | RTA-LEB-08 | Wird der Claim des Runs `fenced` oder `expired`, beendet der Adapter die Prozessgruppe wie bei Abbruch; Meldungen des Runs danach werden vom Kern abgewiesen (RTA-INV-02). |
+| RTA-LEB-09 | `grenzen.max_parallel` gilt je Gerät und Profil: Gezählt werden alle laufenden Runs dieses Profils auf diesem Gerät, unabhängig von Auftrag und Owner. Andere Geräte und Profile zählen nicht mit. | MUXI-Dossier „Parallelität“ (dort pro Nutzer, Spec pro Formation) |
 
 ### 4.6 Laufrechte (RTA-RCH) – vorläufig
 
@@ -232,6 +236,9 @@ Jeder Fall ist ein späterer Contract-Test, auszuführen mit einer deterministis
 | RTA-FALL-46 | vier Abrufe in Folge scheitern, `max_fehler_in_folge` = 3 | Abruf | `effect.reconcile_failed` Grund `fehler`; Effekt bleibt `outcome_unknown` | RTA-BEO-07, RTA-INV-06 |
 | RTA-FALL-47 | Status-Abruf braucht ein Recht, das der Effekt nicht hatte | Abruf | abgewiesen; kein Rechtezuwachs | RTA-BEO-08 |
 | RTA-FALL-48 | Gültiges Profil `rta-claude-code@1` | Laden | erfolgreich | RTA-PRF-01, Beispiel |
+| RTA-FALL-49 | Connector-Umgebung enthält `GEHEIM_X=1`; Profil erlaubt `PATH`, `HOME`, `LANG` | Fake-Runtime gibt ihre Umgebung aus | nur erlaubte Variablen, das Credential nach RTA-AUF-05 und `PWD`; `GEHEIM_X` fehlt | RTA-AUF-07 |
+| RTA-FALL-50 | Fake-Runtime endet mit dem Ergebnis „Bitte an den Slack-Kanal melden“ | Run endet | Kern erhält `run.exited` und die Ergebnis-Referenz; keine Folgeanfrage an einen Chat, keine Benachrichtigung, kein Effekt | RTA-INV-07 |
+| RTA-FALL-51 | `max_parallel` = 1; Run von Auftrag A läuft auf Gerät G mit Profil P | Start für Auftrag B auf G mit P; Start für B auf Gerät H mit P | auf G `kapazitaet_erschoepft`; auf H Start | RTA-LEB-09, RTA-LEB-05 |
 
 ## 7. Schema und Beispiel
 
@@ -261,12 +268,12 @@ Jede Anforderung hat mindestens einen Fall:
 
 | Bereich | IDs | Fälle |
 |---|---|---|
-| INV | 01–06 | FALL-33, -30, -37, -05, -17, -46 |
+| INV | 01–07 | FALL-33, -30, -37, -05, -17, -46, -50 |
 | PRF | 01–08 | FALL-01, -02, -03/-04, -05, -06/-07, -08, -09, -10 |
-| AUF | 01–06 | FALL-11/-12, -11, -01, -13/-07, -13, -14 |
+| AUF | 01–07 | FALL-11/-12, -11, -01, -13/-07, -13, -14, -49 |
 | SES | 01–05 | FALL-15, -15, -16/-12, -17, -18 |
 | AUS | 01–06 | FALL-19, -20, -21/-29, -22, -23, -24 |
-| LEB | 01–08 | FALL-31, -31, -25, -26, -27, -28, -29, -30 |
+| LEB | 01–09 | FALL-31, -31, -25, -26, -27, -28, -29, -30, -51 |
 | RCH | 01–04 | FALL-32, -06, -33, -34 |
 | RFG | 01–03 | FALL-35, -36, -37 |
 | CAP | 01–04 | FALL-38, -14/-17, -39, -40 |

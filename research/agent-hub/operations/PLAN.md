@@ -18,11 +18,23 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] Workflow/Transport/Hosting anhand Fault-Tests entscheiden.
 - [ ] Vorschläge P1–P9 aus der [Reflexion zur ChatGPT-Spec](../inputs/2026-10-30-reflexion-chatgpt-spec.md#4-konsequenzen-für-die-planung-vorschläge) mit dem Owner klären; P3 und P8 sind entschieden (Claude Code zuerst; ein Repo), siehe [Grundsatzentscheidungen](../../../docs/entscheidungen/README.md#grundsatzentscheidungen-des-owners).
 
+## Reihenfolge ab 31.10.2026 (Vorschlag, Owner-Entscheidung offen)
+
+Maßgebliche Reihenfolge: [Gesamtplan ab November 2026](gesamtplan-2026-11.md) (Meilensteine M0–M4, Library L1–L6). Begründung: [Plan-Review](plan-review-2026-10-31.md). Status nur hier:
+
+- [x] AP1–AP3 und MUXI-Dossier, Skill `using-codegraph` gemergt (#31–#36).
+- [x] M0.1–M0.2: Plan-Review und N1/RS-1 (DSPy-Dossier auf `92d97ca`; RTA-INV-07, -AUF-07, -LEB-09).
+- [ ] M0.3–M0.4: Gesamtplan und Owner-Entscheidungen E1–E6.
+- [ ] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index. **Nächster Schritt: M1.1.**
+- [ ] M2: Tor B (CLI, ACP/SDK) und Tor A mit der Vertragssuite.
+- [ ] M3: Tor C und Tor D mit Prozessgrenze und Neustarts.
+- [ ] M4: Review-Schulden, Stack (O-4), vertikaler MVP.
+
 ## Run-Supervisor statt eigener Agent-Runtime (31.10.2026)
 
 Befund aus dem [MUXI-Dossier](../../../docs/research/dossiers/muxi-runtime.md): Eine MUXI-artige Runtime (≈ 184.000 Zeilen, davon ≈ 100.000 Orchestrierung) wird nicht nachgebaut. Gebraucht wird nur das Verhalten ihrer Teile `coding/` und `watch/` (≈ 3.000 Zeilen) als **Run-Supervisor im Connector** nach der [Runtime-Adapter-Spec](../../../docs/spec/runtime-adapter-v0.md). Status: vorgeschlagen, Owner-Freigabe offen.
 
-- [ ] RS-1: Drei MUXI-Befunde in die Runtime-Adapter-Spec (PR #32) einarbeiten: Umgebung des Kindprozesses nur per Positivliste; Negativfall „Rückweg ohne Freigabe oder mit Kanal-Benachrichtigung“; benannter Bezug der Kapazitätsgrenze (Gerät/Owner statt implizit pro Nutzer).
+- [x] RS-1 (erledigt mit N1): Drei MUXI-Befunde in die Runtime-Adapter-Spec (PR #32) einarbeiten: Umgebung des Kindprozesses nur per Positivliste; Negativfall „Rückweg ohne Freigabe oder mit Kanal-Benachrichtigung“; benannter Bezug der Kapazitätsgrenze (Gerät/Owner statt implizit pro Nutzer).
 - [ ] RS-2: Arbeitspaket planen: deterministische Fake-Runtime plus Contract-Tests für RTA-FALL-01…48, ohne echtes Claude Code.
 - [ ] RS-3: Claude-Code-Pfad unter Tor B praktisch prüfen (Resume, Abbruch der Prozessgruppe, Kostenmeldung, Wiederanbindung); Profilfähigkeiten erst danach auf `nachgewiesen`.
 - [ ] RS-4: Supervisor-Code erst ab Phase 1: Profil-Loader, Run-Supervisor, Ausgabe-Parser, Arbeitsbereich, Umgebungsfilter, lokale Outbox (Tor C), Beobachter. Schätzung 1.500–2.500 Zeilen TypeScript ohne Tests, nicht gemessen.

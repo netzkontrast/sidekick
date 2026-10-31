@@ -67,6 +67,14 @@
       "--worktree"
     ]
   },
+  "umgebung": {
+    "erlaubt": [
+      "PATH",
+      "HOME",
+      "LANG",
+      "TERM"
+    ]
+  },
   "faehigkeiten": {
     "resume": {
       "status": "behauptet"
