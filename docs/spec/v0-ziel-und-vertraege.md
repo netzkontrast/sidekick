@@ -1,6 +1,7 @@
 # V0 – Ziel und Verträge
 
-> Version 0.2 · 31.10.2026 (0.1: 30.10.2026) · **Entwurf zur Review**, kein Implementierungsbeginn.
+> Version 0.3 · 31.10.2026 (0.1: 30.10.2026) · **Entwurf zur Review**, keine Produktlaufzeit.
+> Änderung 0.3: JSON-Schemas und synthetische Beispiele zu 0.2 synchronisiert; Schemafälle V0-FALL-33…38.
 > Grundlage: [Vision v5 (Entwurf)](../vision-v5-entwurf.md), [Kern-These](../../research/kern-first-principles.md),
 > [Vision v4](../vision.md) §9–13, [Analyse](../analyse-und-uebernahmeplan.md) §3 und §8, [Bauauftrag](../claude-startauftrag-vision-v5.md).
 > Vorentscheidungen: [Fragen V0](../fragen/v0-ziel-und-vertraege/index.md), alle drei mit Option A beantwortet.
@@ -376,15 +377,17 @@ bleiben offen (Tor C/D).
 
 ### 7.1 Erweiterungen aus 0.2
 
-Die JSON-Schemas und Beispiele werden nach der Review in einem eigenen Schritt nachgezogen (§8). Bis dahin gilt diese Beschreibung.
-Alle Änderungen sind additiv: Dokumente nach 0.1 bleiben gültig.
+Die JSON-Schemas und synthetischen Beispiele bilden diese Ergänzungen ab. Das Auftragsschema akzeptiert
+`schema_version` `0.1` und `0.2`; neue Beispiele mit den Ergänzungen tragen `0.2`. Die bisherigen Beispiele
+bleiben gültig. Die neuen Übergabe- und Befundschemas tragen `0.2`. Eine Schemaprüfung bestätigt die Datenform,
+nicht Journal-Herkunft, aktive Claims, Befugnisse oder eine erfolgte Abnahme; diese Laufzeitprüfungen folgen in V1.
 
 | Schema | Änderung |
 |---|---|
 | [auftrag.schema.json](schemas/auftrag.schema.json) | `zustand` zusätzlich `partially_submitted`. `budget.vorwarnung_anteil` (Zahl, 0 < x < 1) und `budget.reparatur_anteil_max` (Zahl, 0 < x ≤ 1), beide optional; fehlen sie, gibt es keine Vorwarnung bzw. keine Reparaturgrenze. `rueckwaertsabnahme` (optional) mit `verlangt` (bool) und `budget` (`max_dauer_min`, optional `max_kosten_eur`); fehlt das Feld, gibt es keine Rückwärtsabnahme. |
 | [ereignis.schema.json](schemas/ereignis.schema.json) | Keine Änderung am Typmuster. Neue Typen: `task.budget_warning`, `task.partially_submitted`, `task.handover_recorded`, `task.handover_requested`, `task.repair_limit_reached`, `task.failed` (mit `daten.grund`), `run.usage_reported`, `run.attempt_failed`, `run.attempt_succeeded`, `run.strategy_changed`, `task.backward_review_requested`, `task.backward_reconstruction_recorded`, `task.backward_finding`, `task.backward_review_completed`, `task.backward_review_not_performed`, `task.backward_review_waived`, `task.backward_finding_rated`, `claim.rejected_inactive` (Meldung auf einem Claim, der nicht mehr `active` ist). Die Prüfinstanz meldet als Akteur `run`. |
-| neu: Übergabepaket | Felder siehe unten |
-| neu: Rückwärts-Befund | Felder siehe unten |
+| [uebergabe.schema.json](schemas/uebergabe.schema.json) | Felder siehe unten; Beispiele [Run](beispiele/uebergabe-run.json) und [Kern](beispiele/uebergabe-kern.json) |
+| [rueckwaerts-befund.schema.json](schemas/rueckwaerts-befund.schema.json) | Felder siehe unten; Beispiel [Befund](beispiele/rueckwaerts-befund.json) |
 
 **Übergabepaket** (V0-BUD-06 bis -08). Texte liegen per `inhalt_ref` in gesondert löschbaren Objekten (V0-INV-11).
 
@@ -413,6 +416,41 @@ Alle Änderungen sind additiv: Dokumente nach 0.1 bleiben gültig.
 | `fundstelle` | Stelle im Artefakt, falls vorhanden |
 | `inhalt_ref` | Bedingungstexte und Begründung (V0-INV-11) |
 
+### 7.2 Austauschform und Schemafälle
+
+Die Beispiele [Auftrag 0.2](beispiele/auftrag-recherche-budget.json) und
+[Budgetwarnung](beispiele/ereignis-budget-warning.json) ergänzen den unveränderten Ablauf V0-ABL-01.
+Sie decken V0-BUD-04/-06 und V0-RWA-06 ab; die beiden Übergaben V0-BUD-07/-08, der Befund V0-RWA-11.
+
+- Übergabe: `ausgangsstand` ist eine Liste aus `{ref, hash}`, `ergebnisse` eine Liste aus
+  `{artefakt_hash, beleg}`. Hashes haben die Form `sha256:<64 Hexzeichen>`, Belege sind Referenzen.
+  `kriterienstand` ordnet Kriterium-IDs den drei Zuständen aus §7.1 zu.
+  `offen` enthält die Listen `rueckfragen`, `annahmen`, `blockaden` mit Referenzen auf getrennte Inhalte.
+  `budgetstand` enthält `dauer_min`, `kosten_eur`, `runs`; Zahlen sind nicht negativ,
+  nicht gemessene Dimensionen sind `null` (V0-BUD-03). Die Berechnung und Vollständigkeit prüft V1.
+- Rückwärts-Befund: `bezug_auftrag` ist eine nicht leere Referenz, bei `angenommen` genau `null`.
+  `bezug_rekonstruktion` ist eine ganze Nummer ab 1, bei `uebersehen` genau `null`.
+  Bei `anders_verstanden` sind beide Bezüge gesetzt. `fundstelle` ist optional und gegebenenfalls `null`.
+- `rueckwaertsabnahme` enthält bei Angabe sowohl `verlangt` als auch ein eigenes `budget`
+  mit positiver ganzzahliger Dauer und optionalen nicht negativen Kosten. Es gibt keine impliziten Schwellen.
+- Ereignistypen verwenden einen wörtlichen Punkt zwischen Bereich und Name, z. B. `input.answered`.
+  Das Muster aus 0.1 bleibt unverändert; die Beispiele und Datenprüfungen decken auch die neuen Typen ab.
+- Der vorhandene lokale Schemaprüfer unterstützt dafür zusätzlich `exclusiveMinimum` und
+  `exclusiveMaximum` und `uniqueItems` (Gerätefähigkeiten); `examples` und `default` sind nur Annotationen, keine Datenänderung.
+  Unbekannte Schlüsselwörter bleiben Fehler. Keine neue Dependency.
+
+| ID | Ausgangslage / Mutation | Erwartung | Bezug |
+|---|---|---|---|
+| V0-FALL-33 | Alte und neue Vertragsbeispiele, jeweils mit zugehörigem Schema | gültig; Prüfung ändert die Daten nicht | §7, Abwärtskompatibilität |
+| V0-FALL-34 | Vorwarnung 0 oder 1, Reparaturanteil 0 oder >1, Prüfbudget fehlt oder ist negativ | ungültig; 0,8 / 0,5 sowie Reparaturanteil 1 gültig | BUD-04/-13, RWA-07 |
+| V0-FALL-35 | Run-Übergabe mit fehlendem Pflichtfeld, negativem Budget, falschem Hash oder Zustand `accepted` je Kriterium | ungültig; unbekannte Kosten als `null` gültig | BUD-06/-07, INV-07 |
+| V0-FALL-36 | Kern-Übergabe behauptet erfülltes Kriterium oder nennt einen anderen nächsten Schritt | ungültig; alle Kriterien `unklar`, Owner entscheidet | BUD-08 |
+| V0-FALL-37 | Drei Befundklassen mit passenden und vertauschten leeren Bezügen | passende Bezüge gültig, vertauschte ungültig | RWA-11 |
+| V0-FALL-38 | Bestehende und neue Ereignistypen sowie `taskXfailed`, Backslash oder fehlender Bereich | gültige Punktnotation akzeptiert, fehlerhafte abgewiesen | §7.1, INV-02 |
+
+Diese Fälle sind Datenprüfungen. V0-FALL-01…32 bleiben noch auszuführende Laufzeit-Vertragstests.
+Ausführen: `node --test tools/skill-library/test/v0-contracts.test.js`.
+
 ## 8. Offene Punkte und Tor-Zuordnung
 
 | Punkt | Wohin |
@@ -434,6 +472,5 @@ Alle Änderungen sind additiv: Dokumente nach 0.1 bleiben gültig.
 | Rückweg aus `outcome_unknown` in den vorigen Auftragszustand ist nicht festgelegt (betrifft V0-BUD-14) | V1-Spec |
 | Budgeterhöhung während eines laufenden Runs: wie der Run ohne Unterbrechung an die neue Version gelangt (betrifft V0-BUD-16) | V1-Spec |
 | Inhalte verspäteter, abgewiesener Einreichungen zur Ansicht aufbewahren oder nicht | V1-Spec |
-| JSON-Schemas und Beispiele nach §7.1 nachziehen | Eigener Schritt nach der Review |
 
 Nächster Schritt nach Review: V1 als Contract-Test-Spec für V0-ABL-01 und die Fallmatrix ausarbeiten, abhängig von den Befunden zu Tor A.

@@ -1,0 +1,295 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-T4-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        13
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        28
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 17,
+      "aussage": "Laut README gibt es Streaming mit konstantem Speicherbedarf, Felder in Anführungszeichen mit Zeilenumbrüchen nach RFC 4180, ein einstellbares Trennzeichen und das automatische Entfernen eines BOM.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 18,
+      "aussage": "Das Trennzeichen ist über `delimiter` einstellbar, `';'` wird also beachtet.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 19,
+      "aussage": "Kein Streaming: Die ganze Datei wird mit `fs.readFileSync(path, 'utf8')` als ein String eingelesen und danach komplett in ein Zeilen-Array zerlegt. Der Generator liefert erst Zeilen, wenn alles im Speicher liegt. Der Speicherbedarf wächst also mit der Dateigröße.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "Ob eine 2-GB-Datei überhaupt in einen String passt, ist nicht geprüft. Nach meinem Wissen begrenzt V8 die Stringlänge auf etwa 512 Mi Zeichen, dann bräche das Einlesen mit einem Fehler ab. Die Node.js-Dokumentation dazu habe ich hier nicht gelesen.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 21,
+      "aussage": "Zeilenumbrüche in Anführungszeichen werden nicht unterstützt: Der Text wird an jedem `\\n` geteilt, bevor die Anführungszeichen ausgewertet werden. Ein mehrzeiliger Verwendungszweck zerfällt dadurch in mehrere falsche Datensätze.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 22,
+      "aussage": "Verdoppelte Anführungszeichen (`\"\"`) nach RFC 4180 werden nicht als ein Zeichen `\"` gelesen. Jedes `\"` schaltet nur den Modus „in Anführungszeichen“ an oder aus und wird verworfen.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 23,
+      "aussage": "`\\r` aus CRLF-Zeilenenden wird nicht entfernt und bleibt am letzten Feld jeder Zeile hängen.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Der Code entfernt keinen BOM. Gesucht habe ich in `vendor/**` (ohne Beachtung der Groß-/Kleinschreibung) nach `FEFF|BOM|createReadStream|stream|\\r`. Treffer gab es nur in der README (Zeilen 7 und 10), keinen in `src/parse.js`. Nach meinem Kenntnisstand behält die UTF-8-Dekodierung in Node das U+FEFF. Dann stünde es vor dem ersten Kopfzeilenfeld, was nicht getestet ist.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Als Lizenz ist MIT angegeben, aber unter `vendor/` gibt es keine Lizenzdatei mit Copyright-Vermerk und kein `repository`-Feld. Herkunft und Urheber sind deshalb unbelegt.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 26,
+      "aussage": "Nichts aus diesem Bericht wurde praktisch getestet. AGENTS.md verbietet das Ausführen von Fremdcode.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "keine",
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/csvlesen/README.md:7-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/README.md",
+      "von": 7,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/csvlesen/src/parse.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/csvlesen/src/parse.js:19@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 19,
+      "bis": 19,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/csvlesen/src/parse.js:4-6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 4,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/csvlesen/src/parse.js:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/csvlesen/src/parse.js:12-28@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 12,
+      "bis": 28,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/csvlesen/src/parse.js:17-18@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 17,
+      "bis": 18,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/csvlesen/src/parse.js:5-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 5,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/csvlesen/src/parse.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/src/parse.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/csvlesen/package.json:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/package.json",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/csvlesen/README.md:21@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/csvlesen/README.md",
+      "von": 21,
+      "bis": 21,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-T4",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 6, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "nicht_erfuellt",
+      "grundlage": "Block «Befunde»: 10 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 10,
+    "codeaussagen": 6,
+    "anweisungen": 0,
+    "zitate": 11,
+    "gueltig": 11,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 2
+  },
+  "messages": [
+    {
+      "path": "RV-T4-K-VERTRAG.md",
+      "line": 20,
+      "code": "source_role_unknown",
+      "severity": "error",
+      "rule": "SLV0-EVAL-40",
+      "message": "Quellenrolle «—» ist keine von: Herstellerbehauptung, Spezifikation, Code, ausgeführter Test"
+    },
+    {
+      "path": "RV-T4-K-VERTRAG.md",
+      "line": 26,
+      "code": "source_role_unknown",
+      "severity": "error",
+      "rule": "SLV0-EVAL-40",
+      "message": "Quellenrolle «—» ist keine von: Herstellerbehauptung, Spezifikation, Code, ausgeführter Test"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "csvlesen",
+  "version": "1.5.2",
+  "type": "module",
+  "main": "src/parse.js",
+  "license": "MIT"
+}

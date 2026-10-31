@@ -1,0 +1,287 @@
+{
+ "question": "Ziel: belegte, übertragbare Mechanismen zur Verbesserung eines Agent-Skills „grilling“. Der Skill führt ein strukturiertes Interview, das entscheidungsrelevante offene Fragen zu Plänen und Anforderungen klärt. Dabei nutzt er AskUser-Tools mit Fragen, Optionen und Empfehlung, führt Abhängigkeiten zwischen Fragen, erfindet nie Antworten und recherchiert Fakten selbst.\n\nForschungsfragen:\n(1) Intent capture bei LLM-Agenten: Wie erkennen Agenten Mehrdeutigkeit, unklare Absicht und fehlende Information? Wann sollten sie nachfragen statt annehmen (ask vs. act)? Gesucht sind Belege aus Papers und Benchmarks zu Clarifying Questions und Ambiguität, zum Beispiel AmbigQA, CLAMBER, ClarQ, Ask-before-Plan, und dazu bekannte Fehlermuster wie zu viele oder zu wenige Rückfragen.\n(2) Interview- und Elicitation-Techniken: Welche Methoden der Anforderungserhebung gibt es (z. B. Laddering, Five Whys, Jobs-to-be-done, Kontextinterview), und welche Belege stützen sie? Wie wählt man Fragen nach erwartetem Informationsgewinn bzw. Value of Information? Was weiß man über aktive Präferenz- und Task-Elicitation mit LLMs (z. B. GATE), über das Bündeln von Fragen, ihre Reihenfolge und den Umgang mit Abhängigkeiten?\n(3) Tree of Thoughts und verwandte Suchverfahren (ToT, Graph of Thoughts, Self-Consistency, MCTS-Planung) für Fragestrategien: Helfen sie, Entscheidungsbäume offener Fragen zu erkunden, mögliche Antworten vorwegzunehmen und die nächste Frage zu wählen? Was ist zu Kosten und Nutzen belegt, wo liegen die Grenzen?\n\nGewünscht: konkrete Mechanismen mit Quelle und Evidenzstärke; was sich ohne Modelltraining in einen Prompt-Skill übertragen lässt; Gegenbelege.",
+ "summary": "Die geprüften Belege kommen fast alle aus Papers zu LLM-Agenten. Sie zeigen: Ohne ausdrückliche Regel im Prompt fragen Agenten bei unklaren Aufgaben kaum nach, auch starke Reasoning-Modelle nicht. Fehlende Angaben füllen sie stattdessen selbst aus. Ob sie nachfragen sollen, können sie zudem schlecht einschätzen; je nach Modell fragen sie zu viel oder zu wenig. Belegt ist außerdem, wie man ohne Training die nächste Frage auswählt. Man bildet ausdrücklich eine Menge möglicher Deutungen oder Hypothesen, streicht sie gegen alle bisherigen Antworten und wählt die Frage, die den Rest am gleichmäßigsten aufteilt. Das ist eine Näherung an den erwarteten Informationsgewinn (EIG). In 20-Questions-, Code- und Diagnoseaufgaben schlägt dieses Verfahren direktes Prompting deutlich. Tree of Thoughts und das bloße Auswählen der Frage durch das Modell selbst helfen etwas, bleiben aber hinter der expliziten Bewertung zurück und kosten mehr Rechenzeit. Für den Skill lassen sich drei Dinge direkt übernehmen: eine Prüfung vor jedem Schritt, ob gefragt oder gehandelt wird; eine geführte Liste der Hypothesen und Entscheidungen; die Fragenwahl danach, wo die möglichen Deutungen auseinandergehen. Zu klassischen Erhebungstechniken wie Laddering, Five Whys oder Jobs-to-be-done hat die Prüfung keinen einzigen Beleg bestätigt.",
+ "findings": [
+  {
+   "claim": "Ob gefragt oder gehandelt wird, muss als ausdrückliche Regel im Skill stehen. Ohne diese Anweisung fragen LLM-Agenten fast nie nach, selbst bei stark unterspezifizierten Aufgaben. Fehlende Pflichtangaben erfinden sie dann selbst. Stärkeres Reasoning ändert daran nichts. Eine reine Prompt-Prüfung vor jeder Aktion („Fehlt etwas? Ist etwas falsch? Liegt es außerhalb meiner Möglichkeiten?“) hebt die Quote passender Rückfragen dagegen stark.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/abs/2502.13069",
+    "https://aclanthology.org/2025.emnlp-main.1104"
+   ],
+   "evidence": "Ambig-SWE (ICLR 2026) stellt fest: „Without explicit prompting, models almost never interact.“ Qwen 3 Coder fragt in keiner Prompt-Variante nach (FNR 1,00). Claude Sonnet 4 erreicht mit „Strong Encouragement“ eine Erkennungsgenauigkeit von 0,89 bei FNR 0,18. Learning to Ask (EMNLP 2025) zeigt, dass Agenten fehlende Argumente willkürlich erzeugen. Die Erklärung über das Next-Token-Ziel ist eine Deutung der Autoren und nicht experimentell geprüft. Ask-when-Needed fügt ohne Training einen Schritt „Need to ask?“ ein und hebt damit die Quote erwarteter Rückfragen (A1) bei gpt-4o mit CoT: von 0,52 auf 0,90 bei fehlenden Informationen und von 0,10 auf 0,92 bei Anfragen außerhalb der Möglichkeiten. o3-mini mit CoT erreicht ohne diese Regel A1 = 0,00 auf allen vier Fehlertypen, mit Ask-when-Needed 0,78 bei fehlenden Informationen. Alle Abstimmungen fielen 3:0 aus.",
+   "vote": "3-0 (Claims 0, 6, 7, 8)"
+  },
+  {
+   "claim": "Agenten schätzen schlecht ein, wann eine Rückfrage nötig ist, und liegen in beide Richtungen daneben. Manche Modelle und Varianten fragen zu viel und ohne erkennbares Muster, andere führen einfach aus. Wie stark ermutigende Formulierungen wirken, hängt vom Modell ab, und manchmal schaden sie. Der Skill braucht deshalb klare Kriterien, wann gefragt wird; die bloße Aufforderung, mehr nachzufragen, reicht nicht.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/abs/2502.13069",
+    "https://arxiv.org/abs/2406.12639"
+   ],
+   "evidence": "Ambig-SWE: Llama 3.1 70B fragt zu viel (FPR 0,95 unter „Moderate“). Deepseek-v2 schneidet mit „Neutral“ am besten ab (0,69) und fällt unter „Strong“ auf 0,51; die FNR steigt dabei von 0,31 auf 0,94. Ask-before-Plan (EMNLP Findings 2024, GPT-3.5): Die nur gesprächsbasierte Variante „Proactive“ und eine regelbasierte Variante, die nur die Umgebung sieht, fragen zu oft. ProCoT, Direct und ICL führen dagegen ohne Rückfrage aus. Die Nebenbehauptung, die Einbindung von Umgebungsbeobachtungen verbessere die Entscheidung, wurde dagegen widerlegt (0:3).",
+   "vote": "3-0 (Claims 1, 9)"
+  },
+  {
+   "claim": "Ein übertragbares Signal, wann gefragt werden sollte: Man erzeugt mehrere unabhängige Deutungen oder Lösungen und vergleicht sie. Stimmen sie überein, handelt der Agent; weichen sie ab, fragt er. Im Code-Setting erkennt dieser Mechanismus Mehrdeutigkeit recht zuverlässig und steigert die Ergebnisqualität. Ohne Code-Ausführung muss der Vergleich semantisch durch das Modell erfolgen, und das wurde nicht getestet.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/abs/2310.10996"
+   ],
+   "evidence": "ClarifyGPT (FSE 2024) zieht 25 Code-Lösungen bei Temperatur 0,8 und vergleicht ihre Ausgaben auf mutierten Testeingaben. Jede Abweichung gilt als mehrdeutig. Auf MBPP-sanitized wurden 140 von 427 Aufgaben markiert. Gegen menschliche Labels (κ 0,86) erreicht die Erkennung mit GPT-4 ein F1 von 88,25, mit ChatGPT eine Precision von 72. Das Nachfragen hob Pass@1 von GPT-4 im Test mit 10 Personen von 70,96 % auf 80,80 %. Mit simulierten Nutzern auf vier Benchmarks stieg der Wert von 68,02 % auf 75,75 % (GPT-4) und von 58,55 % auf 67,22 % (ChatGPT). Der Mechanismus kostet etwa 25-mal so viel wie direkte Generierung. Die Vergleichsbehauptung „nur bei Mehrdeutigkeit fragen schlägt immer fragen“ wurde widerlegt (0:3). Es gibt nur eine Quelle; sie ist peer-reviewed.",
+   "vote": "3-0 (Claims 2, 3)"
+  },
+  {
+   "claim": "Mehrdeutigkeit zu erkennen und die richtige Frage zu wählen sind zwei getrennte Fehlerquellen. Auch wenn ein Modell Mehrdeutigkeit erkennt, sind seine Rückfragen oft schwach, weil es nicht weiß, welche Mehrdeutigkeit es klären soll. CoT und Few-Shot-Prompting verbessern die Erkennung nur wenig und uneinheitlich und können das Modell übermäßig selbstsicher machen. Der Skill sollte deshalb einen eigenen Schritt haben, der die offenen Punkte priorisiert, statt sich darauf zu verlassen, dass das Modell „mehr nachdenkt“.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/abs/2405.12063"
+   ],
+   "evidence": "CLAMBER (ACL 2024, ca. 12.000 Anfragen) testete Modelle von 2023 (Vicuna-13B, Llama2-13B/70B, ChatGPT). Mit CoT stieg die Genauigkeit von ChatGPT nur von 54,34 auf 57,38; das F1 von Llama2-13B fiel von 50,99 auf 36,80, das von Vicuna stieg um etwa 11 Punkte. Die genannten Ursachen (fehlende Konfliktauflösung, ungenauer Einsatz des eigenen Wissens) stammen aus einer qualitativen Fehleranalyse und sind kein kausaler Test. Es gibt nur eine Quelle mit älteren Modellen.",
+   "vote": "3-0 (Claims 4, 5)"
+  },
+  {
+   "claim": "Zuverlässigster Befund zur Fragenauswahl: Die nächste Frage wird nach erwartetem Informationsgewinn gewählt. Grundlage ist eine ausdrücklich geführte Menge von Hypothesen oder Lösungskandidaten. Das Modell schlägt mehrere Kandidatenfragen vor, und gewählt wird die Frage, deren mögliche Antworten die Kandidaten am gleichmäßigsten aufteilen. Drei unabhängige Verfahren, die ohne Training auskommen, schlagen damit direktes Prompting deutlich und kommen oft mit weniger Fragen aus.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/abs/2508.21184",
+    "https://arxiv.org/abs/2502.04485",
+    "https://arxiv.org/abs/2402.03271"
+   ],
+   "evidence": "BED-LLM (ICLR 2026) wurde mit 6 LLMs und 3×100 Zielen im 20-Questions-Setting getestet. Gegenüber direktem Prompting liegt es im Mittel 37,4 Prozentpunkte höher und schneidet nie schlechter ab, z. B. GPT-4o/Animals 45 % → 93 %. Ein Baseline-Verfahren im ReAct-Stil mit CoT erreicht dort nur 62 %. Active Task Disambiguation (ICLR 2025) zieht N=20 Kandidaten und M=5 Fragen und wählt nach der Entropie der Aufteilung; auf HumanEval steigt GPT-3.5 nach 4 Fragen von 70,8 % auf 85,6 %. UoT (NeurIPS 2024) misst im Mittel +38,1 % relativ bzw. etwa +10,8 Prozentpunkte absolut über 5 LLMs und 5 Datensätze (20Q, Diagnose, Troubleshooting) bei weniger Fragen. In allen drei Arbeiten antwortet ein simuliertes LLM oder Code-Orakel, nie ein echter Nutzer. BED-LLM nutzt nach Möglichkeit Logits, die ein reiner Prompt-Skill nicht hat.",
+   "vote": "3-0 (Claims 10, 13, 15)"
+  },
+  {
+   "claim": "Tree of Thoughts und das Auswählen der Frage durch das Modell selbst bringen gegenüber naivem Fragen etwas, bleiben aber deutlich hinter einer expliziten Bewertung nach Informationsgewinn zurück und kosten mehr. Tiefere ToT-Suche schließt den Abstand nicht. Entscheidend ist das Bewertungssignal, also wie gleichmäßig eine Frage die Hypothesen aufteilt, nicht die Baumsuche an sich. Eine reine Prompt-Variante von ToT mit dem Hinweis „wähle die Frage, die die Kandidatenmenge halbiert“ kommt in Diagnose und Troubleshooting bis auf 2–6 Prozentpunkte an UoT heran.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/abs/2508.21184",
+    "https://arxiv.org/abs/2502.04485",
+    "https://arxiv.org/abs/2402.03271"
+   ],
+   "evidence": "BED-LLM, Implicit Maximization (eine zusammengefasste ToT-Vorausschau in einem einzigen Aufruf): GPT-4o/Animals 70 % gegenüber 93 % mit EIG; Mistral-Large/Celebrities 36 % gegenüber 91 %. Laufzeit Qwen2.5-72B: Prompt-Only 26 Minuten, IM 45 Minuten, BED-LLM 2 Stunden 28 Minuten (etwa 5,6-mal Prompt-Only). Active Task Disambiguation, 20Q-Score (EIG-uniform / implicit-ToT / implicit): GPT-3.5 6,2/5,1/4,9; GPT-4o-mini 6,8/6,6/5,5; Llama-3-70B 6,3/5,1/5,9, hier also ToT unter Zero-shot. Der Abstand schrumpft bei stärkeren Modellen. UoT bei etwa 4,6k Tokens mit GPT-4 (20Q/Diagnose/Troubleshooting): Pruned UoT 48,1/88,4/63,2, Adapted-ToT 33,8/85,1/60,3, Original-ToT 23,7/65,3/40,4, CoT-SC mit k=33 32,6/37,6/42,5. Bei etwa 9,2k Tokens: UoT 54,4/92,5/66,0, Adapted-ToT mit Tiefe 4 40,9/86,7/63,7. Eine explizite ToT-Baumsuche über Interviewfragen hat keine Quelle getestet. Die Behauptung zu einer UoT-Belohnungsablation (ToT+UR) wurde widerlegt (0:3).",
+   "vote": "3-0 (Claims 11, 14, 16)"
+  },
+  {
+   "claim": "Hypothesen nicht nur im Gesprächsverlauf mitführen, sondern ausdrücklich gegen alle bisherigen Antworten prüfen. Ohne diese Prüfung erzeugt selbst GPT-4o Hypothesen, die früheren Antworten widersprechen, und legt sich vorzeitig fest. Beides nimmt mit wachsender Historie zu. Für den Skill heißt das: Ein Protokoll der Annahmen und Entscheidungen führen, das nach jeder Antwort bereinigt wird.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/abs/2508.21184"
+   ],
+   "evidence": "BED-LLM verwirft eine Hypothese, wenn die Wahrscheinlichkeit einer beobachteten Antwort unter 0,2 liegt. Konsistente Hypothesen bleiben erhalten. Neue Kandidaten erzeugt das Modell in einem gemeinsamen Durchgang mit einem Prompt, der Vielfalt verlangt; die neueste Antwort steht dabei zuerst im Kontext. Ohne die Filterung (Baseline ICL Beliefs) fällt GPT-4o/Animals von 93 % auf 25 %. Der Schwellenwert 0,2 ist eine Versuchseinstellung und keine abgeleitete Regel. Es gibt nur eine Quelle mit 20Q-artigen Aufgaben.",
+   "vote": "3-0 (Claim 12)"
+  },
+  {
+   "claim": "GATE liefert direkt übertragbare Formulierungsregeln für Fragen, aber keinen Wirksamkeitsnachweis für sie im Einzelnen. Jede Runde soll die informativste nächste Frage enthalten, die einen neuen Aspekt abdeckt, nur eine Sache auf einmal fragt („bite-sized“) und keinen unerklärten Fachjargon enthält. Ob es besser ist, Fragen einzeln zu stellen oder zu bündeln, wurde nicht getestet; „eine Frage pro Runde“ ist eine Designentscheidung.",
+   "confidence": "low",
+   "sources": [
+    "https://arxiv.org/abs/2310.11589"
+   ],
+   "evidence": "Der Prompt aus App. A.1 ist wörtlich belegt (gpt-4-0613, Temperatur 0, Domänenbeschreibung plus bisheriger Verlauf). Die Autoren schreiben, dass ihr Ziel aus Gl. 2 nicht explizit optimiert wird (App. F). Unsicherheits- und Disagreement-Sampling nennen sie als Zukunftsarbeit. Die Studie ist klein, und in einigen Domänen fehlt statistische Signifikanz. Die Methodenbeschreibung ist gut belegt; ein Beleg für die Wirksamkeit der einzelnen Regeln fehlt.",
+   "vote": "3-0 (Claim 17)"
+  }
+ ],
+ "caveats": "1. Die Forschungsfrage 2 ist nur zur Hälfte abgedeckt. Zu klassischen Erhebungstechniken (Laddering, Five Whys, Jobs-to-be-done, Kontextinterview) hat die Prüfung keinen einzigen Beleg bestätigt. Belegt sind dort nur EIG-Auswahl und GATE.\n2. Die Benchmarks sind eng und künstlich. In fast allen Belegen antwortet ein simuliertes LLM oder ein Code-Orakel, kein echter Mensch; Ausnahme ist der Test von ClarifyGPT mit 10 Personen. Die Aufgaben sind 20 Questions, Code, Toolaufrufe, Reiseplanung und vereinfachte Diagnose. Ob das auf offene Anforderungs- und Planinterviews übertragbar ist, mit großen und sich überschneidenden Hypothesenräumen, wechselnden Präferenzen und Abhängigkeiten zwischen Fragen, wurde nicht geprüft. BED-LLM selbst berichtet kleinere Gewinne bei der Präferenzerhebung.\n3. Die EIG-Verfahren nutzen Logits, Code-Ausführung oder viele Samples. Ein reiner Prompt-Skill kann sie nur annähern, etwa über die eigene Einschätzung des Modells, wie gleichmäßig eine Frage aufteilt. Genau diese Selbsteinschätzung schneidet in den Belegen aber schlechter ab (Implicit Maximization, implicit-ToT). Am nächsten kommt eine Prompt-Variante wie Adapted-ToT mit Halbierungshinweis, die in 2 von 3 Domänen nahe an UoT liegt.\n4. Die Modelle sind veraltet: Viele Ergebnisse stammen von Modellen aus 2023/24 (GPT-3.5/4, Llama 2/3.1, Deepseek-v2). Wie stark aktuelle Modelle ohne Regel nachfragen, kann sich verschoben haben. Die Kalibrierung ist ausdrücklich modellabhängig.\n5. Einzelquellen: Die Befunde zu Konsistenzprüfung, CLAMBER, Belief-Filterung und GATE beruhen jeweils auf einem Paper, meist mit selbst gebauten Benchmarks und ohne unabhängige Replikation. Der Konfidenzgrad „medium“ für die peer-reviewten Einzelquellen ist eine Abweichung von der strengen Regel, nach der eine einzelne Quelle als „low“ gilt.\n6. Folgende Aussagen wurden widerlegt und nicht verwendet:\n- INTENT-SIM (simulierte Nutzerantworten clustern, um zu entscheiden, wann gefragt wird)\n- der Vorteil von „nur bei Mehrdeutigkeit fragen“ gegenüber „immer fragen“ bei ClarifyGPT\n- „Agenten sollten erst selbst die Umgebung erkunden und dann nur nach dem fragen, was sie nicht selbst herausfinden können“ (Ambig-SWE)\n- die Verbesserung durch Umgebungsbeobachtungen\n- die UoT-Belohnungsablation\n\nDie skillnahe Regel „Fakten selbst recherchieren, nur Unauffindbares fragen“ ist deshalb plausibel, aber nicht belegt.",
+ "openQuestions": [
+  "Lässt sich die EIG-Auswahl (Hypothesen ausdrücklich auflisten, Frage nach gleichmäßiger Aufteilung wählen) ohne Logits und Code-Ausführung in einem reinen Prompt-Skill so umsetzen, dass sie messbar besser ist als Selbstauswahl oder ToT? Getestet werden müsste das an echten Anforderungsinterviews und nicht an 20 Questions.",
+  "Wie sollte der Skill Fragen bündeln und ordnen, wenn Fragen voneinander abhängen, z. B. erst die Weichenfragen mit dem größten Aufteilungseffekt, dann die abhängigen? Dazu fand sich keine bestätigte Evidenz; GATE hat das Bündeln nicht getestet.",
+  "Gibt es belastbare empirische Belege für klassische Elicitation-Techniken (Laddering, Five Whys, JTBD, Kontextinterview), am besten im Vergleich oder kombiniert mit LLM-Interviewern?",
+  "Wie kalibriert man die Schwelle für eine Rückfrage, um zu viel und zu wenig Nachfragen zu vermeiden, bei aktuellen Modellen, deren Reaktion auf ermutigende Formulierungen stark schwankt? Taugt eine Konsistenzprüfung über gesampelte Deutungen (ClarifyGPT) dafür auch ohne Code?"
+ ],
+ "refuted": [
+  {
+   "claim": "On underspecified SWE-Bench Verified issues, interaction with a simulated user who holds the full issue improves resolution by up to 74% over the non-interactive setting. Claude Sonnet 4 recovers 89% of the performance it reaches with the full issue. Qwen 3 Coder and Deepseek-v2 recover 59%, and Llama 3.1 70B recovers 54%.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2502.13069"
+  },
+  {
+   "claim": "Question quality and timing drive the gains. The most effective questions are specific, actionable and at the task level. The strongest models (Claude Sonnet) first explore the codebase and then ask only about what they cannot discover themselves. Weaker models ask immediately, including about details they could recover from the code. Question counts also differ: Llama averages 2.61 questions, which are too few and too general, and Qwen 3 averages 6.02, which risks overwhelming the user.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2502.13069"
+  },
+  {
+   "claim": "The paper splits ambiguity resolution into three separately testable subtasks: deciding when to clarify, deciding what to ask, and answering with the new information. For deciding when to clarify, INTENT-SIM measures ambiguity as the entropy over simulated user intents, not over the model's own output. It works in four steps: generate one clarifying question greedily, sample 10 simulated user answers at temperature 0.5, cluster the answers into equivalent intents with an NLI model, then compute the entropy over those clusters. The authors report that this beats existing uncertainty-estimation methods at spotting inputs that clarification will help. This needs no training and could become a prompt step: before asking, anticipate plausible user answers, group them, and ask only when they diverge.",
+   "vote": "1-2",
+   "source": "https://arxiv.org/abs/2311.09469"
+  },
+  {
+   "claim": "With a fixed clarification budget of 10% of examples, choosing which examples to clarify by INTENT-SIM roughly doubles the performance gain compared with choosing them at random. Choosing the questions selectively pays off more than asking more often.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2311.09469"
+  },
+  {
+   "claim": "Asking only on detected ambiguity beat the always-ask baseline GPT-Engineer on Pass@1. With GPT-4 and simulated feedback, the average over four benchmarks was 75.75 vs 69.94. With human feedback on MBPP-sanitized it was 80.80 vs 73.77. The authors argue that blanket questioning adds needless interactions and token cost on unambiguous requirements. There is no dedicated always-ask/never-ask ablation, and cost is not quantified.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2310.10996"
+  },
+  {
+   "claim": "Grounding the ask/act decision in environment observations (tool results) improves clarification-need prediction over conversation-only reasoning. Environment-only reached 70.4/17.7 micro/macro clarification accuracy, versus Proactive at 62.3/6.1 and ProCoT at 33.7/10.6 (all GPT-3.5). Chain-of-thought-style ProCoT scored lowest on micro accuracy.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2406.12639"
+  },
+  {
+   "claim": "Entscheidend ist das Bewertungssignal, nicht die Baumsuche an sich. UoT führt eine explizite Kandidatenmenge (Hypothesen). Ein simulierter Antwortender teilt sie für jede Frage in eine Ja- und eine Nein-Teilmenge. Die Belohnung ist der erwartete Informationsgewinn, also die binäre Entropie dieser Aufteilung. Er ist maximal, wenn Ja und Nein gleich wahrscheinlich sind, und null, wenn eine Antwort sicher ist. Als Prior gilt eine Gleichverteilung, und die Belohnung wird über den Simulationsbaum propagiert. Setzt man diese Belohnung in ToT anstelle der LLM-Selbstbewertung ein (ToT+UR), steigt die Erfolgsrate im Mittel um 5,9 %. Umgekehrt sinkt die Leistung, wenn UoT die heuristische Selbstbewertung statt dieser Belohnung nutzt (UoT−UR); sie bleibt dann aber noch über Adapted-ToT.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2402.03271"
+  }
+ ],
+ "unverified": [],
+ "sources": [
+  {
+   "url": "https://arxiv.org/abs/2502.13069",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2311.09469",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2310.10996",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2405.12063",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://aclanthology.org/2025.emnlp-main.1104",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2406.12639",
+   "quality": "primary",
+   "angle": "Ask vs. Act: Ambiguitätserkennung und Benchmarks (FF1)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2508.21184",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2502.04485",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2402.03271",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2310.11589",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2403.05534",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/1805.04655",
+   "quality": "primary",
+   "angle": "Fragenauswahl nach Informationsgewinn und Value of Information (FF2, LLM)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2402.10890",
+   "quality": "primary",
+   "angle": "Baumsuche für Fragestrategien: ToT und MCTS (FF3)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://aclanthology.org/2023.emnlp-main.63/",
+   "quality": "primary",
+   "angle": "Baumsuche für Fragestrategien: ToT und MCTS (FF3)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2501.15056",
+   "quality": "primary",
+   "angle": "Baumsuche für Fragestrategien: ToT und MCTS (FF3)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://doi.org/10.1109/TSE.2010.33",
+   "quality": "primary",
+   "angle": "Klassische Anforderungserhebung: Evidenzbasis (FF2, Mensch)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://jmis-web.org/articles/775",
+   "quality": "primary",
+   "angle": "Klassische Anforderungserhebung: Evidenzbasis (FF2, Mensch)",
+   "claimCount": 4
+  },
+  {
+   "url": "https://openportal.isti.cnr.it/data/2016/353983/2016_353983.postprint.pdf",
+   "quality": "primary",
+   "angle": "Klassische Anforderungserhebung: Evidenzbasis (FF2, Mensch)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://par.nsf.gov/servlets/purl/10105611",
+   "quality": "primary",
+   "angle": "Klassische Anforderungserhebung: Evidenzbasis (FF2, Mensch)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://aisel.aisnet.org/misq/vol36/iss1/8",
+   "quality": "primary",
+   "angle": "Klassische Anforderungserhebung: Evidenzbasis (FF2, Mensch)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://irlab.science.uva.nl/wp-content/papercite-data/pdf/zou2022asking.pdf",
+   "quality": "primary",
+   "angle": "Gegenbelege: zu viele oder zu wenige Rückfragen",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2406.00922",
+   "quality": "primary",
+   "angle": "Gegenbelege: zu viele oder zu wenige Rückfragen",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2505.06120",
+   "quality": "primary",
+   "angle": "Gegenbelege: zu viele oder zu wenige Rückfragen",
+   "claimCount": 5
+  }
+ ],
+ "stats": {
+  "angles": 5,
+  "sourcesFetched": 23,
+  "claimsExtracted": 114,
+  "claimsVerified": 25,
+  "confirmed": 18,
+  "killed": 7,
+  "unverified": 0,
+  "afterSynthesis": 8,
+  "urlDupes": 4,
+  "budgetDropped": 3,
+  "agentCalls": 105
+ },
+ "herkunft": {
+  "workflow": "deep-research (Claude Code), Lauf wf_b96fa512-3d6",
+  "datum": "2026-10-31",
+  "agenten": 105
+ }
+}

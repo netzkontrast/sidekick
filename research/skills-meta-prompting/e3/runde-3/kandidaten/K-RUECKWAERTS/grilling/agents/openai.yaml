@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grilling – offene Fragen klären"
+  short_description: "Entscheidungen klären und Antworten nachvollziehbar sichern"
+  default_prompt: "Nutze $grilling, um den Plan kritisch zu hinterfragen und offene Fragen mit AskUser-Werkzeugen nachvollziehbar zu klären."
+policy:
+  allow_implicit_invocation: true

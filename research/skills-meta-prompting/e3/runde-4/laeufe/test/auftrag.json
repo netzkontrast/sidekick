@@ -1,0 +1,38 @@
+{
+ "paare": [
+  {
+   "paar": "RV-T1",
+   "links": "Z207",
+   "rechts": "Z750",
+   "fall": "runde-4/familien/RV/test/RV-T1"
+  },
+  {
+   "paar": "RV-T2",
+   "links": "Z351",
+   "rechts": "Z810",
+   "fall": "runde-4/familien/RV/test/RV-T2"
+  },
+  {
+   "paar": "RV-T3",
+   "links": "Z895",
+   "rechts": "Z287",
+   "fall": "runde-4/familien/RV/test/RV-T3"
+  },
+  {
+   "paar": "RV-T4",
+   "links": "Z729",
+   "rechts": "Z870",
+   "fall": "runde-4/familien/RV/test/RV-T4"
+  }
+ ],
+ "regression": [
+  {
+   "code": "Z929",
+   "fall": "familien/regression/R-02-research"
+  },
+  {
+   "code": "Z774",
+   "fall": "familien/regression/R-03-research"
+  }
+ ]
+}

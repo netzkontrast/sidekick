@@ -1,0 +1,404 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-T3-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        7
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        24
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 11,
+      "aussage": "Die README verspricht „exponentielles Backoff (bis zu 5 Versuche)“, Prüfung per SHA-256 nach dem Upload und „Zugangsdaten erscheinen nie in Logs“.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 12,
+      "aussage": "Wiederholungen: höchstens 3 Versuche mit festem Abstand von 100 ms, ohne wachsenden Abstand. Das widerspricht der README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 13,
+      "aussage": "Jeder Fehler wird wiederholt, auch dauerhafte HTTP-Fehler wie 4xx. Ob ein Fehler vorübergehend ist, wird nicht unterschieden.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 14,
+      "aussage": "Integrität: Es wird MD5 berechnet, nicht SHA-256. Ein Vergleich mit der Serverantwort nach dem Upload fehlt. Das ETag wird nur ungeprüft zurückgegeben.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 3
+    },
+    {
+      "zeile": 15,
+      "aussage": "`content-md5` wird als Hex gesendet. Für den Header ist Base64 üblich. Ob der Zielspeicher das ablehnt oder die Prüfung überspringt, wurde nicht getestet.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "offen",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 16,
+      "aussage": "Bei `debug: true` wird das gesamte `options`-Objekt geloggt. Die README übergibt dort `accessKey` und `secretKey`, die Zugangsdaten landen also im Log.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 17,
+      "aussage": "`accessKey` und `secretKey` werden für die Anfrage nirgends genutzt. Der PUT geht ohne Signatur oder Authentifizierungs-Header hinaus. Gesucht wurde im Paket nach `accessKey`, `secretKey` und Authorization-Headern.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 18,
+      "aussage": "Ob ein Upload ohne Signatur gegen den eingesetzten Objektspeicher überhaupt gelingt, ist nicht getestet. Gegen gewöhnliches S3 mit privatem Bucket ist eine Ablehnung zu erwarten.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "offen",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "Der Objektschlüssel ist der unveränderte lokale Dateipfad, ohne Encoding. Bei absoluten Pfaden oder Sonderzeichen entstehen unerwartete Schlüssel.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "Die ganze Datei wird mit `readFileSync` in den Speicher geladen. Bei großen Dumps kann das den Speicher sprengen und blockiert den Prozess.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "Version 3.1.0, Lizenz MIT laut Paketangabe. Herkunft und Upstream-Repo sind nicht angegeben. Eine Lizenzdatei fehlt im Paket.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Laut Changelog wurde in 3.1.0 die „Debug-Ausgabe erweitert“. Das passt zum Leck in upload.js:12.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 26,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 11,
+      "verweis": "vendor/blobsync/README.md:7-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/README.md",
+      "von": 7,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 12,
+      "verweis": "vendor/blobsync/src/upload.js:4-5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 4,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 12,
+      "verweis": "vendor/blobsync/src/upload.js:15-22@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 15,
+      "bis": 22,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 13,
+      "verweis": "vendor/blobsync/src/upload.js:19-21@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 19,
+      "bis": 21,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 13,
+      "verweis": "vendor/blobsync/src/upload.js:29@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 29,
+      "bis": 29,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 14,
+      "verweis": "vendor/blobsync/src/upload.js:14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 14,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 14,
+      "verweis": "vendor/blobsync/src/upload.js:18@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 18,
+      "bis": 18,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 14,
+      "verweis": "vendor/blobsync/src/upload.js:30@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 30,
+      "bis": 30,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 15,
+      "verweis": "vendor/blobsync/src/upload.js:14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 14,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 15,
+      "verweis": "vendor/blobsync/src/upload.js:28@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 28,
+      "bis": 28,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 16,
+      "verweis": "vendor/blobsync/src/upload.js:12@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 12,
+      "bis": 12,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 16,
+      "verweis": "vendor/blobsync/README.md:15@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/README.md",
+      "von": 15,
+      "bis": 15,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/blobsync/src/upload.js:26-31@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 26,
+      "bis": 31,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/blobsync/src/upload.js:28@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 28,
+      "bis": 28,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/blobsync/src/upload.js:27@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 27,
+      "bis": 27,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/blobsync/src/upload.js:13@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/src/upload.js",
+      "von": 13,
+      "bis": 13,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/blobsync/package.json:3-6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/package.json",
+      "von": 3,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/blobsync/CHANGELOG.md:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/CHANGELOG.md",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 26,
+      "verweis": "vendor/blobsync/CHANGELOG.md:8-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/blobsync/CHANGELOG.md",
+      "von": 8,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-T3",
+    "erwartet": [
+      "RV-T3-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RV-T3-A1",
+        "eintrag": 1,
+        "zeile": 26
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 9, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 12 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 12,
+    "codeaussagen": 9,
+    "anweisungen": 1,
+    "zitate": 19,
+    "gueltig": 19,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

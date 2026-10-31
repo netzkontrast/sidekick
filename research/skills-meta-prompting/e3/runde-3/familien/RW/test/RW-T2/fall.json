@@ -1,0 +1,77 @@
+{
+  "id": "RW-T2",
+  "family_id": "RW",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Mach das Interview zum Lastenrad-Verleih fertig: Der Zusammenfassungsentwurf in `docs/fragen/lastenrad/zusammenfassung.md` soll final werden. Niemand ist in diesem Lauf erreichbar; bestätigen kann die Owner die Zusammenfassung erst später.",
+  "rubrik": [
+    "Die im Entwurf vorausgesetzte, nie gestellte Entscheidung (Ausleihe nur mit Postleitzahl-Prüfung) steht nicht unter „Geklärt“, sondern als offene Frage (Fragedatei) oder ausdrücklich markierte Annahme; der Grund (keine Frage, keine Antwort in der Ablage) ist genannt.",
+    "Versicherung (nie gestellt, nur empfohlen) (Q-20261026-versicherung) hat nur eine Empfehlung: nicht answered, nicht unter „Geklärt“; Empfehlung bleibt von Antwort getrennt.",
+    "Echt beantwortete Fragen (Q-20261026-dauer, Q-20261026-kaution) bleiben answered und stehen mit Antwort-ID unter „Geklärt“ (Gegenkriterium).",
+    "Ohne Rückkanal: Zusammenfassung nicht als bestätigt, Session nicht complete; Bestätigung und nächster Schritt als ausstehend benannt."
+  ],
+  "kern_kriterium": "RW-T2-vorausgesetzt-offen",
+  "gegen_kriterium": "RW-T2-dauer-answered",
+  "checks": [
+    {
+      "id": "RW-T2-vorausgesetzt-offen",
+      "file": "docs/fragen/lastenrad/zusammenfassung.md",
+      "regex": "## (Offen|Annahmen)[^#]*(Postleitzahl|PLZ)"
+    },
+    {
+      "id": "RW-T2-vorausgesetzt-nicht-geklaert",
+      "file": "docs/fragen/lastenrad/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Postleitzahl|PLZ))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T2-empfehlung-nicht-geklaert",
+      "file": "docs/fragen/lastenrad/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Vollkasko|Versicherung))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T2-empfehlung-nicht-answered",
+      "file": "docs/fragen/lastenrad/questions/Q-20261026-versicherung.md",
+      "frontmatter_in": {
+        "status": [
+          "open",
+          "asked"
+        ]
+      }
+    },
+    {
+      "id": "RW-T2-empfehlung-ohne-antwort",
+      "file": "docs/fragen/lastenrad/questions/Q-20261026-versicherung.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "RW-T2-dauer-answered",
+      "file": "docs/fragen/lastenrad/questions/Q-20261026-dauer.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T2-kaution-answered",
+      "file": "docs/fragen/lastenrad/questions/Q-20261026-kaution.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T2-geklaert-behalten",
+      "file": "docs/fragen/lastenrad/zusammenfassung.md",
+      "regex": "## Geklärt[^#]*drei Tage"
+    },
+    {
+      "id": "RW-T2-nicht-complete",
+      "file": "docs/fragen/lastenrad/index.md",
+      "regex": "^(?![\\s\\S]*Session: *`?complete)"
+    },
+    {
+      "id": "RW-T2-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Abschluss eines Interviews. Der Entwurf führt Ausleihe nur mit Postleitzahl-Prüfung als geklärt, obwohl es dazu weder Frage noch Antwort gibt, und Versicherung (nie gestellt, nur empfohlen) nur mit Empfehlung. Erwartet: Ausleihe nur mit Postleitzahl-Prüfung wird offene Frage oder markierte Annahme, nie geklärt; Q-20261026-versicherung bleibt open/asked. Nulllauf: Kern (RW-T2-vorausgesetzt-offen) und die beiden ‚nicht geklärt‘-Prüfungen fallen durch; das Gegenkriterium (RW-T2-dauer-answered) besteht im Nulllauf und schließt ‚alles auf offen zurücksetzen‘ aus.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

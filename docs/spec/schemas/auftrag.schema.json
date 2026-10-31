@@ -7,7 +7,7 @@
   "required": ["schema_version", "id", "version", "vorhaben_id", "typ", "ziel", "abnahmekriterien", "befugnis", "budget", "datenklasse", "owner_id", "zustand", "erstellt_am"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "const": "0.1" },
+    "schema_version": { "enum": ["0.1", "0.2"] },
     "id": { "type": "string", "pattern": "^a-[a-z0-9-]+$" },
     "version": { "type": "integer", "minimum": 1, "description": "Steigt bei jeder Vertragsänderung; Runs bleiben an ihre Version gebunden." },
     "vorhaben_id": { "type": "string", "pattern": "^v-[a-z0-9-]+$" },
@@ -65,13 +65,32 @@
       "properties": {
         "max_dauer_min": { "type": "integer", "minimum": 1 },
         "max_runs": { "type": "integer", "minimum": 1 },
-        "max_kosten_eur": { "type": "number", "minimum": 0 }
+        "max_kosten_eur": { "type": "number", "minimum": 0 },
+        "vorwarnung_anteil": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+        "reparatur_anteil_max": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+      }
+    },
+    "rueckwaertsabnahme": {
+      "type": "object",
+      "required": ["verlangt", "budget"],
+      "additionalProperties": false,
+      "properties": {
+        "verlangt": { "type": "boolean" },
+        "budget": {
+          "type": "object",
+          "required": ["max_dauer_min"],
+          "additionalProperties": false,
+          "properties": {
+            "max_dauer_min": { "type": "integer", "minimum": 1 },
+            "max_kosten_eur": { "type": "number", "minimum": 0 }
+          }
+        }
       }
     },
     "datenklasse": { "enum": ["public", "internal", "confidential", "local-only"] },
     "owner_id": { "type": "string" },
     "zustand": {
-      "enum": ["draft", "open", "in_progress", "waiting_input", "waiting_approval", "submitted", "checking", "in_review", "accepted", "applying", "completed", "rework", "outcome_unknown", "cancelled", "failed"]
+      "enum": ["draft", "open", "in_progress", "waiting_input", "waiting_approval", "submitted", "partially_submitted", "checking", "in_review", "accepted", "applying", "completed", "rework", "outcome_unknown", "cancelled", "failed"]
     },
     "erstellt_am": { "type": "string", "format": "date-time" },
     "herkunft": {

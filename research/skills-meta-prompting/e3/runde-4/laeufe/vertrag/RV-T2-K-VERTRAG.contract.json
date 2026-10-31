@@ -1,0 +1,338 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-T2-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        12
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        30
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 16,
+      "aussage": "Laut README nimmt die Bibliothek Cron-Ausdrücke mit sechs Feldern (inklusive Sekunden) an, z. B. `0 30 2 * * *`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 17,
+      "aussage": "Der Parser verlangt genau fünf Felder und bricht bei jeder anderen Anzahl mit einem Fehler ab. Das Beispiel aus dem README würde also beim Aufruf von `schedule` scheitern.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 18,
+      "aussage": "Laut README gibt es eine Zeitzonen-Option `{ tz: 'Europe/Berlin' }`, und die Sommerzeitumstellung wird berücksichtigt.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "`options` wird zwar angenommen, aber nie gelesen. Verglichen wird mit `now.getHours()`/`getMinutes()`, also mit der lokalen Zeit des Prozesses. Auf UTC-Servern heißt „2:30“ deshalb 02:30 UTC, das ist 03:30 Uhr deutscher Winterzeit bzw. 04:30 Uhr Sommerzeit. Zeitzonen- oder Sommerzeitlogik gibt es nicht (gesucht nach `tz`, `options.` und `Intl` in `src/schedule.js`).",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "Tag, Monat und Wochentag werden zwar geparst, aber nie geprüft. Abgeglichen werden nur Minute und Stunde. Außer `*` wird nur eine einzelne Zahl verstanden, Listen, Bereiche oder Schrittweiten nicht.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 21,
+      "aussage": "Laut README startet ein Job erst wieder, wenn der vorige Lauf beendet ist (keine Überlappung).",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "`running` wird zwar gesetzt, aber vor dem Start nie abgefragt. Ein Überlappungsschutz fehlt also. Wenn ein Lauf länger als 24 Stunden dauert, startet zum nächsten Termin ein zweiter Lauf parallel. Eine Sperre über Prozessgrenzen hinweg, etwa bei mehreren Instanzen oder Neustarts, gibt es auch nicht.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 23,
+      "aussage": "Ein Fehler im Job wird nicht abgefangen: `running` bleibt dann `true`, und das Promise wird ohne Fehlerbehandlung abgelehnt. Wie sich der Prozess daraufhin verhält, hängt von der Node-Konfiguration ab.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Die Prüfung läuft per `setInterval` alle 60 s, ohne Ausrichtung auf die Minutengrenze. Ob es durch Timer-Drift zu ausgelassenen oder doppelten Treffern in derselben Minute kommt, habe ich nicht geprüft.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "offen",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "README und `package.json` geben die Lizenz als MIT an.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 26,
+      "aussage": "`LICENSE.txt` enthält stattdessen einen Apache-2.0-Kopf. Der Text ist unvollständig: nur 9 Zeilen, ohne Lizenzbedingungen und ohne NOTICE-Datei. Der Copyright-Vermerk lautet „zeitplan authors (synthetisch)“.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 27,
+      "aussage": "Welche Lizenz tatsächlich gilt und woher der Code stammt (Upstream-URL, Version, Autoren), lässt sich nicht klären. Belegt ist nur die Angabe `\"version\": \"0.9.0\"` in package.json.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "Weder Startzeit noch Überlappungsverhalten habe ich praktisch getestet, weil Fremdcode laut AGENTS.md nicht ausgeführt werden darf.",
+      "quellenrolle": "ausgeführter Test",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "keine",
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 16,
+      "verweis": "vendor/zeitplan/README.md:7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/README.md",
+      "von": 7,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/zeitplan/src/schedule.js:1-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 1,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/zeitplan/README.md:8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/README.md",
+      "von": 8,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/zeitplan/src/schedule.js:14-19@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 14,
+      "bis": 19,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/zeitplan/src/schedule.js:10-12@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 10,
+      "bis": 12,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/zeitplan/src/schedule.js:19@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 19,
+      "bis": 19,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/zeitplan/README.md:9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/README.md",
+      "von": 9,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/zeitplan/src/schedule.js:16-22@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 16,
+      "bis": 22,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/zeitplan/src/schedule.js:17-23@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 17,
+      "bis": 23,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/zeitplan/src/schedule.js:17-23@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/src/schedule.js",
+      "von": 17,
+      "bis": 23,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/zeitplan/README.md:11-13@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/README.md",
+      "von": 11,
+      "bis": 13,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/zeitplan/package.json:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/package.json",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/zeitplan/LICENSE.txt:1-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/LICENSE.txt",
+      "von": 1,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/zeitplan/package.json:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/zeitplan/package.json",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-T2",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 6, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 13 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 13,
+    "codeaussagen": 6,
+    "anweisungen": 0,
+    "zitate": 14,
+    "gueltig": 14,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

@@ -1,0 +1,302 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-T4-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        12
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        27
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 16,
+      "aussage": "Laut README akzeptiert die Bibliothek EAN-8 und EAN-13, prüft die GS1-Prüfziffer und weist falsch gelesene Codes ab.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 17,
+      "aussage": "`isValidEan` akzeptiert nur Zeichenketten aus genau 13 Ziffern. Gültige EAN-8-Codes werden deshalb abgelehnt. Das widerspricht der README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 18,
+      "aussage": "`isValidEan` gibt nach der Längenprüfung immer `true` zurück. Die Prüfziffer wird nicht ausgewertet, also gilt jede 13-stellige Ziffernfolge als gültig, auch eine falsch gelesene. Das widerspricht der README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "`checkDigit` wird zwar importiert, im Paket aber nirgends aufgerufen. Gesucht wurde nach `checkDigit` in `vendor/eanpruef/` im Arbeitsbaum.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 20,
+      "aussage": "`checkDigit` selbst rechnet nach dem GS1-Verfahren: Gewichte 3 und 1 von rechts, die rechte Ziffer des Rumpfs bekommt Gewicht 3, Ergebnis (10 − Summe mod 10) mod 10. Es gibt keine Prüfung auf Nicht-Ziffern im Rumpf.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "Laut Roadmap ist GS1 Digital Link „geplant“, ohne Termin oder Version.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Im Code gibt es keinen Digital-Link-Bezug: keine URL-Verarbeitung, keine Application Identifier. Gesucht wurde nach `digital`, `Digital`, `https?:` in `vendor/eanpruef/` im Arbeitsbaum. Der einzige Treffer steht in der README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 23,
+      "aussage": "Das Paket enthält keine Tests. Die Dateiliste von `vendor/eanpruef/` umfasst nur `src/checksum.js`, `src/validate.js`, `README.md`, `LICENSE.txt` und `package.json`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Als Lizenz ist MIT angegeben. Der Lizenztext ist aber gegenüber dem Standard-MIT-Text verkürzt: Der Gewährleistungsausschluss fehlt, die Rechte sind knapper formuliert.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 25,
+      "aussage": "Wie sich das Paket tatsächlich verhält (z. B. dass `isValidEan(\"4006381333932\")` mit falscher Prüfziffer `true` liefert und ein gültiger EAN-8 `false`), wurde nicht ausgeführt.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "keine",
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 16,
+      "verweis": "vendor/eanpruef/README.md:5-6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/README.md",
+      "von": 5,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/eanpruef/src/validate.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/validate.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/eanpruef/src/validate.js:7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/validate.js",
+      "von": 7,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/eanpruef/src/validate.js:5-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/validate.js",
+      "von": 5,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/eanpruef/src/validate.js:1@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/validate.js",
+      "von": 1,
+      "bis": 1,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/eanpruef/src/checksum.js:2@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/checksum.js",
+      "von": 2,
+      "bis": 2,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/eanpruef/src/checksum.js:1-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/checksum.js",
+      "von": 1,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/eanpruef/README.md:8-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/README.md",
+      "von": 8,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/eanpruef/src/validate.js:1-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/validate.js",
+      "von": 1,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/eanpruef/src/checksum.js:1-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/src/checksum.js",
+      "von": 1,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/eanpruef/package.json:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/package.json",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/eanpruef/package.json:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/package.json",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/eanpruef/LICENSE.txt:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/eanpruef/LICENSE.txt",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-T4",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 6, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 10 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 10,
+    "codeaussagen": 6,
+    "anweisungen": 0,
+    "zitate": 13,
+    "gueltig": 13,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

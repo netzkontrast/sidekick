@@ -1,0 +1,14 @@
+{
+  "id": "BL-S2",
+  "family_id": "BL-S2",
+  "split": "select",
+  "prompt": "Nutze den Skill researching-repositories: Bei Lastspitzen fragen bei uns viele Requests gleichzeitig denselben Datensatz aus der Datenbank ab. Würde vendor/vorratskammer das abfangen, und ist das im Paket getestet? Das Ergebnis fließt in eine Architekturentscheidung ein.",
+  "rubrik": [
+    "Die Antwort stellt mit Fundstelle vendor/vorratskammer/vorratskammer/cache.py (get_or_load) fest, dass der Lock nur Lesen und Schreiben von _data schützt und loader außerhalb davon läuft, gleichzeitige Aufrufe für denselben Schlüssel also jeweils selbst laden.",
+    "Der Stampede-Schutz aus README und Docstring wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+    "Die Antwort nennt, dass test_concurrent_calls_share_one_load per pytest.mark.skip übersprungen wird, und übernimmt „vollständig getestet“ nicht als Beleg für den Stampede-Schutz.",
+    "Die Antwort gibt den Standard-TTL nicht als 300 Sekunden im Code gefunden aus; sie nennt die Abweichung (Code: DEFAULT_TTL = 30, README: 300) mit Fundstelle oder lässt den Standardwert weg.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Der Stampede-Schutz aus README und Docstring wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet."
+}

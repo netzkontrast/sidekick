@@ -1,6 +1,6 @@
 # Fragen-CLI V0 – Interview-Ablage über ein Werkzeug mit Schema
 
-> Version 0.1 · 31.10.2026 · **Entwurf zur Review.** Paket P9 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`
+> Version 0.2 · 31.10.2026 · Implementiert; Integration ergänzt um QCLI-FALL-45 (Rundendatei-Symlink). Paket P9 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`
 > auf Branch `research/e3-runde-2`). Owner-Freigabe: Antwort A-20261031-p9-questions-cli auf Q-20261031-p9-questions-cli
 > (dort `docs/fragen/skill-library/questions/`): „ja und vergib auch die rechte“. Freigegeben ist nur
 > `node tools/skill-library/cli.js questions …`, keine allgemeine Bash-Freigabe.
@@ -288,6 +288,7 @@ Testnamen beginnen mit der Fall-ID.
 | QCLI-FALL-42 | Quelltext von `lib/questions/` | importiert nur `node:fs`, `node:path`, `node:crypto` und eigene Module; kein Netz, kein Prozessstart | INV-12 |
 | QCLI-FALL-43 | unbekannter Befehl, fehlendes `--root`, `--root` ohne Verzeichnis, unbekannte Option, ungültiges `--now` | je Exit 2 mit JSON auf stdout | §6.2 |
 | QCLI-FALL-44 | `.claude/settings.json` | genau eine Erlaubnisregel `Bash(node tools/skill-library/cli.js questions:*)`, keine weiteren Rechte | Owner-Freigabe |
+| QCLI-FALL-45 | Einzelne Rundendatei unter `rounds/` ist ein Symlink auf eine Datei außerhalb der Ablage oder ein nicht existentes Ziel | `path_unsafe`, Exit 1; weder lesen noch schreiben; alle Dateien unverändert | INV-08 |
 
 Szenarien -34 bis -41 spielen die Dev-Fälle als CLI-Abläufe nach und wenden dieselben Prüfungen an wie `check_case.py`
 (Frontmatter, enthält/enthält nicht, Regex, Mindestanzahl, nirgends vorhanden, neue Datei, nur unter Pfad geändert).

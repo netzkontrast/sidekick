@@ -1,0 +1,6 @@
+interface:
+  display_name: "Arbeit wieder aufnehmen"
+  short_description: "Übergabe schreiben und unterbrochene Arbeit sicher fortsetzen"
+  default_prompt: "Nutze $resuming-work, um eine Übergabe zu schreiben oder die Arbeit auf aktuellem Stand fortzusetzen."
+policy:
+  allow_implicit_invocation: true

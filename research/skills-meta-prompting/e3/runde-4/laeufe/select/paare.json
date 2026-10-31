@@ -1,0 +1,14 @@
+[
+ {
+  "paar": "RV-S1",
+  "links": "Z311",
+  "rechts": "Z717",
+  "fall": "RV/select/RV-S1"
+ },
+ {
+  "paar": "RV-S2",
+  "links": "Z881",
+  "rechts": "Z247",
+  "fall": "RV/select/RV-S2"
+ }
+]

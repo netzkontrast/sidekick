@@ -17,8 +17,14 @@ Bearbeiter: Claude Code (Session), Owner beantwortet.
 | [Q-20261030-sl-e3-budget](questions/Q-20261030-sl-e3-budget.md) | Bekommt der Lernschritt E3 ein eigenes Laufbudget? |
 | [Q-20261030-sl-entwurfsabnahme](questions/Q-20261030-sl-entwurfsabnahme.md) | Wie werden die Entwürfe SL3, SL4, SL6 und SL7 abgeschlossen? |
 
+| [Q-20261031-port-reihenfolge](questions/Q-20261031-port-reihenfolge.md) | Gilt die Reihenfolge P0–P12 des Portierungsplans? |
+| [Q-20261031-port-laufbudget](questions/Q-20261031-port-laufbudget.md) | Gibt es ein Laufbudget für P6–P10? |
+| [Q-20261031-p9-questions-cli](questions/Q-20261031-p9-questions-cli.md) | Wird P9 (`questions`-CLI) gebaut, und dürfen Läufe sie aufrufen? |
+| [Q-20261031-p12-kernspec](questions/Q-20261031-p12-kernspec.md) | Darf P12 die V0-Spec des Kerns ändern? |
+| [Q-20261031-e3-b1-vorlauf](questions/Q-20261031-e3-b1-vorlauf.md) | Wird der B1-Vorlauf in Select eingeführt? |
+| [Q-20261031-p6-runde5](questions/Q-20261031-p6-runde5.md) | Wird K-VERTRAG überarbeitet in einer Runde 5 gemessen? |
 Status, Abhängigkeiten und Prüfbedarf stehen ausschließlich in den Frage-Dateien.
 
-Runden: [R-20261030-sl-runde1](rounds/R-20261030-sl-runde1.md) (beantwortet), [R-20261030-sl-runde2](rounds/R-20261030-sl-runde2.md) (beantwortet: SL1 korrigieren, dann C0), [R-20261030-sl-runde3](rounds/R-20261030-sl-runde3.md) (beantwortet: Node ohne Deps, beide Skills aktiv, E3 bis ~30 Läufe, Abnahme durch Owner-Review).
+Runden: [R-20261030-sl-runde1](rounds/R-20261030-sl-runde1.md) (beantwortet), [R-20261030-sl-runde2](rounds/R-20261030-sl-runde2.md) (beantwortet: SL1 korrigieren, dann C0), [R-20261030-sl-runde3](rounds/R-20261030-sl-runde3.md) (beantwortet: Node ohne Deps, beide Skills aktiv, E3 bis ~30 Läufe, Abnahme durch Owner-Review), [R-20261031-port-runde1](rounds/R-20261031-port-runde1.md) (beantwortet: Reihenfolge P0–P12, ~60 Starts, P9 mit eng begrenzten Rechten, P12-Spec-Review), [R-20261031-e3-b1-vorlauf](rounds/R-20261031-e3-b1-vorlauf.md) (beantwortet: B1-Vorlauf mit P2 einführen), [R-20261031-p6-runde5](rounds/R-20261031-p6-runde5.md) (beantwortet: Runde 5 für K-VERTRAG-2).
 Zusammenfassung: Alle vier Fragen mit Option A beantwortet: bis ~40 Live-Läufe, erste Version Stufen 0–2, Feedback aus synthetischen Fällen und freigegebenen Repo-Artefakten, Aktivierung nur durch den Owner am Hash. Bestätigung über das PR-Review.
 Bestätigung: ausstehend.

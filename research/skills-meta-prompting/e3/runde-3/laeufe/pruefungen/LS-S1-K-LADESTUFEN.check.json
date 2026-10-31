@@ -1,0 +1,151 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval check",
+  "checked_level": "Dateiprüfungen (SLV0-EVAL-22)",
+  "case_id": "LS-S1",
+  "ausgangsstand": "angegeben",
+  "pruefungen": [
+    {
+      "id": "LS-S1-preis-answered",
+      "regel": "frontmatter",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "LS-S1-preis-antwort-eintrag",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-preis-wortlaut",
+      "regel": "contains",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-kaution-bleibt-asked",
+      "regel": "frontmatter",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "LS-S1-kaution-ohne-antwort",
+      "regel": "not_contains",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-reinigung-nicht-beantwortet",
+      "regel": "frontmatter_in",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-musik-erhalten",
+      "regel": "contains",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-nur-ablage",
+      "regel": "only_changed_under",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "bestanden": 8,
+  "nicht_bestanden": 0,
+  "assertions": [
+    {
+      "id": "LS-S1-preis-answered",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "LS-S1-preis-antwort-eintrag",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-preis-wortlaut",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-kaution-bleibt-asked",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "LS-S1-kaution-ohne-antwort",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-reinigung-nicht-beantwortet",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-musik-erhalten",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S1-nur-ablage",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "messages": []
+}

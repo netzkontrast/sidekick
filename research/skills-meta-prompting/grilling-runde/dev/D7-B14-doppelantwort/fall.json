@@ -1,0 +1,30 @@
+{
+  "id": "D7-B14-doppelantwort",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Meine Mitgründerin hat gerade geschrieben: Gäste sollen doch per Link lesen dürfen.",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "contains": "Nein, nur mit Konto."
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter": {
+        "needs_review": "true"
+      }
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "regex": "Konflikt mit:\\s*A-"
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K16",
+    "GR-K11"
+  ],
+  "erwartung": "Zweite Antwort sichtbar als Konflikt, erste gilt bis zur Klärung, needs_review; Rückfrage, wer entscheidet."
+}

@@ -40,6 +40,28 @@ function itext(ids, { session = 'waiting_user', extra = '' } = {}) {
 
 const Q = (s) => `Q-20261029-${s}`;
 
+test('QCLI-FALL-45 round file symlinks, including dangling links, are refused before reading', (t) => {
+  const root = setup(t, assert, [qp('Q-20261031-a')]);
+  const outside = tmpRoot(t);
+  const target = path.join(outside, 'round.md');
+  // Invalid secret-bearing content must never be parsed or echoed.
+  const marker = 'outside-round-content-must-not-appear';
+  fs.writeFileSync(target, marker);
+  fs.mkdirSync(path.join(root, 't/rounds'), { recursive: true });
+  const link = path.join(root, 't/rounds/R-20261031-outside.md');
+  fs.symlinkSync(target, link);
+  for (const dangling of [false, true]) {
+    if (dangling) fs.unlinkSync(target);
+    for (const command of ['check', 'status', 'render']) {
+      const r = qcli([command, '--root', root, '--topic', 't']);
+      assert.equal(r.code, 1, r.stdout);
+      assert.deepEqual(codesOf(r), ['path_unsafe']);
+      assert.ok(!r.stdout.includes(marker) && !r.stderr.includes(marker));
+      assert.equal(fs.lstatSync(link).isSymbolicLink(), true);
+    }
+  }
+});
+
 test('QCLI-FALL-25 check reports each invariant violation with its code; only warnings keep exit 0; secrets are not echoed', (t) => {
   const root = tmpRoot(t);
   const secret = 'sk-live-51QpTafelSyncX9d7Kq2Lm8Vb4Zr6Wt3Yh';

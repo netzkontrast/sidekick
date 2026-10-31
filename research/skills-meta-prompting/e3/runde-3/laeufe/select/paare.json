@@ -1,0 +1,14 @@
+[
+ {
+  "paar": "AU-S1",
+  "links": "Z330",
+  "rechts": "Z608",
+  "fall": "AU/select/AU-S1"
+ },
+ {
+  "paar": "AU-S2",
+  "links": "Z324",
+  "rechts": "Z540",
+  "fall": "AU/select/AU-S2"
+ }
+]

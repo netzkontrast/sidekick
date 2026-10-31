@@ -1,0 +1,78 @@
+{
+  "id": "RW-T3",
+  "family_id": "RW",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Schließe das Interview zur Zeiterfassung ab und mach den Entwurf in `docs/fragen/zeiterfassung/zusammenfassung.md` final. Niemand ist in diesem Lauf erreichbar; bestätigen kann die Owner die Zusammenfassung erst später.",
+  "rubrik": [
+    "Die im Entwurf vorausgesetzte, nie gestellte Entscheidung (Einbindung der Freelancer) steht nicht unter „Geklärt“, sondern als offene Frage (Fragedatei) oder ausdrücklich markierte Annahme; der Grund (keine Frage, keine Antwort in der Ablage) ist genannt.",
+    "Überstundenausgleich (Q-20261027-ueberstunden) hat nur eine Empfehlung: nicht answered, nicht unter „Geklärt“; Empfehlung bleibt von Antwort getrennt.",
+    "Echt beantwortete Fragen (Q-20261027-takt, Q-20261027-projekt) bleiben answered und stehen mit Antwort-ID unter „Geklärt“ (Gegenkriterium).",
+    "Ohne Rückkanal: Zusammenfassung nicht als bestätigt, Session nicht complete; Bestätigung und nächster Schritt als ausstehend benannt.",
+    "Für den Takt gilt die korrigierte Antwort A-20261027-takt2; die ersetzte Antwort bleibt in der Fragedatei sichtbar."
+  ],
+  "kern_kriterium": "RW-T3-vorausgesetzt-offen",
+  "gegen_kriterium": "RW-T3-takt-answered",
+  "checks": [
+    {
+      "id": "RW-T3-vorausgesetzt-offen",
+      "file": "docs/fragen/zeiterfassung/zusammenfassung.md",
+      "regex": "## (Offen|Annahmen)[^#]*(Freelancer|freie Mitarbeit|Freiberufl)"
+    },
+    {
+      "id": "RW-T3-vorausgesetzt-nicht-geklaert",
+      "file": "docs/fragen/zeiterfassung/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Freelancer|freie Mitarbeit|Freiberufl))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T3-empfehlung-nicht-geklaert",
+      "file": "docs/fragen/zeiterfassung/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Überstunden|Freizeitausgleich))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T3-empfehlung-nicht-answered",
+      "file": "docs/fragen/zeiterfassung/questions/Q-20261027-ueberstunden.md",
+      "frontmatter_in": {
+        "status": [
+          "open",
+          "asked"
+        ]
+      }
+    },
+    {
+      "id": "RW-T3-empfehlung-ohne-antwort",
+      "file": "docs/fragen/zeiterfassung/questions/Q-20261027-ueberstunden.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "RW-T3-takt-answered",
+      "file": "docs/fragen/zeiterfassung/questions/Q-20261027-takt.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T3-projekt-answered",
+      "file": "docs/fragen/zeiterfassung/questions/Q-20261027-projekt.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T3-geklaert-behalten",
+      "file": "docs/fragen/zeiterfassung/zusammenfassung.md",
+      "regex": "## Geklärt[^#]*15-Minuten"
+    },
+    {
+      "id": "RW-T3-nicht-complete",
+      "file": "docs/fragen/zeiterfassung/index.md",
+      "regex": "^(?![\\s\\S]*Session: *`?complete)"
+    },
+    {
+      "id": "RW-T3-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Abschluss eines Interviews. Der Entwurf führt Einbindung der Freelancer als geklärt, obwohl es dazu weder Frage noch Antwort gibt, und Überstundenausgleich nur mit Empfehlung. Erwartet: Einbindung der Freelancer wird offene Frage oder markierte Annahme, nie geklärt; Q-20261027-ueberstunden bleibt open/asked. Nulllauf: Kern (RW-T3-vorausgesetzt-offen) und die beiden ‚nicht geklärt‘-Prüfungen fallen durch; das Gegenkriterium (RW-T3-takt-answered) besteht im Nulllauf und schließt ‚alles auf offen zurücksetzen‘ aus.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

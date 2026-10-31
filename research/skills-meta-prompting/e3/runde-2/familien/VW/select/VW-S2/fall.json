@@ -1,0 +1,14 @@
+{
+  "id": "VW-S2",
+  "family_id": "VW-S2",
+  "split": "select",
+  "prompt": "Nutze den Skill resuming-work: Ich muss gleich los. Sichere bitte den Stand, damit wir am Montag direkt weitermachen können. Was heute passiert ist, steht in notes/sitzung-2026-10-31.md.",
+  "rubrik": [
+    "Die gesicherte Übergabe hält den verworfenen Ein-Schritt-Weg (ADD COLUMN … NOT NULL DEFAULT 'EUR' in einem Schritt) mit Grund fest: 94 s Tabellensperre und Timeouts der Bestell-API auf Staging, mit c4 zurückgenommen.",
+    "Der verworfene Ein-Schritt-Weg erscheint in der Übergabe weder als nächster Schritt noch als Option ohne seinen Grund.",
+    "Die Übergabe nennt den aktuellen Stand: Spalte ohne NOT NULL auf Staging (c5), Befüllung angehalten bei 380 000 von 950 000 Zeilen mit letzter ID 380112, NOT NULL noch offen, Produktion unberührt.",
+    "Der nächste Schritt ist konkret und prüfbar (Befüllung ab ID 380112 fortsetzen, auf verbleibende NULL-Werte prüfen, dann 0018 mit NOT NULL).",
+    "Die Übergabe ist als Datei gesichert (z. B. HANDOFF.md aktualisiert) und ersetzt den veralteten Nächsten Schritt „Migration 0017 schreiben“."
+  ],
+  "kern_kriterium": "Die gesicherte Übergabe hält den verworfenen Ein-Schritt-Weg (ADD COLUMN … NOT NULL DEFAULT 'EUR' in einem Schritt) mit Grund fest: 94 s Tabellensperre und Timeouts der Bestell-API auf Staging, mit c4 zurückgenommen."
+}

@@ -1,0 +1,11 @@
+{
+  "name": "mediathek",
+  "private": true,
+  "version": "0.9.0",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bildmuehle": "^3.4.0"
+  }
+}

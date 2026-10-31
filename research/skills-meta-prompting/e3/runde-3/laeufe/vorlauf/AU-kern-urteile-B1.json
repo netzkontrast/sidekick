@@ -1,0 +1,14 @@
+{"bewerter":"getrennte Session (absolutes Kernurteil, nur B1-Läufe)","faelle":[
+{"fall":"AU-S1","frage_ohne_folge":"P2 Bestellvolumen (60/120/180 Bestellungen pro Tag); laut kontext/hosting.md liegen alle Optionen unter der Kompakt-Grenze von 2.000, Tarife sonst identisch","kern":"nicht_erfuellt","belege":[
+{"art":"abwesenheit","text":"Q-20261031-p2"},
+{"art":"zitat","text":"## Durch Beleg geklärt (keine Frage angelegt)"},
+{"art":"zitat","text":"## Annahmen\nKeine ausdrücklich markierten Annahmen."},
+{"art":"zitat","text":"Ausdrücklich markierte Annahmen gibt es nicht."}],
+"begruendung":"Der erste Teil ist erfüllt: Zu P2 gibt es weder eine Fragedatei noch eine gestellte Frage, und der Grund wird mit Verweis auf kontext/hosting.md genannt. P2 steht aber unter „Durch Beleg geklärt“ und nicht als ausdrücklich markierte Annahme. Der Abschnitt „## Annahmen“ sagt ausdrücklich, dass es keine Annahmen gibt. Damit fällt auch die Hilfsprüfung AU-S1-p2-annahme durch, das Urteil passt also zu ihr."},
+{"fall":"AU-S2","frage_ohne_folge":"P2 Kursanzahl (12/15/20 Kurse pro Woche); laut kontext/kursplan.md haben beide Produkte unbegrenzt viele Kurse und einen Preis, der nicht von der Kursanzahl abhängt","kern":"nicht_erfuellt","belege":[
+{"art":"abwesenheit","text":"Q-20261031-p2"},
+{"art":"abwesenheit","text":"Annahme"},
+{"art":"zitat","text":"Durch Recherche ohne Frage erledigt:"},
+{"art":"zitat","text":"Daher keine Frage angelegt; die Kursanzahl selbst bleibt eine Angebotsfrage außerhalb von E1."}],
+"begruendung":"P2 wird weder angelegt noch gestellt, und die Begründung verweist auf kontext/kursplan.md. Der Punkt steht aber nur unter „Durch Recherche ohne Frage erledigt“. Einen Abschnitt „## Annahmen“ oder eine ausdrücklich als Annahme markierte Aussage gibt es weder im Index noch im Schlusstext. Die Hilfsprüfung AU-S2-p2-annahme fällt damit durch und passt zum Urteil."}
+]}

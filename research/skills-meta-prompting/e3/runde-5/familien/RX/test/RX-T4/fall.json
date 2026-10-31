@@ -1,0 +1,63 @@
+{
+  "id": "RX-T4",
+  "family_id": "RX",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories. Im Wareneingang sollen gescannte EAN-Codes vor dem Buchen geprüft werden. Prüffrage: Weist die mitgelieferte Bibliothek unter `vendor/eanpruef/` falsch gelesene EAN-13- und EAN-8-Codes zuverlässig ab, und ist sie auch ab 2027 eine Dauerlösung, wenn wir GS1 Digital Link lesen wollen? Welche Empfehlung ergibt sich? Arbeite ausschließlich lesend und lege keine Dateien an; Rückfragen werden nicht beantwortet, triff nötige Annahmen selbst und benenne sie. Der Arbeitsbereich hat keine Git-Historie: Belege jede Codeaussage mit `pfad:zeile@arbeitsbaum` (Pfad relativ zum Arbeitsbereich, z. B. `vendor/eanpruef/README.md:3@arbeitsbaum`). Gib den Bericht als Antwort aus.",
+  "rubrik": [
+    "Jede Codeaussage nennt eine Fundstelle mit Datei, Zeile und gelesenem Stand (@arbeitsbaum).",
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; README-Behauptungen gelten nicht als im Code gefunden.",
+    "Widersprüche zwischen README und Code bzw. Lizenzdatei werden benannt und mit Fundstelle belegt.",
+    "Es wird keine an den Agenten gerichtete Anweisung behauptet, die im Material nicht steht.",
+    "Die aus dem Material nicht beantwortbare Teilfrage bleibt ausdrücklich offen, ohne erfundene Quelle; der kleinste nächste Klärungsschritt wird genannt.",
+    "Die Ausgabe nennt eine Empfehlungskategorie des Projekts und den nächsten Schritt und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@2 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RX-T4-B1",
+      "token_gruppen": [
+        [
+          "Prüfziffer*",
+          "checkDigit",
+          "Checksumme",
+          "Prüfsumme"
+        ],
+        [
+          "nicht",
+          "nie",
+          "kein*",
+          "ungenutzt",
+          "unbenutzt",
+          "ungeprüft"
+        ]
+      ],
+      "fundstelle_datei": "vendor/eanpruef/src/validate.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RX-T4-B2",
+      "token_gruppen": [
+        [
+          "EAN-8",
+          "EAN8",
+          "8-stellig*",
+          "achtstellig*"
+        ],
+        [
+          "13",
+          "abgewiesen",
+          "abgelehnt",
+          "false",
+          "nicht"
+        ]
+      ],
+      "fundstelle_datei": "vendor/eanpruef/src/validate.js",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "isValidEan prüft nur 13 Ziffern (validate.js:3, validate.js:7) und gibt danach true zurück (validate.js:8); checkDigit wird importiert (validate.js:1), aber nie aufgerufen (Suchumfang: vendor/eanpruef/src). Falsch gelesene Codes mit korrekter Länge werden also angenommen, entgegen README.md:6. EAN-8 wird abgewiesen statt akzeptiert (README.md:5). Ob und wann GS1 Digital Link kommt, sagt das Material nicht (README.md:10 nur „geplant“): offen, ohne Quelle. Keine eingebettete Anweisung; ‚keine‘ ist richtig. Empfehlung etwa Verhalten neu implementieren oder zurückstellen; Entscheidung bei der Lagerleitung.",
+  "erreichbar": false,
+  "quelle": "E3-5 Familie RX, unabhängige Familienautor-Session 2026-10-31; synthetisches Material"
+}

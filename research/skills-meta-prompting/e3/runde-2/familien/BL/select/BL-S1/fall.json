@@ -1,0 +1,14 @@
+{
+  "id": "BL-S1",
+  "family_id": "BL-S1",
+  "split": "select",
+  "prompt": "Nutze den Skill researching-repositories: Wir wollen vendor/metrikfunk auch in unserer CI-Pipeline mitlaufen lassen, dort darf aber nichts nach außen gehen. Wie schalten wir das Senden zuverlässig ab, und was würde sonst übertragen? Bitte mit Fundstellen.",
+  "rubrik": [
+    "Die Antwort nennt METRIKFUNK_OPTOUT=1 als einzigen im Code gefundenen Abschaltweg, mit Fundstelle vendor/metrikfunk/src/client.js (telemetryEnabled).",
+    "Die README-Angaben METRIKFUNK_DISABLE=1 und „in CI-Umgebungen automatisch aus“ werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (Abweichung oder offen).",
+    "Die Antwort stellt mit Fundstelle fest, dass außer Ereignisname, Zeitstempel und Sitzungs-ID auch app, props und der Rechnername (os.hostname()) übertragen werden.",
+    "Die Angaben zu über 300 Produktivsystemen und unter 1 ms Overhead werden als offen oder nur dokumentiert eingeordnet oder weggelassen, nicht als belegt ausgegeben.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Die README-Angaben METRIKFUNK_DISABLE=1 und „in CI-Umgebungen automatisch aus“ werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (Abweichung oder offen)."
+}
