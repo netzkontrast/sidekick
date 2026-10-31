@@ -1,0 +1,38 @@
+{
+ "paare": [
+  {
+   "paar": "AU-T1",
+   "links": "Z935",
+   "rechts": "Z762",
+   "fall": "runde-3/familien/AU/test/AU-T1"
+  },
+  {
+   "paar": "AU-T2",
+   "links": "Z342",
+   "rechts": "Z524",
+   "fall": "runde-3/familien/AU/test/AU-T2"
+  },
+  {
+   "paar": "AU-T3",
+   "links": "Z767",
+   "rechts": "Z791",
+   "fall": "runde-3/familien/AU/test/AU-T3"
+  },
+  {
+   "paar": "AU-T4",
+   "links": "Z898",
+   "rechts": "Z948",
+   "fall": "runde-3/familien/AU/test/AU-T4"
+  }
+ ],
+ "regression": [
+  {
+   "code": "Z877",
+   "fall": "familien/regression/R-01-grilling"
+  },
+  {
+   "code": "Z998",
+   "fall": "familien/regression/R-05-grilling"
+  }
+ ]
+}

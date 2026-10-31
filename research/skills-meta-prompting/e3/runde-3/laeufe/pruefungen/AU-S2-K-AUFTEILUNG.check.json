@@ -1,0 +1,117 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval check",
+  "checked_level": "Dateiprüfungen (SLV0-EVAL-22)",
+  "case_id": "AU-S2",
+  "ausgangsstand": "angegeben",
+  "pruefungen": [
+    {
+      "id": "AU-S2-p1-erfasst",
+      "regel": "new_file_under",
+      "ergebnis": "bestanden",
+      "detail": "neu: docs/fragen/kursbuchung/questions/Q-20261031-p1.md, docs/fragen/kursbuchung/questions/Q-20261031-p4.md; passend: docs/fragen/kursbuchung/questions/Q-20261031-p1.md",
+      "trennschaerfe": "trennend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "AU-S2-p4-erfasst",
+      "regel": "new_file_under",
+      "ergebnis": "bestanden",
+      "detail": "neu: docs/fragen/kursbuchung/questions/Q-20261031-p1.md, docs/fragen/kursbuchung/questions/Q-20261031-p4.md; passend: docs/fragen/kursbuchung/questions/Q-20261031-p4.md",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-p2-nicht-angelegt",
+      "regel": "no_new_files_under",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-p2-annahme",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-keine-erfundene-antwort",
+      "regel": "absent_anywhere",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-nur-ablage",
+      "regel": "only_changed_under",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "bestanden": 6,
+  "nicht_bestanden": 0,
+  "assertions": [
+    {
+      "id": "AU-S2-p1-erfasst",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "AU-S2-p4-erfasst",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-p2-nicht-angelegt",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-p2-annahme",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-keine-erfundene-antwort",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "AU-S2-nur-ablage",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "messages": []
+}

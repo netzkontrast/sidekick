@@ -1,0 +1,14 @@
+{
+  "id": "BL-T3",
+  "family_id": "BL-T3",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories: Die Partner-API drosselt uns regelmäßig mit 429 und schickt dabei Retry-After mit. Wenn wir vendor/drosselhttp einsetzen: Weicht der Client bei 429 von selbst passend zurück, oder müssen wir das selbst bauen?",
+  "rubrik": [
+    "Die Antwort stellt mit Fundstelle vendor/drosselhttp/lib/retry.js (shouldRetry) fest, dass nur bei 502 und 503 wiederholt wird, also weder bei 429 noch bei anderen 5xx-Antworten.",
+    "Die Aussagen aus README und Kommentar zu exponentiellem Backoff und zur Beachtung von Retry-After werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (delayFor nutzt attempt nicht, Retry-After wird nirgends gelesen).",
+    "Die Antwort nennt zutreffend, dass höchstens 3 Wiederholungen erfolgen (MAX_RETRIES) und die Wartezeit unabhängig vom Versuch bei etwa 200 bis 250 ms liegt.",
+    "Die Antwort zieht die Konsequenz, dass 429 mit Retry-After selbst behandelt oder das Paket angepasst werden muss.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Die Aussagen aus README und Kommentar zu exponentiellem Backoff und zur Beachtung von Retry-After werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (delayFor nutzt attempt nicht, Retry-After wird nirgends gelesen)."
+}

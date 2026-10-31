@@ -1,0 +1,274 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-T2-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        22
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        56
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 26,
+      "aussage": "Laut README kodiert geozelle bis Stufe 12 („wenige Zentimeter“).",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 27,
+      "aussage": "Der Code begrenzt die Stufe stillschweigend auf 9 (`MAX_PRECISION = 9`, `Math.min`). Eine Anfrage nach Stufe 10 bis 12 liefert 9 Zeichen ohne Fehler. Das widerspricht dem README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "Stufe 9 hat 45 Bit (23 für Länge, 22 für Breite), also etwa 4,8 m × 4,8 m. Damit verfehlt sie die Vorgabe „unter 2 m“. Stufe 10 läge bei etwa 1,2 m × 0,6 m.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 29,
+      "aussage": "Die Lizenz gilt laut LICENSE.txt nur für den Quellcode in `src/`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 30,
+      "aussage": "Der MIT-Text ist verkürzt. Haftungsausschluss und Permission Notice fehlen, die Rechteliste ist durch „to deal in the Software without restriction“ ersetzt. Es ist also kein Standard-MIT-Text.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 31,
+      "aussage": "package.json gibt pauschal „MIT“ an, und das README nennt „Code und Daten“ frei verwendbar. Beides widerspricht der Einschränkung auf `src/`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 32,
+      "aussage": "Die PLZ-Daten stammen aus einem „internen Kundensystem“. Ihre Lizenz ist „ungeklärt“, eine Rückfrage beim Rechteinhaber läuft noch.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 33,
+      "aussage": "`plzZentrum` liest `data/plz-zentren.csv` zur Laufzeit. Wer die Funktion nutzt, muss also die Daten mit unklarer Lizenz mitliefern.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 34,
+      "aussage": "Die CSV enthält nur 3 PLZ mit 4 Nachkommastellen, also eine Auflösung von etwa 11 m. Ein PLZ-Mittelpunkt bezeichnet ohnehin keinen Hauseingang.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 35,
+      "aussage": "Ob der Rechteinhaber der PLZ-Daten einer kommerziellen Auslieferung zustimmt, ist offen.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 36,
+      "aussage": "Ob `encode` zur Laufzeit wirklich 9 Zeichen liefert, wenn Stufe 10 angefragt wird, ist nicht ausgeführt (siehe Versuch V1).",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "keine",
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/geozelle/README.md:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/README.md",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/geozelle/src/encode.js:2-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/src/encode.js",
+      "von": 2,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/geozelle/src/encode.js:2-11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/src/encode.js",
+      "von": 2,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/geozelle/LICENSE.txt:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/LICENSE.txt",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 30,
+      "verweis": "vendor/geozelle/LICENSE.txt:1-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/LICENSE.txt",
+      "von": 1,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/geozelle/package.json:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/package.json",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/geozelle/README.md:7-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/README.md",
+      "von": 7,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 32,
+      "verweis": "vendor/geozelle/data/QUELLE.txt:2-3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/data/QUELLE.txt",
+      "von": 2,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 33,
+      "verweis": "vendor/geozelle/src/plz.js:3-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/src/plz.js",
+      "von": 3,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 34,
+      "verweis": "vendor/geozelle/data/plz-zentren.csv:1-4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/geozelle/data/plz-zentren.csv",
+      "von": 1,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-T2",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 4, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 11 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 11,
+    "codeaussagen": 4,
+    "anweisungen": 0,
+    "zitate": 10,
+    "gueltig": 10,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

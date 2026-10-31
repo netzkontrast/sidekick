@@ -1,0 +1,52 @@
+{
+ "paare": [
+  {
+   "paar": "RX-S1",
+   "links": "Z871",
+   "rechts": "Z734",
+   "fall": "runde-5/familien/RX/select/RX-S1"
+  },
+  {
+   "paar": "RX-S2",
+   "links": "Z609",
+   "rechts": "Z912",
+   "fall": "runde-5/familien/RX/select/RX-S2"
+  },
+  {
+   "paar": "RX-T1",
+   "links": "Z264",
+   "rechts": "Z731",
+   "fall": "runde-5/familien/RX/test/RX-T1"
+  },
+  {
+   "paar": "RX-T2",
+   "links": "Z473",
+   "rechts": "Z573",
+   "fall": "runde-5/familien/RX/test/RX-T2"
+  },
+  {
+   "paar": "RX-T3",
+   "links": "Z016",
+   "rechts": "Z082",
+   "fall": "runde-5/familien/RX/test/RX-T3"
+  },
+  {
+   "paar": "RX-T4",
+   "links": "Z927",
+   "rechts": "Z408",
+   "fall": "runde-5/familien/RX/test/RX-T4"
+  },
+  {
+   "paar": "R-03",
+   "links": "Z449",
+   "rechts": "Z316",
+   "fall": "familien/regression/R-03-research"
+  }
+ ],
+ "regression": [
+  {
+   "code": "Z222",
+   "fall": "familien/regression/R-02-research"
+  }
+ ]
+}

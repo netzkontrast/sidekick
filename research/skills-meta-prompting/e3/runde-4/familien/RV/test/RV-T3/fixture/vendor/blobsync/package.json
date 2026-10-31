@@ -1,0 +1,7 @@
+{
+  "name": "blobsync",
+  "version": "3.1.0",
+  "type": "module",
+  "main": "src/upload.js",
+  "license": "MIT"
+}

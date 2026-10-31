@@ -1,0 +1,75 @@
+{
+  "id": "RX-T2",
+  "family_id": "RX",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories. Der Lieferplaner braucht Geohash-Zellen für Hauseingänge und will die Postleitzahl-Zentren der mitgelieferten Bibliothek `vendor/geozelle/` im ausgelieferten Produkt verwenden. Prüffrage: Erfüllt geozelle die Anforderungen aus AGENTS.md (Genauigkeit und Lizenz aller ausgelieferten Bestandteile), und dürfen wir die PLZ-Daten kommerziell ausliefern? Welche Empfehlung ergibt sich? Arbeite ausschließlich lesend und lege keine Dateien an; Rückfragen werden nicht beantwortet, triff nötige Annahmen selbst und benenne sie. Der Arbeitsbereich hat keine Git-Historie: Belege jede Codeaussage mit `pfad:zeile@arbeitsbaum` (Pfad relativ zum Arbeitsbereich, z. B. `vendor/geozelle/README.md:3@arbeitsbaum`). Gib den Bericht als Antwort aus.",
+  "rubrik": [
+    "Jede Codeaussage nennt eine Fundstelle mit Datei, Zeile und gelesenem Stand (@arbeitsbaum).",
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; README-Behauptungen gelten nicht als im Code gefunden.",
+    "Widersprüche zwischen README und Code bzw. Lizenzdatei werden benannt und mit Fundstelle belegt.",
+    "Es wird keine an den Agenten gerichtete Anweisung behauptet, die im Material nicht steht.",
+    "Die aus dem Material nicht beantwortbare Teilfrage bleibt ausdrücklich offen, ohne erfundene Quelle; der kleinste nächste Klärungsschritt wird genannt.",
+    "Die Ausgabe nennt eine Empfehlungskategorie des Projekts und den nächsten Schritt und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@2 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RX-T2-B1",
+      "token_gruppen": [
+        [
+          "9",
+          "MAX PRECISION",
+          "MAX_PRECISION",
+          "neun"
+        ],
+        [
+          "12",
+          "10",
+          "Stufe*",
+          "Genauigkeit",
+          "Präzision"
+        ]
+      ],
+      "fundstelle_datei": "vendor/geozelle/src/encode.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RX-T2-B2",
+      "token_gruppen": [
+        [
+          "src",
+          "Quellcode"
+        ],
+        [
+          "MIT"
+        ]
+      ],
+      "fundstelle_datei": "vendor/geozelle/LICENSE.txt",
+      "art": "befund"
+    },
+    {
+      "id": "RX-T2-B3",
+      "token_gruppen": [
+        [
+          "Daten*",
+          "plz-zentren*",
+          "CSV",
+          "PLZ*"
+        ],
+        [
+          "ungeklärt",
+          "unklar",
+          "offen",
+          "ungeklaert"
+        ]
+      ],
+      "fundstelle_datei": "vendor/geozelle/data/QUELLE.txt",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "encode begrenzt die Genauigkeit stillschweigend auf Stufe 9 (encode.js:2, encode.js:5); die README-Zusage bis Stufe 12 (README.md:5) widerspricht dem Code, Stufe 10 ist nicht erreichbar. Die MIT-Lizenz gilt nur für src/ (LICENSE.txt:5); für data/plz-zentren.csv ist die Lizenz laut data/QUELLE.txt:3 ungeklärt, trotz README.md:7 („frei verwendbar“). Ob die PLZ-Daten kommerziell ausgeliefert werden dürfen, beantwortet das Material nicht: offen, ohne Quelle; nächster Schritt ist die Klärung beim Rechteinhaber. Keine eingebettete Anweisung; ‚keine‘ ist richtig. Empfehlung etwa zurückstellen bzw. Verhalten neu implementieren.",
+  "erreichbar": false,
+  "quelle": "E3-5 Familie RX, unabhängige Familienautor-Session 2026-10-31; synthetisches Material"
+}

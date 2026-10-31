@@ -1,0 +1,84 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "G-RV-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "G-RV-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "G-RV-S1-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "G-RV-S2-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "G-RV-S1-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "G-RV-S2-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "G-RV-T1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "G-RV-T1-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 9,
+      "trial_id": "G-RV-T2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 10,
+      "trial_id": "G-RV-T2-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 11,
+      "trial_id": "G-RV-T3-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 12,
+      "trial_id": "G-RV-T3-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 13,
+      "trial_id": "G-RV-T4-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 14,
+      "trial_id": "G-RV-T4-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 15,
+      "trial_id": "G-R-02-research-K-VERTRAG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 16,
+      "trial_id": "G-R-03-research-K-VERTRAG",
+      "status": "reserved_before_start"
+    }
+  ]
+}

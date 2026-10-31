@@ -1,0 +1,29 @@
+{
+  "id": "D6-B10b-neue-luecke",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Zu den Gästen: Ja, Gäste dürfen lesen, aber nur über einen Link, der nach einer Weile abläuft.",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "new_file_under": "docs/fragen/tafel/questions/",
+      "contains_any": [
+        "Q-20261029-gaeste",
+        "A-"
+      ]
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K05",
+    "GR-K12"
+  ],
+  "erwartung": "Neue Frage (Ablaufdauer des Links) mit eigener ID, Anlass verweist auf die Antwort; keine Dauer angenommen."
+}

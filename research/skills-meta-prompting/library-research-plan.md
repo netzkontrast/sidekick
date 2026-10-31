@@ -174,6 +174,29 @@ Reihenfolge: SL0 → SL1 → Review → SL2 → SL3 → SL4 → SL5 → SL6 → 
 
 In SL0 zunächst alle neun Bereiche inventarisieren; die eigentliche Bereichsrecherche folgt nach Review in SL2. Danach entscheidende Lücken vertiefen. Kein generisches Framework implementieren, bevor Vertrag und Baseline stehen. Keine Aufwands-/Kostenersparnis vor Messung zusagen.
 
+### 8.1 Phase 2: Portierung (P0–P12) und laufende Messrunden
+
+Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ und „improve grilling“. Owner-Entscheidungen zu Reihenfolge, Budget (~60 Starts für P6–P10), P9 und P12: [R-20261031-port-runde1](../../docs/fragen/skill-library/rounds/R-20261031-port-runde1.md). Inhalt, Begründung und Abnahme: [Portierungsplan](portierungsplan-2026-10-31.md). Status nur hier.
+
+| Paket | Highlight (Repo) | Status |
+|---|---|---|
+| P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | gemergt (PR #21) |
+| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | gemergt (PR #23) |
+| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | gemergt (PR #23) |
+| P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | gemergt (PR #23) |
+| P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | gemergt (PR #28) |
+| P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | gemergt (PR #25) |
+| P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | abgeschlossen: Prüfer gemergt (PR #29, Vertrag `@2`); K-VERTRAG (E3-4) und K-VERTRAG-2 (E3-5) **nicht vorgelegt** – Format 4/4 erreichbar, Inhalt neutral bis gemischt ([E3-5](e3/runde-5/E3-5-ergebnis-2026-10-31.md)) |
+| P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | abgeschlossen in E3-3: **verworfen, kein Vorteil** (Select ohne Kostenersparnis, Weiche greift nicht) ([Ergebnis](e3/runde-3/E3-3-ergebnis-2026-10-31.md)) |
+| P8 | grilling K-RUECKWAERTS: Rückwärtsabgleich vor der Zusammenfassung (prompt-architect) | abgeschlossen in E3-3: **zurückgestellt**, B1 erfüllt den Kern bereits (B1-Vorlauf nicht trennend) |
+| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | gemergt (PR #24) |
+| P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | Kanarienfälle **praktisch nachgewiesen** (4 Starts: fremder Pfad per Read/Grep/Glob verweigert, kein Web, kein MCP) ([Ergebnis](p10-kanarien/ergebnis-2026-10-31.md)); Profil als Datensatz in `eval prepare` offen |
+| P11 | Fail-closed `context-pack` (code2prompt) | gemergt (PR #27) |
+| P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | gemergt (PR #22); Schema-Nachzug offen |
+| E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | abgeschlossen: beide **verworfen, kein Vorteil** (Select schlechter, B1 erfüllt den Kern bereits); Abbruch vor Test, 8/30 Starts; Testfamilien ungelaufen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)) |
+| DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | abgeschlossen: 8 Befunde (18 bestätigt, 7 widerlegt); stärkster Befund Fragenwahl nach Aufteilung der Hypothesen, ToT allein schwächer; neuer Kandidat K-AUFTEILUNG neben P7/P8 ([Auswertung](grilling-runde/deep-research/auswertung-2026-10-31.md)) |
+| E3-3 | K-AUFTEILUNG (DR), K-LADESTUFEN (P7), K-RUECKWAERTS (P8) | abgeschlossen, 20/40 Starts: **K-AUFTEILUNG aktiv** seit Owner-Merge von PR #26 am 31.10.2026 (`2ddf9ed`; select 2/2, test 4/4 besser, 0 R-Verstöße; Paketsatz `1c6d2951…`); P7 verworfen; P8 zurückgestellt ([Ergebnis](e3/runde-3/E3-3-ergebnis-2026-10-31.md)) |
+
 ## 9. Drei spätere durchgängige Versuche (SL5)
 
 SL1 entwirft diese Versuche; ausgeführt werden sie erst in SL5. Für spätere Kandidatensuche sind Baseline, Rubrik und Entwicklungs-/Auswahldaten vorher versioniert festzuhalten. Eine getrennte Review-Person oder -Session prüft das Evaluationsdesign; eine neue Session allein beweist keine Unabhängigkeit. Finale Testinhalte bleiben vom Optimierungsprozess getrennt. Ein Autor bewertet seine eigenen Varianten nicht als alleiniger unabhängiger Nachweis.

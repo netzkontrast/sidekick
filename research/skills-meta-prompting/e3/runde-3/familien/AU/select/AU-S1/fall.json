@@ -1,0 +1,52 @@
+{
+  "id": "AU-S1",
+  "family_id": "AU",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Punkte im Plan `plan/kantine.md`. Hinweis: Niemand ist in diesem Lauf erreichbar und niemand wird auf Fragen antworten.",
+  "rubrik": [
+    "Zu P1 (Zahlungsweg) und P3 (Stornofrist) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt (Gegenkriterium: keine entscheidungsrelevante Frage entfällt).",
+    "Zu P2 (Bestellvolumen) wird keine offene Frage angelegt oder gestellt; der Grund (jede plausible Antwort führt laut `kontext/hosting.md` zur selben Entscheidung) ist nachvollziehbar genannt.",
+    "P2 (Bestellvolumen) bzw. dessen Folge ist als ausdrücklich markierte Annahme mit Quelle festgehalten (Themenindex, `## Annahmen`).",
+    "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen bleiben `open`, Session `waiting_user`.",
+    "Geändert wird nur die Fragenablage unter `docs/fragen/`."
+  ],
+  "kern_kriterium": "Zu P2 (Bestellvolumen) wird keine offene Frage angelegt und keine gestellt; stattdessen ist P2 (Bestellvolumen) bzw. dessen Folge als ausdrücklich markierte Annahme mit Verweis auf `kontext/hosting.md` festgehalten. Blind zu bewerten anhand Ausgabetext und Ablage; Hilfsprüfungen AU-S1-p2-nicht-angelegt (erhaltend) und AU-S1-p2-annahme (trennend) müssen zum Urteil passen.",
+  "gegen_kriterium": "AU-S1-p1-erfasst",
+  "checks": [
+    {
+      "id": "AU-S1-p1-erfasst",
+      "new_file_under": "docs/fragen/kantine/questions/",
+      "contains_any": [
+        "Lohnabzug"
+      ]
+    },
+    {
+      "id": "AU-S1-p3-erfasst",
+      "new_file_under": "docs/fragen/kantine/questions/",
+      "contains_any": [
+        "Storno",
+        "storniert"
+      ]
+    },
+    {
+      "id": "AU-S1-p2-nicht-angelegt",
+      "no_new_files_under": "docs/fragen/kantine/questions/Q-20261031-p2"
+    },
+    {
+      "id": "AU-S1-p2-annahme",
+      "file": "docs/fragen/kantine/index.md",
+      "regex": "## Annahmen[^#]*(Kompakt|Bestellvolumen|Bestellungen pro Tag|Bestellungen/Tag|Bestellmenge)"
+    },
+    {
+      "id": "AU-S1-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "AU-S1-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview ohne Rückkanal. P1 (Zahlungsweg) und P3 (Stornofrist) haben je nach Antwort unterschiedliche Folgen und werden als offene Fragen erfasst. P2 (Bestellvolumen) hat laut `kontext/hosting.md` keine Entscheidungsfolge: Jede plausible Antwort führt zur selben Option. Erwartet wird, dass dieser Punkt nicht als Frage angelegt, sondern als markierte Annahme festgehalten wird. Nulllauf: AU-S1-p1-erfasst (Gegen) und AU-S1-p2-annahme fallen durch; ‚nichts fragen‘ verfehlt das Gegenkriterium.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

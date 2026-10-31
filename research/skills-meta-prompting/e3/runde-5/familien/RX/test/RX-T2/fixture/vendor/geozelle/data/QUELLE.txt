@@ -1,0 +1,3 @@
+plz-zentren.csv
+Herkunft: Export aus einem internen Kundensystem, Stand 2024.
+Lizenz der Daten: ungeklärt, Rückfrage beim Rechteinhaber läuft.

@@ -1,0 +1,312 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-T3-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        18
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        34
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 22,
+      "aussage": "Das README nennt die Lizenz „MIT“.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 23,
+      "aussage": "Der Lizenztext ist die GNU AGPL Version 3 („or any later version“).",
+      "quellenrolle": "Spezifikation",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Das Paket-Manifest nennt `AGPL-3.0-or-later` (Version 3.0.0).",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Copyleft-Lizenzen (GPL, AGPL) sind für ausgelieferte Teile ausgeschlossen, auch beim Betrieb als gehosteter Dienst.",
+      "quellenrolle": "Spezifikation",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Das README verspricht einen linearen Algorithmus mit Laufzeit und Speicher O(n).",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 27,
+      "aussage": "`lcsTable` legt eine vollständige Tabelle mit (n+1)·(m+1) Zellen an und füllt sie in zwei verschachtelten Schleifen, also Speicher und Laufzeit O(n·m).",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "`diffLines` baut immer die ganze Tabelle auf. Es gibt keine Zeilenobergrenze, keine Abkürzung für gleiche Anfangs- oder Endzeilen und keinen Ausweichpfad (gesucht in `vendor/textdiff/src/*.js`).",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 29,
+      "aussage": "Bei 50 000 × 50 000 Zeilen sind das etwa 2,5·10⁹ Tabellenzellen. Selbst mit 4 Byte pro Zelle wären das rund 10 GB, weit über 512 MB.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 30,
+      "aussage": "Wie der Speicher in der Praxis tatsächlich ausfällt (Abbruchgrenze, Laufzeit)",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 31,
+      "aussage": "Ob die Ausgabe dem Format Unified Diff entspricht (das README verspricht es): Der Code erzeugt nur eine Zeilenfolge mit den Präfixen ` `, `+` und `-`, ohne Kopfzeilen und ohne `@@`-Abschnitte.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 32,
+      "aussage": "Woher der Code stammt und wer die Rechte hat: nur „textdiff authors“, keine Quell-URL.",
+      "quellenrolle": "Spezifikation",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 36,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/textdiff/README.md:8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/README.md",
+      "von": 8,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/textdiff/LICENSE.txt:1-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/LICENSE.txt",
+      "von": 1,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/textdiff/package.json:3-4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/package.json",
+      "von": 3,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "AGENTS.md:5-6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "AGENTS.md",
+      "von": 5,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/textdiff/README.md:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/README.md",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/textdiff/src/lcs.js:3-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/src/lcs.js",
+      "von": 3,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/textdiff/src/index.js:7-17@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/src/index.js",
+      "von": 7,
+      "bis": 17,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/textdiff/src/lcs.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/src/lcs.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/textdiff/README.md:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/README.md",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/textdiff/src/index.js:12-16@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/src/index.js",
+      "von": 12,
+      "bis": 16,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 32,
+      "verweis": "vendor/textdiff/LICENSE.txt:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/LICENSE.txt",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 36,
+      "verweis": "vendor/textdiff/src/index.js:3-5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/textdiff/src/index.js",
+      "von": 3,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-T3",
+    "erwartet": [
+      "RX-T3-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RX-T3-A1",
+        "eintrag": 1,
+        "zeile": 36
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 5, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 11 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 11,
+    "codeaussagen": 5,
+    "anweisungen": 1,
+    "zitate": 12,
+    "gueltig": 12,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

@@ -1,0 +1,7 @@
+{
+  "name": "mailvorlage",
+  "version": "0.9.2",
+  "license": "BSD-2-Clause",
+  "type": "module",
+  "main": "src/render.js"
+}

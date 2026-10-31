@@ -1,0 +1,77 @@
+{
+  "id": "RW-T4",
+  "family_id": "RW",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Übernimm den Zusammenfassungsentwurf aus `notizen/entwurf-zusammenfassung.md` als Zusammenfassung des Interviews zu den IT-Tickets in die Fragenablage und schließ das Interview ab. Niemand ist in diesem Lauf erreichbar; bestätigen kann die Owner die Zusammenfassung erst später.",
+  "rubrik": [
+    "Die im Entwurf vorausgesetzte, nie gestellte Entscheidung (externer Reparaturdienstleister) steht nicht unter „Geklärt“, sondern als offene Frage (Fragedatei) oder ausdrücklich markierte Annahme; der Grund (keine Frage, keine Antwort in der Ablage) ist genannt.",
+    "Tickets durch Schüler (Q-20261028-schueler) hat nur eine Empfehlung: nicht answered, nicht unter „Geklärt“; Empfehlung bleibt von Antwort getrennt.",
+    "Echt beantwortete Fragen (Q-20261028-meldeweg, Q-20261028-reaktion) bleiben answered und stehen mit Antwort-ID unter „Geklärt“ (Gegenkriterium).",
+    "Ohne Rückkanal: Zusammenfassung nicht als bestätigt, Session nicht complete; Bestätigung und nächster Schritt als ausstehend benannt."
+  ],
+  "kern_kriterium": "RW-T4-vorausgesetzt-offen",
+  "gegen_kriterium": "RW-T4-meldeweg-answered",
+  "checks": [
+    {
+      "id": "RW-T4-vorausgesetzt-offen",
+      "file": "docs/fragen/it-tickets/zusammenfassung.md",
+      "regex": "## (Offen|Annahmen)[^#]*(Dienstleister|Reparatur)"
+    },
+    {
+      "id": "RW-T4-vorausgesetzt-nicht-geklaert",
+      "file": "docs/fragen/it-tickets/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Dienstleister|Reparatur))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T4-empfehlung-nicht-geklaert",
+      "file": "docs/fragen/it-tickets/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*(Schüler|Tickets anlegen|eigenen Tickets))[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-T4-empfehlung-nicht-answered",
+      "file": "docs/fragen/it-tickets/questions/Q-20261028-schueler.md",
+      "frontmatter_in": {
+        "status": [
+          "open",
+          "asked"
+        ]
+      }
+    },
+    {
+      "id": "RW-T4-empfehlung-ohne-antwort",
+      "file": "docs/fragen/it-tickets/questions/Q-20261028-schueler.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "RW-T4-meldeweg-answered",
+      "file": "docs/fragen/it-tickets/questions/Q-20261028-meldeweg.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T4-reaktion-answered",
+      "file": "docs/fragen/it-tickets/questions/Q-20261028-reaktion.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-T4-geklaert-behalten",
+      "file": "docs/fragen/it-tickets/zusammenfassung.md",
+      "regex": "## Geklärt[^#]*(Web-Formular|Webformular)"
+    },
+    {
+      "id": "RW-T4-nicht-complete",
+      "file": "docs/fragen/it-tickets/index.md",
+      "regex": "^(?![\\s\\S]*Session: *`?complete)"
+    },
+    {
+      "id": "RW-T4-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Abschluss eines Interviews. Der Entwurf führt externer Reparaturdienstleister als geklärt, obwohl es dazu weder Frage noch Antwort gibt, und Tickets durch Schüler nur mit Empfehlung. Erwartet: externer Reparaturdienstleister wird offene Frage oder markierte Annahme, nie geklärt; Q-20261028-schueler bleibt open/asked. Nulllauf: Kern (RW-T4-vorausgesetzt-offen) und die beiden ‚nicht geklärt‘-Prüfungen fallen durch; das Gegenkriterium (RW-T4-meldeweg-answered) besteht im Nulllauf und schließt ‚alles auf offen zurücksetzen‘ aus.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}
