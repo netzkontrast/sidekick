@@ -1,0 +1,7 @@
+{
+  "name": "geozelle",
+  "version": "1.0.3",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/encode.js"
+}

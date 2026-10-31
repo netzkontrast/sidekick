@@ -1,0 +1,63 @@
+{
+  "id": "LS-T1",
+  "family_id": "LS",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Mach mit dem Interview zum Elternportal weiter. Die Antworten der Kita-Leitung stehen in `notizen/antworten-leitung.md`; übernimm sie und bereite die nächste Fragerunde vor. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Fotos- und Login-Antwort sind wörtlich bzw. als sinngemäß markiert mit Quelle (Nachricht 2026-10-30) an Q-20261027-fotos und Q-20261027-login ergänzt; beide answered.",
+    "„Und das andere – ja, machen wir so“ ist nicht eindeutig zuzuordnen (Ja zu freiem Austausch oder Zustimmung zur Empfehlung „nur mit der Kita“): Q-20261027-elternchat bleibt asked, eine gezielte Rückfrage ist vorbereitet.",
+    "Q-20261027-archiv ist nach der Fotoantwort fragbar und für die nächste Runde vorbereitet; ohne Rückkanal bleibt sie open.",
+    "Index nachgeführt (Session, nächste Runde, Chat-Runde); keine Antwort erfunden."
+  ],
+  "kern_kriterium": "LS-T1-fotos-answered",
+  "gegen_kriterium": "LS-T1-elternchat-bleibt-asked",
+  "checks": [
+    {
+      "id": "LS-T1-fotos-answered",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-fotos.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "LS-T1-fotos-wortlaut",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-fotos.md",
+      "contains": "Gruppenaufnahmen"
+    },
+    {
+      "id": "LS-T1-login-answered",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-login.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "LS-T1-login-antwort-eintrag",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-login.md",
+      "regex": "Antwort-ID: *A-"
+    },
+    {
+      "id": "LS-T1-elternchat-bleibt-asked",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-elternchat.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "id": "LS-T1-archiv-nicht-beantwortet",
+      "file": "docs/fragen/elternportal/questions/Q-20261027-archiv.md",
+      "frontmatter_in": {
+        "status": [
+          "open"
+        ]
+      }
+    },
+    {
+      "id": "LS-T1-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Fortsetzung mit zwei zuordenbaren Antworten und einer mehrdeutigen. Nulllauf: Kern (fotos answered) fällt durch; das Gegenkriterium (elternchat bleibt asked) schließt ‚alles auf answered setzen‘ aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

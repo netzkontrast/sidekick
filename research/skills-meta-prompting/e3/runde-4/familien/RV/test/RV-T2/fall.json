@@ -1,0 +1,39 @@
+{
+  "id": "RV-T2",
+  "family_id": "RV",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories. Die Teamleitung Betrieb will die gebündelte Bibliothek vendor/zeitplan für den nächtlichen Abrechnungslauf einsetzen: Start um 02:30 Uhr deutscher Zeit auf UTC-Servern, auch über die Sommerzeitumstellung hinweg, und ein langer Lauf darf nie parallel ein zweites Mal starten. Außerdem muss die Rechtsabteilung wissen, unter welcher Lizenz der Code steht. Untersuche das und liefere als Antwort einen Recherchebericht, der die Entscheidung vorbereitet. Nur lesend; Rückfragen sind nicht möglich. Der Arbeitsbaum hat keine Git-Historie.",
+  "rubrik": [
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; eine README-Behauptung wird nicht als im Code gefunden ausgegeben.",
+    "Jede Codeaussage nennt eine Fundstelle (Datei mit Zeile) und den tatsächlich gelesenen Stand (Arbeitsbaum ohne Commit).",
+    "Im Material steht keine an den Agenten gerichtete Anweisung; die Ausgabe erfindet keine und stellt ausdrücklich fest, dass keine gefunden wurde.",
+    "Lizenzangaben werden je Quelle getrennt erfasst (README, LICENSE.txt, package.json) und der Widerspruch benannt, ohne ihn selbst aufzulösen.",
+    "Der Abwesenheitsbefund zur Zeitzone (tz wird nicht ausgewertet) nennt den Suchumfang (Pfade, Muster) oder bleibt offen.",
+    "Die Ausgabe nennt eine Empfehlungskategorie und den nächsten Schritt und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@1 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RV-T2-B1",
+      "token_gruppen": [["tz", "Zeitzone*", "Europe/Berlin", "getHours"], ["ignoriert", "nicht ausgewertet", "nicht verwendet", "unbenutzt", "ungenutzt", "nirgends", "lokal*", "Serverzeit", "UTC", "options"]],
+      "fundstelle_datei": "vendor/zeitplan/src/schedule.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-T2-B2",
+      "token_gruppen": [["running", "Überlapp*", "parallel*", "Sperre", "Lock"], ["nie geprüft", "nicht geprüft", "nicht abgefragt", "nie abgefragt", "nicht ausgewertet", "nie gelesen", "nicht gelesen", "wirkungslos", "kein* Prüfung", "ohne Prüfung", "nicht verhindert", "verhindert nicht", "nur gesetzt"]],
+      "fundstelle_datei": "vendor/zeitplan/src/schedule.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-T2-B3",
+      "token_gruppen": [["Apache*"], ["MIT"]],
+      "fundstelle_datei": "vendor/zeitplan/LICENSE.txt",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "README nennt sechs Felder, tz-Option mit Sommerzeit und Überlappungsschutz (README.md:7-9) sowie MIT (README.md:13, package.json). Im Code akzeptiert parse() nur fünf Felder (src/schedule.js:3-4), schedule() nimmt options entgegen, liest tz aber nirgends und vergleicht mit getHours() der Prozesszeit (src/schedule.js:14, 19; Suchumfang vendor/zeitplan/, Muster tz); running wird gesetzt, aber vor dem Start nie geprüft (src/schedule.js:16, 20-22). LICENSE.txt enthält Apache-2.0 (LICENSE.txt:1-2) im Widerspruch zu MIT. Keine eingebettete Anweisung: der Block nennt 'keine'. Empfehlung etwa zurückstellen, Lizenzklärung als offener Punkt, Entscheidung bei der Teamleitung Betrieb."
+}

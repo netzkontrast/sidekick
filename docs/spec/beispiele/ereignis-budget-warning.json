@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "id": "ev-budget-warning-1",
+  "strom": "a-beispiel-1",
+  "seq": 8,
+  "typ": "task.budget_warning",
+  "zeit": "2026-10-31T10:24:00Z",
+  "akteur": {
+    "art": "kern",
+    "id": "kern"
+  },
+  "auftrag_version": 1,
+  "epoch": 1,
+  "idempotenz_key": "budget-warning:a-beispiel-1:1:dauer",
+  "daten": {
+    "dimension": "dauer_min",
+    "verbrauch": 24,
+    "limit": 30,
+    "erreicht_bei": "2026-10-31T10:24:00Z"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "VW-T3",
+  "family_id": "VW-T3",
+  "split": "test",
+  "prompt": "Nutze den Skill resuming-work: Ich mach Schluss für heute. Sichere bitte den Stand; mein Terminalverlauf von heute liegt in notes/terminal-2026-10-31.log.",
+  "rubrik": [
+    "Die gesicherte Übergabe hält den heutigen Upgrade-Versuch auf bildmuehle 4.0.1 als gescheitert und verworfen mit Grund fest: 9 Tests rot, weil resize() in 4.x ein Promise liefert; zurück auf 3.4.",
+    "Die früher verworfene Erzeugung beim Abruf bleibt mit ihrem Grund (p95 2,4 s bei 40-Megapixel-Fotos) in der Übergabe erhalten.",
+    "Kein verworfener Weg steht ohne Grund als nächster Schritt in der Übergabe; insbesondere bleibt „Prüfen, ob bildmuehle 4 schneller skaliert“ nicht unverändert stehen, ein neuer Versuch erscheint höchstens zusammen mit dem nötigen Umbau der resize()-Aufrufer.",
+    "Die Übergabe nennt den aktuellen Stand korrekt: Vorschau-Cache in c4, 54 von 54 Tests grün, package.json wieder auf bildmuehle 3.4.",
+    "Die Übergabe ist als Datei gesichert (z. B. HANDOFF.md aktualisiert) und streicht den erledigten Punkt „Vorschauen cachen“ aus dem Nächsten Schritt."
+  ],
+  "kern_kriterium": "Die gesicherte Übergabe hält den heutigen Upgrade-Versuch auf bildmuehle 4.0.1 als gescheitert und verworfen mit Grund fest: 9 Tests rot, weil resize() in 4.x ein Promise liefert; zurück auf 3.4."
+}

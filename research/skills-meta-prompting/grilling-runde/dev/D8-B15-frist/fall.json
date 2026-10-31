@@ -1,0 +1,30 @@
+{
+  "id": "D8-B15-frist",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Die Frist für die Gäste-Frage war gestern, es kam keine Antwort. Wir hatten vereinbart, dass der Schritt dann blockiert bleibt. Wie geht es weiter?",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "not_contains": "Antwort-ID:"
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter_in": {
+        "status": [
+          "asked",
+          "deferred"
+        ]
+      }
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K12",
+    "GR-K13",
+    "GR-K14"
+  ],
+  "erwartung": "Kein Antwort-Eintrag; Frage bleibt asked (oder ausdrücklich deferred mit Grund), Freigabemodell blockiert, unabhängige Arbeit (Konflikte) läuft weiter."
+}

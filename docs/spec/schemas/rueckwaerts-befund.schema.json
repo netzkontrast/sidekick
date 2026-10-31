@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/rueckwaerts-befund.schema.json",
+  "title": "Rückwärts-Befund – V0 0.2",
+  "description": "V0-RWA-11 und §7.1/7.2. Ein Befund ist ein Vorschlag, keine Abnahme.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pruefung_id",
+    "artefakt_hash",
+    "auftrag_version",
+    "epoch",
+    "klasse",
+    "bezug_auftrag",
+    "bezug_rekonstruktion",
+    "inhalt_ref"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "pruefung_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artefakt_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "auftrag_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "klasse": {
+      "enum": [
+        "uebersehen",
+        "angenommen",
+        "anders_verstanden"
+      ]
+    },
+    "bezug_auftrag": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "bezug_rekonstruktion": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "fundstelle": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "inhalt_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "klasse": {
+            "const": "angenommen"
+          }
+        },
+        "required": [
+          "klasse"
+        ]
+      },
+      "then": {
+        "properties": {
+          "bezug_auftrag": {
+            "const": null
+          },
+          "bezug_rekonstruktion": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "klasse": {
+            "const": "uebersehen"
+          }
+        },
+        "required": [
+          "klasse"
+        ]
+      },
+      "then": {
+        "properties": {
+          "bezug_auftrag": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bezug_rekonstruktion": {
+            "const": null
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "klasse": {
+            "const": "anders_verstanden"
+          }
+        },
+        "required": [
+          "klasse"
+        ]
+      },
+      "then": {
+        "properties": {
+          "bezug_auftrag": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bezug_rekonstruktion": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  ]
+}

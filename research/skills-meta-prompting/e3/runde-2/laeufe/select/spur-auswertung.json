@@ -1,0 +1,74 @@
+{
+  "BL-S1-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 8,
+    "cost_usd_client": 0.1444,
+    "output_tokens": 2648
+  },
+  "BL-S1-K-BELEG": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.171,
+    "output_tokens": 2823
+  },
+  "BL-S2-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1662,
+    "output_tokens": 2731
+  },
+  "BL-S2-K-BELEG": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 8,
+    "cost_usd_client": 0.1886,
+    "output_tokens": 3373
+  },
+  "VW-S1-B1": {
+    "skills": [
+      "resuming-work"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 10,
+    "cost_usd_client": 0.1727,
+    "output_tokens": 2647
+  },
+  "VW-S1-K-WEGE": {
+    "skills": [
+      "resuming-work"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 10,
+    "cost_usd_client": 0.1841,
+    "output_tokens": 3324
+  },
+  "VW-S2-B1": {
+    "skills": [
+      "resuming-work"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 10,
+    "cost_usd_client": 0.1851,
+    "output_tokens": 3381
+  },
+  "VW-S2-K-WEGE": {
+    "skills": [
+      "resuming-work"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 11,
+    "cost_usd_client": 0.2004,
+    "output_tokens": 3759
+  }
+}

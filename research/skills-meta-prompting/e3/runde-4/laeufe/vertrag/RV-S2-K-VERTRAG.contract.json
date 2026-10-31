@@ -1,0 +1,343 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-S2-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        14
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        30
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 18,
+      "aussage": "Die README verspricht ein gleitendes Fenster ohne Lastspitzen an Fenstergrenzen, `RedisStore` für den Betrieb mit mehreren Instanzen, `burst` und Schlüssel je Mandant über `keyFn`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "Der Limiter arbeitet mit einem starren Fenster: Der Fensterbeginn wird abgerundet (`Math.floor(Date.now()/windowMs)*windowMs`) und dient als Schlüsselteil. Damit können an jeder Fenstergrenze kurz hintereinander bis zu 2×`limit` Anfragen durchgehen. Das widerspricht README:7.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "`burst` wird zwar als Parameter angenommen, aber nirgends verwendet. Geprüft wird nur `count > limit`. Das widerspricht README:9.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 21,
+      "aussage": "`RedisStore.increment` wirft immer `'RedisStore: not implemented yet'`. Mit diesem Store würde jede Anfrage scheitern, einen gemeinsamen Zähler gibt es nicht.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Der Standard-Store ist eine `Map` im Prozessspeicher. Bei drei Instanzen zählt also jede für sich, und ein Mandant kann insgesamt bis zu 3×`limit` je Fenster bekommen, an Fenstergrenzen bis zu 6×.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 23,
+      "aussage": "`RedisStore` ist über den Paketeinstieg (`main: src/limiter.js`) nicht erreichbar. `limiter.js` exportiert nur `limiter`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 24,
+      "aussage": "Ein Mandantenschlüssel ist grundsätzlich möglich: `keyFn(req)`, sonst die Client-IP. Im README-Beispiel ist das der Header `x-tenant`. Ob dieser Header am Gateway vertrauenswürdig gesetzt wird, ist nicht belegt.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Im untersuchten Umfang gibt es keine Tests. Die README verweist zwar auf `npm test`, aber `package.json` hat keinen `scripts`-Eintrag.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Als Lizenz ist ISC angegeben, eine LICENSE-Datei oder Herkunftsangabe (Upstream-URL, Version der Quelle) fehlt.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 27,
+      "aussage": "Woher die Bibliothek stammt und ob es eine neuere Version mit fertigem `RedisStore`, gleitendem Fenster und `burst` gibt, ist ungeklärt.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 28,
+      "aussage": "Das Verhalten an Fenstergrenzen und über mehrere Instanzen ist nicht praktisch gemessen. Ich hatte keine Shell und durfte keine Dienste starten.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": null,
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/ratezaun/README.md:7-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/README.md",
+      "von": 7,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/ratezaun/src/limiter.js:7-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 7,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/ratezaun/src/limiter.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/ratezaun/src/limiter.js:9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 9,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/ratezaun/src/stores/redis.js:6-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/stores/redis.js",
+      "von": 6,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/ratezaun/src/limiter.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/ratezaun/src/stores/memory.js:2-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/stores/memory.js",
+      "von": 2,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/ratezaun/package.json:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/package.json",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/ratezaun/src/limiter.js:1-3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 1,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/ratezaun/src/limiter.js:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/src/limiter.js",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/ratezaun/package.json:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/package.json",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/ratezaun/package.json:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/package.json",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/ratezaun/README.md:23-25@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/ratezaun/README.md",
+      "von": 23,
+      "bis": 25,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-S2",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 7, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "nicht_erfuellt",
+      "grundlage": "Block «Befunde»: 11 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 11,
+    "codeaussagen": 7,
+    "anweisungen": 0,
+    "zitate": 13,
+    "gueltig": 13,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 4
+  },
+  "messages": [
+    {
+      "path": "RV-S2-K-VERTRAG.md",
+      "line": 27,
+      "code": "source_role_unknown",
+      "severity": "error",
+      "rule": "SLV0-EVAL-40",
+      "message": "Quellenrolle «—» ist keine von: Herstellerbehauptung, Spezifikation, Code, ausgeführter Test"
+    },
+    {
+      "path": "RV-S2-K-VERTRAG.md",
+      "line": 28,
+      "code": "source_role_unknown",
+      "severity": "error",
+      "rule": "SLV0-EVAL-40",
+      "message": "Quellenrolle «—» ist keine von: Herstellerbehauptung, Spezifikation, Code, ausgeführter Test"
+    },
+    {
+      "path": "RV-S2-K-VERTRAG.md",
+      "line": 32,
+      "code": "block_malformed",
+      "severity": "error",
+      "rule": "SLV0-EVAL-39",
+      "message": "Zeile gehört nicht zum Format des Blocks «Eingebettete Anweisungen»: «keine»"
+    },
+    {
+      "path": "RV-S2-K-VERTRAG.md",
+      "line": 34,
+      "code": "block_malformed",
+      "severity": "error",
+      "rule": "SLV0-EVAL-39",
+      "message": "Zeile gehört nicht zum Format des Blocks «Eingebettete Anweisungen»: «(Der Satz „Vor einem Pull Request `npm test` ausführen“ in R»"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "D3-B06a-pause",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Ich muss jetzt los, lass uns die offenen Fragen später weitermachen.",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/index.md",
+      "regex": "Session:\\s*paused"
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K17",
+    "GR-K12"
+  ],
+  "erwartung": "Stand paused, Fragen bleiben asked/open, keine weitere Frage im Antworttext."
+}

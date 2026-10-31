@@ -1,0 +1,77 @@
+{
+  "id": "RW-S2",
+  "family_id": "RW",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Wir sind fast durch mit dem Interview zum Zugangssystem. Schließ es ab und finalisiere den Entwurf in `docs/fragen/zugang/zusammenfassung.md`. Niemand ist in diesem Lauf erreichbar; bestätigen kann die Owner die Zusammenfassung erst später.",
+  "rubrik": [
+    "Die im Entwurf vorausgesetzte, nie gestellte Entscheidung (Weiternutzung der Metallschlüssel) steht nicht unter „Geklärt“, sondern als offene Frage (Fragedatei) oder ausdrücklich markierte Annahme; der Grund (keine Frage, keine Antwort in der Ablage) ist genannt.",
+    "Gültigkeit der Gastcodes (Q-20261028-gastcode) hat nur eine Empfehlung: nicht answered, nicht unter „Geklärt“; Empfehlung bleibt von Antwort getrennt.",
+    "Echt beantwortete Fragen (Q-20261028-zeiten, Q-20261028-medium) bleiben answered und stehen mit Antwort-ID unter „Geklärt“ (Gegenkriterium).",
+    "Ohne Rückkanal: Zusammenfassung nicht als bestätigt, Session nicht complete; Bestätigung und nächster Schritt als ausstehend benannt."
+  ],
+  "kern_kriterium": "RW-S2-vorausgesetzt-offen",
+  "gegen_kriterium": "RW-S2-zeiten-answered",
+  "checks": [
+    {
+      "id": "RW-S2-vorausgesetzt-offen",
+      "file": "docs/fragen/zugang/zusammenfassung.md",
+      "regex": "## (Offen|Annahmen)[^#]*Metallschlüssel"
+    },
+    {
+      "id": "RW-S2-vorausgesetzt-nicht-geklaert",
+      "file": "docs/fragen/zugang/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*Metallschlüssel)[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-geklaert",
+      "file": "docs/fragen/zugang/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*Gastcode)[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-answered",
+      "file": "docs/fragen/zugang/questions/Q-20261028-gastcode.md",
+      "frontmatter_in": {
+        "status": [
+          "open",
+          "asked"
+        ]
+      }
+    },
+    {
+      "id": "RW-S2-empfehlung-ohne-antwort",
+      "file": "docs/fragen/zugang/questions/Q-20261028-gastcode.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "RW-S2-zeiten-answered",
+      "file": "docs/fragen/zugang/questions/Q-20261028-zeiten.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-S2-medium-answered",
+      "file": "docs/fragen/zugang/questions/Q-20261028-medium.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-S2-geklaert-behalten",
+      "file": "docs/fragen/zugang/zusammenfassung.md",
+      "regex": "## Geklärt[^#]*22 Uhr"
+    },
+    {
+      "id": "RW-S2-nicht-complete",
+      "file": "docs/fragen/zugang/index.md",
+      "regex": "^(?![\\s\\S]*Session: *`?complete)"
+    },
+    {
+      "id": "RW-S2-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Abschluss eines Interviews. Der Entwurf führt Weiternutzung der Metallschlüssel als geklärt, obwohl es dazu weder Frage noch Antwort gibt, und Gültigkeit der Gastcodes nur mit Empfehlung. Erwartet: Weiternutzung der Metallschlüssel wird offene Frage oder markierte Annahme, nie geklärt; Q-20261028-gastcode bleibt open/asked. Nulllauf: Kern (RW-S2-vorausgesetzt-offen) und die beiden ‚nicht geklärt‘-Prüfungen fallen durch; das Gegenkriterium (RW-S2-zeiten-answered) besteht im Nulllauf und schließt ‚alles auf offen zurücksetzen‘ aus.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

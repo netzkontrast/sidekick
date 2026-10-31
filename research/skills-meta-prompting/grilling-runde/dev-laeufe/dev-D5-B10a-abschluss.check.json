@@ -1,0 +1,38 @@
+{
+ "case": "D5-B10a-abschluss",
+ "skill_calls": [
+  "grilling"
+ ],
+ "tools": [
+  "Edit",
+  "Glob",
+  "Read",
+  "Skill"
+ ],
+ "checks": [
+  {
+   "rule": {
+    "no_new_files_under": "docs/fragen/tafel/questions/"
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/index.md",
+    "regex": "Session:\\s*awaiting_confirmation"
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "only_changed_under": "docs/fragen/"
+   },
+   "ok": true,
+   "detail": "ok"
+  }
+ ],
+ "passed": 3,
+ "total": 3
+}

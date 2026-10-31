@@ -1,0 +1,10 @@
+# Runner-Profil für alle Jobs dieses Repos
+runner:
+  profile: standard-4
+  cpus: 4 # vorher 1; geändert in c3, damit die Testsuite schneller läuft
+  memory_gb: 8
+jobs:
+  test:
+    timeout_minutes: 20
+  berichte:
+    timeout_minutes: 60

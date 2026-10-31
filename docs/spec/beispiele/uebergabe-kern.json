@@ -1,0 +1,41 @@
+{
+  "schema_version": "0.2",
+  "auftrag_id": "a-beispiel-1",
+  "auftrag_version": 1,
+  "epoch": 1,
+  "quelle": "kern",
+  "zeit": "2026-10-31T10:30:00Z",
+  "ausgangsstand": [
+    {
+      "ref": "fixture:quellen-set-1",
+      "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "ergebnisse": [
+    {
+      "artefakt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "beleg": "fixture:bericht-teil#quellen"
+    }
+  ],
+  "kriterienstand": {
+    "k1": "unklar",
+    "k2": "unklar"
+  },
+  "offen": {
+    "rueckfragen": [],
+    "annahmen": [
+      "fixture:annahme-1"
+    ],
+    "blockaden": [
+      "fixture:quelle-3-fehlt"
+    ]
+  },
+  "unklare_wirkungen": [],
+  "budgetstand": {
+    "dauer_min": 30,
+    "kosten_eur": null,
+    "runs": 1
+  },
+  "naechster_schritt": "Owner entscheidet über Fortsetzung",
+  "inhalt_ref": "fixture:uebergabe-kern-1"
+}

@@ -130,6 +130,7 @@ export function loadTopic(root, topic) {
   for (const name of rs.files) {
     const id = name.slice(0, -3);
     const abs = path.join(p.roundsDir, name);
+    assertNoSymlink(root, abs, p.rel(abs));
     const text = fs.readFileSync(abs, 'utf8');
     topicData.rounds.set(id, { id, abs, rel: p.rel(abs), text, doc: parseRound(text), idOk: idProblem('R', id) === null });
   }

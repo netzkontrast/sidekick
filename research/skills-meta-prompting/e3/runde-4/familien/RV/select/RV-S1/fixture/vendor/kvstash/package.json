@@ -1,0 +1,7 @@
+{
+  "name": "kvstash",
+  "version": "0.4.1",
+  "type": "module",
+  "main": "src/stash.js",
+  "license": "MIT"
+}

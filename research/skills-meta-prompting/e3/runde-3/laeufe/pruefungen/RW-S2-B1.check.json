@@ -1,0 +1,185 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval check",
+  "checked_level": "Dateiprüfungen (SLV0-EVAL-22)",
+  "case_id": "RW-S2",
+  "ausgangsstand": "angegeben",
+  "pruefungen": [
+    {
+      "id": "RW-S2-vorausgesetzt-offen",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "RW-S2-vorausgesetzt-nicht-geklaert",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-geklaert",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-answered",
+      "regel": "frontmatter_in",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-ohne-antwort",
+      "regel": "not_contains",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-zeiten-answered",
+      "regel": "frontmatter",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "RW-S2-medium-answered",
+      "regel": "frontmatter",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-geklaert-behalten",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-nicht-complete",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-nur-ablage",
+      "regel": "only_changed_under",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "bestanden": 10,
+  "nicht_bestanden": 0,
+  "assertions": [
+    {
+      "id": "RW-S2-vorausgesetzt-offen",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "RW-S2-vorausgesetzt-nicht-geklaert",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-geklaert",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-nicht-answered",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-empfehlung-ohne-antwort",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-zeiten-answered",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "RW-S2-medium-answered",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-geklaert-behalten",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-nicht-complete",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "RW-S2-nur-ablage",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "messages": []
+}

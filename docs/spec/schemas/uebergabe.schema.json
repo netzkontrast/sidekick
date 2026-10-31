@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/v0/uebergabe.schema.json",
+  "title": "Übergabepaket – V0 0.2",
+  "description": "V0-BUD-06…08, §7.1/7.2. Budget und Bindungen werden vom Kern geprüft; das Schema prüft nur die Datenform.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "auftrag_id",
+    "auftrag_version",
+    "epoch",
+    "quelle",
+    "zeit",
+    "ausgangsstand",
+    "ergebnisse",
+    "kriterienstand",
+    "offen",
+    "unklare_wirkungen",
+    "budgetstand",
+    "naechster_schritt",
+    "inhalt_ref"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "auftrag_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^a-[a-z0-9-]+$"
+    },
+    "auftrag_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quelle": {
+      "enum": [
+        "run",
+        "kern"
+      ]
+    },
+    "zeit": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ausgangsstand": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ref",
+          "hash"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hash": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "ergebnisse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artefakt_hash",
+          "beleg"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "artefakt_hash": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "beleg": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "kriterienstand": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "erfuellt_laut_bearbeiter",
+          "offen",
+          "unklar"
+        ]
+      }
+    },
+    "offen": {
+      "type": "object",
+      "required": [
+        "rueckfragen",
+        "annahmen",
+        "blockaden"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "rueckfragen": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "annahmen": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "blockaden": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "unklare_wirkungen": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "budgetstand": {
+      "type": "object",
+      "required": [
+        "dauer_min",
+        "kosten_eur",
+        "runs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dauer_min": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "kosten_eur": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "runs": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "naechster_schritt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inhalt_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "quelle": {
+            "const": "kern"
+          }
+        },
+        "required": [
+          "quelle"
+        ]
+      },
+      "then": {
+        "properties": {
+          "kriterienstand": {
+            "type": "object",
+            "additionalProperties": {
+              "const": "unklar"
+            }
+          },
+          "naechster_schritt": {
+            "const": "Owner entscheidet über Fortsetzung"
+          }
+        }
+      }
+    }
+  ]
+}

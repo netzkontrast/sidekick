@@ -1,0 +1,67 @@
+{
+  "id": "LS-S1",
+  "family_id": "LS",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Setze das Interview zur Vereinsheim-Vermietung fort. Die Antworten der Owner aus dem Chat vom 30.10. stehen in `notizen/chat-2026-10-30.md`; trage sie ein und bereite die nächste Runde vor. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Die Preisantwort ist wörtlich oder als sinngemäß markiert mit Quelle (Chat 2026-10-30, notizen/chat-2026-10-30.md) und Bezug auf R-20261028-chat1 an Q-20261028-preis ergänzt; Status answered.",
+    "Q-20261028-kaution bleibt asked ohne Antworteintrag; die Ankündigung „melde mich“ gilt nicht als Antwort.",
+    "Q-20261028-reinigung ist jetzt fragbar und als nächste Runde vorbereitet bzw. im Ausgabetext gestellt; ohne Rückkanal Zustellung unbekannt, Status bleibt open.",
+    "Die beantwortete Frage Q-20261027-musik wird weder erneut gefragt noch verändert.",
+    "Index nachgeführt (Session, nächste Runde, Chat-Runde); keine Antwortkopien außerhalb der Fragedateien."
+  ],
+  "kern_kriterium": "LS-S1-preis-answered",
+  "gegen_kriterium": "LS-S1-kaution-bleibt-asked",
+  "checks": [
+    {
+      "id": "LS-S1-preis-answered",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-preis.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "LS-S1-preis-antwort-eintrag",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-preis.md",
+      "regex": "Antwort-ID: *A-"
+    },
+    {
+      "id": "LS-S1-preis-wortlaut",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-preis.md",
+      "contains": "120"
+    },
+    {
+      "id": "LS-S1-kaution-bleibt-asked",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-kaution.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "id": "LS-S1-kaution-ohne-antwort",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-kaution.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "LS-S1-reinigung-nicht-beantwortet",
+      "file": "docs/fragen/vermietung/questions/Q-20261028-reinigung.md",
+      "frontmatter_in": {
+        "status": [
+          "open"
+        ]
+      }
+    },
+    {
+      "id": "LS-S1-musik-erhalten",
+      "file": "docs/fragen/vermietung/questions/Q-20261027-musik.md",
+      "contains": "A-20261027-1"
+    },
+    {
+      "id": "LS-S1-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Fortsetzung: eine echte Antwort eintragen, eine Teil-/Nichtantwort offen halten, die freigewordene abhängige Frage vorbereiten. Nulllauf: Kern (preis answered) fällt durch; das Gegenkriterium (kaution bleibt asked) schließt ‚alles auf answered setzen‘ aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

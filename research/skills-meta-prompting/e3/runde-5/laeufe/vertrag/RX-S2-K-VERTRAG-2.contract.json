@@ -1,0 +1,359 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-S2-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        14
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        32
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 18,
+      "aussage": "Laut README werden Umlaute nach der Regel ä → ae, ö → oe, ü → ue, ß → ss umgeschrieben.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "Der Code zerlegt Umlaute in Buchstabe plus Pünktchen (Unicode-NFD) und entfernt dann die Pünktchen. Aus ä wird so a statt ae, aus ö o, aus ü u. Das widerspricht der README und unserer Regel.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "ß wird durch die Zerlegung nicht verändert. Danach wird jedes Zeichen außer a–z und 0–9 durch das Trennzeichen ersetzt, also wird ß zu `-` statt `ss`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "Daraus folgt: Das README-Beispiel ergibt nach dem Code `grune-apfel-aus-su-wasser-anbau` und nicht das dokumentierte `gruene-aepfel-aus-suesswasser-anbau`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 22,
+      "aussage": "Diese Ableitung ist noch nicht durch einen ausgeführten Test bestätigt.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 23,
+      "aussage": "Laut README sind Slugs höchstens 80 Zeichen lang.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Der Standardwert für `maxLength` ist 100, nicht 80. Man kann ihn per Option auf 80 setzen.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 25,
+      "aussage": "Gekürzt wird erst nach dem Entfernen der Trennzeichen am Rand. Ein gekürzter Slug kann deshalb auf `-` enden oder mitten im Wort abbrechen.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Das Trennzeichen wird ohne Schutz in einen regulären Ausdruck eingesetzt. Bei Sonderzeichen wie `.` ist das Ergebnis falsch. Der Standard `-` ist nicht betroffen.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 27,
+      "aussage": "Die Funktion ist deterministisch und speichert nichts. Ein Slug bleibt nur gleich, solange Produktname und Bibliotheksversion gleich bleiben. Die Regel „URL ändert sich nie“ muss der Shop selbst sicherstellen, indem er den Slug speichert.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "Laut README und `package.json` steht das Paket unter ISC.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 29,
+      "aussage": "Die Lizenzdatei `LICENSE.txt` enthält dagegen den Text der Apache-2.0-Lizenz. Beide Lizenzen wären einzeln erlaubt, aber die Angaben widersprechen sich. Damit ist die Lizenz nicht eindeutig.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 30,
+      "aussage": "Welche Lizenz tatsächlich gilt, ist ungeklärt. Dafür müsste man die Herkunft beim Upstream klären.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "keine",
+    "eintraege": []
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/slugkit/README.md:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/README.md",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/slugkit/src/slugify.js:5@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 5,
+      "bis": 5,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/slugkit/src/slugify.js:5-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 5,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/slugkit/README.md:11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/README.md",
+      "von": 11,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/slugkit/src/slugify.js:5-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 5,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/slugkit/README.md:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/README.md",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/slugkit/src/options.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/options.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/slugkit/src/slugify.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/slugkit/src/slugify.js:8-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 8,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/slugkit/src/slugify.js:8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 8,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/slugkit/src/options.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/options.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/slugkit/src/slugify.js:3-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/src/slugify.js",
+      "von": 3,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/slugkit/README.md:14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/README.md",
+      "von": 14,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/slugkit/package.json:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/package.json",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/slugkit/LICENSE.txt:1-11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/slugkit/LICENSE.txt",
+      "von": 1,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "ungueltig",
+      "code": "range_out_of_bounds"
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-S2",
+    "erwartet": [],
+    "getroffen": [],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "nicht_erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 7, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 13 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "nicht_anwendbar",
+      "grundlage": "Block «Eingebettete Anweisungen»: 0 von 0 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 13,
+    "codeaussagen": 7,
+    "anweisungen": 0,
+    "zitate": 15,
+    "gueltig": 14,
+    "ungueltig": 1,
+    "nicht_geprueft": 0,
+    "fehler": 1
+  },
+  "messages": [
+    {
+      "path": "RX-S2-K-VERTRAG-2.md",
+      "line": 29,
+      "code": "range_out_of_bounds",
+      "severity": "error",
+      "rule": "SLV0-EVAL-29",
+      "message": "vendor/slugkit/LICENSE.txt:1-11@arbeitsbaum: Zeilen 1–11 liegen in keiner passenden Fixture-Datei"
+    }
+  ]
+}

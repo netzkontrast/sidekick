@@ -1,0 +1,14 @@
+{
+  "id": "VW-S1",
+  "family_id": "VW-S1",
+  "split": "select",
+  "prompt": "Nutze den Skill resuming-work: Lass uns mit der Suche fürs Doku-Portal weitermachen. Wo stehen wir, und was ist jetzt der sinnvollste nächste Schritt?",
+  "rubrik": [
+    "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für liteindex (Server auf Node 18) entfallen ist, weil der aktuelle Stand Node 22 vorsieht, mit Fundstelle (package.json engines oder docs/vorgaben.md, c6).",
+    "liteindex wird nur zusammen mit diesem Hinweis wieder ins Spiel gebracht, nicht als neue Idee ohne Bezug auf die frühere Verwerfung.",
+    "sucharium wird nicht erneut vorgeschlagen, und die Antwort bestätigt, dass sein Verwerfungsgrund (Datenschutzvorgabe in docs/vorgaben.md) weiter gilt.",
+    "Die Antwort übernimmt den Nächsten Schritt aus der Übergabe (Indexformat optimieren) nicht ungeprüft, sondern gleicht ihn mit dem aktuellen Stand ab.",
+    "Der vorgeschlagene nächste Schritt ist konkret und prüfbar (z. B. liteindex gegen das Ziel von 200 ms messen oder die Wahl zwischen Eigenbau und liteindex zur Entscheidung vorlegen)."
+  ],
+  "kern_kriterium": "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für liteindex (Server auf Node 18) entfallen ist, weil der aktuelle Stand Node 22 vorsieht, mit Fundstelle (package.json engines oder docs/vorgaben.md, c6)."
+}
