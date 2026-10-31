@@ -13,8 +13,8 @@ import { lineCount } from './tree.js';
 const REGULAR = new Set(['100644', '100755']);
 const STOP = '\\s?#)\\]>"\'`';
 /** github.com/<owner>/<repo>/blob/<ref>/<path>[?query][#anchor] */
-const PERMALINK = new RegExp(`https://github\\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/blob/([^/${STOP}]+)/([^${STOP}]+)(\\?[^\\s#)\\]>"'\`]*)?(#[^\\s)\\]>"'\`]*)?`, 'g');
-const LINE_ANCHOR = /^#L(\d+)(?:C\d+)?(?:-L(\d+)(?:C\d+)?)?[.,;:!]*$/;
+export const PERMALINK = new RegExp(`https://github\\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/blob/([^/${STOP}]+)/([^${STOP}]+)(\\?[^\\s#)\\]>"'\`]*)?(#[^\\s)\\]>"'\`]*)?`, 'g');
+export const LINE_ANCHOR = /^#L(\d+)(?:C\d+)?(?:-L(\d+)(?:C\d+)?)?[.,;:!]*$/;
 const TRAILING_PUNCT = /[.,;:!]+$/;
 const GITHUB_REPO = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
 
@@ -80,6 +80,71 @@ function lineCitations(rawLine, lineNo) {
 }
 
 /**
+ * Register of a commit (SLV0-EVAL-28): resolves `commit` (7–40 hex, else UsageError; unknown →
+ * EvalRefusal commit_unknown) and lists its regular files. Line counts and commit lookups are cached.
+ * Shared by `eval cite-check` and `eval contract check` (SLV0-EVAL-42).
+ */
+export function openCommitRegister(repo, commit) {
+  if (!COMMIT_ID.test(commit ?? '')) throw new UsageError('--commit erwartet 7–40 Zeichen 0-9a-f (keine Ref-Namen)');
+  requireGitRepo(repo);
+  const full = resolveCommit(repo, commit);
+  if (full === null) {
+    throw new EvalRefusal([evalMsg('commit_unknown', '--commit', `${commit} ist kein eindeutiger Commit im Repository; kein Register`)]);
+  }
+  const files = listTree(repo, full).filter((e) => REGULAR.has(e.mode)).sort((a, b) => compareCodepoints(a.path, b.path));
+  const byPath = new Map(files.map((f) => [f.path, f]));
+  const lineCache = new Map();
+  const linesOf = (f) => {
+    if (!lineCache.has(f.oid)) lineCache.set(f.oid, lineCount(readBlob(repo, f.oid)));
+    return lineCache.get(f.oid);
+  };
+  const commitCache = new Map();
+  const resolve = (id) => {
+    if (!commitCache.has(id)) commitCache.set(id, resolveCommit(repo, id));
+    return commitCache.get(id);
+  };
+  return { full, files, byPath, linesOf, resolve };
+}
+
+/**
+ * Validity of one citation at the register's commit (SLV0-EVAL-29). `c` is {art: 'permalink'|'fundstelle',
+ * ref (permalink only), rawPath, von, bis}; `von === null` means the whole file. Returns {file, pfad, range}
+ * or {code, message, pfad}.
+ */
+export function checkCitation(reg, c) {
+  let file;
+  let pfad = c.rawPath;
+  if (c.art === 'permalink') {
+    if (!COMMIT_ID.test(c.ref)) return { code: 'ref_not_pinned', message: `Ref ${c.ref} ist keine Commit-ID`, pfad };
+    const resolved = reg.resolve(c.ref);
+    if (resolved === null) return { code: 'commit_unknown', message: `Commit ${c.ref} ist im Repository unbekannt oder mehrdeutig`, pfad };
+    if (resolved !== reg.full) return { code: 'sha_mismatch', message: `Commit ${c.ref} ist nicht der angegebene Commit ${reg.full}`, pfad };
+    let rel;
+    try { rel = decodeURIComponent(c.rawPath); } catch { rel = null; }
+    if (rel !== null) pfad = rel;
+    file = rel === null ? undefined : reg.byPath.get(rel);
+    if (!file) return { code: 'path_missing', message: `${pfad} ist am Commit keine reguläre Datei`, pfad };
+  } else {
+    const segs = c.rawPath.split('/');
+    const unsafe = segs.includes('..') || segs.includes('.');
+    file = unsafe ? undefined : reg.byPath.get(c.rawPath);
+    if (!file && !unsafe) {
+      const cands = reg.files.filter((f) => f.path.endsWith(`/${c.rawPath}`));
+      if (cands.length > 1) return { code: 'path_ambiguous', message: `passt auf ${cands.length} Dateien: ${cands.slice(0, 5).map((f) => f.path).join(', ')}`, pfad };
+      file = cands[0];
+    }
+    if (!file) return { code: 'path_missing', message: `${c.rawPath} ist am Commit keine reguläre Datei`, pfad };
+    pfad = file.path;
+  }
+  const lines = reg.linesOf(file);
+  if (c.von === null) return { file, pfad, range: lines > 0 ? [1, lines] : null };
+  if (c.von < 1 || c.bis < c.von || c.bis > lines) {
+    return { code: 'range_out_of_bounds', message: `Zeilen ${c.von}–${c.bis} liegen nicht in 1–${lines} von ${file.path}`, pfad };
+  }
+  return { file, pfad, range: [c.von, c.bis] };
+}
+
+/**
  * `eval cite-check`. Inputs: repository directory, commit (7–40 hex), report text and label,
  * scopes, optional `owner/repo`. Returns {result, code}; throws EvalRefusal (commit_unknown for
  * `--commit`) or UsageError.
@@ -88,30 +153,13 @@ export function citeCheck({ repo, commit, reportText, reportLabel, scopes = [], 
   if (!COMMIT_ID.test(commit ?? '')) throw new UsageError('--commit erwartet 7–40 Zeichen 0-9a-f (keine Ref-Namen)');
   if (github !== null && !GITHUB_REPO.test(github)) throw new UsageError('--github erwartet OWNER/REPO');
   const matchers = scopes.map((s) => ({ scope: s, match: scopeMatcher(s) }));
-  requireGitRepo(repo);
-  const full = resolveCommit(repo, commit);
-  if (full === null) {
-    throw new EvalRefusal([evalMsg('commit_unknown', '--commit', `${commit} ist kein eindeutiger Commit im Repository; kein Register`)]);
-  }
-
-  const files = listTree(repo, full).filter((e) => REGULAR.has(e.mode)).sort((a, b) => compareCodepoints(a.path, b.path));
-  const byPath = new Map(files.map((f) => [f.path, f]));
+  const reg = openCommitRegister(repo, commit);
+  const { full, files, linesOf } = reg;
   for (const { scope, match } of matchers) {
     if (!files.some((f) => match(f.path))) throw new UsageError(`--scope ${scope} trifft keine Datei am Commit ${full}`);
   }
   const inScope = (p) => matchers.length === 0 || matchers.some(({ match }) => match(p));
   const register = files.filter((f) => inScope(f.path));
-
-  const lineCache = new Map();
-  const linesOf = (f) => {
-    if (!lineCache.has(f.oid)) lineCache.set(f.oid, lineCount(readBlob(repo, f.oid)));
-    return lineCache.get(f.oid);
-  };
-  const commitCache = new Map();
-  const resolveCached = (id) => {
-    if (!commitCache.has(id)) commitCache.set(id, resolveCommit(repo, id));
-    return commitCache.get(id);
-  };
 
   const messages = [];
   const zitate = [];
@@ -130,37 +178,11 @@ export function citeCheck({ repo, commit, reportText, reportLabel, scopes = [], 
         messages.push(evalMsg(code, reportLabel, `${c.verweis}: ${message}`, lineNo));
       };
       zitate.push(entry);
-      let file = null;
-      if (c.art === 'permalink') {
-        if (githubLc !== null && `${c.owner}/${c.repo}`.toLowerCase() !== githubLc) { entry.ergebnis = 'fremd'; continue; }
-        if (!COMMIT_ID.test(c.ref)) { fail('ref_not_pinned', `Ref ${c.ref} ist keine Commit-ID`); continue; }
-        const resolved = resolveCached(c.ref);
-        if (resolved === null) { fail('commit_unknown', `Commit ${c.ref} ist im Repository unbekannt oder mehrdeutig`); continue; }
-        if (resolved !== full) { fail('sha_mismatch', `Commit ${c.ref} ist nicht der angegebene Commit ${full}`); continue; }
-        let rel;
-        try { rel = decodeURIComponent(c.rawPath); } catch { rel = null; }
-        if (rel !== null) entry.pfad = rel;
-        file = rel === null ? undefined : byPath.get(rel);
-        if (!file) { fail('path_missing', `${entry.pfad} ist am Commit keine reguläre Datei`); continue; }
-      } else {
-        const segs = c.rawPath.split('/');
-        file = segs.includes('..') || segs.includes('.') ? undefined : byPath.get(c.rawPath);
-        if (!file && !segs.includes('..') && !segs.includes('.')) {
-          const cands = files.filter((f) => f.path.endsWith(`/${c.rawPath}`));
-          if (cands.length > 1) { fail('path_ambiguous', `passt auf ${cands.length} Dateien: ${cands.slice(0, 5).map((f) => f.path).join(', ')}`); continue; }
-          file = cands[0];
-        }
-        if (!file) { fail('path_missing', `${c.rawPath} ist am Commit keine reguläre Datei`); continue; }
-        entry.pfad = file.path;
-      }
-      const lines = linesOf(file);
-      let range;
-      if (c.von === null) {
-        range = lines > 0 ? [1, lines] : null;
-      } else {
-        if (c.von < 1 || c.bis < c.von || c.bis > lines) { fail('range_out_of_bounds', `Zeilen ${c.von}–${c.bis} liegen nicht in 1–${lines} von ${file.path}`); continue; }
-        range = [c.von, c.bis];
-      }
+      if (c.art === 'permalink' && githubLc !== null && `${c.owner}/${c.repo}`.toLowerCase() !== githubLc) { entry.ergebnis = 'fremd'; continue; }
+      const res = checkCitation(reg, c);
+      entry.pfad = res.pfad;
+      if (res.code) { fail(res.code, res.message); continue; }
+      const { file, range } = res;
       if (!inScope(file.path)) { entry.ergebnis = 'ausserhalb_bereich'; continue; }
       const cov = covered.get(file.path) ?? { ranges: [], count: 0 };
       if (range) cov.ranges.push(range);
@@ -169,7 +191,7 @@ export function citeCheck({ repo, commit, reportText, reportLabel, scopes = [], 
     }
     for (const w of hexWords(masked)) {
       if (!/[0-9]/.test(w) || !/[a-f]/.test(w)) continue;
-      const resolved = resolveCached(w);
+      const resolved = reg.resolve(w);
       commitWords.push({ wort: w, zeile: lineNo, commit: resolved });
       if (resolved === null) messages.push(evalMsg('commit_unverified', reportLabel, `Hex-Wort ${w} ist im Repository kein Commit`, lineNo));
     }
