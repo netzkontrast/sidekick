@@ -248,8 +248,8 @@ eine Überschrift ist eine Einheit für sich. Andere Zeilen setzen die laufende 
 
 **Wortgrenze:** Vor und nach einem Treffer steht kein Buchstabe und keine Ziffer; bei einer Alternative mit `*` am Ende entfällt die Grenze rechts.
 
-**Fundstellen:** erkannt im unveränderten Ausgabetext; der Pfad hat mindestens eine Dateiendung, die mit einem Buchstaben beginnt, und steht nicht hinter
-`/`, `.`, `-` oder einem Wortzeichen (URLs und absolute Pfade werden daher nicht geprüft). Führende `./` entfallen. Passend sind Fixture-Dateien mit genau
+**Fundstellen:** erkannt im unveränderten Ausgabetext, nachdem URLs (`schema://` bis zum nächsten Leerraum) ausgeblendet sind; der Pfad hat mindestens
+eine Dateiendung, die mit einem Buchstaben beginnt, und steht nicht hinter `/`, `.`, `-` oder einem Wortzeichen (absolute Pfade werden daher nicht geprüft). Führende `./` entfallen. Passend sind Fixture-Dateien mit genau
 diesem Pfad oder mit diesem Pfadende ab einer Segmentgrenze. Zeilen zählen ab 1; eine Datei hat so viele Zeilen wie Zeilenumbrüche, plus eine, wenn
 sie nicht mit einem Zeilenumbruch endet. **Commit-IDs:** Wörter aus 7–40 Zeichen `0-9a-f` mit mindestens einer Ziffer und einem Buchstaben, nach Abzug
 umgebender Satz- und Auszeichnungszeichen; bekannt ist ein Commit, wenn ein Hex-Wort aus 7–40 Zeichen in einer Fixture-Datei mit ihm beginnt oder er mit ihm.
