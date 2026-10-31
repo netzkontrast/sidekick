@@ -12,16 +12,15 @@
       "status": "automatisiert"
     },
     "V0-FALL-03": {
-      "status": "offen",
-      "grund": "Netz weg mit lokalem Puffer braucht einen Connector mit Outbox (M3.1); Schritt 5–7 von V0-ABL-01 prüfen nur den Kernanteil"
+      "status": "automatisiert",
+      "hinweis": "Suite-Connector-Prototyp (referenzkern/connector.js) mit Outbox; der echte Connector folgt in M3.1"
     },
     "V0-FALL-04": {
-      "status": "offen",
-      "grund": "Connector-Neustart mit echtem Connector erst in M3.1; Supervisor-Seite in RTA-FALL-28"
+      "status": "automatisiert",
+      "hinweis": "Connector-Neustart mit dem Prototyp; Prozessgrenze und echter Connector in M3.1"
     },
     "V0-FALL-05": {
-      "status": "offen",
-      "grund": "Runtime-Absturz mit Übergabepaket braucht task.record_handover (im Referenzkern noch nicht gebaut)"
+      "status": "automatisiert"
     },
     "V0-FALL-06": {
       "status": "automatisiert"
@@ -30,8 +29,7 @@
       "status": "automatisiert"
     },
     "V0-FALL-08": {
-      "status": "offen",
-      "grund": "Abbruch mit Run-Rückmeldung: Kernanteil fehlt noch; Supervisor-Seite in RTA-FALL-26"
+      "status": "automatisiert"
     },
     "V0-FALL-09": {
       "status": "automatisiert"
@@ -41,14 +39,13 @@
     },
     "V0-FALL-11": {
       "status": "offen",
-      "grund": "Hub-Instanzwechsel erst mit Prozessgrenze und Transport (M3.1)"
+      "grund": "Hub-Instanzwechsel braucht zwei Kerninstanzen über einem gemeinsamen Journal (M3.1); der Connector-Prototyp setzt nur am gespeicherten Cursor fort"
     },
     "V0-FALL-12": {
       "status": "automatisiert"
     },
     "V0-FALL-13": {
-      "status": "offen",
-      "grund": "Entwurfskonflikt zwischen Geräten: Command-Variante für draft.conflict noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-14": {
       "status": "automatisiert"
@@ -60,68 +57,52 @@
       "status": "automatisiert"
     },
     "V0-FALL-17": {
-      "status": "offen",
-      "grund": "Capability-Abgleich beim Start braucht Kopplung Supervisor ↔ Kern (M1-Nachfolge)"
+      "status": "automatisiert"
     },
     "V0-FALL-18": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-19": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-20": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-21": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-22": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-23": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-24": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-25": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-26": {
-      "status": "offen",
-      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-27": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-28": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-29": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-30": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-31": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-32": {
-      "status": "offen",
-      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+      "status": "automatisiert"
     },
     "V0-FALL-33": {
       "status": "daten",
@@ -278,22 +259,20 @@
     },
     "RTA-FALL-33": {
       "status": "offen",
-      "grund": "Push ohne Credential im kontrollierten Run braucht Sandbox/Netzgrenze (V1)"
+      "grund": "Push ohne Credential im kontrollierten Run braucht Sandbox/Netzgrenze (V1); die Positivliste der Umgebung ist mit RTA-FALL-13/49 geprüft"
     },
     "RTA-FALL-34": {
       "status": "offen",
-      "grund": "Kennzeichnung „eingeschränkt überwacht“ ist Sache des Kerns, nicht gebaut"
+      "grund": "Kennzeichnung „eingeschränkt überwacht“ für fremd gestartete Runtimes: Kern-Ansicht und Erkennung folgen mit V1; im Referenzkern nicht gebaut"
     },
     "RTA-FALL-35": {
       "status": "automatisiert"
     },
     "RTA-FALL-36": {
-      "status": "offen",
-      "grund": "Rückfrage über den Kern mit anschließender Wiederaufnahme: Kopplung Supervisor ↔ Kern fehlt"
+      "status": "automatisiert"
     },
     "RTA-FALL-37": {
-      "status": "offen",
-      "grund": "Antwort ohne Rechtezuwachs: Kopplung Supervisor ↔ Kern fehlt"
+      "status": "automatisiert"
     },
     "RTA-FALL-38": {
       "status": "automatisiert"
@@ -305,32 +284,25 @@
       "status": "automatisiert"
     },
     "RTA-FALL-41": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-42": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-43": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-44": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-45": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-46": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-47": {
-      "status": "offen",
-      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+      "status": "automatisiert"
     },
     "RTA-FALL-48": {
       "status": "automatisiert"

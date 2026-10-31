@@ -1,6 +1,6 @@
 # Kern-Port V0 – Prüfgrenze für die Vertragssuite
 
-> Version 0.1 · 31.10.2026 · **Entwurf zur Review**, kein Implementierungsbeginn vor Owner-Entscheidung zum [Gesamtplan](../../research/agent-hub/operations/gesamtplan-2026-11.md) (Paket M1.1).
+> Version 0.2 · 31.10.2026 · **Entwurf zur Review** (0.2: §12, Ergänzungen aus M1.6), kein Implementierungsbeginn vor Owner-Entscheidung zum [Gesamtplan](../../research/agent-hub/operations/gesamtplan-2026-11.md) (Paket M1.1).
 > Grundlage: [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) (Begriffe, Automaten, Fallmatrix, V0-ABL-01), [Runtime-Adapter V0](runtime-adapter-v0.md), [Ereignis-Schema](schemas/ereignis.schema.json).
 > Der Kern-Port ist **keine Produkt-API und kein Transport** (Tor C). Er ist die schmalste Schnittstelle, über die eine Vertragssuite einen Kern von außen bedienen und beobachten kann.
 > Dieselbe Suite soll gegen einen wegwerfbaren Referenzkern, gegen Paperclip bzw. OpenHands (über Adapter, Tor A) und später gegen den echten Kern laufen.
@@ -222,3 +222,28 @@ Die Commands aus §5 werden über die V0-Fälle in §7 und §8 geprüft; jedes C
 | Neue Ereignistypen gegenüber V0: `task.revised`, `claim.fenced`, `claim.released`, `input.withdrawn`, `input.answer_conflict`, `device.capability_reported`, `effect.approval_pending` – im Ereignis-Schema nur über das Typmuster abgedeckt | V0 §7.1 bzw. V1-Spec |
 | Ablageort von Suite und Referenzkern | Gesamtplan E2 |
 | Wie ein Adapter auf Paperclip oder OpenHands Epoch und Freigabebindung abbildet, wenn deren API sie nicht kennt | M2.3 („nicht abbildbar“ ist dann der Befund) |
+
+## 12. Ergänzungen 0.2 (M1.6, 31.10.2026)
+
+Beim Bau der Budget-, Rückwärtsabnahme- und Kopplungsfälle im Referenzkern zeigte sich, dass §5 einige Eingaben und Ereignisse offenließ.
+Die folgenden Festlegungen gelten für die Prüfgrenze. Sie sind *vorläufig* wie KP-GRZ-06 und gehen mit der übrigen Spec in die Owner-Review (M4.1).
+Sie ändern kein V0-Verhalten. Wo V0 schweigt, ist das Verhalten als Wahl des Referenzkerns gekennzeichnet.
+
+| ID | Festlegung | V0 |
+|---|---|---|
+| KP-ERG-01 | `task.draft` auf eine bestehende Auftrags-ID: Gleicht der Inhalt einer bekannten Version, entsteht kein Ereignis. Weicht er ab, schreibt der Kern `draft.conflict` mit beiden Hashes und dem Entwurf; die Hub-Fassung bleibt gültig, `task.open` wird bis zur Wahl abgewiesen. Der Owner wählt mit `task.revise` und `konflikt: entwurf` (neue Version aus dem Entwurf) oder `konflikt: hub` (`draft.resolved`). | ENT-04, FALL-13 |
+| KP-ERG-02 | `task.revise` ändert nur `ziel`, `ausgangsstand`, `abnahmekriterien`, `budget` und `rueckwaertsabnahme`; `budget` wird feldweise zusammengeführt. Erlaubt aus `draft`, `open`, `in_progress`, `waiting_input` und `partially_submitted` (dann → `open`). Ein laufender Claim bleibt an seine Version gebunden. | §4.1, BUD-10, -16 |
+| KP-ERG-03 | Aufforderungen des Kerns an einen Run stehen als `daten.aufforderung` (`an`, dazu `art` oder `optionen`) in `task.budget_warning`, `task.repair_limit_reached`, `task.handover_requested`, `task.failed` und `task.cancelled`. Zugestellt werden sie über `journal.read` ab Cursor; eine Zustellung belegt keine Verarbeitung. | BUD-05, -08, -13, FALL-08 |
+| KP-ERG-04 | `task.cancel` setzt einen aktiven Claim auf `expired` (Grund `abbruch`). Auf einem vom Kern beendeten Claim (Budgetende, Abbruch, Verzicht) nimmt der Kern vom selben Run mit derselben Epoch weiterhin `run.report` mit `cancel_requested`, `cancel_confirmed`, `exited_*` oder `lost` und `run.report_usage` an, damit Abbruch und Kosten sichtbar bleiben. Alle anderen Meldungen weist er nach KP-INV-03 ab. | AUF-11, BUD-08, FALL-08 |
+| KP-ERG-05 | Budgetende: Der Kern schreibt zuerst `task.handover_recorded` mit `uebergabe.quelle: kern`, dann `task.failed` mit `uebergabe_run` und `uebergabe_kern`, dann `claim.expired`. Die Kern-Übergabe führt `ausgangsstand` leer, weil das Journal keine Hashes der Ausgangsquellen enthält. Ein Budgetende über `runs` gilt erst, wenn kein Claim mehr aktiv ist (Wahl des Referenzkerns). | BUD-08 |
+| KP-ERG-06 | `effect.propose` durch einen Run braucht einen Grant der Auftragsversion seines Claims mit passendem `effekt_typ` und einem Ziel, das mit dem Grant-Ziel beginnt; sonst `nicht_berechtigt`. Ein Run-Effekt ändert den Auftragszustand nicht. Nur `outcome_unknown` hält den Auftrag an, und nach dem Abgleich kehrt er in den vorherigen Zustand zurück (Wahl des Referenzkerns). Wird der Claim neu vergeben oder beendet, schreibt der Kern für offene Run-Effekte dieser Epoch `effect.invalidated`. | INV-01, -04, -05, BUD-14, FALL-23 |
+| KP-ERG-07 | Prüfschritt: `claim.request` mit `schritt: pruefung` vergibt einen eigenen Claim (Abfrage über `state.get` `claim` mit ID `<auftrag_id>#pruefung`); Claim-Ereignisse des Prüfschritts tragen `daten.schritt: pruefung`, `claim.granted` zusätzlich `pruefung_id` und das Eingabemanifest. `context.get` mit `schritt: pruefung` liefert vor der Rekonstruktion nur Artefakt-Hash und Manifest, danach zusätzlich die Vergleichsgrundlage. | RWA-02, -07, -08, -10 |
+| KP-ERG-08 | `state.get` kennt zusätzlich `entitaet: budget` (ID = Auftrags-ID): Verbrauch je Dimension nach V0-BUD-01, `kosten: unbekannt`, solange nichts als `gemeldet` bestätigt ist, Fehlversuche, Reparaturverbrauch, geschriebene Vorwarnungen und Reparaturgrenzen, maßgebliche Version. | BUD-02, -03 |
+| KP-ERG-09 | `run.report` darf `quellsequenz` tragen; der Kern übernimmt sie ins Ereignis. Nachgelieferte Meldungen mit demselben Idempotenz-Key sind Wiederholungen nach KP-INV-01. | FALL-03, -04 |
+| KP-ERG-10 | Neues Command `effect.reconcile_failed` (Akteur `effekt_adapter`, `effekt_id`, `grund` `frist` oder `fehler`): schreibt `effect.reconcile_failed`; der Effekt bleibt `outcome_unknown`. | RTA-BEO-07, RTA-INV-06 |
+| KP-ERG-11 | `test.clock_set` lehnt eine Kernzeit vor der aktuellen mit `anfrage_ungueltig` ab und wertet danach die Budgetregeln aus. Der Kern wertet außerdem vor und nach jedem schreibenden Command aus, sodass eine verspätete Meldung nach V0-BUD-09 auf das Budgetende trifft. | KP-TST-01, BUD-09 |
+
+Neue Ereignistypen gegenüber §11: `draft.conflict`, `draft.resolved`, `claim.expired`, `effect.invalidated`, `effect.reconcile_failed`. Wie die Typen aus §11 deckt sie das Ereignis-Schema nur über sein Typmuster ab.
+
+Offen bleibt, wie Kosten in USD aus einer Runtime in das Budget in EUR eingehen. Der Connector-Prototyp meldet sie deshalb als `geschaetzt`, sodass sie nicht zählen.
+

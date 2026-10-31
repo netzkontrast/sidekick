@@ -25,11 +25,12 @@ Maßgebliche Reihenfolge: [Gesamtplan ab November 2026](gesamtplan-2026-11.md) (
 - [x] AP1–AP3 und MUXI-Dossier, Skill `using-codegraph` gemergt (#31–#36).
 - [x] M0.1–M0.2: Plan-Review und N1/RS-1 (DSPy-Dossier auf `92d97ca`; RTA-INV-07, -AUF-07, -LEB-09).
 - [ ] M0.3–M0.4: Gesamtplan und Owner-Entscheidungen E1–E6.
-- [ ] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index.
+- [x] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index.
   - [x] M1.1: [Kern-Port V0](../../../docs/spec/kern-port-v0.md) als Spec-Entwurf (31.10.2026).
   - [x] M1.5: eigener CodeGraph-Index für sidekick (Owner-Freigabe 31.10.2026; 112 Dateien, ohne Fremdrepos).
   - [x] M1.2–M1.4: [Vertragssuite](../../../tools/contract-suite/README.md) mit Fake-Runtime, Referenzkern und Supervisor-Prototyp; 57 Tests grün, Abdeckung 62 automatisiert, 33 offen mit Grund, 6 Datenprüfungen (31.10.2026). Ablage unter `tools/` statt `research/` wegen der Owner-Regel vom 30.10.2026.
-  - [ ] M1 offen: Budget- und Rückwärtsabnahme-Commands im Referenzkern, Kopplung Supervisor ↔ Kern; danach M2.
+  - [x] M1.6: Budget (V0-FALL-18…26), Rückwärtsabnahme (27…32), Entwurfskonflikt (13), Run-Effekte mit Epoch, Connector-Prototyp für die Kopplung Supervisor ↔ Kern (V0-FALL-03, -04, -05, -08, -17; RTA-FALL-36, -37) und Beobachter-Prototyp (RTA-FALL-41…47). 93 Tests grün; Abdeckung 92 automatisiert, 3 offen (V0-FALL-11 → M3.1, RTA-FALL-33/34 → V1), 6 Datenprüfungen. Prüfgrenze ergänzt in [Kern-Port §12](../../../docs/spec/kern-port-v0.md) (0.2, Review offen) (31.10.2026).
+  - Nächster Schritt: M2 wartet auf **E4** (Budget ≤ 12 Starts / ≤ 3 USD und zulässiger CLI-Zugang, für M2.1) und **E5** (Docker mit Netz, für M2.3). Ohne Freigabe nur kostenfreie Arbeit: Owner-Review von Kern-Port 0.2 (aus M4.1 vorgezogen).
 - [ ] M2: Tor B (CLI, ACP/SDK) und Tor A mit der Vertragssuite.
 - [ ] M3: Tor C und Tor D mit Prozessgrenze und Neustarts.
 - [ ] M4: Review-Schulden, Stack (O-4), vertikaler MVP.

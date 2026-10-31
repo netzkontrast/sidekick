@@ -62,6 +62,10 @@ Reihenfolge nach Abhängigkeiten. Zeitangaben sind Zeitboxen, keine Zusagen. Inn
 
 **M1.5 CodeGraph-Index trennen** (N7; vor M1.3, wegen Clean-Room). Eigener Index für sidekick oder Ausschluss der Fremdklone; Entscheidung beim Owner.
 
+**M1.6 Restfälle bis zur Budgetgrenze E4** (nachgetragen 31.10.2026). Budget, Rückwärtsabnahme, Entwurfskonflikt und Run-Effekte im Referenzkern; Connector-Prototyp (Outbox, Neustart, Abbruch, Wiederaufnahme) und Beobachter-Prototyp, beide wegwerfbar.
+- Abnahme: Alle V0- und RTA-Fälle, die ohne echte Runtime und ohne zweite Kerninstanz prüfbar sind, laufen automatisiert. Offen bleiben nur V0-FALL-11 (M3.1) und RTA-FALL-33/34 (V1), jeweils mit Grund. Neue Festlegungen an der Prüfgrenze stehen in Kern-Port §12.
+- Ergebnis: 93 Tests grün, Abdeckung 92/3/6; Stand im [PLAN](PLAN.md).
+
 ### M2 – Tor B und Tor A mit Belegen (Budget nötig, Zeitbox 3–4 Tage)
 
 **M2.1 Tor B, CLI-Pfad (∥ M2.2).** Wie N2 im Plan-Review: höchstens 12 Starts, Deckel 3 USD im Ledger. Zusätzlich: Das echte Claude-Code-Profil läuft durch die RTA-Fälle der Suite, die ohne Fake gehen (Session, Abbruch, Kosten, Rechtemodus).
@@ -144,4 +148,5 @@ L6 verbindet beide Stränge: Ein Run bekommt sein Kontextpaket aus der Library �
 
 ## 8. Nächster ausführbarer Schritt
 
-M1.1 – Kern-Port als Spec-Ergänzung. Er braucht keine Entscheidung, kostet nichts und ist Voraussetzung für alles in M1.
+Stand 31.10.2026: M1 ist abgeschlossen (M1.1–M1.6). Der nächste Schritt ist M2.1. Er braucht E4 (Budget und zulässiger CLI-Zugang), M2.3 zusätzlich E5 (Docker).
+Bis dahin bleibt nur kostenfreie Arbeit: die Owner-Review von Kern-Port 0.2 (Teil von M4.1) und L-Pakete der Skill-Library.

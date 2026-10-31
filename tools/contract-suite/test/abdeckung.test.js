@@ -14,7 +14,8 @@ const idsIn = (p, prefix) => [...new Set([...read(p).matchAll(new RegExp(`^\\| (
 
 function testIds() {
   const ids = new Set();
-  for (const f of ['kern.test.js', 'runtime-adapter.test.js']) {
+  const dateien = fs.readdirSync(path.join(SUITE, 'test')).filter((f) => f.endsWith('.test.js') && f !== 'abdeckung.test.js');
+  for (const f of dateien) {
     for (const [, name] of read(`tools/contract-suite/test/${f}`).matchAll(/(?:test|withK)\('([^']+)'/g)) {
       const m = name.match(/^((?:V0-FALL|KP-FALL|RTA-FALL|V0-ABL|KP-INV)-\d\d(?:\/\d\d)*)/);
       if (!m) continue;
