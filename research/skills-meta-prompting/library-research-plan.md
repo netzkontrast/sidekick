@@ -181,15 +181,15 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | Paket | Highlight (Repo) | Status |
 |---|---|---|
 | P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | umgesetzt in PR #21 (116/116 Tests) |
-| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | in Umsetzung (P1–P3 gemeinsam); Prototyp: [Zitatprüfung](e3/zitatpruefung-2026-10-31.md) (101/101 bei K-MELDEN, 66/83 bei M4) |
-| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | Befund: Nulllauf besteht 20/31 grilling-Prüfungen ([Korrektur](grilling-runde/dev-ergebnis.md)); Umsetzung geplant |
-| P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | geplant |
+| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | umgesetzt in PR #23 (`eval judge check`; Fix für kurze Innenzitate) |
+| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | umgesetzt in PR #23 (`eval check`, `eval nullrun`, `--b1-kern`) |
+| P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | umgesetzt in PR #23 (`eval findings`) |
 | P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
 | P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | geplant |
 | P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | geplant; E3-Kandidat |
 | P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | Diagnose geliefert ([dev](grilling-runde/dev-ergebnis.md)); Kandidat geplant |
 | P8 | grilling K-RUECKWAERTS: Rückwärtsabgleich vor der Zusammenfassung (prompt-architect) | geplant |
-| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | freigegeben mit eng begrenzten Rechten ([A-20261031-p9-questions-cli](../../docs/fragen/skill-library/questions/Q-20261031-p9-questions-cli.md)); geplant |
+| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | umgesetzt in PR #24 ([A-20261031-p9-questions-cli](../../docs/fragen/skill-library/questions/Q-20261031-p9-questions-cli.md)); Permission-Regel nur für `questions` |
 | P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | geplant |
 | P11 | Fail-closed `context-pack` (code2prompt) | geplant |
 | P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | Spec-Entwurf V0 0.2 in PR #22 zum Owner-Review (5 vorläufige Festlegungen zur Entscheidung; Schemas folgen nach dem Review) |
