@@ -324,7 +324,7 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   Ersetzung, die genau die ganze `description:`-Zeile im Frontmatter ersetzt; alles andere ist `candidate_multi_dimension`.
   Ein `project-binding`-Kandidat darf das Frontmatter nicht berühren (sonst ebenfalls zweite Dimension). Unbekannte Datei
   und fehlender oder mehrfacher Fundort sind `replacement_not_unique`. Unbekannte Dimension oder kaputter Datensatz: Exit 2.
-- **Vorbereiten:** Konfigurationsschutz vergleicht das erste Pfadsegment ohne Groß-/Kleinschreibung. Alles wird vor dem
+- **Vorbereiten:** Konfigurationsschutz ohne Groß-/Kleinschreibung: an der Wurzel `.claude/`, `.agents/`, `.mcp.json`; `AGENTS.md`, `CLAUDE.md` und `CLAUDE.local.md` in jedem Verzeichnis, weil der Client verschachtelte Regeldateien nachlädt (SLV0-FALL-47). Alles wird vor dem
   ersten Schreiben geprüft; ein Abbruch hinterlässt kein Zielverzeichnis.
 - **Ledger:** Das Limit steht im Kopf (`ledger init`, 1…40, Owner-Budget). Ein Ergebnis je Versuch; ein zweites ist Exit 2.
   Ein beschädigtes Ledger wird nicht repariert (Exit 2). Die Sperre `<ledger>.lock` wird bei `ledger_locked` nie entfernt.
