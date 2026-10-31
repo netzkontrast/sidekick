@@ -1,0 +1,50 @@
+[
+ {
+  "paar": "FF-T1",
+  "fall": "FF/test/FF-T1",
+  "links": "Y384",
+  "rechts": "Y543"
+ },
+ {
+  "paar": "FF-T2",
+  "fall": "FF/test/FF-T2",
+  "links": "Y613",
+  "rechts": "Y624"
+ },
+ {
+  "paar": "FF-T3",
+  "fall": "FF/test/FF-T3",
+  "links": "Y022",
+  "rechts": "Y714"
+ },
+ {
+  "paar": "FF-T4",
+  "fall": "FF/test/FF-T4",
+  "links": "Y826",
+  "rechts": "Y229"
+ },
+ {
+  "paar": "MA-T1",
+  "fall": "MA/test/MA-T1",
+  "links": "Y963",
+  "rechts": "Y796"
+ },
+ {
+  "paar": "MA-T2",
+  "fall": "MA/test/MA-T2",
+  "links": "Y703",
+  "rechts": "Y038"
+ },
+ {
+  "paar": "MA-T3",
+  "fall": "MA/test/MA-T3",
+  "links": "Y191",
+  "rechts": "Y567"
+ },
+ {
+  "paar": "MA-T4",
+  "fall": "MA/test/MA-T4",
+  "links": "Y422",
+  "rechts": "Y695"
+ }
+]

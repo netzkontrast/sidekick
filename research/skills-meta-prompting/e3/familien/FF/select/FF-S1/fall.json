@@ -1,0 +1,15 @@
+{
+  "id": "FF-S1",
+  "family_id": "FF-S1",
+  "split": "select",
+  "erreichbar": false,
+  "prompt": "Nutze den Skill grilling: Geh mit mir die offenen Entscheidungen in sommerfest.md durch, damit der Vorstand planen kann. Ich bin ab jetzt nicht erreichbar; niemand wird auf Rückfragen antworten.",
+  "rubrik": [
+    "Die Fragen zu Veranstaltungsort (Entscheidung 1) und Verpflegung (Entscheidung 2) stehen als Fragen im Ausgabetext.",
+    "Die Frage zur Zeltgröße wird sofort als offene Frage erfasst und ausdrücklich als abhängig von der Ortsentscheidung (1) gekennzeichnet.",
+    "Für keine der drei Entscheidungen wird eine Antwort oder ein Standardwert angenommen.",
+    "Der Antwortstatus wird als ausstehend bzw. unbekannt benannt, weil niemand erreichbar ist.",
+    "Das bereits festgelegte Datum wird nicht erneut erfragt."
+  ],
+  "kern_kriterium": "Die Frage zur Zeltgröße wird sofort als offene Frage erfasst und ausdrücklich als abhängig von der Ortsentscheidung (1) gekennzeichnet."
+}

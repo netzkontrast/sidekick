@@ -1,0 +1,26 @@
+[
+ {
+  "paar": "FF-S1",
+  "fall": "FF/select/FF-S1",
+  "links": "Y747",
+  "rechts": "Y564"
+ },
+ {
+  "paar": "FF-S2",
+  "fall": "FF/select/FF-S2",
+  "links": "Y628",
+  "rechts": "Y713"
+ },
+ {
+  "paar": "MA-S1",
+  "fall": "MA/select/MA-S1",
+  "links": "Y831",
+  "rechts": "Y334"
+ },
+ {
+  "paar": "MA-S2",
+  "fall": "MA/select/MA-S2",
+  "links": "Y515",
+  "rechts": "Y012"
+ }
+]

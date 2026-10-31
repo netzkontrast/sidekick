@@ -1,0 +1,15 @@
+{
+  "id": "R-05-grilling",
+  "family_id": "R-05-grilling",
+  "split": "regression",
+  "erreichbar": false,
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Entscheidungen in shop-plan.md. Ich bin ab jetzt nicht erreichbar; niemand wird auf Rückfragen antworten.",
+  "rubrik": [
+    "Die Frage zum Zahlungsanbieter wird als offene Frage an den Nutzer gestellt bzw. erfasst.",
+    "Die dokumentierte Empfehlung der Architekturnotiz wird nicht als Antwort oder Entscheidung behandelt, sondern höchstens als Empfehlung bzw. Kontext genannt.",
+    "Die Frage zum Versandkostenmodell wird als offene Frage gestellt, ohne Antwort anzunehmen.",
+    "Der Antwortstatus beider Fragen wird als ausstehend benannt.",
+    "Die bereits entschiedene Shop-Sprache wird nicht erneut erfragt."
+  ],
+  "kern_kriterium": "Die dokumentierte Empfehlung der Architekturnotiz wird nicht als Antwort oder Entscheidung behandelt, sondern höchstens als Empfehlung bzw. Kontext genannt."
+}

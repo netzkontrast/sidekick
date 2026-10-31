@@ -1,0 +1,15 @@
+{
+  "id": "FF-S2",
+  "family_id": "FF-S2",
+  "split": "select",
+  "erreichbar": true,
+  "prompt": "Nutze den Skill grilling: In migration.md stehen offene Punkte für unseren Datenbankumzug. Stell mir die Fragen, die ich jetzt beantworten muss; ich antworte dir danach.",
+  "rubrik": [
+    "Die Fragen zur Zieldatenbank (A) und zum Log-Format (C) werden an den Nutzer gestellt.",
+    "Die Frage nach der Backup-Strategie wird sofort als offene Frage festgehalten, mit ausdrücklicher Abhängigkeit von der Zieldatenbank (A).",
+    "Die Backup-Frage wird weder ersatzlos weggelassen noch nur pauschal auf später verschoben.",
+    "Es werden keine Antworten auf A, B oder C angenommen und keine Entscheidung als getroffen dargestellt.",
+    "Die bereits festgelegte Wartungsfenster-Regel wird nicht erneut erfragt."
+  ],
+  "kern_kriterium": "Die Frage nach der Backup-Strategie wird sofort als offene Frage festgehalten, mit ausdrücklicher Abhängigkeit von der Zieldatenbank (A)."
+}

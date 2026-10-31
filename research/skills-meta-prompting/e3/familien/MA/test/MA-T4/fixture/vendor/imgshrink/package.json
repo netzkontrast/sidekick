@@ -1,0 +1,7 @@
+{
+  "name": "imgshrink",
+  "version": "5.2.0",
+  "license": "ISC",
+  "engines": { "node": ">=18" },
+  "homepage": "https://example.invalid/imgshrink"
+}

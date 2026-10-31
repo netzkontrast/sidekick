@@ -1,0 +1,74 @@
+{
+  "FF-S1-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1955,
+    "output_tokens": 2851
+  },
+  "FF-S1-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1984,
+    "output_tokens": 3302
+  },
+  "FF-S2-B1": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 6,
+    "cost_usd_client": 0.1433,
+    "output_tokens": 2031
+  },
+  "FF-S2-K-FOLGEFRAGE": {
+    "skills": [
+      "grilling"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1445,
+    "output_tokens": 2003
+  },
+  "MA-S1-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1176,
+    "output_tokens": 1910
+  },
+  "MA-S1-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 7,
+    "cost_usd_client": 0.1256,
+    "output_tokens": 2211
+  },
+  "MA-S2-B1": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 8,
+    "cost_usd_client": 0.1249,
+    "output_tokens": 1964
+  },
+  "MA-S2-K-MELDEN": {
+    "skills": [
+      "researching-repositories"
+    ],
+    "schreib_oder_shell": [],
+    "turns": 8,
+    "cost_usd_client": 0.1305,
+    "output_tokens": 2143
+  }
+}

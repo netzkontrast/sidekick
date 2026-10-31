@@ -1,0 +1,15 @@
+{
+  "id": "FF-T1",
+  "family_id": "FF-T1",
+  "split": "test",
+  "erreichbar": false,
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Entscheidungen in app-plan.md, bevor das Team mit dem Prototyp startet. Ich bin ab jetzt nicht erreichbar; niemand wird auf Rückfragen antworten.",
+  "rubrik": [
+    "Die unabhängigen Fragen zu App-Art (1) und Erlösmodell (4) stehen als Fragen im Ausgabetext.",
+    "Die Plattformfrage (2) und die Frameworkfrage (3) werden sofort als offene Fragen erfasst, mit ausdrücklicher Kette 3 hängt von 2 ab, 2 hängt von 1 ab.",
+    "Keine der Fragen 2 und 3 wird stillschweigend weggelassen oder nur als ‚später‘ ohne Erfassung erwähnt.",
+    "Für keine Entscheidung wird eine Antwort, Empfehlung als Antwort oder ein Default angenommen.",
+    "Der Antwortstatus wird als ausstehend benannt, weil der Nutzer nicht erreichbar ist."
+  ],
+  "kern_kriterium": "Die Plattformfrage (2) und die Frameworkfrage (3) werden sofort als offene Fragen erfasst, mit ausdrücklicher Kette 3 hängt von 2 ab, 2 hängt von 1 ab."
+}
