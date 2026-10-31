@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-judgement.schema.json",
+  "title": "Bewertung mit Belegart – Skill-Library V0",
+  "description": "Bewertung verblindeter Ausgaben durch einen Bewerter (SLV0-EVAL-19, §7.2). Je Kriterium Status und genau eine Belegart; `eval judge check` findet Zitate in Ausgabe bzw. Fixture wieder und prüft Abwesenheitsbelege (SLV0-EVAL-20/-21). Kommentar steht in `anmerkung` und ist nie Beleg. Ältere Bewertungen ohne schema_version liest das Werkzeug kompatibel, sie folgen diesem Schema nicht.",
+  "type": "object",
+  "required": ["schema_version", "format", "bewerter", "ausgaben"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "format": { "const": "sl-eval-judgement@1" },
+    "bewerter": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "rubrik_version": { "type": ["string", "null"], "maxLength": 128 },
+    "ausgaben": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/code" },
+      "additionalProperties": { "$ref": "#/$defs/ausgabe" }
+    },
+    "paare": {
+      "type": "array",
+      "description": "Paarurteile mit Begründung; nur Daten, nicht geprüft (Spec O-11).",
+      "items": { "type": "object" }
+    }
+  },
+  "$defs": {
+    "code": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "ausgabe": {
+      "type": "object",
+      "required": ["fall", "kriterien"],
+      "additionalProperties": false,
+      "properties": {
+        "fall": { "type": "string", "minLength": 1, "maxLength": 256, "description": "Sicherer relativer Pfad; Fixture unter <fixtures>/<fall>/fixture/." },
+        "kriterien": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/kriterium" } },
+        "kern_erfuellt": { "type": ["boolean", "null"] },
+        "erfuellt": { "type": ["integer", "null"], "minimum": 0 },
+        "r_verstoss": { "type": ["boolean", "null"] },
+        "auffaelligkeiten": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "zitat": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "kriterium": {
+      "type": "object",
+      "required": ["kriterium", "status", "beleg_art"],
+      "additionalProperties": false,
+      "properties": {
+        "kriterium": { "type": "string", "minLength": 1, "maxLength": 1000, "description": "Kriteriums-ID (z. B. RR-K03) oder Formulierung." },
+        "status": { "enum": ["erfuellt", "nicht_erfuellt", "unklar"] },
+        "beleg_art": { "enum": ["zitat", "fixture", "abwesenheit", "fehlt"] },
+        "beleg": {
+          "type": ["string", "array"],
+          "minLength": 1,
+          "maxLength": 4000,
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/zitat" },
+          "description": "Ein Zitat oder eine Liste von Zitaten; Auslassungen teilen ein Zitat in Fragmente (SLV0-EVAL-20)."
+        },
+        "suchbegriff": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "kern": { "type": "boolean" },
+        "anmerkung": { "type": "string", "maxLength": 2000 }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["beleg_art"], "properties": { "beleg_art": { "enum": ["zitat", "fixture"] } } },
+          "then": { "required": ["beleg"], "properties": { "suchbegriff": false } }
+        },
+        {
+          "if": { "required": ["beleg_art"], "properties": { "beleg_art": { "const": "abwesenheit" } } },
+          "then": { "required": ["suchbegriff"], "properties": { "beleg": false } }
+        },
+        {
+          "if": { "required": ["beleg_art"], "properties": { "beleg_art": { "const": "fehlt" } } },
+          "then": { "properties": { "beleg": false, "suchbegriff": false } }
+        }
+      ]
+    }
+  }
+}

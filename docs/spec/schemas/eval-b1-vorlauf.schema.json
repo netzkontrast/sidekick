@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-b1-vorlauf.schema.json",
+  "title": "Kernurteile des B1-Vorlaufs – Skill-Library V0",
+  "description": "Absolute Kernurteile über die B1-Ausgaben der select-Fälle eines Kandidaten, vor jedem Kandidatenstart (SLV0-EVAL-25). Quelle je Fall: deterministischer Prüfer des Falls oder getrennte Bewerter-Session mit Belegprüfung (SLV0-EVAL-21). Kein Paarurteil.",
+  "type": "object",
+  "required": ["schema_version", "faelle"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "kandidat": { "type": "string", "pattern": "^K-[A-Za-z0-9._-]{1,64}$" },
+    "faelle": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["case_id", "kern"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+          "kern": { "enum": ["erfuellt", "nicht_erfuellt", "unklar"] },
+          "quelle": { "type": "string", "minLength": 1, "maxLength": 512, "description": "Woher das Urteil stammt, z. B. Prüf-ID oder Bewertungsdatei mit Belegprüfung." }
+        }
+      }
+    }
+  }
+}

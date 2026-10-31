@@ -90,7 +90,9 @@
           "art": { "enum": ["deterministisch", "rubrik"] },
           "bewerter": { "type": "string", "minLength": 1, "maxLength": 128, "description": "Wer oder was geprüft hat, z. B. spur-regel@1 oder eine benannte Bewerter-Session." },
           "ergebnis": { "enum": ["bestanden", "nicht_bestanden", "unklar"] },
-          "r_regel": { "type": ["string", "null"], "pattern": "^R-[0-9]{2}$", "description": "Gesetzt, wenn die Assertion eine harte Regel prüft (SL1 §5.4). Wird nie mit anderen Assertions verrechnet (SLV0-EVAL-11)." }
+          "r_regel": { "type": ["string", "null"], "pattern": "^R-[0-9]{2}$", "description": "Gesetzt, wenn die Assertion eine harte Regel prüft (SL1 §5.4). Wird nie mit anderen Assertions verrechnet (SLV0-EVAL-11)." },
+          "trennschaerfe": { "enum": ["trennend", "erhaltend", null], "description": "Nur bei deterministischen Assertions: Ergebnis des Nulllaufs (SLV0-EVAL-23/-24); null = nicht gegen einen Nulllauf geprüft. Optional, damit frühere Rohdatensätze gültig bleiben." },
+          "rolle": { "enum": ["kern", "gegen", null], "description": "Assertion prüft das Kern- bzw. Gegenkriterium des Falls; je Rohdatensatz höchstens einmal je Rolle, nie bei R-Assertions (SLV0-EVAL-24)." }
         }
       }
     },
