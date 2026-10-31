@@ -3,6 +3,7 @@
 import { compareCodepoints, hashOfFileMap, sha256Hex } from '../core.js';
 import { validateProject, PACKAGES_DIR } from '../project.js';
 import { EvalRefusal, evalMsg, requireSchema, UsageError, safeRelativeSegments } from './common.js';
+import { verifyGitSource } from './git.js';
 
 export const SNAPSHOT_SCHEMA = 'eval-snapshot';
 const COMMIT_RE = /^[0-9a-f]{7,64}$/;
@@ -34,10 +35,12 @@ function build(sourceCommit, contents) {
 
 /**
  * Freeze the packages of a repository working tree. Invalid packages get no hash (SLV0-PKG-20),
- * so any validator error refuses the snapshot. The source commit is stated by the caller.
+ * so any validator error refuses the snapshot. The source commit is stated by the caller; with
+ * `verifyGit` it must equal HEAD and .agents/skills/ must be clean (SLV0-EVAL-18).
  */
-export function freezeFromRepo(repoRoot, sourceCommit) {
+export function freezeFromRepo(repoRoot, sourceCommit, { verifyGit = false } = {}) {
   checkCommit(sourceCommit);
+  if (verifyGit) verifyGitSource(repoRoot, sourceCommit);
   const res = validateProject(repoRoot, { adapters: false });
   const errors = res.messages.filter((m) => m.severity === 'error');
   if (errors.length > 0 || res.package_set_hash === null) {

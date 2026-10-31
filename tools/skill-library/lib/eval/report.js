@@ -1,12 +1,14 @@
 // Reports only from raw records (SLV0-EVAL-10/-11, SLV0-INV-06/-09).
 // Every number carries numerator, denominator and the raw record IDs of its population. Levels
 // M0–M5 and R, families and repeats are reported separately. R assertions are never counted
-// together with other assertions. No score, no ranking, no activation recommendation.
+// together with other assertions. Rubric versions are listed and never mixed (SLV0-EVAL-15).
+// No score, no ranking, no activation recommendation.
 import { canonicalJson, sha256Hex, compareCodepoints } from '../core.js';
 import { sumTokens } from '../tokens.js';
 import { evalMsg, EvalRefusal, UsageError, requireSchema, schemaErrors } from './common.js';
 import { RAW_SCHEMA } from './raw.js';
 import { USAGE_FIELDS } from './normalize.js';
+import { rubricVersionsOf, mixingMessages, rubricName } from './rubric.js';
 
 export const REPORT_SCHEMA = 'eval-report';
 const LEVELS = ['M0', 'M1', 'M2', 'M3', 'M4', 'M5', 'R'];
@@ -86,8 +88,12 @@ function levelReport(records) {
   return { laeufe, assertions, je_fall: jeFall, je_familie: jeFamilie, je_wiederholung: jeWdh, skill_aufrufe: skillAufrufe, katalog_unbekannt: katalog, usage };
 }
 
-/** Build a report from validated raw records. Throws report_without_raw without any record. */
-export function buildReport(records) {
+/**
+ * Build a report from validated raw records. Throws report_without_raw without any record and
+ * rubric_version_mixed when two versions of one rubric (or a version other than a pinned one,
+ * `rubricVersions`) occur (SLV0-EVAL-15).
+ */
+export function buildReport(records, { rubricVersions = [] } = {}) {
   if (!Array.isArray(records) || records.length === 0) {
     throw new EvalRefusal([evalMsg('report_without_raw', 'report', 'keine Rohdatensätze; ein Bericht ohne Rohdaten wird nicht erzeugt')]);
   }
@@ -96,6 +102,10 @@ export function buildReport(records) {
   for (let i = 1; i < sorted.length; i += 1) {
     if (sorted[i].run_id === sorted[i - 1].run_id) throw new UsageError(`doppelte run_id ${sorted[i].run_id}`);
   }
+  const pinnedGroups = rubricVersions.map((v) => rubricName(v));
+  if (new Set(pinnedGroups).size !== pinnedGroups.length) throw new UsageError('--rubric-version nennt zwei Versionen derselben Rubrik');
+  const rubriken = rubricVersionsOf(sorted, rubricVersions);
+  if (rubriken.messages.length > 0) throw new EvalRefusal(rubriken.messages);
   const ebenen = {};
   for (const level of LEVELS) {
     const rs = sorted.filter((r) => r.ebene === level);
@@ -121,6 +131,7 @@ export function buildReport(records) {
     bericht: 'sl-eval-report@1',
     hinweis: HINWEIS,
     rohdaten: { anzahl: sorted.length, rohdatensatz_ids: sorted.map((r) => r.run_id), eingabe_sha256: sha256Hex(canonicalJson(sorted)) },
+    rubrik_versionen: rubriken.versionen,
     ebenen,
     r_pruefungen: rPruefungen,
     r_verstoesse: rVerstoesse,
@@ -159,6 +170,9 @@ export function checkReport(report, knownRunIds) {
     for (const [k, v] of Object.entries(node)) walk(v, `${ptr}/${k}`);
   };
   walk(report, '');
+  if (Array.isArray(report?.rubrik_versionen) && report.rubrik_versionen.every((v) => typeof v?.rubrik_version === 'string')) {
+    messages.push(...mixingMessages(report.rubrik_versionen));
+  }
   if (known.size === 0) messages.push(evalMsg('report_without_raw', 'report', 'keine Rohdatensätze zum Abgleich übergeben'));
   return { schema_errors: schemaErrs, messages };
 }
