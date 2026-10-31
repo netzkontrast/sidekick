@@ -60,6 +60,19 @@ test('SLV0-FALL-32 case file that overwrites AGENTS.md (or .claude/, .agents/, C
   }
 });
 
+test('SLV0-FALL-47 local rules, MCP config and nested rule files → config_overwrite; similar names pass', (t) => {
+  for (const bad of ['CLAUDE.local.md', '.mcp.json', 'docs/CLAUDE.md', 'sub/Agents.md']) {
+    const { out, args } = setup(t, [{ ...CASE, files: { [bad]: 'eingeschleust' } }]);
+    const r = runEvalCli(args);
+    assert.equal(r.code, 1, `${bad}: ${r.stdout}`);
+    assert.deepEqual(codesOf(r.json), ['config_overwrite'], bad);
+    assert.equal(fs.existsSync(out), false, `${bad}: no partial output`);
+  }
+  const { args } = setup(t, [{ ...CASE, files: { 'docs/claude-notes.md': 'harmlos' } }]);
+  const r = runEvalCli(args);
+  assert.equal(r.code, 0, r.stdout);
+});
+
 test('SLV0-FALL-32 B0 arm has no package files and no adapter; config hash equals B1', NEEDS_SYMLINKS, (t) => {
   const { out, args } = setup(t, [CASE]);
   const r = runEvalCli(args);

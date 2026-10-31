@@ -19,14 +19,28 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric> …`;
-  startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check|context-pack> …`;
+  startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result`, `split access|select` und `context-pack --output`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
+- Belege einer Bewertung prüfen: `node tools/skill-library/cli.js eval judge check BEWERTUNG.json --outputs BLIND-VERZ [--fixtures FAMILIEN-VERZ]`
+  (Exit 1, wenn ein Zitat nicht wiedergefunden wird oder ein „erfuellt“ ohne Beleg bleibt). Einzeltest: `node --test tools/skill-library/test/eval-judge.test.js`
+- Nulllauf-Trennschärfe: `node tools/skill-library/cli.js eval nullrun --cases FALLORDNER-VERZ`; B1-Vorlauf in select:
+  `… eval nullrun --b1-kern KERNURTEILE.json` (Exit 1 = kein Kandidatenstart). Prüfungen gegen ein Arbeitsverzeichnis:
+  `… eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]`. Erwartete Befunde und Überberichtung: `… eval findings --case FALLORDNER AUSGABE.md…`.
+  Einzeltests: `node --test tools/skill-library/test/eval-nullrun.test.js` (ebenso `eval-trennschaerfe`, `eval-findings`).
+- Belegabdeckung eines Berichts am Commit: `node tools/skill-library/cli.js eval cite-check --repo REPO-VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]… [--github OWNER/REPO]`
+  („X von Y Dateien belegt; nicht belegt: …“; Exit 1 bei falschem SHA, Bereich hinter dem Dateiende oder fehlender Datei). Einzeltest: `node --test tools/skill-library/test/eval-citecheck.test.js`
+- Kontextpaket für eine Clean-Room-Session: `node tools/skill-library/cli.js eval context-pack --allowlist ALLOWLIST.json [--root VERZ] [--deny MUSTER]… [--estimator utf8-bytes-div-4@1] [--output NEUE-DATEI.md]`
+  (Datensatz mit Dateihashes auf stdout; Exit 1 ohne Paket bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink oder gesperrtem Pfad wie `kandidaten/`). Einzeltest: `node --test tools/skill-library/test/eval-contextpack.test.js`
+- Kostenbilanz je Kontextklasse und Turn: `node tools/skill-library/cli.js eval report RAW-VERZ [--estimator utf8-bytes-div-4@1]`
+  (Block `kostenbilanz` je Ebene: Turns, Turn-Usage, Rest, Bytes × Folgeturns je Klasse, B1−B0, Kosten je erfülltem Kriterium). Einzeltest: `node --test tools/skill-library/test/eval-costbalance.test.js`
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`
   (nur lesend; der einzige Prozess, den der Harness startet, ist `git`).
 - Research-Helfer-Tests: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
+- Fragen-Ablage (grilling, optional): `node tools/skill-library/cli.js questions <check|status|next|add|ask|answer|…> --root docs/fragen --topic THEMA`;
+  `check` liest nur. Spec: [questions-cli-v0](docs/spec/questions-cli-v0.md); Einzeltests `node --test tools/skill-library/test/questions-*.test.js`.
 
 Details: [tools/skill-library/README.md](tools/skill-library/README.md). Ab Phase 1 (TypeScript/Next.js)
 stehen hier Install, Dev, Build, Einzeltest, Typecheck und Lint mit exakten Flags.
