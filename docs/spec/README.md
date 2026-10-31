@@ -8,6 +8,7 @@ Vision und Recherche begründen; hier steht, was das System tun muss und woran d
 | [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) | Verträge und Fallmatrix; seit 0.3 Schemas/Beispiele zu Budget und Rückwärtsabnahme synchronisiert | Datenform geprüft; Produktlaufzeit und V1-Vertragstests offen |
 | [Skill-Library V0](skill-library-v0.md) | Paketvertrag, Hashes, Validator, Registry und Eval-Harness; IDs `SLV0-<Bereich>-<nn>` | Stufen 0–2 implementiert; Grenzen und offene Punkte in der Spec |
 | [Runtime-Adapter V0](runtime-adapter-v0.md) | Adapterprofil, Aufruf ohne Shell, Session-Formen, Abbruch und Timeout, Laufrechte, Beobachter für unklare Effekte, Fallmatrix; IDs `RTA-<Bereich>-<nn>` | Entwurf; nicht implementiert |
+| [Kern-Port V0](kern-port-v0.md) | Prüfgrenze der Vertragssuite: Commands, Steuerbefehle, Fehlercodes, Zuordnung von V0-ABL-01 und V0-FALL; IDs `KP-<Bereich>-<nn>` | Entwurf; nicht implementiert |
 | [Fragen-CLI V0](questions-cli-v0.md) | Fragenablage, Befehle, Zustandsinvarianten, Dateiformat und Fehlerfälle; IDs `QCLI-<Bereich>-<nn>` | Implementiert; Einsparung im Modellvergleich offen (QO-1) |
 
 ## Konventionen

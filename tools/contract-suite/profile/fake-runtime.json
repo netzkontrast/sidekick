@@ -1,0 +1,48 @@
+{
+  "schema_version": "0.1",
+  "id": "rta-fake-runtime",
+  "version": 1,
+  "runtime": {
+    "name": "Fake-Runtime der Vertragssuite",
+    "programm": "node",
+    "version_bereich": "0.1"
+  },
+  "befehl": {
+    "basis": ["fake-runtime.js", "--print", "--output-format", "stream-json"],
+    "prompt": { "art": "stdin" },
+    "modell_fragment": ["--model", "{modell}"]
+  },
+  "session": {
+    "form": "paar",
+    "neu_fragment": ["--session-id", "{session}"],
+    "fortsetzen_fragment": ["--resume", "{session}"]
+  },
+  "ausgabe": {
+    "format": "jsonl",
+    "ergebnis_pfad": "$.result",
+    "session_pfad": "$.session_id",
+    "verbrauch": {
+      "eingabe_tokens": "$.usage.input_tokens",
+      "ausgabe_tokens": "$.usage.output_tokens",
+      "kosten_usd": "$.total_cost_usd"
+    }
+  },
+  "rechte": {
+    "stufen": {
+      "nur_lesen": ["--permission-mode", "plan"],
+      "arbeitsbaum_schreiben": ["--permission-mode", "acceptEdits"]
+    },
+    "verbotene_flags": ["--dangerously-skip-permissions", "--allow-dangerously-skip-permissions", "bypassPermissions"]
+  },
+  "arbeitsverzeichnis": { "verbotene_flags": ["--add-dir", "-w", "--worktree"] },
+  "umgebung": { "erlaubt": ["PATH", "LANG"] },
+  "faehigkeiten": {
+    "resume": { "status": "nachgewiesen", "beleg": "tools/contract-suite/test/runtime-adapter.test.js RTA-FALL-16" },
+    "abbruch": { "status": "nachgewiesen", "beleg": "tools/contract-suite/test/runtime-adapter.test.js RTA-FALL-26" },
+    "rueckfrage": { "status": "nicht_unterstuetzt" },
+    "kosten_meldung": { "status": "nachgewiesen", "beleg": "tools/contract-suite/test/runtime-adapter.test.js RTA-FALL-22" },
+    "wiederanbindung": { "status": "nicht_unterstuetzt" },
+    "modellwahl": { "status": "nachgewiesen", "beleg": "tools/contract-suite/test/runtime-adapter.test.js RTA-FALL-12" }
+  },
+  "grenzen": { "timeout_s": 30, "max_parallel": 2 }
+}

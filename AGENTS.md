@@ -38,6 +38,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
   (Block `kostenbilanz` je Ebene: Turns, Turn-Usage, Rest, Bytes × Folgeturns je Klasse, B1−B0, Kosten je erfülltem Kriterium). Einzeltest: `node --test tools/skill-library/test/eval-costbalance.test.js`
 - Kostendeckel und gepaarte Statistik: `… eval ledger init --budget-usd B [--reserve-usd R]`, dann `ledger reserve --projected-usd P` und `ledger result --cost-usd C`;
   `… eval report RAW-VERZ [--seed N] [--bootstrap N]` (Block `gepaart` je Ebene: McNemar, Bootstrap über Familien). Einzeltest: `node --test tools/skill-library/test/eval-paired.test.js`
+- Vertragssuite (M1): `node --test "tools/contract-suite/test/*.test.js"`; anderer Prüfling über `CONTRACT_KERN="node …"` bzw. `CONTRACT_SUPERVISOR=pfad`.
+  Abdeckung je Fall-ID: `tools/contract-suite/abdeckung.json`. Details: [tools/contract-suite/README.md](tools/contract-suite/README.md)
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`
@@ -132,6 +134,8 @@ Laufende Skill-Library-Recherche und Priorität: [Library-Research-Plan](researc
 Das Repo ist für [CodeGraph](https://github.com/colbymchenry/codegraph) eingerichtet.
 Der Ordner `.codegraph/` existiert immer, weil seine `.gitignore` eingecheckt ist.
 Er sagt also nichts darüber, ob ein Index vorhanden ist.
+Seit 31.10.2026 hat sidekick einen eigenen Index nur über dieses Repo (Owner-Freigabe; ohne Fremdrepos, wegen Clean-Room).
+Er läuft ohne Watcher: nach Änderungen `codegraph sync` ausführen, bevor man ihn befragt.
 
 **Ablauf:** Skill [`using-codegraph`](.agents/skills/using-codegraph/SKILL.md) mit Befehlsübersicht und Grenzen.
 
