@@ -197,6 +197,23 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | abgeschlossen: 8 Befunde (18 bestätigt, 7 widerlegt); stärkster Befund Fragenwahl nach Aufteilung der Hypothesen, ToT allein schwächer; neuer Kandidat K-AUFTEILUNG neben P7/P8 ([Auswertung](grilling-runde/deep-research/auswertung-2026-10-31.md)) |
 | E3-3 | K-AUFTEILUNG (DR), K-LADESTUFEN (P7), K-RUECKWAERTS (P8) | abgeschlossen, 20/40 Starts: **K-AUFTEILUNG aktiv** seit Owner-Merge von PR #26 am 31.10.2026 (`2ddf9ed`; select 2/2, test 4/4 besser, 0 R-Verstöße; Paketsatz `1c6d2951…`); P7 verworfen; P8 zurückgestellt ([Ergebnis](e3/runde-3/E3-3-ergebnis-2026-10-31.md)) |
 
+### 8.2 Buchgestützter DSPy-Ausbau (Owner-Auftrag 31.10.2026)
+
+Plan und Abhängigkeiten: [DSPy-Integrationsplan entlang der elf Kapitel](dspy-book-integration-plan.md).
+Er ergänzt die offenen AP1–AP5-Arbeiten aus PR #31/#32. Keine Dependency installiert, kein Modellstart,
+keine aktive Skill-Änderung. Status dieser Pakete nur hier; der Plan beschreibt Ergebnisse und Abnahmen.
+
+| Paket | Ergebnis | Status |
+|---|---|---|
+| D0 | aktuelles Buchdossier, Optimierer-Datenvertrag, geschützte Textregionen | geplant; nächster Auftrag |
+| D1 | eigene Datenfamilien, eingefrorene Metriken, Kosten-/Splitdesign; AP3/AP4 ergänzen | geplant |
+| D2 | isolierte native DSPy-/Blackbox-GEPA-Brücke mit Offline-Prüfung | geplant, nach D0/D1 |
+| D3 | echter grilling/Fragen-CLI-Vergleich: B1, manueller Kandidat, GEPA | geplant; Ausführungsort, Dependencies und Budget vor Lauf festlegen |
+| D4 | unabhängiger Test und Aktivierungsvorschlag am Hash | geplant, nach erfolgreichem Select |
+| D5 | geprüfter Export und späterer Hub-Anschluss | geplant, nach D4; Hub-Vertrag bleibt Voraussetzung |
+| D6 | gemessene Skill-/Kontextauswahl | zurückgestellt bis Pilot |
+| D7 | Recherchepipeline und Skill-Discovery aus freigegebenen Fehlerfällen | zurückgestellt bis Pilot und Hub-Ablauf |
+
 ## 9. Drei spätere durchgängige Versuche (SL5)
 
 SL1 entwirft diese Versuche; ausgeführt werden sie erst in SL5. Für spätere Kandidatensuche sind Baseline, Rubrik und Entwicklungs-/Auswahldaten vorher versioniert festzuhalten. Eine getrennte Review-Person oder -Session prüft das Evaluationsdesign; eine neue Session allein beweist keine Unabhängigkeit. Finale Testinhalte bleiben vom Optimierungsprozess getrennt. Ein Autor bewertet seine eigenen Varianten nicht als alleiniger unabhängiger Nachweis.
