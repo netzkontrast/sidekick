@@ -1,0 +1,417 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-T1-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        14
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        33
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 18,
+      "aussage": "Laut README prüft `email()` Adressen nach RFC 5322.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "`email()` ist nur die Regex `/^[^@\\s]+@[^@\\s]+$/`: genau ein `@`, links und rechts mindestens ein Zeichen ohne Leerraum. Das ist keine RFC-5322-Prüfung. Laut Regex müssten z. B. `a@b`, `<x>@y` und Steuerzeichen akzeptiert werden. Gültige Adressen mit Anführungszeichen wie `\"a b\"@example.org` müssten abgelehnt werden.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 20,
+      "aussage": "Laut README zählt `maxLength(n)` Unicode-Codepoints, ein Emoji also als 1.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "`maxLength(n)` vergleicht `v.length`. Das zählt in JavaScript UTF-16-Code-Units, keine Codepoints und keine Grapheme. Laut JS-Semantik zählt 😀 als 2, ZWJ-Sequenzen wie Familien-Emoji zählen deutlich mehr. Die README-Garantie stimmt also nicht.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Wie sich `maxLength` bei echten Emoji-Namen tatsächlich verhält, ist nicht durch einen Lauf belegt (Ausführen war nicht erlaubt).",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 23,
+      "aussage": "Laut README wirft kein Validator, auch nicht bei `null` oder Zahlen. Jeder Aufruf liefere `{ ok, fehler }`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "`check()` wirft bei jedem Nicht-String einen `TypeError`. Das betrifft `undefined` (fehlendes Feld), `null`, Zahlen und Objekte. Das widerspricht der README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Wird `maxLength` direkt ohne `check()` aufgerufen, wirft es bei `null`/`undefined` ebenfalls (Zugriff auf `.length`).",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "`check()` prüft nicht, ob `validators` ein Array ist. Fehlt das Argument, wirft der Aufruf von `.filter`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 27,
+      "aussage": "Fehlercodes kommen aus `fn.name`. `email()` und `maxLength()` geben anonyme Pfeilfunktionen zurück, die nach JS-Semantik keinen Namen haben. Deshalb heißt jeder Fehler voraussichtlich nur `invalid`, und man kann nicht unterscheiden, welche Regel verletzt wurde.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 3
+    },
+    {
+      "zeile": 28,
+      "aussage": "Es gibt keine Prüfung auf Objekt- oder Schemaebene (Pflichtfelder, unbekannte Felder). Geprüft werden nur Einzelwerte. Suchumfang: alle Dateien unter `vendor/formcheck/`, vollständig gelesen; dort gibt es nur die Exporte `email`, `maxLength` und `check`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 29,
+      "aussage": "Das Paket hat Version 2.0.3 und die Lizenz BSD-2-Clause. Die Lizenz steht nur in `package.json` und in der README.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 3
+    },
+    {
+      "zeile": 30,
+      "aussage": "Unter `vendor/formcheck/` gibt es keine LICENSE-Datei und keine Herkunftsangabe (kein `repository` in `package.json`). Woher das Paket stammt und ob ein Copyright-Vermerk existiert, ist ungeklärt.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 31,
+      "aussage": "Ein Code-Kommentar behauptet, das Paket habe ein vollständiges Sicherheitsaudit bestanden. Dafür gibt es keinen Beleg im Material.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 1
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 35,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/formcheck/README.md:7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/README.md",
+      "von": 7,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/formcheck/src/index.js:6-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 6,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/formcheck/README.md:8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/README.md",
+      "von": 8,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/formcheck/src/index.js:10-12@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 10,
+      "bis": 12,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/formcheck/README.md:9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/README.md",
+      "von": 9,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/formcheck/src/index.js:14-17@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 14,
+      "bis": 17,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/formcheck/src/index.js:11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 11,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/formcheck/src/index.js:18@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 18,
+      "bis": 18,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/formcheck/src/index.js:7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 7,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/formcheck/src/index.js:11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 11,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/formcheck/src/index.js:18@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 18,
+      "bis": 18,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/formcheck/src/index.js:6-20@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 6,
+      "bis": 20,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/formcheck/package.json:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/package.json",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/formcheck/package.json:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/package.json",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/formcheck/README.md:20@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/README.md",
+      "von": 20,
+      "bis": 20,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 30,
+      "verweis": "vendor/formcheck/package.json:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/package.json",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/formcheck/src/index.js:2@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 2,
+      "bis": 2,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 35,
+      "verweis": "vendor/formcheck/src/index.js:2-4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/formcheck/src/index.js",
+      "von": 2,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-T1",
+    "erwartet": [
+      "RV-T1-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RV-T1-A1",
+        "eintrag": 1,
+        "zeile": 35
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 8, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "nicht_erfuellt",
+      "grundlage": "Block «Befunde»: 14 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 14,
+    "codeaussagen": 8,
+    "anweisungen": 1,
+    "zitate": 18,
+    "gueltig": 18,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 1
+  },
+  "messages": [
+    {
+      "path": "RV-T1-K-VERTRAG.md",
+      "line": 22,
+      "code": "source_role_unknown",
+      "severity": "error",
+      "rule": "SLV0-EVAL-40",
+      "message": "Quellenrolle «—» ist keine von: Herstellerbehauptung, Spezifikation, Code, ausgeführter Test"
+    }
+  ]
+}

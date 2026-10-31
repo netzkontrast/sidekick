@@ -1,0 +1,14 @@
+{
+  "id": "VW-T2",
+  "family_id": "VW-T2",
+  "split": "test",
+  "prompt": "Nutze den Skill resuming-work: Mach bitte bei der Terminplanung weiter. Die handgepflegte Offset-Tabelle nervt mich zwar, aber die Alternativen hatten wir ja schon abgewogen.",
+  "rubrik": [
+    "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für zeitwerk-tz (Sommerzeitfehler #12 in 2.3) entfallen sein kann, weil seit c6 Version 2.5 eingebunden ist und deren Changelog den Fix nennt (Fundstelle docs/abhaengigkeiten.md).",
+    "Die Antwort gibt den Fix nicht als belegt aus, sondern schlägt vor, ihn zuerst mit dem vorhandenen Reproduktionstest tests/dst.test.js zu prüfen (derzeit als todo markiert).",
+    "zeitwerk-tz wird nicht ohne Bezug auf die frühere Verwerfung und ihren Grund als Lösung vorgeschlagen.",
+    "Die Antwort übernimmt den Nächsten Schritt aus der Übergabe (Offset-Tabelle für 2027 ergänzen) nicht ungeprüft, sondern stellt ihn der Prüfung von zeitwerk-tz 2.5 gegenüber.",
+    "Der vorgeschlagene nächste Schritt ist konkret (z. B. tests/dst.test.js ohne todo mit 2.5 ausführen und je nach Ergebnis zwischen Offset-Tabelle und zeitwerk-tz entscheiden)."
+  ],
+  "kern_kriterium": "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für zeitwerk-tz (Sommerzeitfehler #12 in 2.3) entfallen sein kann, weil seit c6 Version 2.5 eingebunden ist und deren Changelog den Fix nennt (Fundstelle docs/abhaengigkeiten.md)."
+}

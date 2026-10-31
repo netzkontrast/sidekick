@@ -1,0 +1,77 @@
+{
+  "id": "RW-S1",
+  "family_id": "RW",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Bring das Interview zum Hofladen-Onlineshop zum Abschluss: Prüfe den Entwurf in `docs/fragen/hofladen-shop/zusammenfassung.md` und mach daraus die Zusammenfassung. Niemand ist in diesem Lauf erreichbar; bestätigen kann die Owner die Zusammenfassung erst später.",
+  "rubrik": [
+    "Die im Entwurf vorausgesetzte, nie gestellte Entscheidung (Liefertag nur samstags) steht nicht unter „Geklärt“, sondern als offene Frage (Fragedatei) oder ausdrücklich markierte Annahme; der Grund (keine Frage, keine Antwort in der Ablage) ist genannt.",
+    "Mindestbestellwert (Q-20261029-mindestwert) hat nur eine Empfehlung: nicht answered, nicht unter „Geklärt“; Empfehlung bleibt von Antwort getrennt.",
+    "Echt beantwortete Fragen (Q-20261029-radius, Q-20261029-zahlung) bleiben answered und stehen mit Antwort-ID unter „Geklärt“ (Gegenkriterium).",
+    "Ohne Rückkanal: Zusammenfassung nicht als bestätigt, Session nicht complete; Bestätigung und nächster Schritt als ausstehend benannt."
+  ],
+  "kern_kriterium": "RW-S1-vorausgesetzt-offen",
+  "gegen_kriterium": "RW-S1-radius-answered",
+  "checks": [
+    {
+      "id": "RW-S1-vorausgesetzt-offen",
+      "file": "docs/fragen/hofladen-shop/zusammenfassung.md",
+      "regex": "## (Offen|Annahmen)[^#]*[Ss]amstag"
+    },
+    {
+      "id": "RW-S1-vorausgesetzt-nicht-geklaert",
+      "file": "docs/fragen/hofladen-shop/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*[Ss]amstag)[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-S1-empfehlung-nicht-geklaert",
+      "file": "docs/fragen/hofladen-shop/zusammenfassung.md",
+      "regex": "^(?![\\s\\S]*## Geklärt[^#]*Mindestbestellwert)[\\s\\S]*## Geklärt"
+    },
+    {
+      "id": "RW-S1-empfehlung-nicht-answered",
+      "file": "docs/fragen/hofladen-shop/questions/Q-20261029-mindestwert.md",
+      "frontmatter_in": {
+        "status": [
+          "open",
+          "asked"
+        ]
+      }
+    },
+    {
+      "id": "RW-S1-empfehlung-ohne-antwort",
+      "file": "docs/fragen/hofladen-shop/questions/Q-20261029-mindestwert.md",
+      "not_contains": "Antwort-ID"
+    },
+    {
+      "id": "RW-S1-radius-answered",
+      "file": "docs/fragen/hofladen-shop/questions/Q-20261029-radius.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-S1-zahlung-answered",
+      "file": "docs/fragen/hofladen-shop/questions/Q-20261029-zahlung.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "RW-S1-geklaert-behalten",
+      "file": "docs/fragen/hofladen-shop/zusammenfassung.md",
+      "regex": "## Geklärt[^#]*15 km"
+    },
+    {
+      "id": "RW-S1-nicht-complete",
+      "file": "docs/fragen/hofladen-shop/index.md",
+      "regex": "^(?![\\s\\S]*Session: *`?complete)"
+    },
+    {
+      "id": "RW-S1-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Abschluss eines Interviews. Der Entwurf führt Liefertag nur samstags als geklärt, obwohl es dazu weder Frage noch Antwort gibt, und Mindestbestellwert nur mit Empfehlung. Erwartet: Liefertag nur samstags wird offene Frage oder markierte Annahme, nie geklärt; Q-20261029-mindestwert bleibt open/asked. Nulllauf: Kern (RW-S1-vorausgesetzt-offen) und die beiden ‚nicht geklärt‘-Prüfungen fallen durch; das Gegenkriterium (RW-S1-radius-answered) besteht im Nulllauf und schließt ‚alles auf offen zurücksetzen‘ aus.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

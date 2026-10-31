@@ -1,0 +1,39 @@
+{
+  "id": "D2-B04-korrektur",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Korrektur zu meiner Antwort von gestern: Wir speichern doch nicht nur lokal, sondern mit Cloud-Sync.",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+      "contains": "Nur lokal."
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+      "count_at_least": [
+        "Antwort-ID:",
+        2
+      ]
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-konflikte.md",
+      "frontmatter": {
+        "needs_review": "true"
+      }
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter": {
+        "needs_review": "false"
+      }
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K16",
+    "GR-K14"
+  ],
+  "erwartung": "Alte Antwort bleibt, neue angehängt; nur die abhängige Konfliktfrage wird prüfpflichtig, Gäste nicht."
+}

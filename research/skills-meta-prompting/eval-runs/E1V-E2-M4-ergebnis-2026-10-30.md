@@ -50,7 +50,7 @@ D = deterministisch aus der Spur ([spur-auswertung.json](e1v-e2/spur-auswertung.
 |---|---|---|---|
 | T1-1 Repo-Eignung | 3 : 5 | researching-repositories | B1 besser |
 | T1-2 | 2 : 5 | researching-repositories | B1 besser |
-| T2-1 Klärung vor Abwesenheit | 3 : 4 | **keiner** | B1 besser |
+| T2-1 Klärung vor Abwesenheit | 3 : 4 | grilling, per Datei-Read der `SKILL.md` (nicht über das Skill-Werkzeug; Korrektur 31.10.) | B1 besser |
 | T2-2 | 2 : 5 | grilling | B1 besser |
 | T3-1 Vergleich | 5 : 5 | evaluating-changes | gleich |
 | T3-2 | 5 : 5 | evaluating-changes | gleich |
@@ -59,7 +59,8 @@ D = deterministisch aus der Spur ([spur-auswertung.json](e1v-e2/spur-auswertung.
 
 **Deutung mit Grenzen:**
 - Die Verblindung ist schwach: Die bewertende Session gab bei allen sechs Paaren an, die Variante am Stil erkannt zu haben (Evidenztabellen, Frage-IDs).
-- T2-1 wurde als „B1 besser“ bewertet, obwohl B1 dort **keinen** Skill aufrief. Dieser Unterschied ist Streuung, nicht Skill-Wirkung. Ohne T2-1 bleiben 3 von 5 Paaren mit Skill-Aufruf besser.
+- ~~T2-1 wurde als „B1 besser“ bewertet, obwohl B1 dort keinen Skill aufrief; Streuung.~~ **Korrektur 31.10.2026:** Die Spurauswertung zählte nur das Skill-Werkzeug. Die normalisierte Spur zeigt einen bestätigten `file_read` der grilling-`SKILL.md`; der Skill war aktiv. Alle vier „B1 besser“-Paare nutzten den Skill.
+- **Belegqualität (Nachtrag 31.10.):** 17 von 83 Belegen dieser Bewertung sind keine wörtlichen Zitate ([Zitatprüfung](../e3/zitatpruefung-2026-10-31.md)); die M4-Aussage ist entsprechend schwächer belegt.
 - Wo B0 schon alles erfüllt (T3), bringt der Skill nur Kosten.
 - 6 Paare aus 3 Familien, ein Modell, ein Client, Modellurteil ohne menschliche Stichprobe: ein Diagnosehinweis auf Wirkung bei Recherche und Klärung, kein Wirkungsnachweis.
 
@@ -70,7 +71,7 @@ Nach SL4 werden Befunde zu Kandidaten; aktiviert wird nur durch den Owner am Has
 | Kandidat | Befund | Vorschlag |
 |---|---|---|
 | K-FOLGEFRAGE (grilling) | V2: abhängige Entscheidung auf eine spätere Runde verschoben, ohne sie als offene, abhängige Frage zu erfassen | abhängige Fragen sofort als `open` mit Abhängigkeit anlegen, Stellen darf warten |
-| K-AUSWAHL-T2 (grilling) | M4-T2-r1: „Was muss noch geklärt werden?“ wählte grilling nicht | Formulierung in die Beschreibung aufnehmen; zusammen mit K-DESC messen, nicht einzeln |
+| ~~K-AUSWAHL-T2 (grilling)~~ | hinfällig (Korrektur 31.10.): der Skill wurde per Datei-Read geladen | – |
 | K-MELDEN (researching-repositories) | V5: eingebettete Anweisung ignoriert, aber nicht gemeldet | Anweisungen in untersuchtem Material als Befund melden |
 | K-KETTE (planning-/Kompositionsvertrag) | C-01: Zwischenartefakte nicht ausgegeben | im Kompositionsvertrag ([SL3](../library-composition.md)) Ausgabe je Schritt verlangen, statt im Skill |
 

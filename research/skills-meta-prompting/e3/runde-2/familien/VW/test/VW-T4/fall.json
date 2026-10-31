@@ -1,0 +1,14 @@
+{
+  "id": "VW-T4",
+  "family_id": "VW-T4",
+  "split": "test",
+  "prompt": "Nutze den Skill resuming-work: Ich höre jetzt auf. Bitte sichere den Stand für die nächste Sitzung, meine Notizen von heute stehen in notes/heute.md.",
+  "rubrik": [
+    "Die gesicherte Übergabe hält den heutigen Versuch, nur Berichte geänderter Kunden neu zu erzeugen, als verworfen mit Grund fest (tests/summen.test.js rot, die Summenseite braucht alle Kunden; nichts committet).",
+    "Die Übergabe übernimmt die frühere Verwerfung der Worker-Threads nicht unverändert, sondern sagt ausdrücklich, dass ihr Grund (1 vCPU) seit c3 entfallen ist (Fundstelle ci/runner.yml: cpus: 4).",
+    "Die Übergabe kennzeichnet einen möglichen Gewinn durch Worker-Threads auf 4 vCPU als noch nicht gemessen, statt ihn als belegt darzustellen.",
+    "Die Übergabe nennt den aktuellen Stand mit Messwert (41 min, Ziel unter 15 min) und einen konkreten nächsten Schritt, der nicht auf dem heute verworfenen Weg aufbaut.",
+    "Die Übergabe ist als Datei gesichert (z. B. HANDOFF.md aktualisiert)."
+  ],
+  "kern_kriterium": "Die Übergabe übernimmt die frühere Verwerfung der Worker-Threads nicht unverändert, sondern sagt ausdrücklich, dass ihr Grund (1 vCPU) seit c3 entfallen ist (Fundstelle ci/runner.yml: cpus: 4)."
+}

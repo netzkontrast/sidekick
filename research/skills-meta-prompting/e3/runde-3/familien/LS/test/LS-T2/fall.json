@@ -1,0 +1,64 @@
+{
+  "id": "LS-T2",
+  "family_id": "LS",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Setze das Interview zur Bewässerung fort. In `notizen/nachtrag-2026-10-30.md` steht ein Nachtrag der Gartenkoordination; arbeite ihn ein und sag mir, was als Nächstes zu klären ist. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Die Korrektur ist als neue Antwort mit Quelle an Q-20261026-quelle angehängt und verweist auf die ersetzte A-20261026-1; die alte Antwort bleibt sichtbar.",
+    "Die abhängige Frage Q-20261026-pumpe ist als prüfpflichtig markiert (needs_review: true), ihre bisherige Antwort bleibt erhalten und gilt nicht mehr als gültige Voraussetzung.",
+    "Q-20261026-zeitplan bleibt asked; „noch nichts Neues“ ist keine Antwort.",
+    "Nächste Runde nennt die Rückfrage zur Pumpe (unter Leitungsdruck ggf. ohne Pumpe); ohne Rückkanal keine Antwort erfunden."
+  ],
+  "kern_kriterium": "LS-T2-korrektur-ersetzt",
+  "gegen_kriterium": "LS-T2-zeitplan-bleibt-asked",
+  "checks": [
+    {
+      "id": "LS-T2-korrektur-ersetzt",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-quelle.md",
+      "regex": "Ersetzt Antwort: *A-20261026-1"
+    },
+    {
+      "id": "LS-T2-neue-antwort",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-quelle.md",
+      "contains": "Leitungswasser"
+    },
+    {
+      "id": "LS-T2-alte-antwort-erhalten",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-quelle.md",
+      "contains": "Regenwasser aus der Zisterne"
+    },
+    {
+      "id": "LS-T2-quelle-answered",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-quelle.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "id": "LS-T2-pumpe-pruefpflichtig",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-pumpe.md",
+      "frontmatter": {
+        "needs_review": "true"
+      }
+    },
+    {
+      "id": "LS-T2-pumpe-antwort-erhalten",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-pumpe.md",
+      "contains": "A-20261026-2"
+    },
+    {
+      "id": "LS-T2-zeitplan-bleibt-asked",
+      "file": "docs/fragen/bewaesserung/questions/Q-20261026-zeitplan.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "id": "LS-T2-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Fortsetzung mit einer Korrektur: anhängen statt überschreiben, Folgefrage prüfpflichtig. Nulllauf: Kern (Ersetzt-Verweis) fällt durch; das Gegenkriterium (zeitplan bleibt asked) schließt ‚alles auf answered setzen‘ aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

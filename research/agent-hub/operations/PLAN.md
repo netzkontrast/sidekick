@@ -32,8 +32,8 @@ Befund aus dem [MUXI-Dossier](../../../docs/research/dossiers/muxi-runtime.md): 
 
 - [x] Offline-/Geräte-/Sprach-/Gedächtnisrichtung mit elf fixierten GitHub-Quellen und Selfplay abgleichen; [fertiger Befund](../../../docs/research/vision-v5-machbarkeit.md).
 - [x] Separaten [Vision-Entwurf](../../../docs/vision-v5-entwurf.md) und [Claude-Bauauftrag](../../../docs/claude-startauftrag-vision-v5.md) vorlegen; v4 unverändert lassen.
-- [x] V0: Drei Vorentscheidungen mit dem Owner geklärt ([Fragen](../../../docs/fragen/v0-ziel-und-vertraege/index.md)); [V0-Spec](../../../docs/spec/v0-ziel-und-vertraege.md) mit Schemas als Entwurf; Tore A–D um offene Punkte ergänzt, keine Tor-Entscheidung getroffen.
-- [ ] V1: Contract-Test-Spec für V0-ABL-01 und die Fallmatrix V0-FALL-01 bis -17; abhängig von Befunden zu Tor A.
+- [x] V0: Drei Vorentscheidungen mit dem Owner geklärt ([Fragen](../../../docs/fragen/v0-ziel-und-vertraege/index.md)); [V0-Spec](../../../docs/spec/v0-ziel-und-vertraege.md) mit synchronisierten Schemas/Beispielen (0.3, Datenprüfungen V0-FALL-33…38); Tore A–D um offene Punkte ergänzt, keine Tor-Entscheidung getroffen.
+- [ ] V1: Contract-Test-Spec für V0-ABL-01 und die Fallmatrix V0-FALL-01 bis -32; abhängig von Befunden zu Tor A.
 - [ ] Vor dem Geräte-Prototyp: Offline-/Origin-Zugriff, Vercel-Instanzwechsel und dauerhafte Zustellung praktisch prüfen; Polling/SSE gegen erneuerbares WSS vergleichen.
 - [ ] N0: Frühen Needle-Baseline-/Fine-Tune-Versuch mit synthetischen deutschen Beispielen spezifizieren; tatsächliche GPU-Zeit und Nutzen auf Zielhardware messen.
 

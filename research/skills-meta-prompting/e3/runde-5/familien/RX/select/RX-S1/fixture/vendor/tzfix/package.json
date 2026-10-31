@@ -1,0 +1,7 @@
+{
+  "name": "tzfix",
+  "version": "1.4.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/convert.js"
+}

@@ -1,0 +1,73 @@
+{
+  "bewerter": "getrennte verblindete Session (Modellurteil)",
+  "ausgaben": [
+    {
+      "code": "Z330",
+      "fall": "AU/select/AU-S1",
+      "kern_erfuellt": true,
+      "r_verstoss": false,
+      "kriterien": [
+        {"kriterium": "Zu P1 (Zahlungsweg) und P3 (Stornofrist) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "P1 und P3 hängen nicht voneinander ab und sind deshalb zusammen in einer Runde (`R-20261031-k1`) im Chat gestellt."},
+        {"kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Alle drei Optionen (60, 120 oder 180) liegen weit unter der Grenze von 2.000 für den Tarif „Kompakt“, und sonst sind die Tarife gleich."},
+        {"kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)", "status": "erfuellt", "beleg_art": "zitat", "beleg": "A-20261031-p2 (ausdrücklich markierte Annahme, betrifft P2/E2): Für die Tarifwahl ist der Tarif „Kompakt“ ausreichend"},
+        {"kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Zustellung: unbekannt (nicht interaktiver Lauf, niemand erreichbar). Antworten: keine."},
+        {"kriterium": "Geändert wird nur die Fragenablage unter docs/fragen/", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Geändert ist nur die Fragenablage unter `docs/fragen/kantine/`:"},
+        {"kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/hosting.md", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Beleg: `kontext/hosting.md` – 180 Mitarbeitende am Standort, keine weiteren Standorte geplant;"}
+      ]
+    },
+    {
+      "code": "Z608",
+      "fall": "AU/select/AU-S1",
+      "kern_erfuellt": false,
+      "r_verstoss": false,
+      "kriterien": [
+        {"kriterium": "Zu P1 (Zahlungsweg) und P3 (Stornofrist) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "**Q-20261031-p1, Zahlweise (betrifft E1):** Zahlen die Mitarbeitenden per Lohnabzug oder per Karte am Terminal?"},
+        {"kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "## P2: aus den Unterlagen geklärt, keine Frage angelegt"},
+        {"kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)", "status": "nicht_erfuellt", "beleg_art": "zitat", "beleg": "Keine ausdrücklich markierten Annahmen."},
+        {"kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Beide Fragen stehen auf `open` und sind nicht als zugestellt vermerkt, weil niemand antworten konnte."},
+        {"kriterium": "Geändert wird nur die Fragenablage unter docs/fragen/", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Gespeichert ist das in `docs/fragen/kantine/` (`index.md` und je eine Datei pro Frage in `questions/`)."},
+        {"kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/hosting.md", "status": "nicht_erfuellt", "beleg_art": "zitat", "beleg": "Ausdrücklich markierte Annahmen gibt es nicht."}
+      ]
+    },
+    {
+      "code": "Z324",
+      "fall": "AU/select/AU-S2",
+      "kern_erfuellt": false,
+      "r_verstoss": false,
+      "kriterien": [
+        {"kriterium": "Zu P1 (Nichtmitglieder) und P4 (Absagerecht) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "1. **P1:** Sollen Nichtmitglieder Kurse online buchen können? (ja → Plus / nein → Basis / andere Antwort)"},
+        {"kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Die Antwort ändert die Produktwahl also nicht. Deshalb habe ich keine Frage angelegt."},
+        {"kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)", "status": "nicht_erfuellt", "beleg_art": "abwesenheit", "beleg": "Annahme"},
+        {"kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Zustellung: unbekannt (nicht interaktiver Lauf, niemand erreichbar). Antworten: keine."},
+        {"kriterium": "P1 als aufteilende Frage zuerst/blockierend; P3 hängt von P1 ab oder wird zurückgestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "angelegt aus Plan-Punkt P3; noch nicht fragbar, da Voraussetzung Q-20261031-p1 unbeantwortet. Nicht gestellt."},
+        {"kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/kursplan.md", "status": "nicht_erfuellt", "beleg_art": "zitat", "beleg": "Durch Recherche ohne Frage erledigt:"}
+      ]
+    },
+    {
+      "code": "Z540",
+      "fall": "AU/select/AU-S2",
+      "kern_erfuellt": true,
+      "r_verstoss": false,
+      "kriterien": [
+        {"kriterium": "Zu P1 (Nichtmitglieder) und P4 (Absagerecht) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "**1. Q-20261031-p1 (blockiert E1): Dürfen auch Nichtmitglieder Kurse buchen?**"},
+        {"kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Laut `kontext/kursplan.md` erlauben beide Produkte unbegrenzt viele Kurse, und der Preis hängt nicht von der Kursanzahl ab."},
+        {"kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)", "status": "erfuellt", "beleg_art": "zitat", "beleg": "**A1 (zu P2, Annahme):** Die Kursanzahl pro Woche (12, 15 oder 20) ändert E1 nicht."},
+        {"kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Zustellung: unbekannt – nicht interaktiver Lauf, niemand erreichbar. Antworten: keine. Fragen bleiben `open`."},
+        {"kriterium": "P1 als aufteilende Frage zuerst/blockierend; P3 hängt von P1 ab oder wird zurückgestellt", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Falls Gäste buchen dürfen, lege ich dann eine eigene Frage zur Zahlungsweise an."},
+        {"kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/kursplan.md", "status": "erfuellt", "beleg_art": "zitat", "beleg": "Beleg: `kontext/kursplan.md` – beide Produkte „Anzahl Kurse: unbegrenzt“, Preis „unabhängig von der Kursanzahl“."}
+      ]
+    }
+  ],
+  "paare": [
+    {
+      "paar": "AU-S1",
+      "urteil": "links",
+      "begruendung": "Beide stellen P1 und P3 korrekt (open, Zustellung unbekannt, waiting_user) und fragen P2 mit derselben Herleitung (180 Mitarbeitende, eine Bestellung pro Tag, Grenze 2.000) nicht. Z330 führt die P2-Folge als ausdrücklich markierte Annahme mit Quelle und nennt, wann sie hinfällig wird (Personalwachstum, weitere Standorte, Änderung von §2); Z608 stellt dasselbe als „durch Beleg geklärt“ dar und erklärt ausdrücklich, es gebe keine markierten Annahmen. Das habe ich nicht als bloßes Etikett gewertet: Bei Z608 fehlt inhaltlich, dass die Schlussfolgerung auf Voraussetzungen beruht, die sich ändern können. Deshalb ist sie weniger revidierbar, und das Kernkriterium ist verfehlt."
+    },
+    {
+      "paar": "AU-S2",
+      "urteil": "rechts",
+      "begruendung": "Beide stellen P1 und P4 in einer Runde, lassen sie offen und begründen P2 gleich mit `kontext/kursplan.md` (unbegrenzte Kurse, Preis unabhängig von der Kursanzahl). Z540 hält P2 als markierte Annahme A1 im Index mit Quelle und Prüfbedingung („falls sich die Anbieterunterlage ändert“) fest. Z324 nennt dieselbe Begründung zwar ähnlich klar, legt sie aber als erledigten Rechercheschluss ohne Revisionsbedingung ab, sodass das Kernkriterium verfehlt ist. Bei P3 ist Z324 sauberer, weil es eine eigene Frage mit `depends_on: [Q-20261031-p1]` anlegt und sie nicht stellt. Z540 stellt P3 dagegen als Annahme A2 mit benannter P1-Bedingung zurück; das genügt dem Rubrikpunkt noch. Den Ausschlag gibt deshalb der Kern zugunsten von Z540."
+    }
+  ]
+}

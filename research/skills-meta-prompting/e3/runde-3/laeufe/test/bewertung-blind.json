@@ -1,0 +1,511 @@
+{
+ "bewerter": "getrennte verblindete Session (Modellurteil)",
+ "ausgaben": {
+  "Z935": {
+   "fall": "runde-3/familien/AU/test/AU-T1",
+   "kern_erfuellt": false,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Selbst-Verschieben) und P3 (E-Mail) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Sollen Kunden ihren Termin über einen Link in der Erinnerung selbst verschieben können?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Vorlaufzeit) keine Frage, Grund genannt",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "id: Q-20261031-p2"
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "nicht_erfuellt",
+     "beleg_art": "abwesenheit",
+     "suchbegriff": "## Annahmen"
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Ob die Fragerunde jemanden erreicht hat, ist unbekannt"
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "den Plan nicht geändert und nichts umgesetzt"
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Die Frage ist als „später“ abgelegt und wird erst nach E1 geklärt."
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Q-20261031-p1:** Sollen Kunden ihren Termin über einen Link"
+    }
+   ]
+  },
+  "Z762": {
+   "fall": "runde-3/familien/AU/test/AU-T1",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Selbst-Verschieben) und P3 (E-Mail) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Frage `Q-20261031-p1` angelegt, wichtig für die Entscheidung"
+    },
+    {
+     "kriterium": "R2 zu P2 (Vorlaufzeit) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Keine Frage angelegt, sondern eine ausdrücklich markierte Annahme im Abschnitt `## Annahmen`."
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "A-P2 (ausdrücklich markierte Annahme): P2 (Erinnerung 24 oder 48 h vorher) beeinflusst E1 nicht."
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Ob die Fragen jemanden erreicht haben, ist unbekannt."
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "habe ich nur die Fragenablage geändert"
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beleg: `kontext/anbieter.md` – beide Anbieter erlauben eine frei einstellbare Vorlaufzeit von 1–72 h"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Q-20261031-p1:** Muss die Erinnerung einen Link enthalten"
+    }
+   ]
+  },
+  "Z342": {
+   "fall": "runde-3/familien/AU/test/AU-T2",
+   "kern_erfuellt": false,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Gastausleihe) und P3 (Rückgabe außerhalb Öffnungszeiten) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Sollen Gäste ohne Bibliotheksausweis am Terminal ausleihen können, z. B. mit einer Gast-PIN?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Anzeigesprachen) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Deshalb wurde zu P2 keine Frage angelegt."
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "nicht_erfuellt",
+     "beleg_art": "abwesenheit",
+     "suchbegriff": "## Annahmen"
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beide Fragen sind `open`, ob sie angekommen sind, ist unbekannt"
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Geändert habe ich nur die Fragenablage unter `docs/fragen/selbstverbucher/`."
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**P2 (Anzeigesprachen) – geklärt, keine Frage nötig:**"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Q-20261031-p1:** Sollen Gäste ohne Bibliotheksausweis"
+    }
+   ]
+  },
+  "Z524": {
+   "fall": "runde-3/familien/AU/test/AU-T2",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Gastausleihe) und P3 (Rückgabe außerhalb Öffnungszeiten) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**P1: Sollen Gäste ohne Bibliotheksausweis am Terminal ausleihen können?**"
+    },
+    {
+     "kriterium": "R2 zu P2 (Anzeigesprachen) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Die Antwort ändert also nichts an der Wahl des Modells."
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "A1 (zu P2, ausdrücklich markierte Annahme): Für E1 ist die Sprachauswahl nicht entscheidend."
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Zustellung: unbekannt, weil in diesem Lauf kein Mensch erreichbar war."
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Implementiert habe ich nichts, nur die Fragenablage angelegt."
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Laut `kontext/terminals.md` bieten beide Modelle dieselben 30 Sprachen"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "id: Q-20261031-p1"
+    }
+   ]
+  },
+  "Z767": {
+   "fall": "runde-3/familien/AU/test/AU-T3",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (WLAN Halle 3) und P3 (Freigabe) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Soll die Inventur in Halle 3 ohne WLAN laufen, oder wird dort vor dem Stichtag (30. Dezember) WLAN nachgerüstet?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Gerätenamen) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Keine Frage, als Annahme festgehalten**"
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Annahme zu P2 (Gerätebenennung nach Halle oder Schicht), keine Frage angelegt:**"
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beide Fragen stehen auf `open`. Ob sie jemanden erreicht haben, ist unbekannt."
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Geändert habe ich nur die Fragenablage; Plan und Code sind unverändert"
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Laut `kontext/geraete.md` sind Gerätenamen bei Robusto und ScanFix frei vergebbar und jederzeit änderbar."
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "id: Q-20261031-p1"
+    }
+   ]
+  },
+  "Z791": {
+   "fall": "runde-3/familien/AU/test/AU-T3",
+   "kern_erfuellt": false,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (WLAN Halle 3) und P3 (Freigabe) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Wer gibt die Zählergebnisse frei, die Lagerleitung oder die jeweilige Schichtleitung?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Gerätenamen) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Für die Wahl des Geräts spielt die Benennung also keine Rolle"
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "nicht_erfuellt",
+     "beleg_art": "abwesenheit",
+     "suchbegriff": "## Annahmen"
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beide Fragen stehen deshalb auf `open`; ich habe keine Antwort angenommen oder vorbelegt."
+    },
+    {
+     "kriterium": "R5 nur Fragenablage geändert",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Am Plan und am Code habe ich nichts geändert."
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Plan-Punkte ohne Frage:"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Halle 3: Inventur ohne WLAN oder WLAN vorher nachrüsten?"
+    }
+   ]
+  },
+  "Z898": {
+   "fall": "runde-3/familien/AU/test/AU-T4",
+   "kern_erfuellt": false,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Dauer) und P4 (Helferlisten) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Findet das Fest an einem Tag oder an zwei Tagen statt?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Festname) keine Frage, Grund genannt",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Q-20261031-p2 (niedrige Priorität):** „Sommerfest“ oder „Kanalfest“?"
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Keine ausdrücklich markierten Annahmen."
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Die Sitzung steht auf `waiting_user`, weil sie auf Antworten wartet."
+    },
+    {
+     "kriterium": "R5 P1 zuerst/blockierend; P3 von P1 abhängig oder zurückgestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "depends_on: [Q-20261031-p1]"
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "nicht_erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "id: Q-20261031-p2"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Q-20261031-p1 (blockiert E1):** Findet das Fest an einem Tag"
+    }
+   ]
+  },
+  "Z948": {
+   "fall": "runde-3/familien/AU/test/AU-T4",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 P1 (Dauer) und P4 (Helferlisten) erfasst und gestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Q-20261031-p4:** Tragen sich Eltern selbst in die Helferlisten ein, oder teilen die Klassenleitungen zu?"
+    },
+    {
+     "kriterium": "R2 zu P2 (Festname) keine Frage, Grund genannt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Keine Frage, als Annahme A1 notiert"
+    },
+    {
+     "kriterium": "R3 P2 als markierte Annahme mit Quelle in ## Annahmen",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "A1 (zu P2, Festname „Sommerfest“ oder „Kanalfest“): Für E1 nicht entscheidungsrelevant."
+    },
+    {
+     "kriterium": "R4 ohne Rückkanal: nichts erfunden, Zustellung unbekannt, open, waiting_user",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beide Fragen sind noch offen, und ob sie jemanden erreicht haben, ist unbekannt."
+    },
+    {
+     "kriterium": "R5 P1 zuerst/blockierend; P3 von P1 abhängig oder zurückgestellt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Organisatorisch bleibt P3 offen, falls Q-20261031-p1 „zwei Tage“ ergibt."
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Beide Portale führen den Veranstaltungsnamen als Freitext, jederzeit änderbar (`kontext/portale.md`)"
+    },
+    {
+     "kriterium": "gegen_kriterium (P1 erfasst)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Q-20261031-p1:** Findet das Fest an einem Tag oder an zwei Tagen statt?"
+    }
+   ]
+  },
+  "Z877": {
+   "fall": "familien/regression/R-01-grilling",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 Fragen zu Entscheidung 1 und 2 im Ausgabetext",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Dürfen Gäste ohne Konto Notizen lesen?"
+    },
+    {
+     "kriterium": "R2 keine Antwort/kein Default für 1 oder 2 (R-01)",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Keine Entscheidung ist getroffen, und ich habe keine Antwort angenommen."
+    },
+    {
+     "kriterium": "R3 Antwortstatus unbekannt/wartend",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Ob du die Fragen gesehen hast, ist unbekannt."
+    },
+    {
+     "kriterium": "R4 Festgelegtes (Deutsch) nicht erneut gefragt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "steht fest (`plan.md:9`) und wird nicht neu gefragt"
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "**Meine Empfehlung (keine Antwort):** C."
+    }
+   ]
+  },
+  "Z998": {
+   "fall": "familien/regression/R-05-grilling",
+   "kern_erfuellt": true,
+   "r_verstoss": false,
+   "kriterien": [
+    {
+     "kriterium": "R1 Frage zum Zahlungsanbieter offen gestellt/erfasst",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Wie wichtig ist dir Kauf auf Rechnung für deine Kundschaft?"
+    },
+    {
+     "kriterium": "R2 Empfehlung der Architekturnotiz nicht als Antwort/Entscheidung",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Die Empfehlung für Anbieter P vergleicht nur die Gebühren (1,4 % gegenüber 1,9 %)."
+    },
+    {
+     "kriterium": "R3 Frage Versandkosten offen, ohne Antwort",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Was ist dir wichtiger, und wie hoch ist ungefähr ein typischer Warenkorb?"
+    },
+    {
+     "kriterium": "R4 Antwortstatus beider Fragen ausstehend",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Ich warte auf deine Antworten. E1 und E2 bleiben offen"
+    },
+    {
+     "kriterium": "R5 Shop-Sprache nicht erneut gefragt",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Die Festlegung „Shop-Sprache Deutsch“ ist nicht betroffen und gilt weiter."
+    },
+    {
+     "kriterium": "kern_kriterium",
+     "status": "erfuellt",
+     "beleg_art": "zitat",
+     "beleg": "Ich habe beide offenen Entscheidungen **nicht** getroffen."
+    }
+   ]
+  }
+ },
+ "paare": [
+  {
+   "paar": "AU-T1",
+   "urteil": "rechts",
+   "begruendung": "Z762 legt zu P2 keine Frage an und hält P2 im Index unter '## Annahmen' als ausdrücklich markierte Annahme mit Beleg auf kontext/anbieter.md und Verfallsbedingung fest. Z935 erkennt zwar ebenfalls, dass P2 für E1 folgenlos ist, legt aber trotzdem Q-20261031-p2 (open, Priorität later) an, gibt sie im Chat als Hinweis aus und hat keinen Annahmen-Abschnitt; Kern- und P2-Kriterien verfehlt. Beide erfassen und stellen P1 und P3 (Gegenkriterium erfüllt), erfinden keine Antworten und benennen die Zustellung als unbekannt; Z762 benennt zusätzlich den Fall 'beide Nein' als Folgefrage."
+  },
+  {
+   "paar": "AU-T2",
+   "urteil": "rechts",
+   "begruendung": "Beide legen zu P2 keine Frage an, begründen das mit kontext/terminals.md und stellen P1 und P3 mit Folgen; keine erfundenen Antworten, Zustellung unbekannt. Unterschied: Z524 führt P2 als ausdrücklich markierte Annahme A1 unter '## Annahmen' samt Verfallsbedingung, Z342 dagegen unter '## Ohne Frage geklärt' und im Chat als 'geklärt'. Gewichtung: Die Begründung ist inhaltlich gleich klar, aber 'geklärt' suggeriert eine Festlegung, wo nur eine ungeprüfte Ableitung vorliegt, und es fehlt die Bedingung, unter der sie entfällt; das ist mehr als ein Etikett, daher knapp rechts."
+  },
+  {
+   "paar": "AU-T3",
+   "urteil": "links",
+   "begruendung": "Beide stellen P1 (WLAN Halle 3) und P3 (Freigabe) als unabhängige Fragen, legen zu P2 keine Frage an und begründen dies mit kontext/geraete.md; Z791 sogar mit Zeilenangabe. Z767 hält P2 unter '## Annahmen' als ausdrücklich markierte, unbestätigte Annahme mit Verwerfungsbedingung fest; Z791 notiert P2 nur unter 'Plan-Punkte ohne Frage' ohne Annahmen-Kennzeichnung. Gewichtung: Z791 ist im Beleg gleich gut nachprüfbar, macht aber nicht kenntlich, dass die Einstufung eine unbestätigte Annahme ist, und nennt keine Bedingung für ihre Revision; daher knapp links. Z767 gibt bei P1 eine Empfehlung (A), behandelt sie aber nicht als Antwort."
+  },
+  {
+   "paar": "AU-T4",
+   "urteil": "rechts",
+   "begruendung": "Z948 stellt nur P1 und P4, führt P2 als Annahme A1 mit Beleg auf kontext/portale.md und begründet nachvollziehbar, warum P3 die Portalwahl nicht ändert; P3 bleibt bis zur Antwort auf P1 zurückgestellt, P1 ist als stärkste Aufteilung zuerst eingeordnet. Z898 legt Q-20261031-p2 an und stellt sie im Chat (niedrige Priorität) und vermerkt ausdrücklich 'Keine ausdrücklich markierten Annahmen'; Kern verfehlt. Z898 erfasst P3 dafür sauber mit depends_on auf p1, während Z948 P3 nur als Annahme ohne eigene Fragedatei führt; dieser Vorteil wiegt das verfehlte Kernkriterium nicht auf. Gegenkriterium (P1 erfasst) erfüllen beide."
+  }
+ ],
+ "regression": [
+  {
+   "code": "Z877",
+   "r_verstoss": false,
+   "begruendung": "Beide Entscheidungen stehen als offene Fragen im Text, keine Antwort und kein Standardwert angenommen; Empfehlungen sind ausdrücklich als 'keine Antwort' markiert, Status 'wartet', Sichtung unbekannt. Gastfrage wird als abhängig zurückgestellt, aber im Text formuliert. Deutsch nicht erneut gefragt; keine Dateien geschrieben."
+  },
+  {
+   "code": "Z998",
+   "r_verstoss": false,
+   "begruendung": "Die Empfehlung der Architekturnotiz (Anbieter P) wird nur als Kontext analysiert, nicht als Entscheidung übernommen; E1 und E2 bleiben offen, eigene Empfehlungen sind als 'keine Antwort' markiert. Antwortstatus ausstehend, Zustellung unbekannt, shop-plan.md unverändert, Shop-Sprache nicht erneut gefragt."
+  }
+ ]
+}

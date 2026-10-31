@@ -14,7 +14,7 @@
     "typ": {
       "type": "string",
       "pattern": "^(task|claim|run|input|effect|device|memory|draft)\\.[a-z_]+$",
-      "examples": ["task.drafted", "claim.granted", "input.answered", "effect.intent", "claim.rejected_stale_epoch"]
+      "examples": ["task.drafted", "claim.granted", "input.answered", "effect.intent", "claim.rejected_stale_epoch", "task.budget_warning", "task.partially_submitted", "task.backward_finding", "claim.rejected_inactive"]
     },
     "zeit": { "type": "string", "format": "date-time" },
     "akteur": {

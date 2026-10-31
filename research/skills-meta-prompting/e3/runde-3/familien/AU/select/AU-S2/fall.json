@@ -1,0 +1,52 @@
+{
+  "id": "AU-S2",
+  "family_id": "AU",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Punkte im Plan `plan/kursbuchung.md`. Hinweis: Niemand ist in diesem Lauf erreichbar und niemand wird auf Fragen antworten.",
+  "rubrik": [
+    "Zu P1 (Nichtmitglieder) und P4 (Absagerecht) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt (Gegenkriterium: keine entscheidungsrelevante Frage entfällt).",
+    "Zu P2 (Kursanzahl) wird keine offene Frage angelegt oder gestellt; der Grund (jede plausible Antwort führt laut `kontext/kursplan.md` zur selben Entscheidung) ist nachvollziehbar genannt.",
+    "P2 (Kursanzahl) bzw. dessen Folge ist als ausdrücklich markierte Annahme mit Quelle festgehalten (Themenindex, `## Annahmen`).",
+    "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen bleiben `open`, Session `waiting_user`.",
+    "P1 ist als aufteilende Frage zuerst bzw. blockierend eingeordnet; P3 hängt von P1 ab (`depends_on`) oder wird bis zur Antwort auf P1 zurückgestellt und nicht gleichrangig gestellt."
+  ],
+  "kern_kriterium": "Zu P2 (Kursanzahl) wird keine offene Frage angelegt und keine gestellt; stattdessen ist P2 (Kursanzahl) bzw. dessen Folge als ausdrücklich markierte Annahme mit Verweis auf `kontext/kursplan.md` festgehalten. Blind zu bewerten anhand Ausgabetext und Ablage; Hilfsprüfungen AU-S2-p2-nicht-angelegt (erhaltend) und AU-S2-p2-annahme (trennend) müssen zum Urteil passen.",
+  "gegen_kriterium": "AU-S2-p1-erfasst",
+  "checks": [
+    {
+      "id": "AU-S2-p1-erfasst",
+      "new_file_under": "docs/fragen/kursbuchung/questions/",
+      "contains_any": [
+        "Nichtmitglied"
+      ]
+    },
+    {
+      "id": "AU-S2-p4-erfasst",
+      "new_file_under": "docs/fragen/kursbuchung/questions/",
+      "contains_any": [
+        "absagen",
+        "Absage"
+      ]
+    },
+    {
+      "id": "AU-S2-p2-nicht-angelegt",
+      "no_new_files_under": "docs/fragen/kursbuchung/questions/Q-20261031-p2"
+    },
+    {
+      "id": "AU-S2-p2-annahme",
+      "file": "docs/fragen/kursbuchung/index.md",
+      "regex": "## Annahmen[^#]*(Kurse pro Woche|Kursanzahl|Anzahl der Kurse|Kurszahl|Kurse/Woche|Kursangebot)"
+    },
+    {
+      "id": "AU-S2-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "AU-S2-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview ohne Rückkanal. P1 (Nichtmitglieder) und P4 (Absagerecht) haben je nach Antwort unterschiedliche Folgen und werden als offene Fragen erfasst. P2 (Kursanzahl) hat laut `kontext/kursplan.md` keine Entscheidungsfolge: Jede plausible Antwort führt zur selben Option. Erwartet wird, dass dieser Punkt nicht als Frage angelegt, sondern als markierte Annahme festgehalten wird. Nulllauf: AU-S2-p1-erfasst (Gegen) und AU-S2-p2-annahme fallen durch; ‚nichts fragen‘ verfehlt das Gegenkriterium.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

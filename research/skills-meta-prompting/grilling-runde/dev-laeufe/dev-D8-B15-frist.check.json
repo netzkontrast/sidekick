@@ -1,0 +1,44 @@
+{
+ "case": "D8-B15-frist",
+ "skill_calls": [
+  "grilling"
+ ],
+ "tools": [
+  "Edit",
+  "Glob",
+  "Read",
+  "Skill"
+ ],
+ "checks": [
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+    "not_contains": "Antwort-ID:"
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+    "frontmatter_in": {
+     "status": [
+      "asked",
+      "deferred"
+     ]
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "only_changed_under": "docs/fragen/"
+   },
+   "ok": true,
+   "detail": "ok"
+  }
+ ],
+ "passed": 3,
+ "total": 3
+}

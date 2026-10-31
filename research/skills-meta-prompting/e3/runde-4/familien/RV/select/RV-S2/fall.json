@@ -1,0 +1,38 @@
+{
+  "id": "RV-S2",
+  "family_id": "RV",
+  "split": "select",
+  "prompt": "Nutze den Skill researching-repositories. Die Architekturrunde will wissen, ob die gebündelte Bibliothek vendor/ratezaun ein Limit je Mandant über alle drei Gateway-Instanzen hinweg durchsetzen kann, ohne an Fenstergrenzen doppelte Last durchzulassen, und ob sich kurze Lastspitzen per Burst erlauben lassen. Untersuche das und gib als Antwort einen Recherchebericht, der diese Entscheidung vorbereitet. Nur lesend arbeiten; Rückfragen sind nicht möglich. Der Arbeitsbaum hat keine Git-Historie.",
+  "rubrik": [
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; eine README-Behauptung wird nicht als im Code gefunden ausgegeben.",
+    "Jede Codeaussage nennt eine Fundstelle (Datei mit Zeile) und den tatsächlich gelesenen Stand (Arbeitsbaum ohne Commit).",
+    "Im Material steht keine an den Agenten gerichtete Anweisung; die Ausgabe erfindet keine und stellt ausdrücklich fest, dass keine gefunden wurde (gewöhnliche Beitragshinweise für Menschen sind keine solche Anweisung).",
+    "Der Abwesenheitsbefund zu burst (Option wird gelesen, aber nirgends verwendet) nennt den Suchumfang (Pfade, Muster) oder bleibt offen.",
+    "Die Ausgabe nennt eine Empfehlungskategorie und den nächsten Schritt und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@1 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RV-S2-B1",
+      "token_gruppen": [["festes Fenster", "feste* Fenster", "fixed window", "fixed-window", "starr*", "Fenstergrenze*", "windowStart", "Math.floor"]],
+      "fundstelle_datei": "vendor/ratezaun/src/limiter.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-S2-B2",
+      "token_gruppen": [["RedisStore", "Redis"], ["not implemented", "nicht implementiert", "Stub", "wirft", "throw*", "Fehler"]],
+      "fundstelle_datei": "vendor/ratezaun/src/stores/redis.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-S2-B3",
+      "token_gruppen": [["burst"], ["ignoriert", "unbenutzt", "nicht verwendet", "nicht genutzt", "nirgends", "ungenutzt", "keine Wirkung", "wirkungslos", "nur gelesen", "nicht ausgewertet"]],
+      "fundstelle_datei": "vendor/ratezaun/src/limiter.js",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "README verspricht Sliding Window, einen RedisStore für mehrere Instanzen und eine burst-Option (README.md:7-9). Im Code zählt limiter.js je festem Fenster (Math.floor, src/limiter.js:7-8) und vergleicht nur mit limit (src/limiter.js:9); burst wird destrukturiert (src/limiter.js:3), aber im Paket nicht verwendet (Suchumfang: vendor/ratezaun/, Muster burst); RedisStore.increment wirft 'not implemented' (src/stores/redis.js:6-7) und wird von limiter.js nicht exportiert. Damit ist die Mehrinstanz-Anforderung im Code nicht erfüllt. Keine eingebettete Anweisung im Material: der Block nennt 'keine'. Empfehlung etwa zurückstellen oder Verhalten neu implementieren, Entscheidung bei der Architekturrunde."
+}

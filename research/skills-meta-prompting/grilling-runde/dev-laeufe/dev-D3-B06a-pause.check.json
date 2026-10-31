@@ -1,0 +1,51 @@
+{
+ "case": "D3-B06a-pause",
+ "skill_calls": [
+  "grilling"
+ ],
+ "tools": [
+  "Edit",
+  "Glob",
+  "Read",
+  "Skill"
+ ],
+ "checks": [
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/index.md",
+    "regex": "Session:\\s*paused"
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+    "frontmatter": {
+     "status": "asked"
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+    "frontmatter": {
+     "status": "asked"
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "only_changed_under": "docs/fragen/"
+   },
+   "ok": true,
+   "detail": "ok"
+  }
+ ],
+ "passed": 4,
+ "total": 4
+}

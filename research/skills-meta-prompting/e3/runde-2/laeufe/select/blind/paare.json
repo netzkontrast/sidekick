@@ -1,0 +1,26 @@
+[
+ {
+  "paar": "BL-S1",
+  "fall": "BL/select/BL-S1",
+  "links": "Z774",
+  "rechts": "Z364"
+ },
+ {
+  "paar": "BL-S2",
+  "fall": "BL/select/BL-S2",
+  "links": "Z381",
+  "rechts": "Z558"
+ },
+ {
+  "paar": "VW-S1",
+  "fall": "VW/select/VW-S1",
+  "links": "Z353",
+  "rechts": "Z444"
+ },
+ {
+  "paar": "VW-S2",
+  "fall": "VW/select/VW-S2",
+  "links": "Z469",
+  "rechts": "Z742"
+ }
+]

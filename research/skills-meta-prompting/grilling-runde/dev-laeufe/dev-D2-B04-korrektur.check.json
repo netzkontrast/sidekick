@@ -1,0 +1,62 @@
+{
+ "case": "D2-B04-korrektur",
+ "skill_calls": [
+  "grilling"
+ ],
+ "tools": [
+  "Edit",
+  "Glob",
+  "Read",
+  "Skill"
+ ],
+ "checks": [
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+    "contains": "Nur lokal."
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+    "count_at_least": [
+     "Antwort-ID:",
+     2
+    ]
+   },
+   "ok": true,
+   "detail": "2 Treffer"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-konflikte.md",
+    "frontmatter": {
+     "needs_review": "true"
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+    "frontmatter": {
+     "needs_review": "false"
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "only_changed_under": "docs/fragen/"
+   },
+   "ok": true,
+   "detail": "ok"
+  }
+ ],
+ "passed": 5,
+ "total": 5
+}

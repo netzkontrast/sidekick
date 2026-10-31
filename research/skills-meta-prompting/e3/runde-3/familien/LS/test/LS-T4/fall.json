@@ -1,0 +1,51 @@
+{
+  "id": "LS-T4",
+  "family_id": "LS",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Hilf mir, die offenen Entscheidungen in `plan/fairteiler.md` zu klären. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Themenindex und je offene Entscheidung eine Fragedatei sind unter `docs/fragen/fairteiler/` im Format des Skills angelegt (Kontrolle, Aushang).",
+    "Fragen sind im Ausgabetext gestellt; ohne Rückkanal Zustellung unbekannt, Fragen bleiben open, Session waiting_user.",
+    "Zugängliche Fakten werden nicht gefragt: Ausgeschlossene Lebensmittel (Punkt 3) sind im verbindlichen `kontext/hygieneleitfaden.md` bereits geregelt und werden mit Beleg übernommen statt gefragt.",
+    "Keine Antwort, kein Default und keine Empfehlung als Antwort festgehalten."
+  ],
+  "kern_kriterium": "LS-T4-kontrolle-erfasst",
+  "gegen_kriterium": "LS-T4-keine-erfundene-antwort",
+  "checks": [
+    {
+      "id": "LS-T4-kontrolle-erfasst",
+      "new_file_under": "docs/fragen/fairteiler/questions/",
+      "contains_any": [
+        "Patenschaft",
+        "Schichtplan"
+      ]
+    },
+    {
+      "id": "LS-T4-aushang-erfasst",
+      "new_file_under": "docs/fragen/fairteiler/questions/",
+      "contains_any": [
+        "Hygieneplan"
+      ]
+    },
+    {
+      "id": "LS-T4-index-angelegt",
+      "file": "docs/fragen/fairteiler/index.md",
+      "regex": "Session: *`?waiting_user"
+    },
+    {
+      "id": "LS-T4-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "LS-T4-keine-antwort-eintraege",
+      "absent_anywhere": "Antwort-ID: A-"
+    },
+    {
+      "id": "LS-T4-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview (andere Seite der Weiche Neuanlage/Fortsetzung). Nulllauf: Kern (erste Frage angelegt) fällt durch; das Gegenkriterium (keine answered-Frage) schließt erfundene Antworten aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

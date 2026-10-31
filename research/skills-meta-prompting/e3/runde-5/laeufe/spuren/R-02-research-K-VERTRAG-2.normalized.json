@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "normalizer": "sl-eval-normalize@1",
+  "source_format": "claude-stream-json",
+  "input_sha256": "237532cc39e9a6265ff07a3a136c83ae6970c0d986dd5b4a5e1218f3ed4562d2",
+  "trace_sha256": "237532cc39e9a6265ff07a3a136c83ae6970c0d986dd5b4a5e1218f3ed4562d2",
+  "status": "completed",
+  "catalog": {
+    "status": "beobachtet",
+    "skills": [
+      "evaluating-changes",
+      "grilling",
+      "planning-work-packages",
+      "researching-repositories",
+      "resuming-work",
+      "reviewing-decision-gates",
+      "specifying-behavior",
+      "testing-system-boundaries",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "send-to-project",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ]
+  },
+  "tools": [
+    "Glob",
+    "Grep",
+    "Read",
+    "Skill"
+  ],
+  "plugins": [
+    {
+      "name": "cc-plugin-agents-md",
+      "source": "cc-plugin-agents-md@builtin"
+    },
+    {
+      "name": "cc-plugin-telemetry",
+      "source": "cc-plugin-telemetry@builtin"
+    },
+    {
+      "name": "cc-plugin-plugin-authoring",
+      "source": "cc-plugin-plugin-authoring@builtin"
+    }
+  ],
+  "model": "claude-opus-5-5",
+  "activations": [
+    {
+      "mode": "skill_tool",
+      "skill": "researching-repositories",
+      "tool_use_id": "toolu_012t8dB6K2wdyGCoZ5DoXwa7",
+      "confirmed": true
+    }
+  ],
+  "activation_observability": "events_observed",
+  "absence_is_proven": false,
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 3322,
+    "cache_read_input_tokens": 42959,
+    "cache_creation_input_tokens": 13037
+  },
+  "client_cost_estimate_usd": 0.1793598,
+  "cost_balance": {
+    "method": "sl-eval-cost-balance@1",
+    "turns": [
+      {
+        "turn": 1,
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 8,
+          "cache_read_input_tokens": 3846,
+          "cache_creation_input_tokens": 6731
+        }
+      },
+      {
+        "turn": 2,
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 16,
+          "cache_read_input_tokens": 10577,
+          "cache_creation_input_tokens": 2239
+        }
+      },
+      {
+        "turn": 3,
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 16,
+          "cache_read_input_tokens": 12816,
+          "cache_creation_input_tokens": 2904
+        }
+      },
+      {
+        "turn": 4,
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 5,
+          "cache_read_input_tokens": 15720,
+          "cache_creation_input_tokens": 1163
+        }
+      }
+    ],
+    "turn_usage_sum": {
+      "input_tokens": 8,
+      "output_tokens": 45,
+      "cache_read_input_tokens": 42959,
+      "cache_creation_input_tokens": 13037
+    },
+    "usage_remainder": {
+      "input_tokens": 0,
+      "output_tokens": 3277,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0
+    },
+    "classes": [
+      {
+        "class": "assistant_denken",
+        "blocks": 2,
+        "bytes": 0,
+        "bytes_x_later_turns": 0
+      },
+      {
+        "class": "assistant_text",
+        "blocks": 1,
+        "bytes": 4340,
+        "bytes_x_later_turns": 0
+      },
+      {
+        "class": "assistant_werkzeugaufruf",
+        "blocks": 5,
+        "bytes": 647,
+        "bytes_x_later_turns": 973
+      },
+      {
+        "class": "datei_lesen",
+        "blocks": 3,
+        "bytes": 1229,
+        "bytes_x_later_turns": 1229
+      },
+      {
+        "class": "skill_laden",
+        "blocks": 2,
+        "bytes": 4195,
+        "bytes_x_later_turns": 12585
+      },
+      {
+        "class": "tool_ergebnis:Glob",
+        "blocks": 1,
+        "bytes": 4981,
+        "bytes_x_later_turns": 9962
+      }
+    ],
+    "bytes_total": 15392,
+    "bytes_x_later_turns_total": 24749
+  },
+  "quality_scored": false
+}
