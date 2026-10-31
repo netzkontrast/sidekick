@@ -1,0 +1,104 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "G-AU-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "G-AU-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "G-LS-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "G-LS-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "G-RW-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "G-RW-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "G-LS-S1-K-LADESTUFEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "G-AU-S1-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 9,
+      "trial_id": "G-LS-S2-K-LADESTUFEN",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 10,
+      "trial_id": "G-AU-S2-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 11,
+      "trial_id": "G-AU-T1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 12,
+      "trial_id": "G-AU-T1-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 13,
+      "trial_id": "G-AU-T2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 14,
+      "trial_id": "G-AU-T2-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 15,
+      "trial_id": "G-AU-T3-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 16,
+      "trial_id": "G-AU-T3-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 17,
+      "trial_id": "G-AU-T4-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 18,
+      "trial_id": "G-AU-T4-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 19,
+      "trial_id": "G-R-01-grilling-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 20,
+      "trial_id": "G-R-05-grilling-K-AUFTEILUNG",
+      "status": "reserved_before_start"
+    }
+  ]
+}

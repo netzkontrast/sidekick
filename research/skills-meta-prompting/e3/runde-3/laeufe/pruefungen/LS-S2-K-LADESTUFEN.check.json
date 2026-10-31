@@ -1,0 +1,117 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval check",
+  "checked_level": "Dateiprüfungen (SLV0-EVAL-22)",
+  "case_id": "LS-S2",
+  "ausgangsstand": "angegeben",
+  "pruefungen": [
+    {
+      "id": "LS-S2-hotline-erfasst",
+      "regel": "new_file_under",
+      "ergebnis": "bestanden",
+      "detail": "neu: docs/fragen/schadensmeldung/questions/Q-20261031-meldekanal.md, docs/fragen/schadensmeldung/questions/Q-20261031-notdienst.md; passend: docs/fragen/schadensmeldung/questions/Q-20261031-meldekanal.md",
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "LS-S2-notfall-erfasst",
+      "regel": "new_file_under",
+      "ergebnis": "bestanden",
+      "detail": "neu: docs/fragen/schadensmeldung/questions/Q-20261031-meldekanal.md, docs/fragen/schadensmeldung/questions/Q-20261031-notdienst.md; passend: docs/fragen/schadensmeldung/questions/Q-20261031-meldekanal.md, docs/fragen/schadensmeldung/questions/Q-20261031-notdienst.md",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-index-angelegt",
+      "regel": "regex",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-keine-erfundene-antwort",
+      "regel": "absent_anywhere",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "LS-S2-keine-antwort-eintraege",
+      "regel": "absent_anywhere",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-nur-ablage",
+      "regel": "only_changed_under",
+      "ergebnis": "bestanden",
+      "detail": "ok",
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "bestanden": 6,
+  "nicht_bestanden": 0,
+  "assertions": [
+    {
+      "id": "LS-S2-hotline-erfasst",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": "kern"
+    },
+    {
+      "id": "LS-S2-notfall-erfasst",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-index-angelegt",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "trennend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-keine-erfundene-antwort",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": "gegen"
+    },
+    {
+      "id": "LS-S2-keine-antwort-eintraege",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    },
+    {
+      "id": "LS-S2-nur-ablage",
+      "art": "deterministisch",
+      "bewerter": "sl-eval-check@1",
+      "ergebnis": "bestanden",
+      "r_regel": null,
+      "trennschaerfe": "erhaltend",
+      "rolle": null
+    }
+  ],
+  "messages": []
+}
