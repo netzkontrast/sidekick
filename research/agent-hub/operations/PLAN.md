@@ -18,6 +18,16 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] Workflow/Transport/Hosting anhand Fault-Tests entscheiden.
 - [ ] Vorschläge P1–P9 aus der [Reflexion zur ChatGPT-Spec](../inputs/2026-10-30-reflexion-chatgpt-spec.md#4-konsequenzen-für-die-planung-vorschläge) mit dem Owner klären; P3 und P8 sind entschieden (Claude Code zuerst; ein Repo), siehe [Grundsatzentscheidungen](../../../docs/entscheidungen/README.md#grundsatzentscheidungen-des-owners).
 
+## Run-Supervisor statt eigener Agent-Runtime (31.10.2026)
+
+Befund aus dem [MUXI-Dossier](../../../docs/research/dossiers/muxi-runtime.md): Eine MUXI-artige Runtime (≈ 184.000 Zeilen, davon ≈ 100.000 Orchestrierung) wird nicht nachgebaut. Gebraucht wird nur das Verhalten ihrer Teile `coding/` und `watch/` (≈ 3.000 Zeilen) als **Run-Supervisor im Connector** nach der [Runtime-Adapter-Spec](../../../docs/spec/runtime-adapter-v0.md). Status: vorgeschlagen, Owner-Freigabe offen.
+
+- [ ] RS-1: Drei MUXI-Befunde in die Runtime-Adapter-Spec (PR #32) einarbeiten: Umgebung des Kindprozesses nur per Positivliste; Negativfall „Rückweg ohne Freigabe oder mit Kanal-Benachrichtigung“; benannter Bezug der Kapazitätsgrenze (Gerät/Owner statt implizit pro Nutzer).
+- [ ] RS-2: Arbeitspaket planen: deterministische Fake-Runtime plus Contract-Tests für RTA-FALL-01…48, ohne echtes Claude Code.
+- [ ] RS-3: Claude-Code-Pfad unter Tor B praktisch prüfen (Resume, Abbruch der Prozessgruppe, Kostenmeldung, Wiederanbindung); Profilfähigkeiten erst danach auf `nachgewiesen`.
+- [ ] RS-4: Supervisor-Code erst ab Phase 1: Profil-Loader, Run-Supervisor, Ausgabe-Parser, Arbeitsbereich, Umgebungsfilter, lokale Outbox (Tor C), Beobachter. Schätzung 1.500–2.500 Zeilen TypeScript ohne Tests, nicht gemessen.
+- Abgrenzung zu MUXI: Rückweg nur als Einreichung ins Journal (kein Chat, kein Freigabe-Bypass); Rechte nur aus dem Profil; `lost`/`outcome_unknown` nie Erfolg; Fencing über die Epoch. Wählt Tor B ACP oder das Agent SDK, schrumpft der Supervisor; die Prinzipien bleiben.
+
 ## Neuer Planungsinput: Vision v5
 
 - [x] Offline-/Geräte-/Sprach-/Gedächtnisrichtung mit elf fixierten GitHub-Quellen und Selfplay abgleichen; [fertiger Befund](../../../docs/research/vision-v5-machbarkeit.md).
