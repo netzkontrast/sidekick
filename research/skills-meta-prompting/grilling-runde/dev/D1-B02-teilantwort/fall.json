@@ -1,0 +1,38 @@
+{
+  "id": "D1-B02-teilantwort",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Zu deinen offenen Fragen: Wir speichern lokal und zusätzlich mit Cloud-Sync. Zu den Gästen sage ich später etwas.",
+  "checks": [
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+      "frontmatter": {
+        "status": "answered"
+      }
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+      "contains": "Antwort-ID:"
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "frontmatter": {
+        "status": "asked"
+      }
+    },
+    {
+      "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+      "not_contains": "Antwort-ID:"
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K11",
+    "GR-K12",
+    "GR-K08",
+    "GR-K06"
+  ],
+  "erwartung": "Teilantwort nur Q-speicherort zuordnen; Gäste bleibt asked; Konflikte jetzt fragbar (Voraussetzung erfüllt) und sollte gestellt werden."
+}

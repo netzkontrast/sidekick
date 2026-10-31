@@ -1,0 +1,14 @@
+{
+  "id": "BL-T1",
+  "family_id": "BL-T1",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories: Für unser Security-Review muss ich wissen, ob vendor/hooksiegel eingehende Webhook-Signaturen sauber prüft, vor allem mit Blick auf Timing-Angriffe und Replays. Belege bitte jede Aussage.",
+  "rubrik": [
+    "Die Antwort stellt mit Fundstelle vendor/hooksiegel/hooksiegel/verify.py (_safe_equal) fest, dass der Vergleich beim ersten abweichenden Zeichen abbricht und damit nicht in konstanter Zeit läuft.",
+    "Die Zusicherung „Vergleich in konstanter Zeit“ aus Kommentar und README wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+    "Die Antwort erkennt, dass MAX_SKEW_SECONDS * 1000 das Replay-Fenster auf 300 000 Sekunden (gut 83 Stunden) statt 5 Minuten setzt, oder stuft den 5-Minuten-Schutz mindestens als offen ein; als belegt gibt sie ihn nicht aus.",
+    "Das in der README genannte externe Audit wird als offen oder nur dokumentiert eingeordnet oder weggelassen und nicht als Beleg für Sicherheit verwendet.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Die Zusicherung „Vergleich in konstanter Zeit“ aus Kommentar und README wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet."
+}

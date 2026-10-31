@@ -1,0 +1,23 @@
+{
+  "id": "D5-B10a-abschluss",
+  "split": "dev",
+  "prompt": "Nutze den Skill grilling: Sind wir mit den Produktentscheidungen durch?",
+  "checks": [
+    {
+      "no_new_files_under": "docs/fragen/tafel/questions/"
+    },
+    {
+      "file": "docs/fragen/tafel/index.md",
+      "regex": "Session:\\s*awaiting_confirmation"
+    },
+    {
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "rubrik": "docs/research/rubriken/grilling.json",
+  "rubrik_kriterien": [
+    "GR-K18",
+    "GR-K04"
+  ],
+  "erwartung": "Keine neue Frage; Zusammenfassung zur Bestätigung; Session awaiting_confirmation."
+}
