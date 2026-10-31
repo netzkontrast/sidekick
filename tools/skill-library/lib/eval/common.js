@@ -44,6 +44,16 @@ export const EVAL_RULES = {
   path_ambiguous: 'SLV0-EVAL-29',
   range_out_of_bounds: 'SLV0-EVAL-29',
   commit_unverified: 'SLV0-EVAL-29',
+  pattern_invalid: 'SLV0-EVAL-31',
+  path_escapes_root: 'SLV0-EVAL-31',
+  pattern_unmatched: 'SLV0-EVAL-32',
+  file_missing: 'SLV0-EVAL-32',
+  not_regular_file: 'SLV0-EVAL-32',
+  symlink_in_pack: 'SLV0-EVAL-32',
+  path_forbidden: 'SLV0-EVAL-32',
+  nested_repository: 'SLV0-EVAL-32',
+  file_not_text: 'SLV0-EVAL-32',
+  output_exists: 'SLV0-EVAL-34',
 };
 
 /** Codes reported as warnings: they never change the exit code (spec §8). */

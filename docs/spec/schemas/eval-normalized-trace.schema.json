@@ -66,7 +66,7 @@
     "client_cost_estimate_usd": { "type": ["number", "null"], "minimum": 0 },
     "cost_balance": {
       "type": ["object", "null"],
-      "description": "Kostenbilanz je Turn und Ereignisklasse (SLV0-EVAL-31/-32, Spec §7.6). Nur Größen, keine Inhalte. null beim Import aus skill-pilot-v1. Optional, damit frühere normalisierte Spuren gültig bleiben; die Normalisierung setzt das Feld immer.",
+      "description": "Kostenbilanz je Turn und Ereignisklasse (SLV0-EVAL-35/-36, Spec §7.7). Nur Größen, keine Inhalte. null beim Import aus skill-pilot-v1. Optional, damit frühere normalisierte Spuren gültig bleiben; die Normalisierung setzt das Feld immer.",
       "required": ["method", "turns", "turn_usage_sum", "usage_remainder", "classes", "bytes_total", "bytes_x_later_turns_total"],
       "additionalProperties": false,
       "properties": {
@@ -121,7 +121,7 @@
         },
         "classes": {
           "type": "array",
-          "description": "Je Ereignisklasse Blockzahl, Bytes (UTF-8) und Bytes × Folgeturns; Summen gleich den Gesamtwerten (Invariante SLV0-EVAL-32).",
+          "description": "Je Ereignisklasse Blockzahl, Bytes (UTF-8) und Bytes × Folgeturns; Summen gleich den Gesamtwerten (Invariante SLV0-EVAL-36).",
           "items": {
             "type": "object",
             "required": ["class", "blocks", "bytes", "bytes_x_later_turns"],

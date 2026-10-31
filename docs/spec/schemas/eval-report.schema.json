@@ -100,7 +100,7 @@
     },
     "differenz": {
       "type": "object",
-      "description": "Minuendwert minus Subtrahendwert über die gemeinsamen Fälle (SLV0-EVAL-33); null, wenn eine Seite unbekannt ist oder Methoden sich unterscheiden.",
+      "description": "Minuendwert minus Subtrahendwert über die gemeinsamen Fälle (SLV0-EVAL-37); null, wenn eine Seite unbekannt ist oder Methoden sich unterscheiden.",
       "required": ["wert", "minuend_wert", "subtrahend_wert", "rohdatensatz_ids", "beleg"],
       "additionalProperties": false,
       "properties": {
@@ -119,7 +119,7 @@
     },
     "kostenbilanz": {
       "type": "object",
-      "description": "Kostenbilanz je Ebene (SLV0-EVAL-33/-34, Spec §7.6). Optional, damit frühere Berichte gültig bleiben; der Harness setzt den Block immer.",
+      "description": "Kostenbilanz je Ebene (SLV0-EVAL-37/-38, Spec §7.7). Optional, damit frühere Berichte gültig bleiben; der Harness setzt den Block immer.",
       "required": ["je_variante", "differenzen"],
       "additionalProperties": false,
       "properties": {
@@ -179,7 +179,7 @@
               },
               "kosten_je_erfuelltem_kriterium": {
                 "type": "object",
-                "description": "Summe der Client-Kostenschätzung geteilt durch die bestandenen Assertions ohne r_regel (SLV0-EVAL-34).",
+                "description": "Summe der Client-Kostenschätzung geteilt durch die bestandenen Assertions ohne r_regel (SLV0-EVAL-38).",
                 "required": ["wert", "quelle", "kosten_usd", "erfuellte_kriterien", "rohdatensatz_ids", "beleg"],
                 "additionalProperties": false,
                 "properties": {

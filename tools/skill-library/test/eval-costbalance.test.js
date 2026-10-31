@@ -1,4 +1,4 @@
-// Cost balance per context class and turn (SLV0-EVAL-31…34, SLV0-FALL-66…70). Synthetic stream-json only.
+// Cost balance per context class and turn (SLV0-EVAL-35…38, SLV0-FALL-73…77). Synthetic stream-json only.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -66,7 +66,7 @@ function classMap(cb) {
   return Object.fromEntries(cb.classes.map((c) => [c.class, [c.blocks, c.bytes, c.bytes_x_later_turns]]));
 }
 
-test('SLV0-FALL-66 turns, per-class bytes and bytes × later turns of a synthetic trace; no content leaves', (t) => {
+test('SLV0-FALL-73 turns, per-class bytes and bytes × later turns of a synthetic trace; no content leaves', (t) => {
   const n = normalizeTrace(Buffer.from(FULL, 'utf8'), 'voll');
   assert.deepEqual(schemaErrors('eval-normalized-trace', n), []);
   const cb = n.cost_balance;
@@ -102,7 +102,7 @@ test('SLV0-FALL-66 turns, per-class bytes and bytes × later turns of a syntheti
   for (const s of [...Object.values(C), 'ENDE-GEHEIM', '/w/src']) assert.ok(!r.stdout.includes(s), `${s} leaked`);
 });
 
-test('SLV0-FALL-66 invariant: class sums equal the totals; turn sum + remainder equals the run usage', () => {
+test('SLV0-FALL-73 invariant: class sums equal the totals; turn sum + remainder equals the run usage', () => {
   const n = normalizeTrace(Buffer.from(FULL, 'utf8'), 'voll');
   const cb = n.cost_balance;
   assert.equal(cb.classes.reduce((a, c) => a + c.bytes, 0), cb.bytes_total);
@@ -125,7 +125,7 @@ test('SLV0-FALL-66 invariant: class sums equal the totals; turn sum + remainder 
   assert.throws(() => buildRawRecord(meta({ kostenbilanz: null }), n), /abgeleitet/);
 });
 
-test('SLV0-FALL-67 missing usage stays unknown (null), never 0; pilot import has no balance', () => {
+test('SLV0-FALL-74 missing usage stays unknown (null), never 0; pilot import has no balance', () => {
   const noTurnUsage = normalizeTrace(Buffer.from(jsonl(INIT,
     asst('m1', usage(1, 2, 3, 4), { type: 'text', text: 'a' }),
     asst('m2', null, { type: 'text', text: 'b' }),
@@ -206,7 +206,7 @@ function pairRecords() {
 const sumOver = (rs, fn) => rs.reduce((a, r) => a + fn(r.kostenbilanz), 0);
 const klasse = (kb, name, field) => kb.klassen.find((k) => k.klasse === name)?.[field] ?? 0;
 
-test('SLV0-FALL-68 differences B1 − B0 and K − B1 only over shared cases, with both values and raw IDs', (t) => {
+test('SLV0-FALL-75 differences B1 − B0 and K − B1 only over shared cases, with both values and raw IDs', (t) => {
   const recs = pairRecords();
   const rep = buildReport(recs);
   assert.deepEqual(schemaErrors('eval-report', rep), []);
@@ -255,7 +255,7 @@ test('SLV0-FALL-68 differences B1 − B0 and K − B1 only over shared cases, wi
   assert.equal(runEvalCli(['report', rawDir, '--estimator', 'tiktoken']).code, 2);
 });
 
-test('SLV0-FALL-68 a raw record without kostenbilanz (older format) makes its population unknown, not 0', () => {
+test('SLV0-FALL-75 a raw record without kostenbilanz (older format) makes its population unknown, not 0', () => {
   const recs = pairRecords();
   const old = structuredClone(recs.find((r) => r.run_id === 'B0-1'));
   delete old.kostenbilanz;
@@ -278,7 +278,7 @@ test('SLV0-FALL-68 a raw record without kostenbilanz (older format) makes its po
   assert.equal(typeof d.kosten_usd.wert, 'number');
 });
 
-test('SLV0-FALL-69 cost per satisfied criterion: known, missing cost, nothing satisfied', () => {
+test('SLV0-FALL-76 cost per satisfied criterion: known, missing cost, nothing satisfied', () => {
   const tr = (cost) => simpleTrace({ turns: 1, fileBytes: 1, cost });
   const a = (id, ergebnis, art = 'deterministisch', r = null) => ({ id, art, bewerter: 'x@1', ergebnis, r_regel: r });
   const r1 = rec('R-1', 'C-1', 'B1', tr(0.25), { assertions: [a('A-1', 'bestanden'), a('A-2', 'bestanden', 'rubrik'), a('A-3', 'nicht_bestanden'), a('A-R', 'bestanden', 'rubrik', 'R-01')] });
@@ -299,7 +299,7 @@ test('SLV0-FALL-69 cost per satisfied criterion: known, missing cost, nothing sa
   assert.match(k3.beleg, /kein erfülltes Kriterium/);
 });
 
-test('SLV0-FALL-70 stored M4 pilot traces (skill-pilot-v1) stay valid; balance unknown, run cost difference known', () => {
+test('SLV0-FALL-77 stored M4 pilot traces (skill-pilot-v1) stay valid; balance unknown, run cost difference known', () => {
   const dir = path.join(RESEARCH, 'eval-runs', 'm4');
   const files = fs.readdirSync(dir).filter((f) => f.endsWith('.normalized.json')).sort();
   assert.equal(files.length, 12);

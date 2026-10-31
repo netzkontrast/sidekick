@@ -37,7 +37,7 @@ export function buildRawRecord(meta, normalized, { rubric = null, ledger = null,
       aufrufe: normalized.activations.map((a) => ({ skill: a.skill, modus: a.mode, bestaetigt: a.confirmed })),
     },
     usage: { lauf: usage.lauf_usage, je_skill: usage.je_skill, kosten_client_schaetzung: usage.kosten_client_schaetzung },
-    kostenbilanz: toRawBalance(normalized.cost_balance ?? null), // SLV0-EVAL-33; null for older traces
+    kostenbilanz: toRawBalance(normalized.cost_balance ?? null), // SLV0-EVAL-37; null for older traces
     normalisierer: NORMALIZER,
   };
   if (rubric !== null) {

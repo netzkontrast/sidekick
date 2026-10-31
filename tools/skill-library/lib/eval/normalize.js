@@ -3,7 +3,7 @@
 // client cost estimate and trace hash leave this module. No thinking text, no free model output,
 // no tool inputs except the skill name. A request alone is not a confirmed activation; a missing
 // catalog is unknown, not empty; an empty or failed trace never proves non-selection.
-// Raw traces additionally get a cost balance (sizes and per-turn usage only, SLV0-EVAL-31/-32).
+// Raw traces additionally get a cost balance (sizes and per-turn usage only, SLV0-EVAL-35/-36).
 import { sha256Hex } from '../core.js';
 import { evalMsg, EvalRefusal, requireSchema } from './common.js';
 import { costBalance } from './costbalance.js';
@@ -108,7 +108,7 @@ function fromPilot(obj, label) {
     activations,
     usage: pickUsage(obj.usage),
     client_cost_estimate_usd: pickCost(obj.reported_cost_usd),
-    cost_balance: null, // the helper format keeps no per-turn usage or sizes (SLV0-EVAL-31)
+    cost_balance: null, // the helper format keeps no per-turn usage or sizes (SLV0-EVAL-35)
   };
 }
 

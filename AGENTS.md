@@ -19,8 +19,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check> …`;
-  startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check|context-pack> …`;
+  startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result`, `split access|select` und `context-pack --output`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
 - Belege einer Bewertung prüfen: `node tools/skill-library/cli.js eval judge check BEWERTUNG.json --outputs BLIND-VERZ [--fixtures FAMILIEN-VERZ]`
   (Exit 1, wenn ein Zitat nicht wiedergefunden wird oder ein „erfuellt“ ohne Beleg bleibt). Einzeltest: `node --test tools/skill-library/test/eval-judge.test.js`
@@ -30,6 +30,10 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
   Einzeltests: `node --test tools/skill-library/test/eval-nullrun.test.js` (ebenso `eval-trennschaerfe`, `eval-findings`).
 - Belegabdeckung eines Berichts am Commit: `node tools/skill-library/cli.js eval cite-check --repo REPO-VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]… [--github OWNER/REPO]`
   („X von Y Dateien belegt; nicht belegt: …“; Exit 1 bei falschem SHA, Bereich hinter dem Dateiende oder fehlender Datei). Einzeltest: `node --test tools/skill-library/test/eval-citecheck.test.js`
+- Kontextpaket für eine Clean-Room-Session: `node tools/skill-library/cli.js eval context-pack --allowlist ALLOWLIST.json [--root VERZ] [--deny MUSTER]… [--estimator utf8-bytes-div-4@1] [--output NEUE-DATEI.md]`
+  (Datensatz mit Dateihashes auf stdout; Exit 1 ohne Paket bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink oder gesperrtem Pfad wie `kandidaten/`). Einzeltest: `node --test tools/skill-library/test/eval-contextpack.test.js`
+- Kostenbilanz je Kontextklasse und Turn: `node tools/skill-library/cli.js eval report RAW-VERZ [--estimator utf8-bytes-div-4@1]`
+  (Block `kostenbilanz` je Ebene: Turns, Turn-Usage, Rest, Bytes × Folgeturns je Klasse, B1−B0, Kosten je erfülltem Kriterium). Einzeltest: `node --test tools/skill-library/test/eval-costbalance.test.js`
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`

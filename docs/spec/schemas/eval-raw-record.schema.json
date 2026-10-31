@@ -139,7 +139,7 @@
     },
     "kostenbilanz": {
       "type": ["object", "null"],
-      "description": "Aus der normalisierten Spur übernommene Kostenbilanz (SLV0-EVAL-33); nicht aus Metadaten. null ohne Bilanz. Optional, damit frühere Rohdatensätze gültig bleiben; eval raw setzt das Feld immer.",
+      "description": "Aus der normalisierten Spur übernommene Kostenbilanz (SLV0-EVAL-37); nicht aus Metadaten. null ohne Bilanz. Optional, damit frühere Rohdatensätze gültig bleiben; eval raw setzt das Feld immer.",
       "required": ["verfahren", "turns", "usage_summe_turns", "usage_rest", "klassen", "bytes_gesamt", "bytes_mal_folgeturns_gesamt"],
       "additionalProperties": false,
       "properties": {

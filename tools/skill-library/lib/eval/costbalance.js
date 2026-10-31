@@ -1,4 +1,4 @@
-// Cost balance per context class and turn (SLV0-EVAL-31…34, spec §7.6).
+// Cost balance per context class and turn (SLV0-EVAL-35…38, spec §7.7).
 // Only sizes leave this module, never content. Bytes are exact (UTF-8); tokens are only what the
 // client reported per turn, or an estimate from a named estimator in the report; both are never mixed.
 // Unknown stays null with a reason, never 0 (SLV0-INV-05). Concept after skill-cost-optimizer (clean-room).
@@ -27,7 +27,7 @@ function toolResultBytes(content) {
   return jsonBytes(content);
 }
 
-/** Payload size of one content block (spec §7.6). */
+/** Payload size of one content block (spec §7.7). */
 function blockBytes(block) {
   if (typeof block === 'string') return utf8(block);
   if (!isObj(block)) return jsonBytes(block);
@@ -68,7 +68,7 @@ const isSubagent = (ev) => ev.parent_tool_use_id !== undefined && ev.parent_tool
 const messageOf = (ev) => (Object.hasOwn(ev, 'message') ? ev.message : ev);
 
 /**
- * Cost balance of a parsed stream-json trace (SLV0-EVAL-31/-32). `events` are the parsed JSON
+ * Cost balance of a parsed stream-json trace (SLV0-EVAL-35/-36). `events` are the parsed JSON
  * objects in order; `totalUsage` is the run usage picked from the final result (or null).
  */
 export function costBalance(events, totalUsage) {
@@ -139,11 +139,11 @@ export function costBalance(events, totalUsage) {
   return out;
 }
 
-/** Invariant SLV0-EVAL-32/-31: class sums equal totals; turn sum + remainder equals the total. */
+/** Invariant SLV0-EVAL-36/-35: class sums equal totals; turn sum + remainder equals the total. */
 export function checkBalance(cb, totalUsage = undefined) {
   const b = cb.classes.reduce((a, c) => a + c.bytes, 0);
   const bt = cb.classes.reduce((a, c) => a + c.bytes_x_later_turns, 0);
-  if (b !== cb.bytes_total || bt !== cb.bytes_x_later_turns_total) throw new Error('interner Fehler: Klassensummen ungleich Gesamt (SLV0-EVAL-32)');
+  if (b !== cb.bytes_total || bt !== cb.bytes_x_later_turns_total) throw new Error('interner Fehler: Klassensummen ungleich Gesamt (SLV0-EVAL-36)');
   if (totalUsage !== undefined) {
     for (const f of TURN_USAGE_FIELDS) {
       const s = cb.turn_usage_sum[f];
@@ -168,7 +168,7 @@ export function toRawBalance(cb) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Report block `kostenbilanz` per level (SLV0-EVAL-33/-34). Every value names its raw records.
+// Report block `kostenbilanz` per level (SLV0-EVAL-37/-38). Every value names its raw records.
 
 const cmp = (a, b) => compareCodepoints(String(a), String(b));
 const idsOf = (rs) => [...new Set(rs.map((r) => r.run_id))].sort(cmp);
@@ -198,7 +198,7 @@ function costPerCriterion(rs) {
     kosten_usd: wertfeld(kosten, rs, beleg),
     erfuellte_kriterien: nonR.length === 0 ? null : { zaehler: passed, nenner: nonR.length, rohdatensatz_ids: idsOf(rs) },
     rohdatensatz_ids: idsOf(rs),
-    beleg: wert === null ? beleg : `Summe kosten_client_schaetzung / ${passed} bestandene Assertions ohne r_regel (SLV0-EVAL-34)`,
+    beleg: wert === null ? beleg : `Summe kosten_client_schaetzung / ${passed} bestandene Assertions ohne r_regel (SLV0-EVAL-38)`,
   };
 }
 
@@ -206,7 +206,7 @@ function costPerCriterion(rs) {
 function variantBalance(rs, estimator) {
   const withB = rs.filter((r) => isObj(r.kostenbilanz));
   const without = rs.filter((r) => !isObj(r.kostenbilanz)).map((r) => r.run_id).sort(cmp);
-  const why = without.length > 0 ? `ohne Kostenbilanz: ${without.join(', ')} (SLV0-EVAL-33)` : null;
+  const why = without.length > 0 ? `ohne Kostenbilanz: ${without.join(', ')} (SLV0-EVAL-37)` : null;
   const sumOf = (fn) => (why ? null : withB.reduce((a, r) => a + fn(r.kostenbilanz), 0));
   const usageTurns = {};
   const usageRest = {};
@@ -288,7 +288,7 @@ function pairDiff(minuend, subtrahend, mRs, sRs, caseIds) {
 
 /**
  * Block `kostenbilanz` of one level: per variant, and differences B1 − B0 and K-… − B1 over the
- * cases that have runs of both variants (SLV0-EVAL-33/-34). No quotient except cost per criterion.
+ * cases that have runs of both variants (SLV0-EVAL-37/-38). No quotient except cost per criterion.
  */
 export function levelBalance(records, { estimator = null } = {}) {
   const variants = [...new Set(records.map((r) => r.variante))].sort(cmp);
