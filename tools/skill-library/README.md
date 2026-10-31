@@ -1,13 +1,15 @@
-# Skill-Library-Werkzeuge (V0, Stufe 0/1)
+# Skill-Library-Werkzeuge (V0, Stufe 0–2)
 
-Read-only-Kommandozeilenwerkzeug für die Pakete unter `.agents/skills/`. Vertrag:
-[Spec Skill-Library V0](../../docs/spec/skill-library-v0.md) §3–§6, §8, §9;
-Auftrag: [Implementierungsübergabe](../../research/skills-meta-prompting/library-implementation-handover.md) L1–L8.
+Kommandozeilenwerkzeug für die Pakete unter `.agents/skills/` und den Eval-Harness. Vertrag:
+[Spec Skill-Library V0](../../docs/spec/skill-library-v0.md) §3–§9;
+Auftrag: [Implementierungsübergabe](../../research/skills-meta-prompting/library-implementation-handover.md) L1–L8 und §7.
 JavaScript (ESM) auf Node 22 ohne Dependencies, nur `node:`-Module
 ([Owner-Antwort](../../docs/fragen/skill-library/questions/Q-20261030-sl-code-sprache.md)).
 
-Das Werkzeug prüft M0 (Format). Es belegt weder Discovery noch Auswahl noch Verhalten, gibt keine
-Scores oder Aktivierungsempfehlungen aus, schreibt keine Dateien, ändert keinen `status` und greift nicht aufs Netz zu.
+`validate`, `hash`, `tokens` und `registry-check` prüfen M0 (Format). Sie belegen weder Discovery noch Auswahl noch
+Verhalten, schreiben keine Dateien, ändern keinen `status` und greifen nicht aufs Netz zu. Der Eval-Harness (`eval …`,
+Abschnitt unten) startet nie einen Client oder ein Modell und schreibt nur in ausdrücklich angegebene Pfade.
+Kein Befehl gibt Scores oder Aktivierungsempfehlungen aus.
 
 ## Befehle
 
@@ -41,7 +43,16 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/schema.js`, `lib/registry.js` | handgeschriebene Prüfung genau der im Schema genutzten Schlüsselwörter; Hashvergleich; Versionskonflikt | VAL-16, PKG-10…15/-24 |
 | `lib/tokens.js` | Tokenzahlen mit Quelle, Schätzer nur auf Schalter, Summenregel, Lauf-Usage aus Spur | TOK-01…08 |
 | `cli.js` | Unterbefehle, JSON-Ausgabe, Exit-Codes | VAL-17 |
-| `test/` | je Fall SLV0-FALL-01…29 mindestens ein Test (Name beginnt mit der Fall-ID) | §9 |
+| `lib/eval/common.js` | Eval-Codes (§8) mit Regel-ID, Abbruch (`EvalRefusal`), Schemaprüfung gegen `docs/spec/schemas/eval-*.schema.json` | §8 |
+| `lib/eval/snapshot.js` | Einfrieren aus Arbeitsbaum oder Quellform, Prüfen aller Hashes | EVAL-01/-02 |
+| `lib/eval/candidate.js` | Kandidatenbindung: Baseline, genau eine Dimension, eindeutige Ersetzung | EVAL-03 |
+| `lib/eval/prepare.js` | Versuchsverzeichnisse B0/B1/Kandidat, Konfigurationsschutz, nie überschreiben | EVAL-04 |
+| `lib/eval/ledger.js` | append-only Ledger (JSON Lines) mit Sperrdatei, Startlimit, Ergebnisnachtrag | EVAL-05 |
+| `lib/eval/split.js` | Split-Manifest, Familienüberlappung, Rollenzugriff, Auswahl, verbrauchter Test-Split | EVAL-06/-07 |
+| `lib/eval/normalize.js` | Positivliste für Client-Spuren (JSONL oder skill-pilot-v1) | EVAL-08, INV-05 |
+| `lib/eval/raw.js`, `lib/eval/report.js` | Rohdatensatz je Start; Bericht nur aus Rohdaten, R-Verstöße getrennt | EVAL-09…11, INV-06/-09 |
+| `lib/eval/cli.js` | Unterbefehle `eval …` | – |
+| `test/` | je Fall SLV0-FALL-01…37 mindestens ein Test (Name beginnt mit der Fall-ID) | §9 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -67,3 +78,96 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Paketsatz-Hash von `skill-pilot-baseline-v2.json`: `4ad5b6dbae228982fe3ba7df6552d9e7029af0fc0c972dde09ad9406f2473967` (SLV0-FALL-23).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
+
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11)
+
+Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
+Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
+sind keine Werkzeugfunktion; sie brauchen Owner-Budget und einen geprüften Client.
+
+```sh
+B="node tools/skill-library/cli.js"   # aus dem Repo-Wurzelverzeichnis
+$B eval freeze --source-commit "$(git rev-parse HEAD)" > snapshot.json          # Snapshot des Arbeitsbaums
+$B eval freeze --source QUELLE.json > snapshot.json                              # Quellform des Research-Helfers
+$B eval verify --snapshot snapshot.json                                          # alle Hashes neu berechnen
+$B eval bind --snapshot snapshot.json --candidates kandidaten.json [--id K-DESC]
+$B eval prepare --snapshot snapshot.json --cases faelle.json --project-config konfig.txt \
+                --output NEUES-VERZ [--candidates kandidaten.json]
+$B eval split manifest --cases faelle.json --manifest-id M-1 > manifest.json
+$B eval split check --manifest manifest.json [--cases faelle.json]
+$B eval ledger init --ledger ledger.jsonl --limit 40 [--manifest manifest.json]
+$B eval ledger reserve --ledger ledger.jsonl --trial-id F-01--B1                 # VOR dem Start
+$B eval ledger result --ledger ledger.jsonl --attempt-id 1 --outcome completed|failed_start|aborted|client_error \
+                      [--trace-sha256 H] [--raw-id RUN-1]
+$B eval ledger status --ledger ledger.jsonl
+$B eval split access --ledger ledger.jsonl --manifest manifest.json --role author --split dev
+$B eval split select --ledger ledger.jsonl --manifest manifest.json --role evaluator --candidate-sha256 H
+$B eval split access --ledger ledger.jsonl --manifest manifest.json --role evaluator --split test --candidate-sha256 H
+$B eval normalize --trace spur.jsonl > spur.sl.json                              # oder *.normalized.json (skill-pilot-v1)
+$B eval raw --meta meta.json --normalized spur.sl.json > raw/RUN-1.json
+$B eval report raw/ > bericht.json
+$B eval report --check bericht.json raw/
+```
+
+**Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw` und `report` geben bei Erfolg das Artefakt selbst
+als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
+`{tool, tool_version, command, …}` aus. Exit 0 ok; Exit 1 Abbruch mit Code aus §8 (`refused: true`, `messages`) oder
+fehlgeschlagene Prüfung (`bind`, `split check`, `report --check`); Exit 2 Bedienfehler, Eingabe verletzt ihr Schema
+oder interne Ausnahme. Kein Teilergebnis gilt als Erfolg.
+
+**Schreiben.** Nur `prepare` (neues Zielverzeichnis, Dateien mit exklusivem Anlegen), `ledger init` (neue Datei)
+sowie `ledger reserve|result` und `split access|select` (Anhängen an das angegebene Ledger) schreiben. Nichts wird überschrieben.
+Alle übrigen Befehle lesen nur.
+
+**Schemas** (JSON Schema 2020-12, geprüft mit `lib/schema.js`):
+[Snapshot](../../docs/spec/schemas/eval-snapshot.schema.json),
+[Ledger-Eintrag](../../docs/spec/schemas/eval-ledger.schema.json),
+[Split-Manifest](../../docs/spec/schemas/eval-split-manifest.schema.json),
+[normalisierte Spur](../../docs/spec/schemas/eval-normalized-trace.schema.json),
+[Rohdatensatz](../../docs/spec/schemas/eval-raw-record.schema.json),
+[Bericht](../../docs/spec/schemas/eval-report.schema.json).
+Der Schemaprüfer kennt dafür zusätzlich `maximum`, `minItems` und `propertyNames`.
+
+### Verhältnis zum Research-Helfer
+
+[`skill_pilot.py`](../../research/skills-meta-prompting/skill_pilot.py) bleibt unverändert als Referenz stehen. Gleichheitstests
+rufen ihn nur lesend auf (`python3 -I -B`; ohne Python übersprungen):
+
+- `freeze` erzeugt dasselbe Objekt wie `skill_pilot.freeze`; aus den Dateien von `skill-pilot-baseline-v2.json` entsteht
+  genau diese Datei wieder (Paketsatz-Hash `4ad5b6db…2473967`).
+- `bind` liefert dieselben Dateien wie `variant_files` und denselben Kandidatenhash wie `digest(canonical(...))`.
+- `normalize` stimmt auf den Positivlistenfeldern mit `normalize_trace` überein (synthetische Spuren). Alle gespeicherten
+  `*.normalized.json` unter `eval-runs/` lassen sich importieren und reproduzieren ihre Positivlistenfelder.
+
+Bewusste Abweichungen vom Helfer: relative statt absolute Adapter-Symlinks (SLV0-VAL-15); `trials.json` nennt Arbeitsverzeichnisse
+relativ; Projektkonfiguration kommt aus einer Datei statt aus einem festen Text; das Ledger ist JSON Lines statt einer
+umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`/`source` und von Usage nur die vier Tokenfelder.
+
+### Auslegungen, wo die Spec nichts festlegt
+
+- **Freeze** friert den Arbeitsbaum ein, nicht einen Git-Commit; der Quellcommit wird angegeben und nicht gegen Git geprüft.
+  Ungültige Pakete werden nicht eingefroren (Validatorfehler, Exit 1), weil sie keinen Hash erhalten (PKG-20).
+- **Kandidaten:** Dimensionen wie im Helfer `description` und `project-binding`. Ein Beschreibungskandidat hat genau eine
+  Ersetzung, die genau die ganze `description:`-Zeile im Frontmatter ersetzt; alles andere ist `candidate_multi_dimension`.
+  Ein `project-binding`-Kandidat darf das Frontmatter nicht berühren (sonst ebenfalls zweite Dimension). Unbekannte Datei
+  und fehlender oder mehrfacher Fundort sind `replacement_not_unique`. Unbekannte Dimension oder kaputter Datensatz: Exit 2.
+- **Vorbereiten:** Konfigurationsschutz vergleicht das erste Pfadsegment ohne Groß-/Kleinschreibung. Alles wird vor dem
+  ersten Schreiben geprüft; ein Abbruch hinterlässt kein Zielverzeichnis.
+- **Ledger:** Das Limit steht im Kopf (`ledger init`, 1…40, Owner-Budget). Ein Ergebnis je Versuch; ein zweites ist Exit 2.
+  Ein beschädigtes Ledger wird nicht repariert (Exit 2). Die Sperre `<ledger>.lock` wird bei `ledger_locked` nie entfernt.
+- **Splits:** `author` liest `dev` und `regression`, `evaluator` liest `select` und `regression`; `test` nur `evaluator`
+  nach `split select` mit demselben Kandidatenhash. Derselbe Kandidat darf `test` erneut lesen (Wiederholungen); ein
+  anderer erhält `split_consumed`. Verweigerte Zugriffe werden im Ledger protokolliert. Split-Befehle verlangen ein bei
+  `ledger init --manifest` gebundenes Manifest. Splits außerhalb von dev/select/test/regression (z. B. `diagnostic` in
+  `skill-pilot-cases.json`) lehnt `split manifest` ab.
+- **Normalisierung:** Eingabe ist eine rohe stream-json-Spur oder eine skill-pilot-v1-Datei (Import; `trace_sha256` bleibt
+  der Hash der Rohspur). Eine leere Spur ist gültig, aber `incomplete_or_error`; ungültiges JSON, Nicht-Objekte oder
+  ungültiges UTF-8 sind `trace_invalid`. `confirmed` ist `true` nur bei Antwort ohne Fehler, `false` bei Fehlerantwort,
+  `null` ohne Antwort. Zeilentrenner sind LF, CRLF und CR (Python trennt zusätzlich an weiteren Unicode-Trennern).
+- **Rohdatensatz:** Modell, Status, Katalog, Skill-Aufrufe, Usage und Spur-Hash kommen nur aus der normalisierten Spur;
+  setzt die Metadatei eines dieser Felder, ist das Exit 2. `beobachtbar` ist `false`, wenn die Spur keine Aufrufereignisse
+  zeigt. Assertions tragen `ergebnis` `bestanden|nicht_bestanden|unklar` und optional `r_regel`.
+- **Bericht:** Nenner einer Zahl ist die Population (Läufe bzw. Assertions); `rohdatensatz_ids` nennt diese Population.
+  R-Assertions zählen nie in den Ebenen-Assertions, sondern nur in `r_pruefungen`/`r_verstoesse`. `skill_aufrufe` zählt Läufe
+  mit bestätigtem Aufruf, ohne zu sagen, ob der Aufruf richtig war. Feldsprache: Rohdatensatz und Bericht deutsch nach SL1 §8,
+  Snapshot, Ledger, Manifest und normalisierte Spur englisch wie der Research-Helfer (O-8 bleibt offen).

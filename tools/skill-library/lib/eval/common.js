@@ -1,0 +1,99 @@
+// Shared helpers for the eval harness (docs/spec/skill-library-v0.md §7, §8).
+// Eval refusals carry stable codes (§8) and abort the operation; no partial result counts as success.
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { sortMessages } from '../core.js';
+import { validateSchema } from '../schema.js';
+import { UsageError } from '../project.js';
+
+/** Eval code → rule ID (spec §7/§8). All eval codes are errors. */
+export const EVAL_RULES = {
+  snapshot_hash_mismatch: 'SLV0-EVAL-02',
+  candidate_baseline_mismatch: 'SLV0-EVAL-03',
+  candidate_multi_dimension: 'SLV0-EVAL-03',
+  replacement_not_unique: 'SLV0-EVAL-03',
+  workspace_exists: 'SLV0-EVAL-04',
+  config_overwrite: 'SLV0-EVAL-04',
+  budget_exhausted: 'SLV0-EVAL-05',
+  ledger_locked: 'SLV0-EVAL-05',
+  family_split_overlap: 'SLV0-EVAL-06',
+  split_access_denied: 'SLV0-EVAL-07',
+  split_consumed: 'SLV0-EVAL-07',
+  trace_invalid: 'SLV0-EVAL-08',
+  report_without_raw: 'SLV0-EVAL-10',
+};
+
+export function evalMsg(code, pathStr, message, line = null) {
+  const rule = EVAL_RULES[code];
+  if (!rule) throw new Error(`unknown eval code ${code}`);
+  return { path: pathStr, line, code, severity: 'error', rule, message };
+}
+
+/** Thrown when an eval operation is refused with one or more §8 codes (exit 1). */
+export class EvalRefusal extends Error {
+  constructor(messages, extra = {}) {
+    super(messages.map((m) => `${m.code}: ${m.message}`).join('; '));
+    this.messages = sortMessages(messages);
+    this.extra = extra;
+  }
+}
+
+export function refuse(code, pathStr, message, extra = {}) {
+  throw new EvalRefusal([evalMsg(code, pathStr, message)], extra);
+}
+
+export { UsageError };
+
+const SCHEMA_DIR = new URL('../../../../docs/spec/schemas/', import.meta.url);
+const schemaCache = new Map();
+
+/** Load docs/spec/schemas/<name>.schema.json. */
+export function loadEvalSchema(name) {
+  if (!schemaCache.has(name)) {
+    const file = fileURLToPath(new URL(`${name}.schema.json`, SCHEMA_DIR));
+    schemaCache.set(name, JSON.parse(fs.readFileSync(file, 'utf8')));
+  }
+  return schemaCache.get(name);
+}
+
+/** Schema errors as strings ("/pointer: message"); empty when valid. */
+export function schemaErrors(name, value) {
+  return validateSchema(loadEvalSchema(name), value).map((e) => `${e.pointer || '/'}: ${e.message}`);
+}
+
+/** Input files violating their schema are operator errors (exit 2), never repaired. */
+export function requireSchema(name, value, label) {
+  const errs = schemaErrors(name, value);
+  if (errs.length > 0) throw new UsageError(`${label} verletzt ${name}.schema.json: ${errs.slice(0, 5).join('; ')}${errs.length > 5 ? ` (+${errs.length - 5})` : ''}`);
+  return value;
+}
+
+export function readJsonFile(file, label = file) {
+  let text;
+  try {
+    text = fs.readFileSync(file, 'utf8');
+  } catch (err) {
+    if (err.code === 'ENOENT') throw new UsageError(`${label}: Datei nicht gefunden`);
+    throw err;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new UsageError(`${label}: kein gültiges JSON (${err.message})`);
+  }
+}
+
+/**
+ * Safe POSIX relative path inside a workspace: no absolute path, no "..", no backslash, no empty
+ * or "." segment. Returns the segments.
+ */
+export function safeRelativeSegments(rel) {
+  if (typeof rel !== 'string' || rel.length === 0 || rel.startsWith('/') || rel.includes('\\') || /^[A-Za-z]:/.test(rel)) return null;
+  const segs = rel.split('/');
+  if (segs.some((s) => s === '' || s === '.' || s === '..')) return null;
+  return segs;
+}
+
+export function isSha256(v) {
+  return typeof v === 'string' && /^[0-9a-f]{64}$/.test(v);
+}

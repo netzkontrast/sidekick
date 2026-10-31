@@ -18,7 +18,11 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
-- Research-Helfer-Tests: `python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
+- Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report> …`;
+  startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
+  und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
+- Research-Helfer-Tests: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
 
 Details: [tools/skill-library/README.md](tools/skill-library/README.md). Ab Phase 1 (TypeScript/Next.js)
 stehen hier Install, Dev, Build, Einzeltest, Typecheck und Lint mit exakten Flags.

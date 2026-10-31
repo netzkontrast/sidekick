@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-ledger.schema.json",
+  "title": "Eval-Ledger-Eintrag – Skill-Library V0",
+  "description": "Eine Zeile des append-only Ledgers (JSON Lines). Kopf `ledger` mit freigegebenem Startlimit und optional gebundenem Split-Manifest; `reservation` vor jedem Start (SLV0-EVAL-05); `result` als eigener Nachtrag, nie durch Umschreiben; `split_access` und `split_selection` protokollieren Splitzugriffe einschließlich Verstößen (SLV0-EVAL-07). Der Zähler ist ein Protokoll, keine systemweite Kostensperre.",
+  "type": "object",
+  "required": ["schema_version", "seq", "kind", "recorded_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "seq": { "type": "integer", "minimum": 1, "description": "Laufende Zeilennummer ab 1, lückenlos." },
+    "kind": { "enum": ["ledger", "reservation", "result", "split_access", "split_selection"] },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 40, "description": "Vom Owner freigegebene Zahl an Starts für dieses Ledger (Kopf; in jeder Reservierung wiederholt)." },
+    "manifest_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$", "description": "Kanonischer Hash des gebundenen Split-Manifests oder null." },
+    "attempt_id": { "type": "integer", "minimum": 1 },
+    "trial_id": { "$ref": "#/$defs/id" },
+    "status": { "const": "reserved_before_start" },
+    "outcome": {
+      "enum": ["completed", "failed_start", "aborted", "client_error"],
+      "description": "Ausgang eines reservierten Starts. Auch ein Fehlstart bleibt gezählt."
+    },
+    "trace_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "raw_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+    "role": { "enum": ["author", "evaluator"] },
+    "split": { "enum": ["dev", "select", "test", "regression"] },
+    "decision": { "enum": ["granted", "denied"] },
+    "code": { "enum": [null, "split_access_denied", "split_consumed"] },
+    "candidate_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "case_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+  },
+  "allOf": [
+    { "if": { "properties": { "kind": { "const": "ledger" } } }, "then": { "required": ["limit", "manifest_sha256"] } },
+    { "if": { "properties": { "kind": { "const": "reservation" } } }, "then": { "required": ["attempt_id", "trial_id", "status", "limit"] } },
+    { "if": { "properties": { "kind": { "const": "result" } } }, "then": { "required": ["attempt_id", "outcome", "trace_sha256", "raw_ids"] } },
+    { "if": { "properties": { "kind": { "const": "split_access" } } }, "then": { "required": ["role", "split", "decision", "code", "candidate_sha256", "case_ids"] } },
+    { "if": { "properties": { "kind": { "const": "split_selection" } } }, "then": { "required": ["role", "candidate_sha256"] } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" }
+  }
+}

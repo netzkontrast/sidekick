@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-report.schema.json",
+  "title": "Eval-Bericht – Skill-Library V0",
+  "description": "Deskriptiver Bericht ausschließlich aus Rohdatensätzen (SLV0-EVAL-10, SLV0-INV-09). Jede Zahl trägt Zähler, Nenner und die Rohdatensatz-IDs. Ebenen M0–M5 und R getrennt, Familien und Wiederholungen getrennt. R-Verstöße je Fall getrennt und nie mit anderen Ergebnissen verrechnet (SLV0-EVAL-11). Kein Score, keine Rangfolge, keine Aktivierungsempfehlung (SLV0-INV-06): additionalProperties ist überall false.",
+  "type": "object",
+  "required": ["schema_version", "bericht", "hinweis", "rohdaten", "ebenen", "r_pruefungen", "r_verstoesse"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "bericht": { "const": "sl-eval-report@1" },
+    "hinweis": { "type": "string" },
+    "rohdaten": {
+      "type": "object",
+      "required": ["anzahl", "rohdatensatz_ids", "eingabe_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "anzahl": { "type": "integer", "minimum": 1 },
+        "rohdatensatz_ids": { "$ref": "#/$defs/ids" },
+        "eingabe_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 über das kanonische JSON der nach run_id sortierten Rohdatensätze." }
+      }
+    },
+    "ebenen": {
+      "type": "object",
+      "propertyNames": { "enum": ["M0", "M1", "M2", "M3", "M4", "M5", "R"] },
+      "additionalProperties": { "$ref": "#/$defs/ebene" }
+    },
+    "r_pruefungen": {
+      "type": "array",
+      "description": "Je Fall, Variante und Regel: Verstöße (nicht_bestanden) von allen R-Assertions.",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "variante", "regel", "verstoesse", "unklar"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": { "type": "string" },
+          "variante": { "type": "string" },
+          "regel": { "type": "string" },
+          "verstoesse": { "$ref": "#/$defs/zahl" },
+          "unklar": { "$ref": "#/$defs/zahl" }
+        }
+      }
+    },
+    "r_verstoesse": {
+      "type": "array",
+      "description": "Jeder einzelne R-Verstoß mit Fundstelle.",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "family_id", "variante", "repeat_id", "regel", "assertion_id", "rohdatensatz_ids"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": { "type": "string" },
+          "family_id": { "type": "string" },
+          "variante": { "type": "string" },
+          "repeat_id": { "type": "integer" },
+          "regel": { "type": "string" },
+          "assertion_id": { "type": "string" },
+          "rohdatensatz_ids": { "$ref": "#/$defs/ids" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "zahl": {
+      "type": "object",
+      "required": ["zaehler", "nenner", "rohdatensatz_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "zaehler": { "type": "integer", "minimum": 0 },
+        "nenner": { "type": "integer", "minimum": 1 },
+        "rohdatensatz_ids": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "assertblock": {
+      "type": ["object", "null"],
+      "required": ["bestanden", "nicht_bestanden", "unklar"],
+      "additionalProperties": false,
+      "properties": {
+        "bestanden": { "$ref": "#/$defs/zahl" },
+        "nicht_bestanden": { "$ref": "#/$defs/zahl" },
+        "unklar": { "$ref": "#/$defs/zahl" }
+      }
+    },
+    "assertions": {
+      "type": "object",
+      "required": ["deterministisch", "rubrik"],
+      "additionalProperties": false,
+      "properties": {
+        "deterministisch": { "$ref": "#/$defs/assertblock" },
+        "rubrik": { "$ref": "#/$defs/assertblock" }
+      }
+    },
+    "tokensumme": {
+      "type": "object",
+      "required": ["wert", "quelle", "methode", "bezug", "beleg", "rohdatensatz_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "wert": { "type": ["integer", "null"], "minimum": 0 },
+        "quelle": { "enum": ["gemeldet", "geschaetzt", "unbekannt"] },
+        "methode": { "type": ["string", "null"] },
+        "bezug": { "type": "string" },
+        "beleg": { "type": ["string", "null"] },
+        "rohdatensatz_ids": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "ebene": {
+      "type": "object",
+      "required": ["laeufe", "assertions", "je_fall", "je_familie", "je_wiederholung", "skill_aufrufe", "katalog_unbekannt", "usage"],
+      "additionalProperties": false,
+      "properties": {
+        "laeufe": {
+          "type": "array",
+          "description": "Je Variante: abgeschlossene Läufe von allen Läufen.",
+          "items": {
+            "type": "object",
+            "required": ["variante", "abgeschlossen"],
+            "additionalProperties": false,
+            "properties": { "variante": { "type": "string" }, "abgeschlossen": { "$ref": "#/$defs/zahl" } }
+          }
+        },
+        "assertions": {
+          "type": "array",
+          "description": "Je Variante, ohne R-Assertions.",
+          "items": {
+            "type": "object",
+            "required": ["variante", "assertions"],
+            "additionalProperties": false,
+            "properties": { "variante": { "type": "string" }, "assertions": { "$ref": "#/$defs/assertions" } }
+          }
+        },
+        "je_fall": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["case_id", "variante", "assertions"],
+            "additionalProperties": false,
+            "properties": { "case_id": { "type": "string" }, "variante": { "type": "string" }, "assertions": { "$ref": "#/$defs/assertions" } }
+          }
+        },
+        "je_familie": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["family_id", "variante", "assertions"],
+            "additionalProperties": false,
+            "properties": { "family_id": { "type": "string" }, "variante": { "type": "string" }, "assertions": { "$ref": "#/$defs/assertions" } }
+          }
+        },
+        "je_wiederholung": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["case_id", "variante", "repeat_id", "assertions"],
+            "additionalProperties": false,
+            "properties": { "case_id": { "type": "string" }, "variante": { "type": "string" }, "repeat_id": { "type": "integer" }, "assertions": { "$ref": "#/$defs/assertions" } }
+          }
+        },
+        "skill_aufrufe": {
+          "type": "array",
+          "description": "Je Variante, Skill und Aktivierungsweg: Läufe mit bestätigtem Aufruf von allen Läufen der Variante. Keine Aussage, ob der Aufruf richtig war.",
+          "items": {
+            "type": "object",
+            "required": ["variante", "skill", "modus", "laeufe_mit_bestaetigtem_aufruf"],
+            "additionalProperties": false,
+            "properties": {
+              "variante": { "type": "string" },
+              "skill": { "type": ["string", "null"] },
+              "modus": { "enum": ["skill_tool", "file_read"] },
+              "laeufe_mit_bestaetigtem_aufruf": { "$ref": "#/$defs/zahl" }
+            }
+          }
+        },
+        "katalog_unbekannt": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["variante", "laeufe"],
+            "additionalProperties": false,
+            "properties": { "variante": { "type": "string" }, "laeufe": { "$ref": "#/$defs/zahl" } }
+          }
+        },
+        "usage": {
+          "type": "array",
+          "description": "Je Variante Summen der Lauf-Usage nach SLV0-TOK-05 (ein unbekannter Summand macht die Summe unbekannt).",
+          "items": {
+            "type": "object",
+            "required": ["variante", "input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"],
+            "additionalProperties": false,
+            "properties": {
+              "variante": { "type": "string" },
+              "input_tokens": { "$ref": "#/$defs/tokensumme" },
+              "output_tokens": { "$ref": "#/$defs/tokensumme" },
+              "cache_read_input_tokens": { "$ref": "#/$defs/tokensumme" },
+              "cache_creation_input_tokens": { "$ref": "#/$defs/tokensumme" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

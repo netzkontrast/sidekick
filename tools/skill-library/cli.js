@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-// Read-only CLI for the skill library (docs/spec/skill-library-v0.md, Stufe 0/1).
-// Subcommands: validate, hash, tokens, registry-check. JSON on stdout.
-// Exit codes (SLV0-VAL-17): 0 no error, 1 at least one error, 2 usage error or internal exception.
-// No network, no model, no writes (SLV0-INV-04, SLV0-INV-08).
+// CLI for the skill library (docs/spec/skill-library-v0.md, Stufe 0–2).
+// Subcommands: validate, hash, tokens, registry-check (read-only) and `eval …` (harness, lib/eval/).
+// JSON on stdout. Exit codes (SLV0-VAL-17): 0 no error, 1 at least one error or refusal,
+// 2 usage error or internal exception. No network, no model, no client start (SLV0-INV-04);
+// nothing under .agents/skills/ is written (SLV0-INV-08). Only `eval prepare`, `eval ledger
+// init|reserve|result` and `eval split access|select` write, only to explicit paths, never overwriting.
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -14,6 +16,7 @@ import { validatePackage } from './lib/package.js';
 import { validateProject, UsageError } from './lib/project.js';
 import { checkRegistry, loadSchema, DEFAULT_SCHEMA_PATH } from './lib/registry.js';
 import { countPackage, runUsageFromTrace, ESTIMATORS } from './lib/tokens.js';
+import { runEval, EVAL_USAGE } from './lib/eval/cli.js';
 
 const USAGE = `Aufruf: node tools/skill-library/cli.js <befehl> [optionen]
 
@@ -26,6 +29,7 @@ const USAGE = `Aufruf: node tools/skill-library/cli.js <befehl> [optionen]
   tokens --scope package PAKETORDNER... [--estimator ...] [--token-budget N]
   tokens --trace NORMALISIERTE-SPUR.json
   registry-check DATENSATZ.json... [--root DIR] [--schema-only] [--schema DATEI]
+${EVAL_USAGE}
 
 Ausgabe: JSON auf stdout. Exit 0 ohne Fehler, 1 mit Fehler, 2 bei Bedienfehler.`;
 
@@ -233,6 +237,7 @@ const COMMANDS = { validate: cmdValidate, hash: cmdHash, tokens: cmdTokens, 'reg
 
 export function run(argv) {
   try {
+    if (argv[0] === 'eval') return runEval(argv.slice(1));
     const parsed = parseArgs(argv);
     if (!parsed.command || parsed.command === '--help' || parsed.opts['--help']) {
       return { out: header('help', { usage: USAGE }), code: parsed.command ? 0 : 2 };

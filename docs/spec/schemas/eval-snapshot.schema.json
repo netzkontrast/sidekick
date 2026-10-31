@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-snapshot.schema.json",
+  "title": "Eval-Snapshot – Skill-Library V0",
+  "description": "Eingefrorene Kopie aller Paketdateien mit Dateihashes, Quellcommit und Paketsatz-Hash (docs/spec/skill-library-v0.md SLV0-EVAL-01/-02, SLV0-PKG-23). Form gleich dem Research-Helfer skill_pilot.py (freeze), damit vorhandene Baselines wie skill-pilot-baseline-v2.json gültig bleiben. Vor jeder Nutzung werden alle Hashes neu berechnet.",
+  "type": "object",
+  "required": ["schema_version", "source_commit", "files", "package_set_sha256"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,64}$",
+      "description": "Commit, aus dem die Dateien stammen; vom Aufrufer angegeben, vom Werkzeug nicht gegen Git geprüft."
+    },
+    "files": {
+      "type": "object",
+      "description": "Repo-relativer Pfad unter .agents/skills/ → Inhalt und SHA-256 der UTF-8-Bytes des Inhalts (SLV0-PKG-21).",
+      "propertyNames": { "type": "string", "pattern": "^\\.agents/skills/[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["content", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "content": { "type": "string" },
+          "sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "package_set_sha256": {
+      "$ref": "#/$defs/sha256",
+      "description": "SHA-256 über das kanonische JSON {Pfad: Dateihash} (SLV0-PKG-22/-23)."
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}
