@@ -19,7 +19,7 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings> …`;
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check> …`;
   startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
 - Belege einer Bewertung prüfen: `node tools/skill-library/cli.js eval judge check BEWERTUNG.json --outputs BLIND-VERZ [--fixtures FAMILIEN-VERZ]`
@@ -28,6 +28,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
   `… eval nullrun --b1-kern KERNURTEILE.json` (Exit 1 = kein Kandidatenstart). Prüfungen gegen ein Arbeitsverzeichnis:
   `… eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]`. Erwartete Befunde und Überberichtung: `… eval findings --case FALLORDNER AUSGABE.md…`.
   Einzeltests: `node --test tools/skill-library/test/eval-nullrun.test.js` (ebenso `eval-trennschaerfe`, `eval-findings`).
+- Belegabdeckung eines Berichts am Commit: `node tools/skill-library/cli.js eval cite-check --repo REPO-VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]… [--github OWNER/REPO]`
+  („X von Y Dateien belegt; nicht belegt: …“; Exit 1 bei falschem SHA, Bereich hinter dem Dateiende oder fehlender Datei). Einzeltest: `node --test tools/skill-library/test/eval-citecheck.test.js`
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`

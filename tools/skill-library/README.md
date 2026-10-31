@@ -52,14 +52,15 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/normalize.js` | Positivliste für Client-Spuren (JSONL oder skill-pilot-v1) | EVAL-08, INV-05 |
 | `lib/eval/raw.js`, `lib/eval/report.js` | Rohdatensatz je Start; Bericht nur aus Rohdaten, R-Verstöße getrennt | EVAL-09…11, INV-06/-09 |
 | `lib/eval/rubric.js` | Rubrik je Skill: Struktur, eindeutige IDs, Hashbindung, Bindung von Rohdatensätzen, Versionsmischung | EVAL-13…15 |
-| `lib/eval/git.js` | Abgleich des Quellcommits mit `git rev-parse HEAD` und `git status`; einziges Modul mit Prozessstart (nur `git`) | EVAL-18 |
+| `lib/eval/git.js` | Abgleich des Quellcommits mit `git rev-parse HEAD` und `git status`; Commit auflösen, Baum und Blobs lesen (`rev-parse`, `ls-tree`, `cat-file`); einziges Modul mit Prozessstart (nur `git`, nur lesend) | EVAL-18, -28 |
 | `lib/eval/textmatch.js` | Normalisierung `sl-judge-norm@1`, Fragmente, Wiederfund in Reihenfolge, Wortgrenzen | EVAL-20, -26 |
 | `lib/eval/judge.js` | Belegprüfung einer Bewertung (neues und älteres Format) | EVAL-19…21 |
 | `lib/eval/tree.js`, `lib/eval/casedir.js` | Dateibäume ohne Symlink-Folgen, Baumvergleich; Fallordner `fall.json` + `fixture/` | EVAL-22 |
 | `lib/eval/checks.js` | Prüfformat, `eval check`, Nulllauf, B1-Vorlauf | EVAL-22…25 |
 | `lib/eval/findings.js` | Einheiten, 1:1-Zuordnung erwarteter Befunde, Überberichtung | EVAL-26/-27 |
+| `lib/eval/citecheck.js` | Segmentregister am Commit, Zitate (Permalinks, Fundstellen, Commit-Wörter) gegen Git, Abdeckung | EVAL-28…30 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
-| `test/` | je Fall SLV0-FALL-01…46 und -48…59 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
+| `test/` | je Fall SLV0-FALL-01…46 und -48…65 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -86,7 +87,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
 
-## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…27)
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…30)
 
 Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
 Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
@@ -140,6 +141,21 @@ $B eval findings --case FALLORDNER ausgabe.md…                                
 
 Formate: [Bewertung](../../docs/spec/schemas/eval-judgement.schema.json), [Fall `fall.json`](../../docs/spec/schemas/eval-case.schema.json),
 [Kernurteile B1-Vorlauf](../../docs/spec/schemas/eval-b1-vorlauf.schema.json); Spec §7.2–§7.4.
+
+Belegabdeckung eines Research-Berichts am Commit (SLV0-EVAL-28…30, Paket P5, nur lesend; Spec §7.5):
+
+```sh
+$B eval cite-check --repo ../fremd-repo --commit 1780d46a73e485cbad4d0a48c019475d8be9193e \
+                   research/…/repos/fremd-repo.md [--scope plugins/] [--scope '**/*.md'] [--github owner/repo]
+```
+
+Das Register sind alle regulären Dateien am Commit (eingeschränkt durch `--scope`). Jeder GitHub-Permalink
+(`…/blob/<sha>/<pfad>#La-Lb`), jede Fundstelle `pfad:zeile[-zeile]` bzw. `pfad#Lx[-Ly]` und jedes Commit-Wort im Bericht wird gegen Git
+geprüft. Ausgabe: `abdeckung` („X von Y Dateien belegt; nicht belegt: …“), `belegt` mit zusammengeführten Zeilenbereichen, `nicht_belegt`,
+`zitate` mit Berichtszeile und Ergebnis (`gueltig`, `ungueltig`, `ausserhalb_bereich`, `fremd`), `commit_woerter`, `zaehlung`.
+Exit 1 bei einem ungültigen Zitat (`commit_unknown`, `sha_mismatch`, `ref_not_pinned`, `path_missing`, `path_ambiguous`, `range_out_of_bounds`)
+oder unbekanntem `--commit`; nicht belegte Dateien und die Warnung `commit_unverified` ändern den Exit-Code nicht. Exit 2 bei Bedienfehlern
+(kein Git-Repository, `--commit` nicht hexadezimal, Bereich unsicher oder ohne Treffer).
 
 **Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw` und `report` geben bei Erfolg das Artefakt selbst
 als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
@@ -250,7 +266,7 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   lauten, wie `prepare` sie bildet. Ohne Ergebniseintrag genügt die Reservierung; `outcome` wird nicht gegen `status` geprüft.
 - **`prepare --manifest`:** Das Manifest wird wie bei `split check` geprüft (Schema, `family_split_overlap`). Alle Fälle werden
   vor dem Abbruch gesammelt. `trials.json` nennt `split_manifest_sha256`, und der `split` jedes Versuchs kommt aus dem Manifest.
-- **Git:** `git --no-optional-locks -c core.fsmonitor=false -C <root> rev-parse|status`; die Ausgabe nennt höchstens fünf
+- **Git:** `git --no-optional-locks -c core.fsmonitor=false -C <root> rev-parse|status` (für `cite-check` zusätzlich `ls-tree|cat-file`); die Ausgabe nennt höchstens fünf
   unsaubere Pfade. Der Importtest erlaubt `node:child_process` nur in `lib/eval/git.js` und dort nur `execFileSync('git', …)`.
 
 ### Auslegungen zu Belegen, Trennschärfe und Befunden (SLV0-EVAL-19…27)
@@ -279,6 +295,23 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 - **Überberichtung:** Nur Pfade mit Dateiendung; Pfadende ab Segmentgrenze (`retry.py` passt auf `vendor/x/retry.py`); bei mehreren passenden
   Dateien genügt eine mit genügend Zeilen. Commits nur in Kleinschreibung; bekannt sind Hex-Wörter (7–40 Zeichen) aus den Fixture-Dateien.
 
+### Auslegungen zur Belegabdeckung (SLV0-EVAL-28…30)
+
+- **Belegt statt gelesen:** Der Portierungsplan spricht von „X von Y, nicht gelesen“. Das Werkzeug sieht nur den Bericht, also zählt es
+  belegte Dateien; ob eine nicht belegte Datei gelesen wurde, bleibt offen. Segmente sind Dateien; Zeilenbereiche werden je Datei
+  zusammengeführt ausgegeben, aber nicht in feste Abschnitte zerlegt.
+- **Commit:** `--commit` nur als 7–40 Hex-Zeichen (keine Ref-Namen wie `HEAD`, damit der Bericht an einen festen Stand gebunden bleibt);
+  Abkürzungen werden über `rev-parse` aufgelöst, mehrdeutige gelten als unbekannt. Ein Permalink mit anderem, aber bekanntem Commit ist
+  `sha_mismatch`; Fundstellen ohne URL beziehen sich immer auf `--commit`.
+- **Fundstellen:** gleiche Erkennung wie die Überberichtung (`findings.js`, Pfad mit Dateiendung); genauer Pfad vor Pfadende; passt das Pfadende
+  auf mehrere Dateien, ist das `path_ambiguous` (anders als in `findings`, wo eine passende Datei genügt). Der Linktext eines Permalinks wird,
+  wenn er selbst wie `pfad:zeile` aussieht, zusätzlich als Fundstelle gezählt.
+- **Permalinks:** nur `github.com/…/blob/…`; Anker `#L…` mit optionaler Spalte `C…`; ein anderer Anker (z. B. eine Überschrift) macht den Link zu
+  keinem Zitat. Ohne `--github` werden alle Permalinks gegen `--repo` geprüft, also auch solche auf andere Repos (dann meist `commit_unknown`).
+- **Register:** Git-Modus `100644`/`100755`; Symlinks und Submodule gehören nicht dazu, ein Zitat darauf ist `path_missing`. Ein Glob-Bereich
+  mit `/` am Ende trifft alles unterhalb der passenden Ordner. Zeilenzahl wie §7.4 über `git cat-file blob`, nur für zitierte Dateien.
+- **Commit-Wörter:** unbekannte Hex-Wörter sind nur eine Warnung (`commit_unverified`), weil ein Hex-Wort auch ein gekürzter Inhaltshash sein kann.
+
 ## Nicht umgesetzt
 
 - Keine Bewertung: Weder Harness noch Rubrik urteilen; Bewerter-Session, Modellfixierung und menschliche Stichprobe (SL1 §7)
@@ -295,4 +328,6 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 - Trennschärfe: Negativkontroll-Familie je Kandidat und die Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion (Spec O-12).
   `eval raw` übernimmt `trennschaerfe` und `rolle` nur aus den Metadaten (z. B. aus `eval check`), prüft sie aber nicht gegen einen Nulllauf.
   Der B1-Vorlauf erzeugt keine Ledger-Einträge und sperrt keine Kandidatenstarts technisch.
-- Überberichtung prüft gegen den Fixture-Text, nicht gegen einen Git-Stand (das ist P5 `cite-check`, Spec O-13).
+- Überberichtung (`eval findings`) prüft weiter gegen den Fixture-Text, nicht gegen einen Git-Stand; gegen Git prüft `eval cite-check` (Spec O-13, teilweise gelöst).
+- `cite-check` hat keine Schwelle und keinen Schalter, der nicht belegte Dateien zum Fehler macht; ob eine Abdeckung genügt, entscheidet das Verfahren.
+  Andere Hosts als GitHub, relative Markdown-Links mit Zeilenanker und Zitate auf Ordner (`tree/`) werden nicht erkannt.

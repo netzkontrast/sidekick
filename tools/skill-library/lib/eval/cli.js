@@ -20,6 +20,7 @@ import { readJudgement, checkJudgement } from './judge.js';
 import { loadCaseDir, loadCaseDirs } from './casedir.js';
 import { nullRun, checkWorkspace, b1Precheck } from './checks.js';
 import { findingsCheck } from './findings.js';
+import { citeCheck } from './citecheck.js';
 import { requireDir } from './tree.js';
 import { validateProject } from '../project.js';
 
@@ -48,15 +49,17 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]
   eval nullrun --cases FALLORDNER|VERZ
   eval nullrun --b1-kern KERNURTEILE.json
-  eval findings --case FALLORDNER AUSGABE.md...`;
+  eval findings --case FALLORDNER AUSGABE.md...
+  eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]`;
 
 const VALUE_OPTS = new Set([
   '--root', '--source-commit', '--source', '--snapshot', '--candidates', '--id', '--cases', '--project-config',
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
   '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
+  '--repo', '--commit', '--github',
 ]);
-const MULTI_OPTS = new Set(['--raw-id', '--rubric-version']);
+const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope']);
 const FLAG_OPTS = new Set(['--verify-git']);
 
 function parse(argv) {
@@ -349,6 +352,21 @@ const SUB = {
     if (new Set(names).size !== names.length) throw new UsageError('zwei Ausgabedateien mit gleichem Namen');
     const res = findingsCheck(loadCaseDir(a.opts['--case']), outputs);
     return { out: { checked_level: 'Erwartete Befunde und Überberichtung (SLV0-EVAL-26/-27)', ...res, messages: [] } };
+  },
+
+  'cite-check'(a) {
+    expect(a, ['--repo', '--commit', '--scope', '--github'], ['--repo', '--commit'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval cite-check braucht genau eine Berichtsdatei');
+    const file = a.positional[0];
+    const { result, code } = citeCheck({
+      repo: requireDir(a.opts['--repo'], '--repo'),
+      commit: a.opts['--commit'],
+      reportText: readText(file),
+      reportLabel: displayPath(process.cwd(), file),
+      scopes: a.multi['--scope'] ?? [],
+      github: a.opts['--github'] ?? null,
+    });
+    return { out: { checked_level: 'Belegabdeckung am Commit (SLV0-EVAL-28…30)', ...result }, code };
   },
 };
 
