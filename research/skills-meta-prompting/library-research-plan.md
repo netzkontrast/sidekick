@@ -193,7 +193,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | geplant |
 | P11 | Fail-closed `context-pack` (code2prompt) | geplant |
 | P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | geplant; Owner-Review der V0-Spec |
-| E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | läuft: Select ausgeführt (8/30 Starts), Bewertung läuft |
+| E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | abgeschlossen: beide **verworfen, kein Vorteil** (Select schlechter, B1 erfüllt den Kern bereits); Abbruch vor Test, 8/30 Starts; Testfamilien ungelaufen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)) |
 | DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | läuft |
 
 ## 9. Drei spätere durchgängige Versuche (SL5)
