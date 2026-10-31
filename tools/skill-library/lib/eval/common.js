@@ -54,6 +54,18 @@ export const EVAL_RULES = {
   nested_repository: 'SLV0-EVAL-32',
   file_not_text: 'SLV0-EVAL-32',
   output_exists: 'SLV0-EVAL-34',
+  block_missing: 'SLV0-EVAL-39',
+  block_duplicate: 'SLV0-EVAL-39',
+  block_heading_variant: 'SLV0-EVAL-39',
+  block_empty: 'SLV0-EVAL-39',
+  block_malformed: 'SLV0-EVAL-39',
+  evidence_level_unknown: 'SLV0-EVAL-40',
+  source_role_unknown: 'SLV0-EVAL-40',
+  evidence_role_mismatch: 'SLV0-EVAL-40',
+  citation_missing: 'SLV0-EVAL-40',
+  citation_invalid: 'SLV0-EVAL-40',
+  injection_not_reported: 'SLV0-EVAL-41',
+  injection_declared_none: 'SLV0-EVAL-41',
 };
 
 /** Codes reported as warnings: they never change the exit code (spec §8). */

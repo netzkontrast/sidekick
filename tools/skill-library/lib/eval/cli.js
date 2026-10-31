@@ -22,6 +22,7 @@ import { nullRun, checkWorkspace, b1Precheck } from './checks.js';
 import { findingsCheck } from './findings.js';
 import { citeCheck } from './citecheck.js';
 import { buildContextPack, renderBundle, writeBundle } from './contextpack.js';
+import { contractCheck } from './contract.js';
 import { ESTIMATORS } from '../tokens.js';
 import { requireDir } from './tree.js';
 import { validateProject } from '../project.js';
@@ -53,6 +54,7 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval nullrun --b1-kern KERNURTEILE.json
   eval findings --case FALLORDNER AUSGABE.md...
   eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]
+  eval contract check --contract researching-repositories@2|@1 BERICHT.md [--repo VERZ --commit SHA] [--case FALLORDNER]
   eval context-pack --allowlist DATEI [--root VERZ] [--deny MUSTER]... [--estimator utf8-bytes-div-4@1]
                     [--output NEUE-DATEI.md]                                    Datensatz (stdout)`;
 
@@ -61,7 +63,7 @@ const VALUE_OPTS = new Set([
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
   '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
-  '--repo', '--commit', '--github', '--allowlist', '--estimator',
+  '--repo', '--commit', '--github', '--allowlist', '--estimator', '--contract',
 ]);
 const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope', '--deny']);
 const FLAG_OPTS = new Set(['--verify-git']);
@@ -373,6 +375,23 @@ const SUB = {
     return { out: { checked_level: 'Belegabdeckung am Commit (SLV0-EVAL-28…30)', ...result }, code };
   },
 
+  contract(a) {
+    const action = a.positional.shift();
+    if (action !== 'check') throw new UsageError('eval contract braucht check');
+    expect(a, ['--contract', '--repo', '--commit', '--case'], ['--contract'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval contract check braucht genau eine Berichtsdatei');
+    const file = a.positional[0];
+    const { result, code } = contractCheck({
+      contractId: a.opts['--contract'],
+      reportText: readText(file),
+      reportLabel: displayPath(process.cwd(), file),
+      repo: a.opts['--repo'] !== undefined ? requireDir(a.opts['--repo'], '--repo') : null,
+      commit: a.opts['--commit'] ?? null,
+      caseDir: a.opts['--case'] !== undefined ? loadCaseDir(a.opts['--case']) : null,
+    });
+    return { out: { checked_level: 'Ausgabevertrag (SLV0-EVAL-39…42)', ...result }, code, sub: 'contract check' };
+  },
+
   'context-pack'(a) {
     expect(a, ['--allowlist', '--root', '--deny', '--estimator', '--output'], ['--allowlist']);
     const estimator = a.opts['--estimator'] ?? null;
@@ -417,7 +436,7 @@ export function runEval(argv) {
     return { out: header(res.sub ?? sub, res.out), code: res.code ?? 0 };
   } catch (err) {
     if (!(err instanceof EvalRefusal)) throw err;
-    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric' || sub === 'judge') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
+    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric' || sub === 'judge' || sub === 'contract') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
     return { out: header(action, { refused: true, ...err.extra, messages: err.messages }), code: 1 };
   }
 }

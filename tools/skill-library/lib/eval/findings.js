@@ -80,6 +80,33 @@ export function hexWords(text) {
   return text.split(/\s+/u).map((t) => t.replace(EDGE_PUNCT, '')).filter((t) => HEX.test(t));
 }
 
+/** Fixture files [{path, text, lines}] and the hex words they contain (known commits, §7.4). */
+export function fixtureIndex(fixtureDir) {
+  const files = [...readTree(fixtureDir).entries()].filter(([, e]) => e.kind === 'file')
+    .map(([p, e]) => { const t = entryText(e); return { path: p, text: t, lines: lineCount(t) }; });
+  const knownCommits = [...new Set(files.flatMap((f) => hexWords(f.text)))].sort(compareCodepoints);
+  return { files, knownCommits };
+}
+
+/** A commit word is known when a fixture hex word starts with it or it with the fixture word (§7.4). */
+export function commitKnown(word, knownCommits) {
+  return knownCommits.some((k) => k.startsWith(word) || word.startsWith(k));
+}
+
+/**
+ * Lookup of one reference (path, line range) in the fixture files (§7.4): null when a file with this
+ * path or path end holds the range, else the reason `pfad_fehlt` or `zeile_ausserhalb`.
+ */
+export function fixtureRefProblem(rawPath, start, end, files) {
+  let rel = rawPath;
+  while (rel.startsWith('./')) rel = rel.slice(2);
+  const segs = rel.split('/');
+  const cands = segs.includes('..') || segs.includes('.') ? [] : files.filter((f) => f.path === rel || f.path.endsWith(`/${rel}`));
+  if (cands.length === 0) return 'pfad_fehlt';
+  if (start < 1 || end < start || !cands.some((f) => end <= f.lines)) return 'zeile_ausserhalb';
+  return null;
+}
+
 /** Over-reports of one output against fixture files [{path, lines, text}] and known commits. */
 export function overReports(text, files, knownCommits) {
   const out = [];
@@ -87,20 +114,13 @@ export function overReports(text, files, knownCommits) {
   text.split(/\r\n|\r|\n/).forEach((rawLine, i) => {
     const line = rawLine.replace(URL, (u) => ' '.repeat(u.length));
     for (const m of line.matchAll(REF)) {
-      const verweis = m[0];
-      let rel = m[1];
-      while (rel.startsWith('./')) rel = rel.slice(2);
-      const segs = rel.split('/');
-      const cands = segs.includes('..') || segs.includes('.') ? [] : files.filter((f) => f.path === rel || f.path.endsWith(`/${rel}`));
       const start = Number(m[2] ?? m[4]);
-      const end = Number(m[3] ?? m[5] ?? start);
-      if (cands.length === 0) out.push({ code: 'ueberberichtung', rule, grund: 'pfad_fehlt', verweis, zeile: i + 1 });
-      else if (start < 1 || end < start || !cands.some((f) => end <= f.lines)) out.push({ code: 'ueberberichtung', rule, grund: 'zeile_ausserhalb', verweis, zeile: i + 1 });
+      const grund = fixtureRefProblem(m[1], start, Number(m[3] ?? m[5] ?? start), files);
+      if (grund !== null) out.push({ code: 'ueberberichtung', rule, grund, verweis: m[0], zeile: i + 1 });
     }
     for (const w of hexWords(line)) {
       if (!/[0-9]/.test(w) || !/[a-f]/.test(w)) continue;
-      const known = knownCommits.some((k) => k.startsWith(w) || w.startsWith(k));
-      if (!known) out.push({ code: 'ueberberichtung', rule, grund: 'commit_unbekannt', verweis: w, zeile: i + 1 });
+      if (!commitKnown(w, knownCommits)) out.push({ code: 'ueberberichtung', rule, grund: 'commit_unbekannt', verweis: w, zeile: i + 1 });
     }
   });
   return out;
@@ -111,9 +131,7 @@ export function overReports(text, files, knownCommits) {
  * Returns {case_id, erwartete_befunde, kritisch, ausgaben}.
  */
 export function findingsCheck({ caseObj, fixtureDir }, outputs) {
-  const files = [...readTree(fixtureDir).entries()].filter(([, e]) => e.kind === 'file')
-    .map(([p, e]) => { const t = entryText(e); return { path: p, text: t, lines: lineCount(t) }; });
-  const knownCommits = [...new Set(files.flatMap((f) => hexWords(f.text)))].sort(compareCodepoints);
+  const { files, knownCommits } = fixtureIndex(fixtureDir);
   const befunde = caseObj.erwartete_befunde ?? [];
   const gewicht = (b) => b.gewicht ?? 'normal';
   const ausgaben = outputs.map(({ name, text }) => {
