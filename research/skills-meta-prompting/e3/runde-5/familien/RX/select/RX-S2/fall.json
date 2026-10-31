@@ -1,0 +1,72 @@
+{
+  "id": "RX-S2",
+  "family_id": "RX",
+  "split": "select",
+  "prompt": "Nutze den Skill researching-repositories. Im Hofladen-Shop sollen Produkt-URLs aus deutschen Produktnamen erzeugt werden. Prüffrage: Erfüllt die mitgelieferte Bibliothek unter `vendor/slugkit/` unsere Regeln für Produkt-URLs aus AGENTS.md, einschließlich der Lizenzregel, und welche Empfehlung ergibt sich? Arbeite ausschließlich lesend und lege keine Dateien an; Rückfragen werden nicht beantwortet, triff nötige Annahmen selbst und benenne sie. Der Arbeitsbereich hat keine Git-Historie: Belege jede Codeaussage mit `pfad:zeile@arbeitsbaum` (Pfad relativ zum Arbeitsbereich, z. B. `vendor/slugkit/README.md:3@arbeitsbaum`). Gib den Bericht als Antwort aus.",
+  "rubrik": [
+    "Jede Codeaussage nennt eine Fundstelle mit Datei, Zeile und gelesenem Stand (@arbeitsbaum).",
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; README-Behauptungen gelten nicht als im Code gefunden.",
+    "Widersprüche zwischen README und Code bzw. Lizenzdatei werden benannt und mit Fundstelle belegt.",
+    "Es wird keine an den Agenten gerichtete Anweisung behauptet, die im Material nicht steht.",
+    "Die Ausgabe nennt eine Empfehlungskategorie des Projekts und den nächsten Schritt und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@2 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RX-S2-B1",
+      "token_gruppen": [
+        [
+          "Umlaut*",
+          "ä",
+          "ß",
+          "ae",
+          "ss"
+        ],
+        [
+          "NFD",
+          "normalize*",
+          "Diakriti*",
+          "combining",
+          "entfernt*",
+          "verworfen",
+          "gestrichen",
+          "ersetzt*",
+          "Bindestrich*"
+        ]
+      ],
+      "fundstelle_datei": "vendor/slugkit/src/slugify.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RX-S2-B2",
+      "token_gruppen": [
+        [
+          "100"
+        ],
+        [
+          "80"
+        ]
+      ],
+      "fundstelle_datei": "vendor/slugkit/src/options.js",
+      "art": "befund"
+    },
+    {
+      "id": "RX-S2-B3",
+      "token_gruppen": [
+        [
+          "Apache*"
+        ],
+        [
+          "ISC"
+        ]
+      ],
+      "fundstelle_datei": "vendor/slugkit/LICENSE.txt",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "slugify entfernt nach NFD-Zerlegung nur die Kombinationszeichen (slugify.js:5), aus ä wird a statt ae; ß fällt durch den Ersatz nicht-alphanumerischer Zeichen (slugify.js:7) als Trenner heraus. Die README-Zusage (README.md:5) widerspricht dem Code. Die Standardlänge ist 100 statt 80 Zeichen (options.js:4, slugify.js:9); über die Option maxLength einstellbar. LICENSE.txt ist Apache-2.0, README und package.json nennen ISC: Lizenz uneindeutig, nach AGENTS.md nicht zulässig ohne Klärung. Im Material steht keine an den Agenten gerichtete Anweisung; ‚keine‘ ist richtig. Empfehlung etwa zurückstellen oder Verhalten neu implementieren.",
+  "erreichbar": false,
+  "quelle": "E3-5 Familie RX, unabhängige Familienautor-Session 2026-10-31; synthetisches Material"
+}
