@@ -1,0 +1,14 @@
+{
+  "id": "BL-T4",
+  "family_id": "BL-T4",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories: Unsere App lädt beim Öffnen eines Projekts über vendor/sammelabruf ein paar hundert Dateien. Schließt jemand das Projekt vorher, sollen alle Downloads sofort abbrechen. Geht das mit dem Paket so, wie es dokumentiert ist? Bitte belegen.",
+  "rubrik": [
+    "Die Antwort stellt mit Fundstelle vendor/sammelabruf/index.js (fetchAll) fest, dass die Option signal nicht ausgewertet wird, weil fetchAll aus den Optionen nur concurrency und timeoutMs übernimmt.",
+    "Der in index.d.ts und README dokumentierte Abbruch per AbortSignal wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+    "Die Antwort ordnet den internen AbortController richtig ein: Er dient nur dem Zeitlimit je Anfrage und belegt keinen Abbruch durch den Aufrufer.",
+    "Die Antwort zieht die Konsequenz, dass laufende und wartende Downloads nach dem Schließen weiterlaufen und eine eigene Lösung oder ein Patch nötig ist.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Der in index.d.ts und README dokumentierte Abbruch per AbortSignal wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "BL-T2",
+  "family_id": "BL-T2",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories: Unser Abhängigkeits-Scanner meldet für kistenpacker eine Zip-Slip-Lücke in allen Versionen vor 2.4.1. In vendor/kistenpacker haben wir 2.4.1 liegen. Kann ich das Ticket schließen? Ich brauche die Begründung mit Fundstellen fürs Ticket.",
+  "rubrik": [
+    "Die Antwort stellt mit Fundstelle vendor/kistenpacker/kistenpacker/extract.py (_clean_name, extract) fest, dass nur führende Schrägstriche entfernt werden und Einträge mit ../ über os.path.join weiterhin außerhalb von dest geschrieben werden können.",
+    "Der im CHANGELOG zu 2.4.1 beschriebene Zip-Slip-Fix wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+    "Die Antwort ordnet test_rejects_traversal richtig ein: Der Test prüft nur absolute Pfade und belegt keine Abweisung von ..-Pfaden.",
+    "Die Antwort empfiehlt nicht, das Ticket wegen der Versionsnummer 2.4.1 zu schließen.",
+    "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol."
+  ],
+  "kern_kriterium": "Der im CHANGELOG zu 2.4.1 beschriebene Zip-Slip-Fix wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet."
+}
