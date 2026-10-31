@@ -64,10 +64,88 @@
       }
     },
     "client_cost_estimate_usd": { "type": ["number", "null"], "minimum": 0 },
+    "cost_balance": {
+      "type": ["object", "null"],
+      "description": "Kostenbilanz je Turn und Ereignisklasse (SLV0-EVAL-31/-32, Spec §7.6). Nur Größen, keine Inhalte. null beim Import aus skill-pilot-v1. Optional, damit frühere normalisierte Spuren gültig bleiben; die Normalisierung setzt das Feld immer.",
+      "required": ["method", "turns", "turn_usage_sum", "usage_remainder", "classes", "bytes_total", "bytes_x_later_turns_total"],
+      "additionalProperties": false,
+      "properties": {
+        "method": { "const": "sl-eval-cost-balance@1" },
+        "turns": {
+          "type": "array",
+          "description": "Je Modellantwort der Hauptsitzung (gleiche message.id) die Usage des letzten Ereignisses, wie gemeldet; fehlendes Feld null.",
+          "items": {
+            "type": "object",
+            "required": ["turn", "usage"],
+            "additionalProperties": false,
+            "properties": {
+              "turn": { "type": "integer", "minimum": 1 },
+              "usage": {
+                "type": "object",
+                "description": "Usage des Turns.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/count" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/count" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/count" },
+                  "output_tokens": { "$ref": "#/$defs/count" }
+                }
+              }
+            }
+          }
+        },
+        "turn_usage_sum": {
+          "type": "object",
+          "description": "Summe über die Turns je Feld; null, sobald ein Turn das Feld nicht meldet oder es keinen Turn gibt.",
+          "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/count" },
+            "cache_creation_input_tokens": { "$ref": "#/$defs/count" },
+            "cache_read_input_tokens": { "$ref": "#/$defs/count" },
+            "output_tokens": { "$ref": "#/$defs/count" }
+          }
+        },
+        "usage_remainder": {
+          "type": "object",
+          "description": "Gesamt-Usage (usage) minus Turn-Summe je Feld, vorzeichenbehaftet; null, wenn eines unbekannt ist.",
+          "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/signed" },
+            "cache_creation_input_tokens": { "$ref": "#/$defs/signed" },
+            "cache_read_input_tokens": { "$ref": "#/$defs/signed" },
+            "output_tokens": { "$ref": "#/$defs/signed" }
+          }
+        },
+        "classes": {
+          "type": "array",
+          "description": "Je Ereignisklasse Blockzahl, Bytes (UTF-8) und Bytes × Folgeturns; Summen gleich den Gesamtwerten (Invariante SLV0-EVAL-32).",
+          "items": {
+            "type": "object",
+            "required": ["class", "blocks", "bytes", "bytes_x_later_turns"],
+            "additionalProperties": false,
+            "properties": {
+              "class": {
+                "type": "string",
+                "pattern": "^(skill_laden|datei_lesen|assistant_text|assistant_denken|assistant_werkzeugaufruf|nutzer_text|unteragent|nicht_zuordenbar|tool_ergebnis:[A-Za-z0-9_.:-]{1,128})$"
+              },
+              "blocks": { "type": "integer", "minimum": 1 },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "bytes_x_later_turns": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "bytes_total": { "type": "integer", "minimum": 0 },
+        "bytes_x_later_turns_total": { "type": "integer", "minimum": 0 }
+      }
+    },
     "quality_scored": { "const": false }
   },
   "$defs": {
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-    "count": { "type": ["integer", "null"], "minimum": 0 }
+    "count": { "type": ["integer", "null"], "minimum": 0 },
+    "signed": { "type": ["integer", "null"] }
   }
 }

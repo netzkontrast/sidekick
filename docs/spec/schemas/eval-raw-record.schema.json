@@ -137,6 +137,81 @@
         }
       }
     },
+    "kostenbilanz": {
+      "type": ["object", "null"],
+      "description": "Aus der normalisierten Spur übernommene Kostenbilanz (SLV0-EVAL-33); nicht aus Metadaten. null ohne Bilanz. Optional, damit frühere Rohdatensätze gültig bleiben; eval raw setzt das Feld immer.",
+      "required": ["verfahren", "turns", "usage_summe_turns", "usage_rest", "klassen", "bytes_gesamt", "bytes_mal_folgeturns_gesamt"],
+      "additionalProperties": false,
+      "properties": {
+        "verfahren": { "const": "sl-eval-cost-balance@1" },
+        "turns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["turn", "usage"],
+            "additionalProperties": false,
+            "properties": {
+              "turn": { "type": "integer", "minimum": 1 },
+              "usage": {
+                "type": "object",
+                "description": "Usage des Turns, wie gemeldet.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+                  "output_tokens": { "$ref": "#/$defs/anzahl_oder_null" }
+                }
+              }
+            }
+          }
+        },
+        "usage_summe_turns": {
+          "type": "object",
+          "description": "Summe über die Turns je Feld.",
+          "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+            "cache_creation_input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+            "cache_read_input_tokens": { "$ref": "#/$defs/anzahl_oder_null" },
+            "output_tokens": { "$ref": "#/$defs/anzahl_oder_null" }
+          }
+        },
+        "usage_rest": {
+          "type": "object",
+          "description": "Lauf-Usage minus Turn-Summe, vorzeichenbehaftet.",
+          "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/ganzzahl_oder_null" },
+            "cache_creation_input_tokens": { "$ref": "#/$defs/ganzzahl_oder_null" },
+            "cache_read_input_tokens": { "$ref": "#/$defs/ganzzahl_oder_null" },
+            "output_tokens": { "$ref": "#/$defs/ganzzahl_oder_null" }
+          }
+        },
+        "klassen": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["klasse", "bloecke", "bytes", "bytes_mal_folgeturns"],
+            "additionalProperties": false,
+            "properties": {
+              "klasse": {
+                "type": "string",
+                "pattern": "^(skill_laden|datei_lesen|assistant_text|assistant_denken|assistant_werkzeugaufruf|nutzer_text|unteragent|nicht_zuordenbar|tool_ergebnis:[A-Za-z0-9_.:-]{1,128})$"
+              },
+              "bloecke": { "type": "integer", "minimum": 1 },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "bytes_mal_folgeturns": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "bytes_gesamt": { "type": "integer", "minimum": 0 },
+        "bytes_mal_folgeturns_gesamt": { "type": "integer", "minimum": 0 }
+      }
+    },
     "latenz_ms": { "type": ["integer", "null"], "minimum": 0 },
     "fehler": { "type": ["string", "null"], "maxLength": 512 },
     "normalisierer": { "const": "sl-eval-normalize@1" }
@@ -144,6 +219,8 @@
   "$defs": {
     "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "anzahl_oder_null": { "type": ["integer", "null"], "minimum": 0 },
+    "ganzzahl_oder_null": { "type": ["integer", "null"] },
     "ref": { "type": ["string", "null"], "pattern": "^[^\\n\\r]{1,512}$", "description": "Verweis (Pfad oder ID) auf eine gespeicherte Datei, keine Inline-Kopie." },
     "token": {
       "type": "object",

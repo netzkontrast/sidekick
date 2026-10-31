@@ -8,6 +8,7 @@
 > Version 0.2 · 31.10.2026 · Ergänzung **SLV0-EVAL-13…18** (Rubrik je Skill nach K5.6, Querprüfungen Ledger/Manifest/Git) und Fälle **SLV0-FALL-38…46**; bestehende IDs unverändert.
 > Version 0.3 · 31.10.2026 · Ergänzung **SLV0-EVAL-19…27** nach den Paketen P1–P3 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`, Research-Branch `research/e3-runde-2`, PR #20): belegpflichtige Bewertungen, Nulllauf-Trennschärfe mit Gegenkriterium und B1-Vorlauf, erwartete Befunde mit Überberichtung; Formate §7.2–§7.4, Fälle **SLV0-FALL-48…59** (§9.1). Bestehende IDs unverändert.
 > Version 0.4 · 31.10.2026 · Ergänzung **SLV0-EVAL-28…30** nach Paket P5 des Portierungsplans (Abdeckungsnachweis über ein Segmentregister, Konzept aus recursive-decomposition-skill): `eval cite-check` prüft die Zitate eines Berichts gegen einen Git-Commit; Format §7.5, Fälle **SLV0-FALL-60…65** (§9.2); O-13 teilweise gelöst. Bestehende IDs unverändert.
+> Version 0.5 · 31.10.2026 · Ergänzung **SLV0-EVAL-31…34** nach Paket P4 des Portierungsplans (Kostenbilanz je Kontextklasse × Turns, Konzept aus skill-cost-optimizer): `eval normalize` behält Usage je Turn und Bytegrößen je Ereignisklasse, `eval raw` übernimmt sie, `eval report` zeigt Summen und Differenzen je Klasse sowie Kosten je erfülltem Kriterium; Format §7.6, Fälle **SLV0-FALL-66…70** (§9.3). Alle neuen Felder sind optional; bestehende IDs, Spuren, Rohdatensätze und Berichte bleiben gültig.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -175,6 +176,10 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-28 | **Segmentregister am Commit:** Der Suchraum eines Berichts wird einmal aufgezählt: alle regulären Dateien (Git-Modus `100644` oder `100755`; keine Symlinks, keine Submodule) im Baum des angegebenen Commits, optional eingeschränkt durch Bereiche (`--scope`: Pfadpräfix oder Glob mit `*`, `**`, `?`; §7.5). Ein Segment ist eine Datei mit ihren Zeilen 1…n (Zeilenzählung wie §7.4). Der Commit wird als 7–40 Hex-Zeichen angegeben und über Git aufgelöst; nennt er keinen eindeutigen Commit → `commit_unknown`, kein Register (Exit 1). Ein Bereich, der keine Datei trifft, ein unsicherer Bereich, ein Verzeichnis ohne Git-Repository oder eine andere Commit-Schreibweise (z. B. `HEAD`) sind Bedienfehler (Exit 2). Gelesen wird nur über das Git-Modul aus SLV0-EVAL-18 mit den lesenden Unterbefehlen `rev-parse`, `ls-tree` und `cat-file`; Arbeitsbaum, Index und Refs bleiben unverändert. | fehlt (Konzept RD: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren) |
 | SLV0-EVAL-29 | **Zitate und ihre Gültigkeit:** Zitate eines Markdown-Berichts sind GitHub-Permalinks `https://github.com/<o>/<r>/blob/<ref>/<pfad>` mit optionalem Anker `#L<a>` oder `#L<a>-L<b>` und Fundstellen `pfad:zeile`, `pfad:von-bis`, `pfad#Lx`, `pfad#Lx-Ly` (Erkennung wie §7.4), die sich auf den angegebenen Commit beziehen. Ein Permalink, dessen `<ref>` keine Commit-ID aus 7–40 Hex-Zeichen ist → `ref_not_pinned`; dessen Commit Git nicht eindeutig kennt → `commit_unknown`; der einen anderen Commit als den angegebenen nennt → `sha_mismatch`. Ein Pfad, den es am Commit nicht als reguläre Datei gibt → `path_missing`; eine Fundstelle, die auf keinen Pfad genau, aber mit ihrem Pfadende auf mehrere Dateien passt → `path_ambiguous`; eine Zeile außerhalb von 1…n der Datei oder `bis` < `von` → `range_out_of_bounds`. Permalinks prüfen den Pfad genau, Fundstellen genau oder über das Pfadende ab einer Segmentgrenze. Mit `--github <o>/<r>` gelten Permalinks auf andere Repos als `fremd` und werden nicht geprüft. Jedes Hex-Wort im übrigen Text (Erkennung wie §7.4) wird in Git als Commit nachgeschlagen; unbekannt → Warnung `commit_unverified`, weil ein Hex-Wort auch ein anderer Hash sein kann. | fehlt (`eval findings` prüft nur gegen den Fixture-Text, O-13) |
 | SLV0-EVAL-30 | **Abdeckung und `eval cite-check`:** Eine Registerdatei ist **belegt**, wenn mindestens ein gültiges Zitat sie nennt; ein gültiges Zitat auf eine Datei außerhalb der Bereiche zählt als `ausserhalb_bereich` und belegt nichts. Die Ausgabe nennt Commit, Bereiche, Registergröße Y, die belegten Dateien (X) mit zusammengeführten Zeilenbereichen und Zahl der belegten Zeilen, die vollständige Liste der nicht belegten Dateien, den Satz „X von Y Dateien belegt; nicht belegt: …“, jedes Zitat mit Berichtszeile und Ergebnis, die nachgeschlagenen Commit-Wörter sowie Zählungen. Exit 1, sobald ein Zitat ungültig ist (SLV0-EVAL-29, ohne die Warnung); nicht belegte Dateien sind ein Messwert und ändern den Exit-Code nicht. Das Werkzeug weiß nicht, was gelesen wurde, nur was belegt ist. Liest nur. | fehlt |
+| SLV0-EVAL-31 | **Usage je Turn:** Die Normalisierung einer rohen Spur setzt zusätzlich `cost_balance` (§7.6). Ein Turn ist eine Modellantwort der Hauptsitzung: alle `assistant`-Ereignisse ohne `parent_tool_use_id` mit gleicher `message.id` (ohne `message.id` je Ereignis ein Turn), gezählt in der Reihenfolge des ersten Auftretens. Usage des Turns sind die vier Felder `input_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`, `output_tokens` aus `message.usage` des **letzten** Ereignisses des Turns, so wie gemeldet; ein fehlendes Feld ist `null` (unbekannt, nie 0). Die Turn-Summe je Feld ist `null`, sobald ein Turn das Feld nicht meldet oder es keinen Turn gibt. Der Rest je Feld ist Gesamt-Usage der Spur (SLV0-EVAL-08) minus Turn-Summe, vorzeichenbehaftet, `null`, wenn eines davon unbekannt ist; er zeigt Usage, die keinem Turn der Hauptsitzung zugeordnet ist (z. B. Unteragenten). Beim Import aus `skill-pilot-v1` ist `cost_balance` `null`. | fehlt (nur Lauf-Usage, SLV0-TOK-06) |
+| SLV0-EVAL-32 | **Größen je Ereignisklasse:** Jeder Inhaltsblock der `assistant`- und `user`-Ereignisse gehört zu genau einer Klasse (§7.6): `skill_laden`, `datei_lesen`, `tool_ergebnis:<Tool>`, `assistant_text`, `assistant_werkzeugaufruf`, `assistant_denken`, `nutzer_text`, `unteragent` oder `nicht_zuordenbar`. Je Klasse stehen Blockzahl, Bytes (UTF-8, exakt) und Bytes × Folgeturns (Zahl der späteren Turns der Hauptsitzung, deren Eingabe den Block enthält; „Dauergeladenes kostet Größe × Nachrichten“). **Invariante:** Die Summen über alle Klassen sind gleich `bytes_total` bzw. `bytes_x_later_turns_total`; was keiner benannten Klasse zugeordnet werden kann, steht in `nicht_zuordenbar`, nie in keiner Klasse. Ausgegeben werden nur Größen, nie Inhalte (SLV0-EVAL-08). Tokens je Klasse meldet kein Client; sie sind `unbekannt` oder nach SLV0-TOK-04 mit benanntem Schätzer `geschaetzt` und werden nie mit gemeldeter Usage verrechnet. | fehlt |
+| SLV0-EVAL-33 | **Kostenbilanz in Rohdatensatz und Bericht:** `eval raw` übernimmt `cost_balance` als `kostenbilanz` (abgeleitet, nicht aus Metadaten; `null` ohne Bilanz). `eval report [--estimator NAME]` weist je Ebene und Variante aus: Läufe mit Bilanz, Turns, Turn-Usage nach SLV0-TOK-05, Rest, Bytes und Bytes × Folgeturns je Klasse und gesamt, Tokens je Klasse (geschätzt oder `unbekannt`). Differenzen gibt es für `B1` − `B0` und für jeden Kandidaten `K-…` − `B1`, nur über Fälle mit Läufen beider Varianten auf derselben Ebene; jede Differenz nennt Minuend, Subtrahend, beide Werte und die Rohdatensatz-IDs beider Seiten. Ein Lauf ohne Bilanz macht jeden Wert seiner Population `unbekannt` (`null` mit Grund), nie 0; innerhalb eines Laufs mit Bilanz ist eine fehlende Klasse 0 Bytes. Kein Quotient außer SLV0-EVAL-34, kein Score, keine Empfehlung. Ältere Rohdatensätze ohne das Feld bleiben gültig und gelten als ohne Bilanz. | fehlt |
+| SLV0-EVAL-34 | **Kosten je erfülltem Kriterium:** je Ebene und Variante die Summe der `kosten_client_schaetzung` (SLV0-TOK-08) geteilt durch die Zahl der bestandenen Assertions ohne `r_regel` (deterministisch und Rubrik) aus den Rohdatensätzen. Der Wert ist `unbekannt`, wenn ein Lauf keine Kostenschätzung hat oder keine Assertion bestanden ist; Kosten, Zähler (bestanden) und Nenner (alle Assertions ohne `r_regel`) stehen mit Rohdatensatz-IDs daneben. R-Assertions zählen nie mit (SLV0-EVAL-11). | fehlt (K7.7 offen) |
 
 ### 7.1 Rubrikformat (SLV0-EVAL-13)
 
@@ -280,6 +285,39 @@ gilt dieser, sonst das Pfadende ab einer Segmentgrenze. **Commit-Wörter** wie �
 Gelesen wird `git ls-tree -r -z --full-tree <commit>` für das Register und `git cat-file blob <objekt>` nur für zitierte Dateien (Zeilenzahl).
 Zeilenbereiche einer Datei werden zusammengeführt, wenn sie sich überlappen oder aneinandergrenzen. Pfade werden nach Codepoint sortiert ausgegeben (SLV0-INV-03).
 
+### 7.6 Kostenbilanz je Kontextklasse und Turn (SLV0-EVAL-31…34)
+
+`eval normalize` ergänzt die normalisierte Spur um `cost_balance`; `eval raw` übernimmt sie als `kostenbilanz`; `eval report` bildet daraus
+den Block `kostenbilanz` je Ebene. Alle drei Felder sind in den Schemas optional, damit frühere Artefakte gültig bleiben; die Werkzeuge setzen sie immer
+(bei Spuren ohne Rohformat als `null`).
+
+**Turns.** Gezählt werden `assistant`-Ereignisse, deren `parent_tool_use_id` fehlt oder `null` ist. Ereignisse mit gleicher `message.id` bilden einen Turn
+(der Client zerlegt eine Antwort in mehrere Ereignisse und wiederholt dabei die Usage); maßgeblich ist das letzte Ereignis. `N` ist die Zahl der Turns.
+
+**Blöcke und Bytes.** Betrachtet werden die Inhalte (`message.content`) aller `assistant`- und `user`-Ereignisse; ein Inhalt als Zeichenkette ist ein Block.
+Gemessen wird die UTF-8-Länge der Nutzlast: `text` bei Textblöcken, `thinking` bzw. `data` bei Denkblöcken, das JSON von `input` (ohne Leerraum) bei
+Werkzeugaufrufen, bei Werkzeugergebnissen der Inhalt (Zeichenkette; bei einer Liste je Element `text` oder sonst das JSON des Elements; fehlend 0),
+bei allen anderen Blöcken das JSON des ganzen Blocks.
+
+| Klasse | Blöcke |
+|---|---|
+| `skill_laden` | Ergebnis eines `Skill`-Aufrufs; Ergebnis eines `Read` auf `.agents/skills/<name>/SKILL.md` bzw. `.claude/skills/<name>/SKILL.md` (wie SLV0-EVAL-08) |
+| `datei_lesen` | Ergebnis eines anderen `Read` |
+| `tool_ergebnis:<Tool>` | Ergebnis eines anderen Werkzeugs; `<Tool>` ist dessen Name (`[A-Za-z0-9_.:-]`, höchstens 128 Zeichen) |
+| `assistant_text`, `assistant_denken`, `assistant_werkzeugaufruf` | Text-, Denk- (`thinking`, `redacted_thinking`) und Werkzeugaufruf-Blöcke der Hauptsitzung |
+| `nutzer_text` | Text-Blöcke und Zeichenketten-Inhalte von `user`-Ereignissen der Hauptsitzung |
+| `unteragent` | jeder Block eines Ereignisses mit gesetzter `parent_tool_use_id` |
+| `nicht_zuordenbar` | Werkzeugergebnis ohne bekannten Aufruf oder mit ungültigem Werkzeugnamen, unbekannter Blocktyp, Block, der kein Objekt ist |
+
+**Folgeturns.** Ein Block eines `assistant`-Ereignisses aus Turn `k` und ein Block eines `user`-Ereignisses, vor dem `k` Turns begonnen haben, steht in der
+Eingabe der Turns `k+1 … N`; seine Folgeturns sind `N − k`. Blöcke der Klasse `unteragent` haben 0 Folgeturns. Der Systemprompt und der Skill-Katalog
+erscheinen in der Spur nicht als Inhalt; ihr Anteil steckt nur in der gemeldeten Eingabe-Usage je Turn.
+
+**Bericht.** Je Ebene: `je_variante` (Felder nach SLV0-EVAL-33/-34) und `differenzen` (`minuend`, `subtrahend`, `case_ids`, Rohdatensatz-IDs beider Seiten,
+Differenzen für Turns, Turn-Usage, Rest, Bytes und Bytes × Folgeturns gesamt und je Klasse, Kosten). Turn-Usage folgt SLV0-TOK-05/-06 (`gemeldet`,
+Methode `client-usage@<modell>`); verschiedene Methoden ergeben eine unbekannte Differenz. Tokens je Klasse werden aus der Bytesumme der Klasse mit dem
+gewählten Schätzer gebildet, ohne Schätzer `unbekannt`.
+
 ## 8. Fehlerfälle
 
 Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und, wo sinnvoll, Zeile.
@@ -293,6 +331,7 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Adapter | `adapter_missing`, `adapter_link_invalid`, `adapter_orphaned` | nur Bereich Projekt |
 | Registry | `registry_invalid`, `hash_mismatch`, `version_hash_conflict` | Datensatz ungültig; nichts wird korrigiert |
 | Eval | `snapshot_hash_mismatch`, `candidate_baseline_mismatch`, `candidate_multi_dimension`, `replacement_not_unique`, `workspace_exists`, `config_overwrite`, `budget_exhausted`, `ledger_locked`, `family_split_overlap`, `split_access_denied`, `split_consumed`, `trace_invalid`, `report_without_raw` | Vorgang abgebrochen, kein Teilergebnis gilt als Erfolg |
+| Kostenbilanz | kein eigener Code (SLV0-EVAL-31…34): Unbekanntes ist `null` mit Grund; ein unbekannter Schätzer bei `eval report --estimator` ist ein Bedienfehler (Exit 2) | Bericht wird erzeugt; nichts wird zu 0 ergänzt |
 | Rubrik | `rubric_invalid`, `rubric_id_duplicate`, `rubric_stale`, `rubric_mismatch`, `rubric_version_mixed` | Prüfung fehlgeschlagen bzw. Rohdatensatz oder Bericht nicht erzeugt; nichts wird neu gebunden |
 | Querprüfung | `ledger_mismatch`, `case_not_in_manifest`, `case_hash_mismatch`, `source_commit_mismatch`, `worktree_dirty` | Vorgang abgebrochen; Ledger, Manifest und Git-Stand bleiben unverändert |
 | Belege, Trennschärfe | `evidence_not_found`, `evidence_missing` · Warnung `evidence_unquoted` (SLV0-EVAL-21) · Warnung `no_discriminating_check` (SLV0-EVAL-23/-24) · `family_not_discriminating`, `core_verdict_unclear` (SLV0-EVAL-25) | Belegprüfung fehlgeschlagen bzw. kein Kandidatenstart in select (Exit 1); Warnungen ändern den Exit-Code nicht; nichts wird korrigiert oder neu bewertet |
@@ -389,6 +428,18 @@ Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/
 | SLV0-FALL-64 | Nicht belegte Dateien und Bereiche: Bericht belegt nur `src/a.js` und zitiert `README.md:1`; ohne `--scope`; `--scope src/`; `--scope '**/*.md'`; `--scope fehlt/`; `--scope ../x`; Permalink auf ein anderes Repo mit `--github` | 2 von 4, nicht belegt `docs/guide.md`, `src/b.js`, Exit 0; 1 von 2 und `README.md` `ausserhalb_bereich`; 1 von 2 (`README.md`), `docs/guide.md` nicht belegt; Exit 2 (2×); `fremd`, nicht geprüft | EVAL-28/-30 |
 | SLV0-FALL-65 | Commit-Wörter und Bedienung: C2 als Hex-Wort im Text; unbekanntes Hex-Wort; Verzeichnis ohne Git; `--commit HEAD`; Bericht fehlt; zwei Berichte. Git-Status, Refs, Index und Bericht vor und nach dem Lauf | bekannt; Warnung `commit_unverified`, Exit 0; Exit 2 (4×); unverändert | EVAL-28/-29, INV-04 |
 
+### 9.3 Fälle zu SLV0-EVAL-31…34
+
+Alle Spuren sind synthetisches stream-json, im Test erzeugt; -70 liest gespeicherte Research-Spuren im Repo.
+
+| ID | Fall | Erwartung | Deckt |
+|---|---|---|---|
+| SLV0-FALL-66 | Spur mit drei Turns, davon einer über zwei Ereignisse mit gleicher `message.id`; Ergebnisse von `Skill`, `Read` auf `SKILL.md`, `Read` auf eine andere Datei und `Bash`; Text-, Denk- und Werkzeugaufruf-Blöcke; unbekannter Blocktyp; Ergebnis ohne bekannten Aufruf; Ereignis eines Unteragenten; Gesamt-Usage größer als die Turn-Summe | drei Turns mit der Usage des jeweils letzten Ereignisses; Bytes und Bytes × Folgeturns je Klasse wie im Test nachgerechnet; Summe über die Klassen = Gesamt; Turn-Summe + Rest = Gesamt-Usage; keine Inhalte in der Ausgabe; Schema gültig | EVAL-31/-32 |
+| SLV0-FALL-67 | Ein Turn ohne `usage`; Spur ohne `result`; leere Spur; Import `skill-pilot-v1` | Turn-Usage `null`, Summe und Rest `null`; Rest `null`; keine Turns, Summen `null`, 0 Bytes; `cost_balance: null`. Im Bericht jeweils `unbekannt`/`null` mit Grund, nie 0 | EVAL-31/-33 |
+| SLV0-FALL-68 | Bericht über B0, B1 und `K-X` auf zwei Fällen, ein weiterer Fall nur mit B1; mit und ohne `--estimator utf8-bytes-div-4@1`; ein Rohdatensatz ohne `kostenbilanz` | Differenzen `B1 − B0` und `K-X − B1` nur über die gemeinsamen Fälle, mit beiden Werten und Rohdatensatz-IDs; je Klasse Summe der Bytes, fehlende Klasse 0; Tokens je Klasse `geschaetzt` bzw. `unbekannt`; der Lauf ohne Bilanz macht die Werte seiner Variante `null`; Bericht schemagültig, `report --check` Exit 0 | EVAL-33 |
+| SLV0-FALL-69 | Kosten je erfülltem Kriterium: Kosten bekannt, drei bestandene von vier Assertions und eine R-Assertion; ein Lauf ohne Kostenschätzung; keine bestandene Assertion | Wert = Kosten / 3, Zähler 3, Nenner 4; `unbekannt`; `unbekannt` | EVAL-34 |
+| SLV0-FALL-70 | Gespeicherte Spuren `research/skills-meta-prompting/eval-runs/` (Format `skill-pilot-v1`) über `raw` und `report` | Rohdatensätze und Bericht schemagültig; `kostenbilanz` `null`; Turns, Bytes und Turn-Usage im Bericht `null` mit Grund; Lauf-Usage unverändert `gemeldet` | EVAL-31/-33, Abwärtsverträglichkeit |
+
 ## 10. Abgrenzung
 
 - **Keine Aktivierung durch Code.** Aktivieren heißt im Repo: Owner mergt einen PR am geprüften Hash (SL4 §5). Werkzeuge liefern Belege, keine Freigaben.
@@ -405,7 +456,7 @@ Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/
 | [eval-snapshot.schema.json](schemas/eval-snapshot.schema.json) | Snapshot (SLV0-EVAL-01/-02), Form des Research-Helfers | [skill-pilot-baseline-v2.json](../../research/skills-meta-prompting/skill-pilot-baseline-v2.json) |
 | [eval-ledger.schema.json](schemas/eval-ledger.schema.json) | Eine Ledger-Zeile: Kopf, Reservierung, Ergebnis, Splitzugriff, Auswahl (SLV0-EVAL-05/-07) | Tests unter `tools/skill-library/test/` |
 | [eval-split-manifest.schema.json](schemas/eval-split-manifest.schema.json) | Split-Manifest (SLV0-EVAL-06) | Tests |
-| [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08) | Tests |
+| [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08), optional mit Kostenbilanz (SLV0-EVAL-31/-32) | Tests |
 | [eval-raw-record.schema.json](schemas/eval-raw-record.schema.json) | Rohdatensatz je Start (SLV0-EVAL-09, SL1 §8) | Tests |
 | [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11), mit Rubrikversionen (SLV0-EVAL-15) | Tests |
 | [eval-rubric.schema.json](schemas/eval-rubric.schema.json) | Rubrik je Skill (SLV0-EVAL-13, §7.1) | [docs/research/rubriken/](../research/rubriken/) |
@@ -417,6 +468,8 @@ Ausgangslage: Commit C1 mit `src/a.js` (5 Zeilen), `src/b.js` (3 Zeilen), `docs/
 
 Rohdatensatz und Bericht tragen seit Version 0.3 die optionalen Felder `trennschaerfe` und `rolle` (Assertion) bzw. `nulllauf`, `konjunktiv` und
 `hinweise` (SLV0-EVAL-24). Sie sind optional, damit frühere Rohdatensätze und Berichte gültig bleiben; der Harness setzt sie immer.
+Seit Version 0.5 tragen normalisierte Spur, Rohdatensatz und Bericht die optionalen Felder `cost_balance`, `kostenbilanz` bzw. `kostenbilanz` je Ebene
+(SLV0-EVAL-31…34) unter derselben Regel; `normalizer` bleibt `sl-eval-normalize@1`, weil sich kein bestehendes Feld ändert.
 
 Die Eval-Schemas kamen mit dem Eval-Harness-PR (Handover §7); Umsetzung und Auslegungen: [tools/skill-library/README.md](../../tools/skill-library/README.md).
 Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die Vereinheitlichung ist offen (O-8).
@@ -438,6 +491,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-11 | Belegprüfung (SLV0-EVAL-21): Paarurteile (`paare`) und ihre Begründungen werden nicht geprüft; ein `nicht_erfuellt` mit nicht gefundenem Beleg bleibt `nicht_erfuellt` (gemeldet, nicht herabgestuft), obwohl ein erfundener Mangel eine Gegenseite begünstigen kann | Bewerter-Vorgabe „Paarurteil nur mit Kriterienbelegen“ bzw. Regel für unbelegte Mängel, mit E3-Runde 3 entscheiden |
 | O-12 | Trennschärfe (SLV0-EVAL-23/-25): Negativkontroll-Familie je Kandidat (Portierungsplan P2) und Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion; `regex` folgt ECMAScript statt Python | SL4 §4/§6; bei Bedarf eigene Spec-Ergänzung |
 | O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | **Teilweise gelöst** mit P5: `eval cite-check` (SLV0-EVAL-28…30) prüft Permalinks, Fundstellen und Commit-Wörter gegen Git. Offen bleibt: `eval findings` prüft weiter nur gegen den Fixture-Text, weil Fallordner keinen Git-Stand haben; beide erkennen Fundstellen nur mit Dateiendung; `host.tld:port` ohne Schema würde auch in `cite-check` als Fundstelle gelesen (`path_missing`); ein Hex-Wort ist nicht sicher als Commit erkennbar (darum dort nur Warnung) |
+| O-14 | Kostenbilanz (SLV0-EVAL-31…34): Klassen folgen nur der Ereignisstruktur. Lädt der Client einen Skill-Rumpf als eigene Nutzernachricht statt im Werkzeugergebnis, zählt er als `nutzer_text`; ob die Gesamt-Usage im `result` gleich der Turn-Summe ist (Rest 0), ist an echten Spuren *offen*; Systemprompt und Katalog haben keine Bytegröße in der Spur; Denkblöcke zählen mit Folgeturns, obwohl der Client sie in späteren Eingaben kürzen kann | an der nächsten rohen Spur prüfen (Rest, Skill-Ladeform); bis dahin Bytes × Folgeturns als Obergrenze der Dauerlast lesen |
 
 ## 13. Rückverfolgung
 
@@ -456,6 +510,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | EVAL-25 | E3-Runde 2, Ergebnis §4–§5; Owner-Antwort A-20261031-e3-b1-vorlauf („B1-Vorlauf ist ok, führ ihn mit P2 ein“); SL4 §4/§6 |
 | EVAL-26/-27 | Portierungsplan P3 (Konzept aus skill-optimization: erwartete Befunde, 1:1-Zuordnung, Überberichtung; deren Code ausgeschlossen) |
 | EVAL-28…30 | Portierungsplan P5 (Konzept aus recursive-decomposition-skill, nur *dokumentiert*: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren, Abdeckung vor der Synthese prüfen; Dossier-Anforderung R4); O-13 |
+| EVAL-31…34 | Portierungsplan P4 (Konzept aus skill-cost-optimizer, nur Konzept: Bilanz je Kontextklasse und Turn, Dauergeladenes kostet Größe × Nachrichten); M4-Befund im Portierungsplan (Cache × Turns, kaum Output); K7.7 (Kosten je erfülltem Kriterium); SLV0-TOK-04/-05/-06/-08 |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.
