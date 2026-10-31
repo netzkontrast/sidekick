@@ -18,6 +18,18 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 - [ ] Workflow/Transport/Hosting anhand Fault-Tests entscheiden.
 - [ ] Vorschläge P1–P9 aus der [Reflexion zur ChatGPT-Spec](../inputs/2026-10-30-reflexion-chatgpt-spec.md#4-konsequenzen-für-die-planung-vorschläge) mit dem Owner klären; P3 und P8 sind entschieden (Claude Code zuerst; ein Repo), siehe [Grundsatzentscheidungen](../../../docs/entscheidungen/README.md#grundsatzentscheidungen-des-owners).
 
+## Reihenfolge ab 31.10.2026 (Vorschlag, Owner-Entscheidung offen)
+
+Begründung und Kritik: [Plan-Review 31.10.2026](plan-review-2026-10-31.md). Vorschlag „Kern vor Library“:
+
+- [x] AP1–AP3 der Übernahme afs-spec/DSPy-Buch gemergt (#31, #32, #34); MUXI-Dossier und Skill `using-codegraph` gemergt (#36, #35).
+- [ ] N1: Aktualität herstellen – DSPy-Dossier auf `92d97ca`, RS-1 in der Runtime-Adapter-Spec, Präsentation korrigieren. **Nächster Schritt.**
+- [ ] N2: Tor B praktisch über die Claude-CLI (≤ 12 Starts, ≤ 3 USD; Owner-Budget und Auth offen).
+- [ ] N3: Fake-Runtime und ausführbare RTA-Fälle (= RS-2; Ablageort offen).
+- [ ] N4: Tor-A-Spike Paperclip/OpenHands lokal mit Docker (Owner-Freigabe offen).
+- [ ] N5–N6: Spielraum-Vorprüfung vor D3, AP4 nur als Fallfamilie – Status im [Library-Plan §8.2](../../skills-meta-prompting/library-research-plan.md#82-buchgestützter-dspy-ausbau-owner-auftrag-31102026).
+- [ ] N7: Eigener CodeGraph-Index für sidekick (Owner-Entscheidung; Clean-Room-Risiko K6).
+
 ## Run-Supervisor statt eigener Agent-Runtime (31.10.2026)
 
 Befund aus dem [MUXI-Dossier](../../../docs/research/dossiers/muxi-runtime.md): Eine MUXI-artige Runtime (≈ 184.000 Zeilen, davon ≈ 100.000 Orchestrierung) wird nicht nachgebaut. Gebraucht wird nur das Verhalten ihrer Teile `coding/` und `watch/` (≈ 3.000 Zeilen) als **Run-Supervisor im Connector** nach der [Runtime-Adapter-Spec](../../../docs/spec/runtime-adapter-v0.md). Status: vorgeschlagen, Owner-Freigabe offen.

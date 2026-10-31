@@ -205,9 +205,9 @@ keine aktive Skill-Änderung. Status dieser Pakete nur hier; der Plan beschreibt
 
 | Paket | Ergebnis | Status |
 |---|---|---|
-| D0 | aktuelles Buchdossier, Optimierer-Datenvertrag, geschützte Textregionen | geplant; nächster Auftrag |
+| D0 | aktuelles Buchdossier, Optimierer-Datenvertrag, geschützte Textregionen | geplant; das Dossier-Update läuft als N1 im [Plan-Review](../agent-hub/operations/plan-review-2026-10-31.md), der Rest als N5 |
 | D1 | eigene Datenfamilien, eingefrorene Metriken, Kosten-/Splitdesign; AP3/AP4 ergänzen | geplant |
-| D2 | isolierte native DSPy-/Blackbox-GEPA-Brücke mit Offline-Prüfung | geplant, nach D0/D1 |
+| D2 | isolierte native DSPy-/Blackbox-GEPA-Brücke mit Offline-Prüfung | wartet auf N5 (Spielraum belegt) und Owner-Freigabe der Dependencies ([Plan-Review K4](../agent-hub/operations/plan-review-2026-10-31.md)) |
 | D3 | echter grilling/Fragen-CLI-Vergleich: B1, manueller Kandidat, GEPA | geplant; Ausführungsort, Dependencies und Budget vor Lauf festlegen |
 | D4 | unabhängiger Test und Aktivierungsvorschlag am Hash | geplant, nach erfolgreichem Select |
 | D5 | geprüfter Export und späterer Hub-Anschluss | geplant, nach D4; Hub-Vertrag bleibt Voraussetzung |
