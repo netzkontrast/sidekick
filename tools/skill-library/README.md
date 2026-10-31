@@ -182,11 +182,14 @@ rufen ihn nur lesend auf (`python3 -I -B`; ohne Python übersprungen):
 Zwei weitere Research-Prüfer liegen nur auf dem Branch `research/e3-runde-2` und bleiben dort Referenz; ihre Daten sind mit Hashes als
 `test/fixtures/*.json` kopiert (Commit `a2afd98b`, Pfade wie im Branch; der Test prüft die Hashes vor der Nutzung):
 
-- `e3/verify_quotes.py` (Zitatprüfung): `judge check` reproduziert dessen Fragmentzählung auf den vier gespeicherten Bewertungen genau
-  (E3 Runde 1 Test 101/101, Regression 25/25, Select 49/55, M4 66/83; SLV0-FALL-51). Abweichung durch die verlangte Reihenfolge: drei Belege setzen
-  Fragmente in umgekehrter Reihenfolge zusammen (Test `Y613`/3, Regression `Y752`/1, M4 `X896`/1); in Reihenfolge sind es 100/101, 24/25, 49/55, 65/83.
-  Neu ist die Urteilsfolge: Von den `erfuellt`-Urteilen werden `unklar` – Test 8 von 70 (6 Abwesenheitsaussagen „fehlt (…)“ ohne Suchbegriff,
-  1 Reihenfolge, 1 Zitat ohne Fragment ≥ 12 Zeichen), Regression 1 von 16, Select 4 von 34, M4 15 von 49.
+- `e3/verify_quotes.py` (Zitatprüfung): `judge check` reproduziert dessen Fragmentzählung auf den vier gespeicherten Bewertungen
+  (E3 Runde 1 Test 101/101, Regression 25/25, Select 49/55, M4 66/83; SLV0-FALL-51). Zwei gewollte Abweichungen:
+  (1) Ein Beleg, dessen Innenzitate kein Fragment mit 12 Zeichen ergeben (etwa nur ein zitierter Name), wird als Ganzes geprüft statt `ohne_beleg`
+  (Test +1 Fragment, M4 +2: 102/102 und 66/85); der Prototyp hätte das K-MELDEN-Urteil `Y695`/3 sonst fälschlich ohne Beleg gelassen.
+  (2) Die verlangte Reihenfolge: drei Belege setzen Fragmente in umgekehrter Reihenfolge zusammen (Test `Y613`/3, Regression `Y752`/1,
+  M4 `X896`/1); in Reihenfolge sind es 101/102, 24/25, 49/55, 65/85.
+  Neu ist die Urteilsfolge: Von den `erfuellt`-Urteilen werden `unklar` – Test 7 von 70 (6 Abwesenheitsaussagen „fehlt (…)“ ohne Suchbegriff,
+  1 Reihenfolge), Regression 1 von 16, Select 4 von 34, M4 15 von 49.
 - `grilling-runde/check_case.py` (Dateiprüfungen): `nullrun` ergibt auf den acht Dev-Fällen dieselben Ergebnisse je Prüfung wie der Prototyp mit
   leerer Änderungsmenge: 31 Prüfungen, 20 erhaltend, 11 trennend, nur D8 ohne trennende Prüfung (SLV0-FALL-54).
 

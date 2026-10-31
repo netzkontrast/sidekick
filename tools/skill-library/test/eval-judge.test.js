@@ -129,6 +129,13 @@ test('SLV0-FALL-50 older judgements are read compatibly; schema violations, unsa
   ]);
   assert.deepEqual(r.json.messages.map((m) => [m.code, m.severity]), [['evidence_missing', 'error'], ['evidence_unquoted', 'warning']]);
 
+  // A short inner quotation (a quoted name) does not hide an evidence text that stands verbatim in the output.
+  const inner = setup(t, { ausgaben: { L1: { kriterien: [{ nr: 1, status: 'erfuellt', zitat: 'In README.md steht ein Kommentar an „LLM agents“.' }] } } },
+    { 'L1.md': 'In `README.md` steht ein Kommentar an „LLM agents“. Mehr nicht.\n' }, { fixtures: false });
+  const ri = runEvalCli(inner.args);
+  assert.equal(ri.code, 0, ri.stdout);
+  assert.deepEqual(ri.json.kriterien.map((x) => [x.beleg_art, x.ergebnis, x.status_geprueft]), [['zitat', 'verifiziert', 'erfuellt']]);
+
   // A warning alone does not change the exit code.
   const warnOnly = setup(t, { ausgaben: { L1: { kriterien: [{ nr: 1, status: 'erfuellt', zitat: 'Die Garantie ist mindestens einmal' }] } } }, out, { fixtures: false });
   assert.equal(runEvalCli(warnOnly.args).code, 0);
@@ -148,13 +155,15 @@ test('SLV0-FALL-50 older judgements are read compatibly; schema violations, unsa
 /** The four stored judgements with their outputs (copied with hashes from research/e3-runde-2). */
 // kriterien: [verifiziert, nicht_gefunden, ohne_beleg, herabgestuft] under the new verdict rule.
 const STORED = [
-  { name: 'E3 Runde 1 Test', dir: 'e3/laeufe/test', fragmente: [101, 101], reihenfolge: 100, umgekehrt: ['Y613/3'], kriterien: [64, 1, 15, 8] },
+  { name: 'E3 Runde 1 Test', dir: 'e3/laeufe/test', fragmente: [102, 102], reihenfolge: 101, umgekehrt: ['Y613/3'], kriterien: [65, 1, 14, 7] },
   { name: 'E3 Runde 1 Regression', dir: 'e3/laeufe/regression', fragmente: [25, 25], reihenfolge: 24, umgekehrt: ['Y752/1'], kriterien: [15, 1, 0, 1] },
   { name: 'E3 Runde 1 Select', dir: 'e3/laeufe/select', fragmente: [55, 49], reihenfolge: 49, umgekehrt: [], kriterien: [32, 4, 4, 4] },
-  { name: 'M4-Pilot', dir: 'eval-runs/m4', fragmente: [83, 66], reihenfolge: 65, umgekehrt: ['X896/1'], kriterien: [41, 17, 2, 15] },
+  { name: 'M4-Pilot', dir: 'eval-runs/m4', fragmente: [85, 66], reihenfolge: 65, umgekehrt: ['X896/1'], kriterien: [41, 18, 1, 15] },
 ];
 
-test('SLV0-FALL-51 equality with the quote check: fragment counts 101/101, 25/25, 49/55, 66/83; three quotes joined in reverse order', (t) => {
+// Prototype counts 101/101, 25/25, 49/55, 66/83 plus evidence texts whose inner quotations yield no fragment and are
+// therefore checked as a whole (test +1 fragment: Y695/3; M4 +2).
+test('SLV0-FALL-51 equality with the quote check: prototype counts plus whole-text fallback; three quotes joined in reverse order', (t) => {
   const { root, herkunft } = materializeBundle(t, 'zitatpruefung-e3-m4');
   t.diagnostic(`Bundle ${herkunft.branch}@${herkunft.commit.slice(0, 12)}`);
   const snapshot = () => [...readTree(root).entries()].map(([p, e]) => [p, e.buf.toString('base64')]);

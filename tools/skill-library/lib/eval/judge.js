@@ -80,7 +80,9 @@ function legacyCriterion(k, i, label, code) {
   const base = { label: String(rawLabel), status, term: null, kern: false, unquoted: false };
   if (text === '' || text.toLowerCase().startsWith('fehlt')) return { ...base, art: 'fehlt', quotes: [] };
   const parts = quotedParts(text);
-  if (parts.length > 0) return { ...base, art: 'zitat', quotes: parts };
+  // Quoted parts count only when at least one yields a checkable fragment; otherwise a short inner
+  // quotation (e.g. a quoted name) would hide an evidence text that stands verbatim in the output.
+  if (parts.some((p) => fragmentsOf(p).length > 0)) return { ...base, art: 'zitat', quotes: parts };
   return { ...base, art: 'zitat', quotes: [stripEdges(text)], unquoted: true };
 }
 
