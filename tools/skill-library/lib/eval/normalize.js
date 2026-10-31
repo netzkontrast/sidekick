@@ -3,8 +3,10 @@
 // client cost estimate and trace hash leave this module. No thinking text, no free model output,
 // no tool inputs except the skill name. A request alone is not a confirmed activation; a missing
 // catalog is unknown, not empty; an empty or failed trace never proves non-selection.
+// Raw traces additionally get a cost balance (sizes and per-turn usage only, SLV0-EVAL-31/-32).
 import { sha256Hex } from '../core.js';
 import { evalMsg, EvalRefusal, requireSchema } from './common.js';
+import { costBalance } from './costbalance.js';
 
 export const NORMALIZER = 'sl-eval-normalize@1';
 export const NORMALIZED_SCHEMA = 'eval-normalized-trace';
@@ -82,6 +84,7 @@ function fromStreamJson(text, label) {
     activations,
     usage: final ? pickUsage(final.usage) : null,
     client_cost_estimate_usd: final ? pickCost(final.total_cost_usd) : null,
+    cost_balance: costBalance(events, final ? pickUsage(final.usage) : null),
   };
 }
 
@@ -105,6 +108,7 @@ function fromPilot(obj, label) {
     activations,
     usage: pickUsage(obj.usage),
     client_cost_estimate_usd: pickCost(obj.reported_cost_usd),
+    cost_balance: null, // the helper format keeps no per-turn usage or sizes (SLV0-EVAL-31)
   };
 }
 
@@ -144,6 +148,7 @@ export function normalizeTrace(buf, label = 'trace') {
     absence_is_proven: false,
     usage: core.usage,
     client_cost_estimate_usd: core.client_cost_estimate_usd,
+    cost_balance: core.cost_balance,
     quality_scored: false,
   };
   requireSchema(NORMALIZED_SCHEMA, out, 'normalisierte Spur');

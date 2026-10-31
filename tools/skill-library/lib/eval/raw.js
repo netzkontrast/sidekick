@@ -6,9 +6,10 @@ import { runUsageFromTrace } from '../tokens.js';
 import { UsageError, requireSchema, evalMsg, EvalRefusal } from './common.js';
 import { NORMALIZED_SCHEMA, NORMALIZER, pilotView } from './normalize.js';
 import { bindRecordToRubric } from './rubric.js';
+import { toRawBalance } from './costbalance.js';
 
 export const RAW_SCHEMA = 'eval-raw-record';
-const DERIVED = ['schema_version', 'modell', 'spur_sha256', 'status', 'katalog', 'skill_aufrufe', 'usage', 'normalisierer'];
+const DERIVED = ['schema_version', 'modell', 'spur_sha256', 'status', 'katalog', 'skill_aufrufe', 'usage', 'kostenbilanz', 'normalisierer'];
 
 /**
  * @param meta caller metadata (SL1 §8 fields that the trace cannot provide)
@@ -36,6 +37,7 @@ export function buildRawRecord(meta, normalized, { rubric = null, ledger = null,
       aufrufe: normalized.activations.map((a) => ({ skill: a.skill, modus: a.mode, bestaetigt: a.confirmed })),
     },
     usage: { lauf: usage.lauf_usage, je_skill: usage.je_skill, kosten_client_schaetzung: usage.kosten_client_schaetzung },
+    kostenbilanz: toRawBalance(normalized.cost_balance ?? null), // SLV0-EVAL-33; null for older traces
     normalisierer: NORMALIZER,
   };
   if (rubric !== null) {
