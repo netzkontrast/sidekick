@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "skill": "using-codegraph",
+  "rubrik_version": "using-codegraph@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "1b37a959568dbbfa2325087cc4bdecaaa90e1ac677de7f6da4147072b5aced4c"
+  },
+  "grundlage": ".agents/skills/using-codegraph/SKILL.md (Schritte 1–8) und references/befehle.md; Regeln aus AGENTS.md, Abschnitt CodeGraph. Fall-IDs UC-01…UC-03 sind geplant und noch nicht als Fallordner angelegt. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "UC-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt vor dem ersten Read- oder Grep-Aufruf auf Quelltextdateien einen Aufruf von codegraph_explore oder codegraph explore.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2; AGENTS.md CodeGraph „Wann“"
+    },
+    {
+      "id": "UC-K02",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Dateien, deren Quelltext eine explore-Antwort bereits enthielt, werden danach nicht erneut per Read geöffnet, sofern sie nicht im Veraltungshinweis standen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 2 und 5"
+    },
+    {
+      "id": "UC-K03",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Vor einer Codeänderung steht in der Spur ein impact-, callers- oder explore-Aufruf zum geänderten Symbol.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; AGENTS.md „Vor dem Ändern eines Symbols“"
+    },
+    {
+      "id": "UC-K04",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Nach einer Codeänderung werden die betroffenen Tests mit codegraph affected bestimmt und ausgeführt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4"
+    },
+    {
+      "id": "UC-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Codeaussagen der Antwort tragen pfad:zeile aus der CodeGraph-Ausgabe; Lücken des Graphen (dynamische Aufrufe, nicht Indexiertes) sind als solche benannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 6 und 8"
+    },
+    {
+      "id": "UC-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Für Markdown, exakte Zeichenketten oder Umbenennungen samt Kommentaren wird grep/Read genutzt, statt den Graphen dafür zu bemühen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6"
+    },
+    {
+      "id": "UC-K07",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt keinen Aufruf von codegraph init oder codegraph index.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; AGENTS.md CodeGraph „Nicht“"
+    },
+    {
+      "id": "UC-K08",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Code-Erkundung wird nicht an einen Subagenten ohne CodeGraph-Anweisung delegiert.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; CLAUDE.md"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "verstehen",
+      "beschreibung": "Frage zu vorhandenem Code beantworten, z. B. wie ein Ablauf funktioniert oder wer eine Funktion aufruft.",
+      "kriterien": ["UC-K01", "UC-K02", "UC-K05", "UC-K07", "UC-K08"],
+      "kern": "UC-K01",
+      "faelle": ["UC-01"]
+    },
+    {
+      "id": "aendern",
+      "beschreibung": "Ein Symbol ändern und die betroffenen Tests ausführen.",
+      "kriterien": ["UC-K01", "UC-K03", "UC-K04", "UC-K07"],
+      "kern": "UC-K03",
+      "faelle": ["UC-02"]
+    },
+    {
+      "id": "nicht-code",
+      "beschreibung": "Aufgabe zu Doku oder exakten Zeichenketten, bei der der Graph nicht passt.",
+      "kriterien": ["UC-K06", "UC-K07"],
+      "kern": "UC-K06",
+      "faelle": ["UC-03"]
+    }
+  ]
+}

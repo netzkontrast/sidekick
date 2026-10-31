@@ -20,14 +20,14 @@ const EXPECTED_CONTENT_HASHES = {
   'testing-system-boundaries': '76f9c4e25c2d630a32ec246136c63f799cbc326679a8c4188f21f0751f1973c9',
 };
 
-test('SLV0-FALL-01 repo skills and .claude/skills: 0 errors, 0 warnings, exit 0, eight content hashes', NEEDS_SYMLINKS, () => {
+test('SLV0-FALL-01 repo skills and .claude/skills: 0 errors, 0 warnings, exit 0, nine content hashes', NEEDS_SYMLINKS, () => {
   // Deliberately breaks when a skill in the working tree becomes invalid (handover §6).
   const r = runCli(['validate', '--scope', 'project', '--root', REPO_ROOT]);
   assert.equal(r.code, 0, r.stdout);
   assert.equal(r.json.checked_level, 'M0');
-  assert.deepEqual(r.json.summary, { errors: 0, warnings: 0, packages: 8, valid_packages: 8 });
+  assert.deepEqual(r.json.summary, { errors: 0, warnings: 0, packages: 9, valid_packages: 9 });
   assert.deepEqual(r.json.messages, []);
-  assert.equal(r.json.packages.length, 8);
+  assert.equal(r.json.packages.length, 9);
   for (const p of r.json.packages) assert.match(p.content_hash, /^[0-9a-f]{64}$/);
 });
 

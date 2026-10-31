@@ -119,13 +119,13 @@ test('SLV0-FALL-40 rubric bound to the content hash; one changed byte or a missi
   assert.equal(runEvalCli(['rubric', 'check', path.join(dir, 'leer'), '--root', repo]).code, 2);
 });
 
-test('SLV0-FALL-41 the eight repository rubrics are valid and bound to the current packages', (t) => {
+test('SLV0-FALL-41 the nine repository rubrics are valid and bound to the current packages', (t) => {
   const r = runEvalCli(['rubric', 'check', '--root', REPO_ROOT]);
   assert.equal(r.code, 0, r.stdout);
   assert.deepEqual(r.json.messages, []);
   const packages = validateProject(REPO_ROOT, { adapters: false }).packages.map((p) => p.name);
   assert.deepEqual(r.json.rubriken.map((x) => x.skill), packages);
-  assert.equal(r.json.rubriken.length, 8);
+  assert.equal(r.json.rubriken.length, 9);
   for (const row of r.json.rubriken) {
     assert.equal(row.gueltig, true, row.skill);
     // A package change bumps the rubric version (SLV0-EVAL-14); any positive version of the right skill is valid here.
