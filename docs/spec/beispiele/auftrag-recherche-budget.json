@@ -1,0 +1,58 @@
+{
+  "schema_version": "0.2",
+  "id": "a-beispiel-1",
+  "version": 1,
+  "vorhaben_id": "v-beispiel-1",
+  "typ": "research-report",
+  "ziel": "Drei Ansätze für lokale Spracheingabe vergleichen und eine begründete Empfehlung geben.",
+  "ausgangsstand": {
+    "beschreibung": "Synthetisches Beispiel; keine echten Quellen.",
+    "referenzen": [
+      "fixture:quellen-set-1"
+    ]
+  },
+  "abnahmekriterien": [
+    {
+      "id": "k1",
+      "text": "Drei Ansätze mit je mindestens einer belegten Quelle",
+      "pruefart": "check"
+    },
+    {
+      "id": "k2",
+      "text": "Empfehlung mit offenen Unsicherheiten",
+      "pruefart": "mensch"
+    }
+  ],
+  "befugnis": {
+    "grants": [
+      {
+        "id": "gr-1",
+        "effekt_typ": "artifact.store",
+        "ziel": "vorhaben/v-beispiel-1/",
+        "freigabe": "immer",
+        "parent_grant_id": null
+      }
+    ]
+  },
+  "budget": {
+    "max_dauer_min": 30,
+    "max_runs": 2,
+    "vorwarnung_anteil": 0.8,
+    "reparatur_anteil_max": 0.5
+  },
+  "datenklasse": "internal",
+  "owner_id": "owner",
+  "zustand": "partially_submitted",
+  "erstellt_am": "2026-10-30T09:00:00Z",
+  "herkunft": {
+    "kanal": "text",
+    "entwurf_id": "d-beispiel-1",
+    "geraet_id": "g-browser-a"
+  },
+  "rueckwaertsabnahme": {
+    "verlangt": true,
+    "budget": {
+      "max_dauer_min": 5
+    }
+  }
+}

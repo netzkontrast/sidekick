@@ -6,8 +6,9 @@ Produktüberblick: [README.md](README.md). Hier steht nur, was sich nicht aus de
 ## Projektstand
 
 - Phase 0 (Recherche, Entscheidungstore A–D, dann Spec). Das Repo enthält Planungsdokumente und isolierte Research-Hilfsprogramme, noch keine Produktlaufzeit.
-  Maßgeblich: [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md) für Vorgehen
-  und Prioritäten, [docs/vision.md](docs/vision.md) für das Produktziel.
+  Maßgeblich: [docs/spec/v0-ziel-und-vertraege.md](docs/spec/v0-ziel-und-vertraege.md) für bestätigte Ziele,
+  Verträge und den ersten Ablauf `research-report`; [docs/analyse-und-uebernahmeplan.md](docs/analyse-und-uebernahmeplan.md)
+  für Vorgehen und Entscheidungstore. `code-change` bleibt Tor-A-Testauftrag und Nordstern.
 - Recherche-Zeit auf P0-Fragen konzentrieren (Analyse §5, §9); keine Feature-Listen für P1/P2 vor dem MVP.
 - Spec-driven: Verhaltensänderungen beginnen in der Spec unter `docs/`, erst danach folgt Code.
 - Sprache von Doku, Specs und PR-Beschreibungen: Deutsch. Code, Bezeichner und Commit-Messages: Englisch.
@@ -18,8 +19,9 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
+- V0-Schemas und Beispiele: `node --test tools/skill-library/test/v0-contracts.test.js` (Datenform, keine Produktlaufzeit)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check|context-pack> …`;
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings|cite-check|context-pack|contract> …`;
   startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result`, `split access|select` und `context-pack --output`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
 - Belege einer Bewertung prüfen: `node tools/skill-library/cli.js eval judge check BEWERTUNG.json --outputs BLIND-VERZ [--fixtures FAMILIEN-VERZ]`

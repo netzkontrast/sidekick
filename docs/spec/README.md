@@ -5,9 +5,9 @@ Vision und Recherche begründen; hier steht, was das System tun muss und woran d
 
 | Spec | Inhalt | Status |
 |---|---|---|
-| [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) | Begriffe, Invarianten, Zustandsautomaten, Budget-Vorwarnung und Rückwärtsabnahme (seit 0.2), Fallmatrix, erster Ablauf | Entwurf |
-| [Skill-Library V0](skill-library-v0.md) | Paketvertrag, Registry-Datensatz, Inhaltshash, Validator, Token-Zählung, Eval-Harness (Stufen 0–2); IDs `SLV0-<Bereich>-<nn>` | Entwurf |
-| [Fragen-CLI V0](questions-cli-v0.md) | `questions`-CLI für die grilling-Ablage: Befehle, Zustandsinvarianten, Dateiformat, Fehlercodes, Fallmatrix (P9); IDs `QCLI-<Bereich>-<nn>` | Entwurf |
+| [V0 – Ziel und Verträge](v0-ziel-und-vertraege.md) | Verträge und Fallmatrix; seit 0.3 Schemas/Beispiele zu Budget und Rückwärtsabnahme synchronisiert | Datenform geprüft; Produktlaufzeit und V1-Vertragstests offen |
+| [Skill-Library V0](skill-library-v0.md) | Paketvertrag, Hashes, Validator, Registry und Eval-Harness; IDs `SLV0-<Bereich>-<nn>` | Stufen 0–2 implementiert; Grenzen und offene Punkte in der Spec |
+| [Fragen-CLI V0](questions-cli-v0.md) | Fragenablage, Befehle, Zustandsinvarianten, Dateiformat und Fehlerfälle; IDs `QCLI-<Bereich>-<nn>` | Implementiert; Einsparung im Modellvergleich offen (QO-1) |
 
 ## Konventionen
 
