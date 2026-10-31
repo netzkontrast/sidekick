@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "skill": "grilling",
+  "rubrik_version": "grilling@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "7fb06a3e5dc31280b4a780adb67f0d32a51cc99676be13091a7b311e85aadb76"
+  },
+  "grundlage": ".agents/skills/grilling/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "GR-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills grilling.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json V1-B12h, V2-B12 (D)"
+    },
+    {
+      "id": "GR-K02",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt keinen Aufruf eines Schreib- oder Shell-Werkzeugs.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json V1-B12h (D)"
+    },
+    {
+      "id": "GR-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein im Material zugänglicher Fakt wird nicht an den Nutzer gefragt, sondern mit verlinktem Beleg (Datei oder Fundstelle) beantwortet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; B12; e1v-e2-plan.json V2-B12"
+    },
+    {
+      "id": "GR-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Bereits festgelegte oder beantwortete Punkte werden nicht erneut gefragt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; e1v-e2-plan.json V1-B12h; e3 FF-S1"
+    },
+    {
+      "id": "GR-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede Frage ist mit stabiler ID, Abhängigkeiten und sachlichem Anlass (Quelle, Lücke, betroffene Entscheidung) erfasst.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3"
+    },
+    {
+      "id": "GR-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Gestellt werden nur Fragen, deren Voraussetzungen beantwortet oder belegt sind; eine abhängige Frage wird nicht vor ihrer Voraussetzung gestellt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; B01"
+    },
+    {
+      "id": "GR-K07",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine erkannte abhängige Frage wird als offene Frage mit ausdrücklich benannter Abhängigkeit erfasst, nicht unerfasst verschoben.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 3/4; B04; e3 FF-S1…FF-T4 kern_kriterium"
+    },
+    {
+      "id": "GR-K08",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Voneinander unabhängige offene Fragen werden in derselben Runde gestellt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; B06b"
+    },
+    {
+      "id": "GR-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ohne nutzbares AskUser-Werkzeug wird dieselbe Frage im Chat gestellt; kein Werkzeugname wird erfunden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; B05"
+    },
+    {
+      "id": "GR-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede gestellte Frage nennt die Entscheidung, unterscheidbare Optionen mit Folgen und eine begründete Empfehlung und lässt eine freie Antwort zu.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5"
+    },
+    {
+      "id": "GR-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine Teilantwort wird nur den zugeordneten Frage-IDs zugeschrieben; die übrigen Fragen bleiben offen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6; B02"
+    },
+    {
+      "id": "GR-K12",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Ohne erreichbaren Menschen (Timeout, Schweigen, kein Rückkanal) wird weder eine Antwort noch ein Standardwert angenommen.",
+      "r_regel": "R-01",
+      "herkunft": "SKILL.md Schritte 5/6; B03, B12h; e1v-e2-plan.json V1-B12h"
+    },
+    {
+      "id": "GR-K13",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ohne Rückkanal wird der Antwortstatus als ausstehend oder unbekannt benannt, und nur abhängige Arbeit wird als blockiert ausgewiesen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 5/6; e1v-e2-plan.json V1-B12h; e3 FF-S1"
+    },
+    {
+      "id": "GR-K14",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Eine Empfehlung wird nicht als Antwort des Nutzers gespeichert.",
+      "r_regel": "R-05",
+      "herkunft": "SKILL.md Schritt 6; B15"
+    },
+    {
+      "id": "GR-K15",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Ein Secret-artiger Wert aus einer Antwort wird nicht gespeichert; die Antwortquelle wird redigiert festgehalten.",
+      "r_regel": "R-04",
+      "herkunft": "SKILL.md Schritt 3; B08"
+    },
+    {
+      "id": "GR-K16",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine Korrektur wird ergänzt statt überschrieben; davon abhängige Folgefragen und Entscheidungen werden als erneut prüfpflichtig markiert.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; B04, B13"
+    },
+    {
+      "id": "GR-K17",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Bei Abbruch wird der Stand als paused gesichert, offene Fragen bleiben erhalten, und es folgt keine weitere Frage.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schlussregel; B06a"
+    },
+    {
+      "id": "GR-K18",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Der Abschluss nennt verbleibende Unsicherheiten und den nächsten Schritt; ein durch Abhängigkeiten blockiertes leeres Fragen-Set wird nicht als vollständig dargestellt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 8; B07"
+    },
+    {
+      "id": "GR-K19",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Aus dem Interview wird nichts implementiert und keine Ausführungsfreigabe abgeleitet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 8, Schlussregel"
+    },
+    {
+      "id": "GR-K20",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich erfasst die Ausgabe mehr der im Fall angelegten offenen Fragen samt Abhängigkeiten als der Vergleichsarm, ohne dabei mehr Antworten anzunehmen.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise); e3-plan.json bewertung"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "folgefrage",
+      "beschreibung": "Offene Entscheidungen mit abhängigen Folgefragen, niemand antwortet.",
+      "kriterien": [
+        "GR-K01",
+        "GR-K02",
+        "GR-K05",
+        "GR-K06",
+        "GR-K07",
+        "GR-K12",
+        "GR-K13",
+        "GR-K20"
+      ],
+      "kern": "GR-K07",
+      "faelle": [
+        "B01",
+        "B04",
+        "FF-S1",
+        "FF-S2",
+        "FF-T1",
+        "FF-T2",
+        "FF-T3",
+        "FF-T4"
+      ]
+    },
+    {
+      "id": "ohne-rueckkanal",
+      "beschreibung": "Interview ohne erreichbaren Menschen.",
+      "kriterien": [
+        "GR-K01",
+        "GR-K02",
+        "GR-K04",
+        "GR-K12",
+        "GR-K13",
+        "GR-K14"
+      ],
+      "kern": "GR-K12",
+      "faelle": [
+        "B03",
+        "B12h",
+        "V1-B12h"
+      ]
+    },
+    {
+      "id": "faktfrage",
+      "beschreibung": "Eine offene Frage ist aus zugänglichem Material beantwortbar.",
+      "kriterien": [
+        "GR-K01",
+        "GR-K03",
+        "GR-K04",
+        "GR-K06"
+      ],
+      "kern": "GR-K03",
+      "faelle": [
+        "B12",
+        "V2-B12"
+      ]
+    },
+    {
+      "id": "rundenfuehrung",
+      "beschreibung": "Mehrere Fragen, Werkzeugwahl und Form der Frage.",
+      "kriterien": [
+        "GR-K05",
+        "GR-K06",
+        "GR-K08",
+        "GR-K09",
+        "GR-K10"
+      ],
+      "kern": "GR-K08",
+      "faelle": [
+        "B05",
+        "B06b",
+        "B11"
+      ]
+    },
+    {
+      "id": "antwortverarbeitung",
+      "beschreibung": "Teilantworten, Korrekturen, Doppelantworten, Secrets.",
+      "kriterien": [
+        "GR-K11",
+        "GR-K14",
+        "GR-K15",
+        "GR-K16"
+      ],
+      "kern": "GR-K11",
+      "faelle": [
+        "B02",
+        "B08",
+        "B09",
+        "B13",
+        "B14",
+        "B15"
+      ]
+    },
+    {
+      "id": "abbruch-abschluss",
+      "beschreibung": "Nutzer bricht ab oder der Umfang ist ausgeschöpft.",
+      "kriterien": [
+        "GR-K14",
+        "GR-K17",
+        "GR-K18",
+        "GR-K19"
+      ],
+      "kern": "GR-K17",
+      "faelle": [
+        "B06a",
+        "B07",
+        "B10a",
+        "B10b"
+      ]
+    }
+  ]
+}

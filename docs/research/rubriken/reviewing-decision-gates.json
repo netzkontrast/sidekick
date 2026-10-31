@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "skill": "reviewing-decision-gates",
+  "rubrik_version": "reviewing-decision-gates@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "fb0236ab1f16442a01f84559829e7d61f81101ef588d816985a7946ab462e177"
+  },
+  "grundlage": ".agents/skills/reviewing-decision-gates/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "DG-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills reviewing-decision-gates.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json C-01 Schritt 4 (D)"
+    },
+    {
+      "id": "DG-K02",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Harte Ausschlüsse sind von Präferenzen getrennt; ein verletztes Muss-Kriterium schließt die Option trotz hoher Summe aus.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 2/4; ST-06, DG-01"
+    },
+    {
+      "id": "DG-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jedem entscheidenden Kriterium sind Befund, Quelle oder Version, Evidenzstufe und verbleibende Unsicherheit zugeordnet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2"
+    },
+    {
+      "id": "DG-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Unbekannt wird weder als bestanden noch als gescheitert gewertet und nie als Zahl eingesetzt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 3/4; ST-05, DG-04"
+    },
+    {
+      "id": "DG-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine nur dokumentierte Funktion wird nicht als bestandener Praxistest gewertet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; ST-05"
+    },
+    {
+      "id": "DG-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine frühere Empfehlung mit korrigiertem oder veraltetem tragendem Befund wird als prüfpflichtig markiert statt übernommen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; DG-02"
+    },
+    {
+      "id": "DG-K07",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Gewichtete Werte stehen nur mit expliziten Gewichten und belegten Werten; nachträgliche Gewichte sind gekennzeichnet, und die Sensitivität der Rangfolge ist benannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; DG-04"
+    },
+    {
+      "id": "DG-K08",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Empfehlung trägt genau einen Status: entscheidungsreif, weiterer Nachweis nötig oder unter aktuellen Bedingungen nicht tragfähig.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; DG-02, DG-03"
+    },
+    {
+      "id": "DG-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Empfehlung, Entscheidung und Ausführungsbefugnis sind getrennt ausgewiesen; der Entscheider ist mit Quelle benannt oder offen, und kein Status lautet entschieden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; DG-03; e1v-e2-plan.json C-01 Schritt 4"
+    },
+    {
+      "id": "DG-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Bei einer Lücke wird der kleinste entscheidungsrelevante Versuch mit Abnahme benannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6; ST-05, DG-02"
+    },
+    {
+      "id": "DG-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein abweichender Index wird gemeldet und die kanonische Stelle genannt, ohne ihn still anzugleichen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; DG-05"
+    },
+    {
+      "id": "DG-K12",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Aus der Empfehlung wird keine Ausführung abgeleitet oder vorgenommen.",
+      "r_regel": "R-03",
+      "herkunft": "SKILL.md Schlussregel; ST-06"
+    },
+    {
+      "id": "DG-K13",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich ordnet die Ausgabe mehr entscheidenden Kriterien Evidenzstufe und Unsicherheit zu als der Vergleichsarm, ohne Unbekanntes als Zahl zu führen.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise)"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "evidenzluecke",
+      "beschreibung": "Optionen mit ungleich belegten Kriterien.",
+      "kriterien": [
+        "DG-K01",
+        "DG-K03",
+        "DG-K04",
+        "DG-K05",
+        "DG-K08",
+        "DG-K10",
+        "DG-K13"
+      ],
+      "kern": "DG-K04",
+      "faelle": [
+        "ST-05"
+      ]
+    },
+    {
+      "id": "muss-kriterium",
+      "beschreibung": "Option mit hoher Summe verletzt ein Muss-Kriterium.",
+      "kriterien": [
+        "DG-K01",
+        "DG-K02",
+        "DG-K08",
+        "DG-K09",
+        "DG-K12"
+      ],
+      "kern": "DG-K02",
+      "faelle": [
+        "ST-06",
+        "DG-01"
+      ]
+    },
+    {
+      "id": "veraltete-empfehlung",
+      "beschreibung": "Tragender Befund einer früheren Empfehlung ist korrigiert.",
+      "kriterien": [
+        "DG-K06",
+        "DG-K08",
+        "DG-K10"
+      ],
+      "kern": "DG-K06",
+      "faelle": [
+        "DG-02"
+      ]
+    },
+    {
+      "id": "befugnis",
+      "beschreibung": "Empfehlung ohne benannten Entscheider.",
+      "kriterien": [
+        "DG-K08",
+        "DG-K09",
+        "DG-K12"
+      ],
+      "kern": "DG-K09",
+      "faelle": [
+        "DG-03"
+      ]
+    },
+    {
+      "id": "gewichtung",
+      "beschreibung": "Gewichteter Vergleich mit unbekannten Werten.",
+      "kriterien": [
+        "DG-K04",
+        "DG-K07"
+      ],
+      "kern": "DG-K07",
+      "faelle": [
+        "DG-04"
+      ]
+    },
+    {
+      "id": "kanonische-stelle",
+      "beschreibung": "Status steht an mehreren Stellen unterschiedlich.",
+      "kriterien": [
+        "DG-K11"
+      ],
+      "kern": "DG-K11",
+      "faelle": [
+        "DG-05"
+      ]
+    }
+  ]
+}

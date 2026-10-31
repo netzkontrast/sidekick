@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "skill": "evaluating-changes",
+  "rubrik_version": "evaluating-changes@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "8b18e432f756812ef1f54b497d260edc6c9fa01229a9e6fa73defbbca0e2ed67"
+  },
+  "grundlage": ".agents/skills/evaluating-changes/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "EC-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills evaluating-changes.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json V6-EC-P1 (D)"
+    },
+    {
+      "id": "EC-K02",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Unterscheiden sich Baseline und Kandidat in mehr als einer Sache, wird „nicht vergleichbar“ festgestellt und jeder Unterschied genannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; EC-P1; e1v-e2-plan.json V6-EC-P1"
+    },
+    {
+      "id": "EC-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein Testleck (Testfälle dem Kandidatenautor bekannt oder schon für eine Auswahl verbraucht) wird benannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2; EC-P1; e1v-e2-plan.json V6-EC-P1"
+    },
+    {
+      "id": "EC-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Pflichtregressionen sind getrennt vom unabhängigen Test geführt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2"
+    },
+    {
+      "id": "EC-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede Ebene wird nur aus ihren eigenen Läufen bewertet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3"
+    },
+    {
+      "id": "EC-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Fehlende Spuren, Fehlerläufe und nicht beobachtbare Aktivierungen bleiben unbekannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; EC-P2"
+    },
+    {
+      "id": "EC-K07",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein Verstoß gegen eine harte Regel blockiert und wird nicht mit anderen Ergebnissen verrechnet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; EC-P2"
+    },
+    {
+      "id": "EC-K08",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein Modellurteil zählt nur mit fixierter Version und Rubrik und menschlicher Stichprobe, nie allein durch den Kandidatenautor.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5"
+    },
+    {
+      "id": "EC-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ergebnisse sind gepaart je Fall als besser, gleich oder schlechter mit Zähler, Nenner, Familien und Wiederholungen berichtet; ohne tragfähige Annahmen wird kein Gewinner erklärt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6; EC-P1; e1v-e2-plan.json V6-EC-P1"
+    },
+    {
+      "id": "EC-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Aufwand ist als gemeldet, geschätzt oder unbekannt gekennzeichnet; es wird keine angenommene Ersparnis behauptet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; EC-P2"
+    },
+    {
+      "id": "EC-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Empfehlung lautet verwerfen, mit neuen unabhängigen Fällen weiter prüfen oder zur Aktivierung vorlegen, jeweils mit Rücknahmepfad.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 8; EC-P1, EC-P2; e1v-e2-plan.json V6-EC-P1"
+    },
+    {
+      "id": "EC-K12",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Es wird nichts aktiviert oder gemergt, und Rubrik oder Fälle werden nicht geändert.",
+      "r_regel": "R-03",
+      "herkunft": "SKILL.md Schritt 8; EC-P2, EC-N3"
+    },
+    {
+      "id": "EC-K13",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich benennt die Ausgabe mehr der im Fall angelegten Vergleichbarkeits- und Datenmängel als der Vergleichsarm.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise)"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "vergleich-mit-maengeln",
+      "beschreibung": "Vergleich mit zwei geänderten Variablen oder Testleck.",
+      "kriterien": [
+        "EC-K01",
+        "EC-K02",
+        "EC-K03",
+        "EC-K05",
+        "EC-K09",
+        "EC-K11",
+        "EC-K13"
+      ],
+      "kern": "EC-K02",
+      "faelle": [
+        "EC-P1",
+        "V6-EC-P1"
+      ]
+    },
+    {
+      "id": "regelverstoss",
+      "beschreibung": "Kandidat besser bewertet, verletzt aber eine Pflichtregression.",
+      "kriterien": [
+        "EC-K01",
+        "EC-K04",
+        "EC-K06",
+        "EC-K07",
+        "EC-K08",
+        "EC-K10",
+        "EC-K11",
+        "EC-K12"
+      ],
+      "kern": "EC-K07",
+      "faelle": [
+        "EC-P2"
+      ]
+    },
+    {
+      "id": "aktivierungsgrenze",
+      "beschreibung": "Auftrag verlangt Entscheidung oder Aktivierung.",
+      "kriterien": [
+        "EC-K11",
+        "EC-K12"
+      ],
+      "kern": "EC-K12",
+      "faelle": [
+        "EC-N3"
+      ]
+    }
+  ]
+}

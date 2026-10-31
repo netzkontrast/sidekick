@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "skill": "specifying-behavior",
+  "rubrik_version": "specifying-behavior@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "9bdc2b8250fa1f16d2a5a18a75c0c13bdfa361f36b3879b8a3286462bc9d7df3"
+  },
+  "grundlage": ".agents/skills/specifying-behavior/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "SB-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills specifying-behavior.",
+      "r_regel": null,
+      "herkunft": "Muster der Läufe in e1v-e2-plan.json (D)"
+    },
+    {
+      "id": "SB-K02",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Spec-Konvention des Projekts (Ablage, ID-Schema, Schemaformat) wird übernommen; vergebene IDs bleiben unverändert, neue werden angehängt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; SB-02"
+    },
+    {
+      "id": "SB-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Spec beschreibt beobachtbares Verhalten statt der Umsetzung und nennt Nicht-Ziele.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2"
+    },
+    {
+      "id": "SB-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine offene Präferenz- oder Entscheidungsfrage wird vermerkt statt festgelegt; betroffene Anforderungen sind als vorläufig markiert.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; SB-02"
+    },
+    {
+      "id": "SB-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede Anforderung ist ein einzelner prüfbarer Satz mit stabiler ID, Auslöser, Reagierendem und beobachtbarer Reaktion.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4"
+    },
+    {
+      "id": "SB-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ungültige Eingabe, fehlende Fähigkeit, Timeout, Abbruch und Konflikt haben, soweit relevant, eigene Anforderungen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; SB-01"
+    },
+    {
+      "id": "SB-K07",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Zustände und Übergänge stehen in einer Tabelle mit Autorität; ein unklarer Ausgang oder Abbruch zählt nie als Erfolg.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; SB-01"
+    },
+    {
+      "id": "SB-K08",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Beispiele sind synthetisch, frei von Secrets und echten Personendaten und nennen die abgedeckten IDs.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6"
+    },
+    {
+      "id": "SB-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede Anforderung hat mindestens einen Vertragsfall mit deterministisch prüfbarer Erwartung, und jeder Fall verweist auf eine existierende ID.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 7/8; SB-01"
+    },
+    {
+      "id": "SB-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Fehlt ein Prüfwerkzeug, wird die Lücke benannt statt ein Prüfergebnis behauptet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 8"
+    },
+    {
+      "id": "SB-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Es wird kein Code geschrieben; die Spec bleibt Entwurf und erteilt keine Rechte zu Implementierung, Merge oder Wirkung.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 9, Schlussregel; SB-01"
+    },
+    {
+      "id": "SB-K12",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich deckt die Ausgabe mehr Fehler- und Grenzfälle mit eigener ID und Vertragsfall ab als der Vergleichsarm.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise)"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "neue-spec",
+      "beschreibung": "Verhalten neu spezifizieren, inklusive Fehlerfällen.",
+      "kriterien": [
+        "SB-K01",
+        "SB-K03",
+        "SB-K05",
+        "SB-K06",
+        "SB-K07",
+        "SB-K08",
+        "SB-K09",
+        "SB-K10",
+        "SB-K11",
+        "SB-K12"
+      ],
+      "kern": "SB-K09",
+      "faelle": [
+        "SB-01"
+      ]
+    },
+    {
+      "id": "ergaenzung",
+      "beschreibung": "Bestehende Spec ergänzen, eine Präferenz ist offen.",
+      "kriterien": [
+        "SB-K01",
+        "SB-K02",
+        "SB-K04",
+        "SB-K05",
+        "SB-K09"
+      ],
+      "kern": "SB-K04",
+      "faelle": [
+        "SB-02"
+      ]
+    }
+  ]
+}
