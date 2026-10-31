@@ -54,6 +54,23 @@
         }
       }
     },
+    "hinweise": {
+      "type": "array",
+      "description": "Hinweise ohne Einfluss auf Zahlen, z. B. no_discriminating_check je Fall, dessen deterministische Assertions alle markiert und nicht trennend sind (SLV0-EVAL-24).",
+      "items": {
+        "type": "object",
+        "required": ["code", "rule", "case_id", "assertion_ids", "rohdatensatz_ids", "message"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "const": "no_discriminating_check" },
+          "rule": { "const": "SLV0-EVAL-24" },
+          "case_id": { "type": "string" },
+          "assertion_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "rohdatensatz_ids": { "$ref": "#/$defs/ids" },
+          "message": { "type": "string" }
+        }
+      }
+    },
     "r_verstoesse": {
       "type": "array",
       "description": "Jeder einzelne R-Verstoß mit Fundstelle.",
@@ -101,7 +118,28 @@
       "additionalProperties": false,
       "properties": {
         "deterministisch": { "$ref": "#/$defs/assertblock" },
-        "rubrik": { "$ref": "#/$defs/assertblock" }
+        "rubrik": { "$ref": "#/$defs/assertblock" },
+        "nulllauf": {
+          "type": ["object", "null"],
+          "description": "Deterministische Assertions (ohne R) getrennt nach Nulllauf-Trennschärfe (SLV0-EVAL-24); null ohne deterministische Assertions.",
+          "required": ["trennend", "erhaltend", "ungeprueft"],
+          "additionalProperties": false,
+          "properties": {
+            "trennend": { "$ref": "#/$defs/assertblock" },
+            "erhaltend": { "$ref": "#/$defs/assertblock" },
+            "ungeprueft": { "$ref": "#/$defs/assertblock" }
+          }
+        },
+        "konjunktiv": {
+          "type": ["object", "null"],
+          "description": "Kern und Gegenkriterium je Stichprobe konjunktiv (SLV0-EVAL-24): Population sind die Rohdatensätze mit beiden Rollen; nie ein Produkt von Mittelwerten. null, wenn kein Rohdatensatz eine Rolle trägt.",
+          "required": ["kern_und_gegen", "ohne_kern_oder_gegen"],
+          "additionalProperties": false,
+          "properties": {
+            "kern_und_gegen": { "$ref": "#/$defs/assertblock" },
+            "ohne_kern_oder_gegen": { "$ref": "#/$defs/zahl" }
+          }
+        }
       }
     },
     "tokensumme": {

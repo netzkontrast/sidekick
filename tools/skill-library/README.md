@@ -53,8 +53,13 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/raw.js`, `lib/eval/report.js` | Rohdatensatz je Start; Bericht nur aus Rohdaten, R-Verstöße getrennt | EVAL-09…11, INV-06/-09 |
 | `lib/eval/rubric.js` | Rubrik je Skill: Struktur, eindeutige IDs, Hashbindung, Bindung von Rohdatensätzen, Versionsmischung | EVAL-13…15 |
 | `lib/eval/git.js` | Abgleich des Quellcommits mit `git rev-parse HEAD` und `git status`; einziges Modul mit Prozessstart (nur `git`) | EVAL-18 |
+| `lib/eval/textmatch.js` | Normalisierung `sl-judge-norm@1`, Fragmente, Wiederfund in Reihenfolge, Wortgrenzen | EVAL-20, -26 |
+| `lib/eval/judge.js` | Belegprüfung einer Bewertung (neues und älteres Format) | EVAL-19…21 |
+| `lib/eval/tree.js`, `lib/eval/casedir.js` | Dateibäume ohne Symlink-Folgen, Baumvergleich; Fallordner `fall.json` + `fixture/` | EVAL-22 |
+| `lib/eval/checks.js` | Prüfformat, `eval check`, Nulllauf, B1-Vorlauf | EVAL-22…25 |
+| `lib/eval/findings.js` | Einheiten, 1:1-Zuordnung erwarteter Befunde, Überberichtung | EVAL-26/-27 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
-| `test/` | je Fall SLV0-FALL-01…46 mindestens ein Test (Name beginnt mit der Fall-ID) | §9 |
+| `test/` | je Fall SLV0-FALL-01…46 und -48…59 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -81,7 +86,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
 
-## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…18)
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…27)
 
 Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
 Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
@@ -123,6 +128,19 @@ $B eval prepare … --manifest manifest.json                # nur Fälle aus dem
 $B eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git > snapshot.json  # HEAD und sauberes .agents/skills/
 ```
 
+Belege, Trennschärfe und erwartete Befunde (SLV0-EVAL-19…27, alle nur lesend):
+
+```sh
+$B eval judge check bewertung.json --outputs blind/ [--fixtures familien/]   # Zitate wiederfinden, „erfuellt“ ohne Beleg → unklar
+$B eval check --case FALLORDNER --workspace ARBEITSVERZ [--baseline AUSGANGSSTAND]  # Prüfungen → Assertions für den Rohdatensatz
+$B eval nullrun --cases FALLORDNER|VERZ-MIT-FALLORDNERN                       # trennend/erhaltend gegen die unveränderte Fixture
+$B eval nullrun --b1-kern kernurteile.json                                    # B1-Vorlauf: trennend (Exit 0) oder nicht (Exit 1)
+$B eval findings --case FALLORDNER ausgabe.md…                                # getroffen, verfehlt, kritisch verfehlt, Überberichtung
+```
+
+Formate: [Bewertung](../../docs/spec/schemas/eval-judgement.schema.json), [Fall `fall.json`](../../docs/spec/schemas/eval-case.schema.json),
+[Kernurteile B1-Vorlauf](../../docs/spec/schemas/eval-b1-vorlauf.schema.json); Spec §7.2–§7.4.
+
 **Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw` und `report` geben bei Erfolg das Artefakt selbst
 als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
 `{tool, tool_version, command, …}` aus. Exit 0 ok; Exit 1 Abbruch mit Code aus §8 (`refused: true`, `messages`) oder
@@ -133,6 +151,10 @@ oder interne Ausnahme. Kein Teilergebnis gilt als Erfolg.
 sowie `ledger reserve|result` und `split access|select` (Anhängen an das angegebene Ledger) schreiben. Nichts wird überschrieben.
 Alle übrigen Befehle lesen nur.
 
+`judge check` endet mit Exit 1, sobald ein Beleg nicht wiedergefunden wird oder ein `erfuellt` keinen gültigen Beleg hat; `nullrun --b1-kern`
+mit Exit 1 bei `nicht_trennend` oder `unklar` (kein Kandidatenstart in select). `check`, `nullrun --cases` und `findings` liefern Messwerte mit Exit 0;
+Warnungen (`evidence_unquoted`, `no_discriminating_check`) ändern den Exit-Code nie.
+
 **Schemas** (JSON Schema 2020-12, geprüft mit `lib/schema.js`):
 [Snapshot](../../docs/spec/schemas/eval-snapshot.schema.json),
 [Ledger-Eintrag](../../docs/spec/schemas/eval-ledger.schema.json),
@@ -140,8 +162,11 @@ Alle übrigen Befehle lesen nur.
 [normalisierte Spur](../../docs/spec/schemas/eval-normalized-trace.schema.json),
 [Rohdatensatz](../../docs/spec/schemas/eval-raw-record.schema.json),
 [Bericht](../../docs/spec/schemas/eval-report.schema.json),
-[Rubrik](../../docs/spec/schemas/eval-rubric.schema.json).
-Der Schemaprüfer kennt dafür zusätzlich `maximum`, `minItems` und `propertyNames`.
+[Rubrik](../../docs/spec/schemas/eval-rubric.schema.json),
+[Bewertung](../../docs/spec/schemas/eval-judgement.schema.json),
+[Fall](../../docs/spec/schemas/eval-case.schema.json),
+[Kernurteile B1-Vorlauf](../../docs/spec/schemas/eval-b1-vorlauf.schema.json).
+Der Schemaprüfer kennt dafür zusätzlich `maximum`, `minItems`, `maxItems` und `propertyNames`.
 
 ### Verhältnis zum Research-Helfer
 
@@ -153,6 +178,20 @@ rufen ihn nur lesend auf (`python3 -I -B`; ohne Python übersprungen):
 - `bind` liefert dieselben Dateien wie `variant_files` und denselben Kandidatenhash wie `digest(canonical(...))`.
 - `normalize` stimmt auf den Positivlistenfeldern mit `normalize_trace` überein (synthetische Spuren). Alle gespeicherten
   `*.normalized.json` unter `eval-runs/` lassen sich importieren und reproduzieren ihre Positivlistenfelder.
+
+Zwei weitere Research-Prüfer liegen nur auf dem Branch `research/e3-runde-2` und bleiben dort Referenz; ihre Daten sind mit Hashes als
+`test/fixtures/*.json` kopiert (Commit `a2afd98b`, Pfade wie im Branch; der Test prüft die Hashes vor der Nutzung):
+
+- `e3/verify_quotes.py` (Zitatprüfung): `judge check` reproduziert dessen Fragmentzählung auf den vier gespeicherten Bewertungen
+  (E3 Runde 1 Test 101/101, Regression 25/25, Select 49/55, M4 66/83; SLV0-FALL-51). Zwei gewollte Abweichungen:
+  (1) Ein Beleg, dessen Innenzitate kein Fragment mit 12 Zeichen ergeben (etwa nur ein zitierter Name), wird als Ganzes geprüft statt `ohne_beleg`
+  (Test +1 Fragment, M4 +2: 102/102 und 66/85); der Prototyp hätte das K-MELDEN-Urteil `Y695`/3 sonst fälschlich ohne Beleg gelassen.
+  (2) Die verlangte Reihenfolge: drei Belege setzen Fragmente in umgekehrter Reihenfolge zusammen (Test `Y613`/3, Regression `Y752`/1,
+  M4 `X896`/1); in Reihenfolge sind es 101/102, 24/25, 49/55, 65/85.
+  Neu ist die Urteilsfolge: Von den `erfuellt`-Urteilen werden `unklar` – Test 7 von 70 (6 Abwesenheitsaussagen „fehlt (…)“ ohne Suchbegriff,
+  1 Reihenfolge), Regression 1 von 16, Select 4 von 34, M4 15 von 49.
+- `grilling-runde/check_case.py` (Dateiprüfungen): `nullrun` ergibt auf den acht Dev-Fällen dieselben Ergebnisse je Prüfung wie der Prototyp mit
+  leerer Änderungsmenge: 31 Prüfungen, 20 erhaltend, 11 trennend, nur D8 ohne trennende Prüfung (SLV0-FALL-54).
 
 Bewusste Abweichungen vom Helfer: relative statt absolute Adapter-Symlinks (SLV0-VAL-15); `trials.json` nennt Arbeitsverzeichnisse
 relativ; Projektkonfiguration kommt aus einer Datei statt aus einem festen Text; das Ledger ist JSON Lines statt einer
@@ -214,6 +253,32 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 - **Git:** `git --no-optional-locks -c core.fsmonitor=false -C <root> rev-parse|status`; die Ausgabe nennt höchstens fünf
   unsaubere Pfade. Der Importtest erlaubt `node:child_process` nur in `lib/eval/git.js` und dort nur `execFileSync('git', …)`.
 
+### Auslegungen zu Belegen, Trennschärfe und Befunden (SLV0-EVAL-19…27)
+
+- **Bewertungsformat:** Eine Datei mit `schema_version` folgt streng dem Schema (Exit 2 bei Verstoß); ohne `schema_version` gilt sie als ältere
+  Bewertung (`format: aeltere-bewertung`). `beleg` darf eine Liste sein; jedes Zitat muss für sich vollständig gefunden werden, zwischen Zitaten gilt
+  keine Reihenfolge. Zitate ohne Fragment ≥ 12 Zeichen werden übergangen; bleibt keines übrig, ist das Kriterium `ohne_beleg`.
+- **Urteilsfolge:** Nur `erfuellt` wird herabgestuft (→ `unklar`). Ein nicht gefundener Beleg bei `nicht_erfuellt` oder `unklar` wird als
+  `evidence_not_found` gemeldet, der Status bleibt (Spec O-11). `kern: true` an einem Kriterium liefert `kern_geprueft` je Ausgabe; ältere Bewertungen
+  markieren den Kern nicht. `erfuellt_laut_bewertung` und `kern_erfuellt_laut_bewertung` sind die Angaben des Bewerters, ungeprüft.
+- **Fixtures:** `--fixtures VERZ` sucht `VERZ/<fall>/fixture/`. Ein `fixture`-Zitat muss vollständig in einer Datei stehen; die Fundstelle wird genannt.
+  Steht ein `zitat` nur in der Fixture, ist es `nicht_gefunden` mit Hinweis `nur_in_fixture`. Fehlt die Ausgabedatei `<code>.md`, ist das Exit 2.
+- **Abwesenheit:** Teilzeichenkette ohne Groß-/Kleinschreibung nach Normalisierung, ohne Wortgrenzen (strenger als ein Wortvergleich).
+- **Prüfformat:** Eine Prüfung mit `file` neben einer Regel ohne Datei (`absent_anywhere`, `*_under`) ist Exit 2. Prüf-IDs ohne `id` heißen
+  `<case_id>-P01`, `-P02`, … Der Ausgangsstand von `eval check` ist ohne `--baseline` die Fixture; für Arbeitsverzeichnisse aus `eval prepare` ist
+  `--baseline` mit einer unberührten Kopie des vorbereiteten Versuchs nötig, sonst zählen Paket- und Adapterdateien als hinzugefügt.
+  Anders als `git status` sieht der Baumvergleich auch ignorierte Dateien. `.git/` wird überall übersprungen; `absent_anywhere` überspringt zusätzlich `.claude/`.
+- **Nulllauf:** Fälle ohne `checks` stehen unter `faelle_ohne_pruefung` und erhalten keinen Hinweis. Im Bericht gilt eine Assertion-ID als markiert,
+  sobald ein Rohdatensatz des Falls sie markiert; nur `trennend` gegen `erhaltend` ist ein Widerspruch (Exit 2).
+- **Rollen:** `eval check` vergibt `kern`/`gegen`, wenn die Prüf-ID gleich `kern_kriterium` bzw. `gegen_kriterium` ist; sonst setzt der Aufrufer
+  `rolle` in den Metadaten. Der konjunktive Block steht in jedem Assertions-Block (je Variante, Fall, Familie, Wiederholung).
+- **B1-Vorlauf:** `unklar` ist weder erfüllt noch verfehlt; verfehlt B1 keinen Fall und ist ein Urteil `unklar`, ist das Ergebnis `unklar` (Exit 1).
+  Der Befehl prüft nicht, ob die Fälle wirklich select-Fälle sind oder die Urteile verblindet entstanden; das sichert das Verfahren (SL4 §4).
+- **Einheiten und Token:** Codeblöcke werden nicht gesondert behandelt. Token und `fundstelle_datei` werden als ganzes Wort gesucht (kein Buchstabe
+  oder keine Ziffer davor oder dahinter, soweit das Token dort selbst einen hat); `fundstelle_datei` passt auch über den Dateinamen allein.
+- **Überberichtung:** Nur Pfade mit Dateiendung; Pfadende ab Segmentgrenze (`retry.py` passt auf `vendor/x/retry.py`); bei mehreren passenden
+  Dateien genügt eine mit genügend Zeilen. Commits nur in Kleinschreibung; bekannt sind Hex-Wörter (7–40 Zeichen) aus den Fixture-Dateien.
+
 ## Nicht umgesetzt
 
 - Keine Bewertung: Weder Harness noch Rubrik urteilen; Bewerter-Session, Modellfixierung und menschliche Stichprobe (SL1 §7)
@@ -225,3 +290,9 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   Mehrere Rohdatensätze zum selben `attempt_id` werden nicht erkannt; der Bericht lehnt nur doppelte `run_id` ab.
 - `freeze --verify-git` prüft nur den Arbeitsbaum gegen HEAD; ein Einfrieren direkt aus einem Commit (`git show`) gibt es nicht.
 - Baseline-Läufe (EVAL-12) bleiben keine Werkzeugfunktion.
+- Belegprüfung: Paarurteile (`paare`) und ihre Begründungen werden nicht geprüft; kein Abgleich der Bewerterangaben `erfuellt`/`kern_erfuellt` mit
+  den Kriterien; keine Unicode-Normalisierung (NFC) über die genannten Zeichen hinaus.
+- Trennschärfe: Negativkontroll-Familie je Kandidat und die Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion (Spec O-12).
+  `eval raw` übernimmt `trennschaerfe` und `rolle` nur aus den Metadaten (z. B. aus `eval check`), prüft sie aber nicht gegen einen Nulllauf.
+  Der B1-Vorlauf erzeugt keine Ledger-Einträge und sperrt keine Kandidatenstarts technisch.
+- Überberichtung prüft gegen den Fixture-Text, nicht gegen einen Git-Stand (das ist P5 `cite-check`, Spec O-13).

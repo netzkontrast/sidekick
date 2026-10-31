@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { REPO_ROOT, CLI } from './helpers.js';
 
 export const RESEARCH = path.join(REPO_ROOT, 'research', 'skills-meta-prompting');
@@ -36,6 +37,36 @@ export function runEvalCli(args, { cwd = REPO_ROOT } = {}) {
 
 export function codesOf(json) {
   return (json?.messages ?? []).map((m) => m.code);
+}
+
+export const FIXTURES = path.join(REPO_ROOT, 'tools', 'skill-library', 'test', 'fixtures');
+
+/**
+ * Write a fixture bundle (test/fixtures/<name>.json: {herkunft, dateien: {pfad: {sha256, inhalt}}})
+ * into a temporary directory removed after the test. Every file hash is checked first, so the
+ * equality tests run on unchanged copies of the research data. Returns {root, herkunft, paths}.
+ */
+export function materializeBundle(t, name) {
+  const bundle = JSON.parse(fs.readFileSync(path.join(FIXTURES, `${name}.json`), 'utf8'));
+  const root = tmp(t, 'slv0-bundle-');
+  for (const [rel, { sha256, inhalt }] of Object.entries(bundle.dateien)) {
+    const actual = createHash('sha256').update(Buffer.from(inhalt, 'utf8')).digest('hex');
+    if (actual !== sha256) throw new Error(`Bundle ${name}: Hash von ${rel} weicht ab`);
+    const abs = path.join(root, ...rel.split('/'));
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, inhalt);
+  }
+  return { root, herkunft: bundle.herkunft, paths: Object.keys(bundle.dateien) };
+}
+
+/** Write files {rel: content} below dir (directories created). */
+export function writeTree(dir, files) {
+  for (const [rel, content] of Object.entries(files)) {
+    const abs = path.join(dir, ...rel.split('/'));
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, content);
+  }
+  return dir;
 }
 
 /** Python 3 available for equality tests against skill_pilot.py (skipped otherwise). */

@@ -19,9 +19,15 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric> …`;
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric|judge|check|nullrun|findings> …`;
   startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
+- Belege einer Bewertung prüfen: `node tools/skill-library/cli.js eval judge check BEWERTUNG.json --outputs BLIND-VERZ [--fixtures FAMILIEN-VERZ]`
+  (Exit 1, wenn ein Zitat nicht wiedergefunden wird oder ein „erfuellt“ ohne Beleg bleibt). Einzeltest: `node --test tools/skill-library/test/eval-judge.test.js`
+- Nulllauf-Trennschärfe: `node tools/skill-library/cli.js eval nullrun --cases FALLORDNER-VERZ`; B1-Vorlauf in select:
+  `… eval nullrun --b1-kern KERNURTEILE.json` (Exit 1 = kein Kandidatenstart). Prüfungen gegen ein Arbeitsverzeichnis:
+  `… eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]`. Erwartete Befunde und Überberichtung: `… eval findings --case FALLORDNER AUSGABE.md…`.
+  Einzeltests: `node --test tools/skill-library/test/eval-nullrun.test.js` (ebenso `eval-trennschaerfe`, `eval-findings`).
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`

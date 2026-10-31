@@ -47,8 +47,29 @@ export function buildRawRecord(meta, normalized, { rubric = null, ledger = null,
   if (record.variante === 'B0' && record.skills.length > 0) throw new UsageError('Variante B0 darf keine Skills nennen');
   const ids = record.assertions.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new UsageError('doppelte Assertion-IDs');
+  checkAssertionMarks(record);
   if (ledger !== null) checkAgainstLedger(record, ledger, ledgerLabel);
   return record;
+}
+
+/**
+ * SLV0-EVAL-24: `trennschaerfe` only on deterministic non-R assertions; at most one `kern` and one
+ * `gegen` role per record, never on an R assertion. Violations are usage errors (exit 2).
+ */
+export function checkAssertionMarks(record, label = 'Rohdatensatz') {
+  const roles = { kern: 0, gegen: 0 };
+  for (const a of record.assertions) {
+    const t = a.trennschaerfe ?? null;
+    if (t !== null && (a.art !== 'deterministisch' || a.r_regel !== null)) {
+      throw new UsageError(`${label} ${record.run_id}: trennschaerfe nur an deterministischen Assertions ohne r_regel (${a.id})`);
+    }
+    const r = a.rolle ?? null;
+    if (r !== null) {
+      if (a.r_regel !== null) throw new UsageError(`${label} ${record.run_id}: R-Assertion ${a.id} darf keine rolle tragen`);
+      roles[r] += 1;
+      if (roles[r] > 1) throw new UsageError(`${label} ${record.run_id}: mehr als eine Assertion mit rolle ${r}`);
+    }
+  }
 }
 
 /**

@@ -6,6 +6,7 @@
 > Aktivierung nur durch den Owner am Hash ([A-20261030-sl-aktivierung](../fragen/skill-library/questions/Q-20261030-sl-aktivierung.md)); Feedback nur synthetisch oder freigegeben ([A-20261030-sl-feedbackdaten](../fragen/skill-library/questions/Q-20261030-sl-feedbackdaten.md)).
 > Implementierungsauftrag: [library-implementation-handover.md](../../research/skills-meta-prompting/library-implementation-handover.md).
 > Version 0.2 · 31.10.2026 · Ergänzung **SLV0-EVAL-13…18** (Rubrik je Skill nach K5.6, Querprüfungen Ledger/Manifest/Git) und Fälle **SLV0-FALL-38…46**; bestehende IDs unverändert.
+> Version 0.3 · 31.10.2026 · Ergänzung **SLV0-EVAL-19…27** nach den Paketen P1–P3 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`, Research-Branch `research/e3-runde-2`, PR #20): belegpflichtige Bewertungen, Nulllauf-Trennschärfe mit Gegenkriterium und B1-Vorlauf, erwartete Befunde mit Überberichtung; Formate §7.2–§7.4, Fälle **SLV0-FALL-48…59** (§9.1). Bestehende IDs unverändert.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -161,6 +162,15 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-16 | **Querprüfung Rohdatensatz ↔ Ledger:** Mit `raw --ledger` muss `attempt_id` im Ledger reserviert sein, und deren `trial_id` muss `<case_id>--<variante>` lauten (Benennung aus EVAL-04). Liegt ein Ergebnis vor, gilt: ein gesetzter `trace_sha256` ist gleich `spur_sha256`, nicht leere `raw_ids` enthalten `run_id`. Abweichung → `ledger_mismatch`. Das Ledger wird nur gelesen. | fehlt |
 | SLV0-EVAL-17 | **Querprüfung Vorbereiten ↔ Split-Manifest:** Mit `prepare --manifest` wird das Manifest nach EVAL-06 geprüft; jeder Fall muss darin mit gleichem Fall-Hash stehen. Fall fehlt → `case_not_in_manifest`; Hash weicht ab → `case_hash_mismatch`. Alle Fälle werden vor dem ersten Schreiben geprüft; bei Ablehnung entsteht kein Zielverzeichnis. Der `split` jedes Versuchs kommt dann aus dem Manifest. | fehlt (`split check --cases` vergleicht nur nachträglich) |
 | SLV0-EVAL-18 | **Quellcommit gegen Git:** `freeze --source-commit SHA --verify-git` prüft vor dem Einfrieren, dass `SHA` gleich der vollständigen Ausgabe von `git rev-parse HEAD` ist (sonst `source_commit_mismatch`) und dass unter `.agents/skills/` keine geänderte, ungetrackte oder ignorierte Datei liegt (sonst `worktree_dirty`). Die Prüfung liest nur (`git --no-optional-locks`); Git ist kein Client im Sinne von SLV0-INV-04. Nur ein Modul darf dafür einen Prozess starten, ausschließlich `git`. Ohne `--verify-git` wird Git nicht aufgerufen. | fehlt |
+| SLV0-EVAL-19 | **Belegpflichtige Bewertung (Format):** Eine Bewertungsdatei nach [eval-judgement.schema.json](schemas/eval-judgement.schema.json) (§7.2) nennt je bewerteter Ausgabe (anonymer Code) und je Kriterium einen `status` (`erfuellt`, `nicht_erfuellt`, `unklar`) und genau eine Belegart `beleg_art`: `zitat` (wörtlicher Text aus der bewerteten Ausgabe), `fixture` (wörtlicher Text aus der Fixture des Falls), `abwesenheit` (ein `suchbegriff`, der in der Ausgabe nicht vorkommt) oder `fehlt`. Kommentar steht getrennt in `anmerkung` und wird nie als Beleg gelesen. | Prototyp `e3/verify_quotes.py` (Research-Branch), ohne Belegart |
+| SLV0-EVAL-20 | **Wiederfund:** Ausgabe, Fixture-Dateien, Zitate und Suchbegriffe werden gleich normalisiert (§7.2): typografische Anführungszeichen werden zu `"` bzw. `'`, die Markdown-Zeichen `*` `` ` `` `\|` `_` `>` `#` zu Leerzeichen, jeder Leerraum zu einem Leerzeichen; Ränder entfallen. Auslassungen (`…`, `...`, `(...)`, `[...]`, `(…)`, `[…]`) teilen ein Zitat in Fragmente; es zählen nur Fragmente mit mindestens 12 Zeichen (Codepoints nach Normalisierung). Ein Zitat ist gefunden, wenn alle Fragmente **in dieser Reihenfolge** und ohne Überlappung im Text stehen; Groß- und Kleinschreibung zählen. Ein `fixture`-Zitat muss in einer einzigen Fixture-Datei stehen. Ein Suchbegriff belegt Abwesenheit nur, wenn er (mindestens 3 Zeichen nach Normalisierung) ohne Beachtung der Groß- und Kleinschreibung nirgends in der Ausgabe steht. | Prototyp: gleiche Normalisierung für `„“”`, Fragmente ohne Reihenfolge |
+| SLV0-EVAL-21 | **Belegprüfung `eval judge check`:** prüft eine Bewertung gegen die bewerteten Ausgaben (`<code>.md`) und, falls angegeben, die Fixtures. Je Kriterium ist der Beleg `verifiziert`, `nicht_gefunden` oder `ohne_beleg` (Belegart `fehlt` oder kein Fragment mit 12 Zeichen). Ein `erfuellt` ohne verifizierten Beleg wird `unklar` (`evidence_missing` bzw. `evidence_not_found`); `nicht_erfuellt` und `unklar` bleiben, ein nicht gefundener Beleg wird trotzdem gemeldet. Die Zählung nennt Kriterien je Belegergebnis, angegebenen und geprüften Status, herabgestufte Urteile sowie Fragmente gesamt, gefunden (ohne Reihenfolge; Vergleichszahl zum Prototyp) und in Reihenfolge. Ältere Bewertungen ohne `schema_version` werden kompatibel gelesen (§7.2): Belege in Anführungszeichen gelten als `zitat`, andere als `zitat` mit Hinweis `evidence_unquoted`, leere oder mit „fehlt“ beginnende als `fehlt`. Exit 1 bei mindestens einem Fehlercode, sonst 0. Liest nur. | Prototyp zählt nur Fragmente; keine Folge für das Urteil |
+| SLV0-EVAL-22 | **Fallordner und Prüfformat:** Ein Fall ist ein Ordner mit `fall.json` nach [eval-case.schema.json](schemas/eval-case.schema.json) und der Fixture unter `fixture/` (§7.3). `checks` sind deterministische Dateiprüfungen im Prüfformat des Research-Prüfers `check_case.py` (§7.3); jede Prüfung hat genau eine Regel, ihre ID ist `id` oder `<case_id>-P<nn>` (Position ab `01`). Änderungen ergeben sich aus dem Vergleich Ausgangsstand ↔ Arbeitsverzeichnis (hinzugefügt, geändert, gelöscht; `.git/` ausgenommen), nicht aus Git. `eval check` wertet die Prüfungen gegen ein Arbeitsverzeichnis aus (Ausgangsstand `--baseline`, sonst die Fixture) und gibt je Prüfung eine Assertion der Art `deterministisch` für den Rohdatensatz aus, mit Trennschärfe (EVAL-23) und Rolle (EVAL-24). Unbekannte oder mehrere Regeln, ungültiges Muster oder unsicherer Pfad → Exit 2. Liest nur. | `check_case.py` (Research-Branch); Änderungen dort per `git status` |
+| SLV0-EVAL-23 | **Nulllauf-Trennschärfe:** `eval nullrun` wertet jede Prüfung eines Falls gegen die **unveränderte** Fixture aus (Ausgangsstand = Arbeitsverzeichnis = Fixture). Fällt der Nulllauf durch, ist die Prüfung `trennend`; besteht er, ist sie `erhaltend`: sie zeigt nur, dass nichts kaputtging, nicht dass etwas getan wurde. Ein Fall ohne trennende Prüfung erhält den Hinweis `no_discriminating_check`; sein Ergebnis beruht dann allein auf Bewertung. Der Hinweis ändert den Exit-Code nicht. Liest nur. | fehlt (Nulllauf von Hand: 20 von 31 Prüfungen erhaltend) |
+| SLV0-EVAL-24 | **Trennschärfe, Kern und Gegenkriterium in Rohdaten und Bericht:** Eine deterministische Assertion darf `trennschaerfe` tragen (`trennend`, `erhaltend`; `null` = nicht gegen einen Nulllauf geprüft). Je Rohdatensatz trägt höchstens eine Assertion `rolle: kern` und höchstens eine `rolle: gegen`, nie eine R-Assertion. Ein Fall nennt neben `kern_kriterium` optional ein `gegen_kriterium` (nur zusammen mit dem Kern); nennt `eval check` eine Prüf-ID als Kern oder Gegenkriterium, erhält deren Assertion die Rolle. Der Bericht weist deterministische Assertions getrennt nach trennend, erhaltend und nicht geprüft aus. Sind alle deterministischen Assertions eines Falls markiert und ist keine trennend, meldet er `no_discriminating_check` für diesen Fall. Kern und Gegenkriterium werden **je Stichprobe konjunktiv** verrechnet: bestanden nur, wenn beide bestanden sind; nicht bestanden, wenn eines nicht bestanden ist; sonst unklar. Nenner sind die Rohdatensätze mit beiden Rollen, nie ein Produkt von Mittelwerten. Widersprüchliche Markierung derselben Assertion-ID in einem Fall → Exit 2. | fehlt |
+| SLV0-EVAL-25 | **B1-Vorlauf in select (E3-Form der Nulllauf-Trennschärfe):** Vor jedem Kandidatenstart in select läuft nur B1 auf den select-Fällen des Kandidaten. B1 wird absolut und nur am Kernkriterium bewertet, mit anonymisierten Ausgaben: durch den deterministischen Prüfer des Falls, sonst durch eine getrennte Bewerter-Session mit Belegprüfung (EVAL-21). Erfüllt B1 den Kern in **allen** diesen Fällen, ist die select-Familienmenge `nicht_trennend`: kein Kandidatenstart in select; entweder schreibt eine getrennte Session eine trennende Familie, oder der Kandidat wird zurückgestellt („zurückgestellt, Familie nicht trennend“). Verfehlt B1 den Kern in mindestens einem Fall, ist sie `trennend`; der Kandidat läuft in select, und die B1-Läufe bilden die B1-Seite der Paare (kein zweiter B1-Start). `eval nullrun --b1-kern` bildet die Entscheidung aus den Kernurteilen nach [eval-b1-vorlauf.schema.json](schemas/eval-b1-vorlauf.schema.json): `trennend` mit den trennenden Fall-IDs (Exit 0); `nicht_trennend` mit `family_not_discriminating` (Exit 1); verfehlt B1 keinen Fall, ist aber mindestens ein Urteil `unklar`, `unklar` mit `core_verdict_unclear` (Exit 1). Liest nur und startet nichts. | Owner-Freigabe A-20261031-e3-b1-vorlauf (PR #20); Evidenz E3-Runde 2, Ergebnis §4–§5 |
+| SLV0-EVAL-26 | **Erwartete Befunde mit 1:1-Zuordnung:** Ein Fall darf `erwartete_befunde` tragen: je Befund `id`, `token_gruppen` (Liste von Gruppen, je Gruppe Alternativen), optional `fundstelle_datei` und `gewicht` (`kritisch` oder `normal`, Standard `normal`). Die Ausgabe wird in Einheiten zerlegt (Absätze, Listenpunkte, Tabellenzeilen, Überschriften; §7.4). Ein Befund passt auf eine Einheit, wenn jede Gruppe mit mindestens einer Alternative als ganzes Wort vorkommt (normalisiert nach EVAL-20, ohne Groß- und Kleinschreibung; `*` am Ende einer Alternative erlaubt ein Präfix) und, falls angegeben, `fundstelle_datei` (Pfad oder Dateiname) in derselben Einheit steht. Zuordnung 1:1: jeder Befund höchstens einer Einheit, jede Einheit höchstens einem Befund. Die Zuordnung ist maximal; kritische Befunde werden zuerst zugeordnet, dann alle in Fall-Reihenfolge, Einheiten in Textreihenfolge. | fehlt (Konzept aus skill-optimization, nur Konzept) |
+| SLV0-EVAL-27 | **Überberichtung und `eval findings`:** Jede in der Ausgabe genannte Fundstelle (`pfad:zeile`, `pfad:von-bis`, `pfad#Lx`, `pfad#Lx-Ly`) und jede Commit-ID (7–40 Hex-Zeichen mit mindestens einer Ziffer und einem Buchstaben) wird in der Fixture nachgeschlagen (§7.4). Gibt es keine Datei mit diesem Pfad oder Pfadende, liegt eine genannte Zeile in keiner passenden Datei zwischen 1 und dem Dateiende, oder steht der Commit in keiner Fixture-Datei (auch nicht als Präfix eines dort genannten Commits oder umgekehrt), ist das eine `ueberberichtung` mit Grund und Zeile der Ausgabe. `eval findings` berichtet je Ausgabe getroffene Befunde (mit Einheit und Zeile), verfehlte, kritisch verfehlte und Überberichtungen. Exit 0: das sind Messwerte, keine Ablehnung. Liest nur. | fehlt |
 
 ### 7.1 Rubrikformat (SLV0-EVAL-13)
 
@@ -174,6 +184,76 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 
 Rubriken bewerten nichts selbst und enthalten keine Schwellen oder Scores (SLV0-INV-06). Eine Rubrik ist kein Freigabebeleg: Ob die Kriterien
 den Skill treffen, entscheidet die Owner-Review der Rubrik-PR (O-10).
+
+### 7.2 Bewertungsformat und Belegprüfung (SLV0-EVAL-19…21)
+
+Die Belegprüfung urteilt nicht über Qualität. Sie prüft nur, ob die Belege eines Bewerters dort stehen, wo er sie verortet, und nimmt
+einem `erfuellt` ohne prüfbaren Beleg die Geltung (SLV0-INV-06).
+
+| Feld | Inhalt |
+|---|---|
+| `schema_version`, `format` | `1` und `sl-eval-judgement@1`; ohne `schema_version` gilt die Datei als ältere Bewertung (unten). |
+| `bewerter` | Wer bewertet hat, z. B. eine benannte, verblindete Bewerter-Session. |
+| `ausgaben` | Objekt `{<code>: Ausgabe}`; der Code ist der anonyme Dateiname der Ausgabe ohne `.md` (`^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$`). |
+| Ausgabe | `fall` (sicherer relativer Pfad; Fixture unter `<fixtures>/<fall>/fixture/`), `kriterien[]`; optional `kern_erfuellt`, `erfuellt`, `r_verstoss`, `auffaelligkeiten` (Angaben des Bewerters, nicht geprüft). |
+| Kriterium | `kriterium` (ID oder Formulierung), `status`, `beleg_art`; `beleg` (Text oder Liste von Texten, je Text ein Zitat) nur und dann Pflicht bei `zitat` und `fixture`; `suchbegriff` nur und dann Pflicht bei `abwesenheit`; optional `kern` (boolesch), `anmerkung` (wird nie geprüft). |
+| `paare` | Paarurteile mit Begründung; nur Daten, nicht geprüft (O-11). |
+
+**Normalisierung `sl-judge-norm@1`:** `„ “ ” « »` → `"`, `‚ ‘ ’` → `'`; `*`, `` ` ``, `|`, `_`, `>`, `#` → Leerzeichen; jede Folge von Leerraum → ein
+Leerzeichen; führender und folgender Leerraum entfällt. Anführungs- und Leerzeichen an den Rändern eines Fragments werden vor dem Vergleich entfernt.
+
+**Ältere Bewertungen** (ohne `schema_version`): `ausgaben` oder `faelle`; je Ausgabe `kriterien` oder `punkte`; je Kriterium `status` oder `urteil`,
+Beleg aus `beleg` oder `zitat`, Bezeichnung aus `kriterium`, `punkt`, `nr` oder `id`. Ein leerer oder mit „fehlt“ beginnender Beleg ist `fehlt`.
+Enthält der Beleg Teile in Anführungszeichen (`„…“`, `"…"`, `«…»`, `‚…‘`, je mindestens 6 Zeichen), ist jeder Teil ein `zitat` und der Text dazwischen
+Kommentar. Das gilt nur, wenn mindestens ein Teil ein Fragment mit 12 Zeichen ergibt; sonst (keine oder nur kurze Teile, etwa ein zitierter Name)
+ist der ganze Beleg ein `zitat`, und der Bericht nennt `evidence_unquoted`. Ein kurzes Innenzitat verdeckt so keinen wörtlich vorhandenen Beleg.
+
+### 7.3 Fallordner und Prüfformat (SLV0-EVAL-22…24)
+
+Ein Fallordner enthält `fall.json` und `fixture/`. Felder von `fall.json`: `id`, `prompt` (Pflicht); `family_id`, `split`, `rubrik`, `rubrik_kriterien`,
+`kern_kriterium`, `gegen_kriterium` (nur mit `kern_kriterium`), `checks`, `erwartete_befunde`, `erwartung`, `erreichbar`, `quelle`. Andere Felder sind unzulässig.
+
+Eine Prüfung ist ein Objekt mit optional `id` und genau einer Regel. Pfade sind relativ zum Arbeitsverzeichnis mit `/`. Dateien werden als UTF-8 gelesen
+(ungültige Folgen werden ersetzt). Jede Regel mit `file` ist nicht bestanden, wenn die Datei fehlt.
+
+| Regel | Felder | bestanden, wenn |
+|---|---|---|
+| `frontmatter` | `file`, `{schluessel: wert}` | Die Datei beginnt mit `---` und Zeilenumbruch; bis zur ersten folgenden Zeile, die mit `---` beginnt, gilt jede Zeile mit `:` als `schluessel: wert` (am ersten `:` getrennt, Ränder ohne Leerraum, kein Entquoten). Jeder genannte Schlüssel hat genau den Wert. |
+| `frontmatter_in` | `file`, `{schluessel: [werte]}` | wie oben, der Wert liegt in der Liste |
+| `contains` / `not_contains` | `file`, Text | die Datei enthält den Text wörtlich bzw. nicht (ohne Normalisierung) |
+| `regex` | `file`, Muster | das Muster (ECMAScript-Syntax, ohne Flags; `\w` nur ASCII) trifft irgendwo in der Datei |
+| `count_at_least` | `file`, `[Text, n]` | der Text kommt mindestens `n`-mal ohne Überlappung vor (`n` ≥ 1) |
+| `absent_anywhere` | Text | keine Datei des Arbeitsverzeichnisses enthält den Text; Ordner `.git/` und `.claude/` (auf jeder Ebene) und Symlinks ausgenommen |
+| `only_changed_under` | Präfix | jeder hinzugefügte, geänderte oder gelöschte Pfad beginnt mit dem Präfix |
+| `no_new_files_under` | Präfix | kein hinzugefügter Pfad beginnt mit dem Präfix |
+| `new_file_under` | Präfix, optional `contains_any` | mindestens ein hinzugefügter Pfad mit dem Präfix, dessen Inhalt einen der Texte enthält (ohne `contains_any`: irgendein hinzugefügter Pfad) |
+
+Ausgangsstand und Arbeitsverzeichnis werden als Dateibäume verglichen: reguläre Dateien nach Bytes, Symlinks nach Ziel, ohne ihnen zu folgen.
+
+**Trennschärfe:** Im Nulllauf ist das Arbeitsverzeichnis die unveränderte Fixture. `trennend` heißt, der Nulllauf fällt durch; `erhaltend`, er besteht.
+**Rollen:** `kern` und `gegen` markieren die Assertions, die das Kernkriterium bzw. das Gegenkriterium eines Falls prüfen. Das Gegenkriterium schließt den
+trivialen Weg zum Kern aus (z. B. „erfüllt den Kern, ohne die eigentliche Aufgabe zu erledigen“).
+
+### 7.4 Erwartete Befunde und Überberichtung (SLV0-EVAL-26/-27)
+
+| Feld | Inhalt |
+|---|---|
+| `id` | eindeutig im Fall (Muster wie Fall-IDs) |
+| `token_gruppen` | Liste von Gruppen; jede Gruppe ist eine Liste von Alternativen (Text, mindestens ein Zeichen nach Normalisierung). Alle Gruppen müssen vorkommen. |
+| `fundstelle_datei` | optional: relativer Pfad in der Fixture; die Einheit muss ihn oder seinen Dateinamen enthalten |
+| `gewicht` | `kritisch` oder `normal` (Standard) |
+
+**Einheiten:** Die Ausgabe wird zeilenweise gelesen. Eine Leerzeile beendet eine Einheit. Eine Zeile, die (nach Einrückung) mit einem Listenzeichen
+(`-`, `*`, `+` oder Zahl mit `.` bzw. `)`, je gefolgt von Leerraum), mit `|` (Tabellenzeile) oder mit `#` (Überschrift) beginnt, eröffnet eine neue Einheit;
+eine Überschrift ist eine Einheit für sich. Andere Zeilen setzen die laufende Einheit fort. Einheiten tragen Nummer und Startzeile.
+
+**Wortgrenze:** Vor und nach einem Treffer steht kein Buchstabe und keine Ziffer; bei einer Alternative mit `*` am Ende entfällt die Grenze rechts.
+
+**Fundstellen:** erkannt im unveränderten Ausgabetext, nachdem URLs (`schema://` bis zum nächsten Leerraum) ausgeblendet sind; der Pfad hat mindestens
+eine Dateiendung, die mit einem Buchstaben beginnt, und steht nicht hinter `/`, `.`, `-` oder einem Wortzeichen (absolute Pfade werden daher nicht geprüft). Führende `./` entfallen. Passend sind Fixture-Dateien mit genau
+diesem Pfad oder mit diesem Pfadende ab einer Segmentgrenze. Zeilen zählen ab 1; eine Datei hat so viele Zeilen wie Zeilenumbrüche, plus eine, wenn
+sie nicht mit einem Zeilenumbruch endet. **Commit-IDs:** Wörter aus 7–40 Zeichen `0-9a-f` mit mindestens einer Ziffer und einem Buchstaben, nach Abzug
+umgebender Satz- und Auszeichnungszeichen; bekannt ist ein Commit, wenn ein Hex-Wort aus 7–40 Zeichen in einer Fixture-Datei mit ihm beginnt oder er mit ihm.
 
 ## 8. Fehlerfälle
 
@@ -190,6 +270,8 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Eval | `snapshot_hash_mismatch`, `candidate_baseline_mismatch`, `candidate_multi_dimension`, `replacement_not_unique`, `workspace_exists`, `config_overwrite`, `budget_exhausted`, `ledger_locked`, `family_split_overlap`, `split_access_denied`, `split_consumed`, `trace_invalid`, `report_without_raw` | Vorgang abgebrochen, kein Teilergebnis gilt als Erfolg |
 | Rubrik | `rubric_invalid`, `rubric_id_duplicate`, `rubric_stale`, `rubric_mismatch`, `rubric_version_mixed` | Prüfung fehlgeschlagen bzw. Rohdatensatz oder Bericht nicht erzeugt; nichts wird neu gebunden |
 | Querprüfung | `ledger_mismatch`, `case_not_in_manifest`, `case_hash_mismatch`, `source_commit_mismatch`, `worktree_dirty` | Vorgang abgebrochen; Ledger, Manifest und Git-Stand bleiben unverändert |
+| Belege, Trennschärfe | `evidence_not_found`, `evidence_missing` · Warnung `evidence_unquoted` (SLV0-EVAL-21) · Warnung `no_discriminating_check` (SLV0-EVAL-23/-24) · `family_not_discriminating`, `core_verdict_unclear` (SLV0-EVAL-25) | Belegprüfung fehlgeschlagen bzw. kein Kandidatenstart in select (Exit 1); Warnungen ändern den Exit-Code nicht; nichts wird korrigiert oder neu bewertet |
+| Befund (Messwert) | `ueberberichtung` mit Grund `pfad_fehlt`, `zeile_ausserhalb` oder `commit_unbekannt` (SLV0-EVAL-27) | Teil des Ergebnisses von `eval findings`, keine Ablehnung (Exit 0) |
 
 Kein Fehler wird still zu einer Warnung herabgestuft, und kein Werkzeug „repariert“ Eingaben (SLV0-INV-08).
 
@@ -248,6 +330,25 @@ Jeder Fall ist ein späterer Contract-Test mit synthetischen Eingaben, außer -0
 | SLV0-FALL-46 | `freeze --verify-git` in einem Test-Git-Repo: passender HEAD und sauberer Baum; anderer Commit; geänderte, ungetrackte bzw. ignorierte Datei unter `.agents/skills/`; Änderung außerhalb; Option ohne `--source-commit`; ohne Git-Repo | ok; `source_commit_mismatch`; `worktree_dirty` (3×); ok; Exit 2; Exit 2. Git-Status vorher/nachher gleich; nur ein Modul startet `git` | EVAL-18, INV-04 |
 | SLV0-FALL-47 | Falldatei `CLAUDE.local.md`; `.mcp.json`; verschachtelt `docs/CLAUDE.md` bzw. `sub/Agents.md`; harmlos `docs/claude-notes.md` | `config_overwrite` (4×), keine Ausgabe; zuletzt ok | EVAL-04 |
 
+### 9.1 Fälle zu SLV0-EVAL-19…27
+
+Gleiche Konventionen wie oben; -51 und -54 sind Gleichheitstests auf gespeicherten Research-Daten (Kopie mit Herkunft und Hashes als Test-Fixture).
+
+| ID | Fall | Erwartung | Deckt |
+|---|---|---|---|
+| SLV0-FALL-48 | `judge check`, neues Format: Zitat mit anderem Leerraum, Markdown-Zeichen und typografischen Anführungszeichen; erfundenes Zitat; zwei Fragmente in umgekehrter Reihenfolge; Zitat nur aus Fragmenten unter 12 Zeichen; `fixture`-Beleg aus der Fixture; `zitat`, das nur in der Fixture steht | verifiziert; `evidence_not_found` und `erfuellt` → `unklar`; `evidence_not_found`; `evidence_missing`, `ohne_beleg`, `unklar`; verifiziert mit Fixture-Datei; `evidence_not_found` mit Hinweis `nur_in_fixture`. Exit 1 | EVAL-19/-20/-21 |
+| SLV0-FALL-49 | `abwesenheit` mit fehlendem Begriff; mit dem Begriff in anderer Schreibweise in der Ausgabe; `fehlt` bei `erfuellt` und bei `nicht_erfuellt`; Bewertung nur mit verifizierten Belegen | verifiziert; `evidence_not_found`, `unklar`; `evidence_missing` nur beim ersten; Exit 0, alle Kriterien verifiziert | EVAL-20/-21 |
+| SLV0-FALL-50 | Ältere Bewertung: Beleg mit Teilen in Anführungszeichen und Kommentar; Beleg ohne Anführungszeichen; Beleg mit nur kurzem Innenzitat, der wörtlich in der Ausgabe steht; „fehlt (…)“; `punkte`/`urteil`. Neues Format verletzt das Schema (`zitat` ohne `beleg`); Ausgabe-Code `../x`; Ausgabedatei fehlt | nur die zitierten Teile geprüft; `zitat` und Warnung `evidence_unquoted`; als Ganzes verifiziert; `fehlt`; gelesen; Exit 2 (3×) | EVAL-21 |
+| SLV0-FALL-51 | Gleichheitstest: die vier gespeicherten Bewertungen E3 Runde 1 (Test, Regression, Select) und M4 mit ihren Ausgaben | Fragmente gefunden wie in der Zitatprüfung (101/101, 25/25, 49/55, 66/83), zuzüglich der Belege, deren Innenzitate kein Fragment ergeben und die deshalb als Ganzes geprüft werden (Test +1, M4 +2): 102/102, 25/25, 49/55, 66/85; in Reihenfolge 101/102, 24/25, 49/55, 65/85 (drei Belege setzen Fragmente in umgekehrter Reihenfolge zusammen) | EVAL-20/-21 |
+| SLV0-FALL-52 | Jede Regel aus §7.3 auf einem synthetischen Ausgangsstand und Arbeitsverzeichnis, je bestanden und nicht bestanden; Datei fehlt; `eval check` mit Kern- und Gegenprüfung; Prüfung mit zwei Regeln; unbekannte Regel; ungültiges Muster; `file: ../x` | wie §7.3; nicht bestanden „Datei fehlt“; Assertions `deterministisch` mit `trennschaerfe` und `rolle`; Exit 2 (4×) | EVAL-22, EVAL-24 |
+| SLV0-FALL-53 | `nullrun` auf synthetischen Fällen: Prüfung, die an der unveränderten Fixture besteht bzw. durchfällt; Fall nur mit erhaltenden Prüfungen; Fixture vor und nach dem Lauf | `erhaltend` bzw. `trennend`; Warnung `no_discriminating_check`, Exit 0; Fixture unverändert | EVAL-23 |
+| SLV0-FALL-54 | Gleichheitstest: die acht grilling-Dev-Fälle D1–D8 der Research-Runde | 31 Prüfungen: 20 erhaltend, 11 trennend; nur D8 ohne trennende Prüfung | EVAL-23 |
+| SLV0-FALL-55 | Bericht aus Rohdaten mit markierten Assertions; Fall nur mit erhaltenden Assertions; `trennschaerfe` an einer Rubrik-Assertion; zwei Assertions `rolle: kern`; Rolle an einer R-Assertion; widersprüchliche Markierung über zwei Rohdatensätze | trennend, erhaltend und nicht geprüft getrennt; `no_discriminating_check` für diesen Fall; Exit 2 (4×) | EVAL-24 |
+| SLV0-FALL-56 | Fünf Stichproben: Kern bestanden + Gegen nicht bestanden; Kern nicht bestanden + Gegen bestanden; beide bestanden; Kern bestanden + Gegen unklar; Kern ohne Gegen. `fall.json` mit `gegen_kriterium` ohne `kern_kriterium` | `kern_und_gegen` 1/4 bestanden, 2/4 nicht bestanden, 1/4 unklar; 1/5 ohne Kern oder Gegen; kein Feld mit dem Produkt der Einzelquoten (3/4 × 2/4); Exit 2 | EVAL-24 |
+| SLV0-FALL-57 | `nullrun --b1-kern`: B1 erfüllt den Kern in allen select-Fällen; verfehlt ihn in einem; verfehlt keinen, ein Urteil `unklar`; doppelte Fall-ID | `nicht_trennend` mit `family_not_discriminating`, Exit 1; `trennend` mit dieser Fall-ID, Exit 0; `unklar` mit `core_verdict_unclear`, Exit 1; Exit 2 | EVAL-25 |
+| SLV0-FALL-58 | `findings`: eine Einheit passt auf zwei Befunde, davon einer kritisch; ein Befund passt auf zwei Einheiten; eine Token-Gruppe fehlt; Treffer über eine Alternative; `fundstelle_datei` fehlt in der Einheit; Token `9` in „2019“; Präfix `verdoppel*` | die Einheit geht an den kritischen Befund; der Befund zählt einmal; verfehlt; getroffen; verfehlt; kein Treffer; Treffer. Zählung getroffen, verfehlt, kritisch verfehlt | EVAL-26 |
+| SLV0-FALL-59 | Überberichtung: `vendor/a.py:3` vorhanden; `fehlt.py:1`; `a.py:99` hinter dem Dateiende; `a.py#L2-L40`; nur Dateiname `a.py:2`; Präfix eines in der Fixture genannten Commits; unbekannter Commit; Hex-Wort ohne Ziffer; URL mit Port | ok; `pfad_fehlt`; `zeile_ausserhalb` (2×); ok; ok; `commit_unbekannt`; nicht geprüft (2×). Exit 0, Fixture und Ausgabe unverändert | EVAL-27 |
+
 ## 10. Abgrenzung
 
 - **Keine Aktivierung durch Code.** Aktivieren heißt im Repo: Owner mergt einen PR am geprüften Hash (SL4 §5). Werkzeuge liefern Belege, keine Freigaben.
@@ -268,6 +369,12 @@ Jeder Fall ist ein späterer Contract-Test mit synthetischen Eingaben, außer -0
 | [eval-raw-record.schema.json](schemas/eval-raw-record.schema.json) | Rohdatensatz je Start (SLV0-EVAL-09, SL1 §8) | Tests |
 | [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11), mit Rubrikversionen (SLV0-EVAL-15) | Tests |
 | [eval-rubric.schema.json](schemas/eval-rubric.schema.json) | Rubrik je Skill (SLV0-EVAL-13, §7.1) | [docs/research/rubriken/](../research/rubriken/) |
+| [eval-judgement.schema.json](schemas/eval-judgement.schema.json) | Bewertung mit Belegart je Kriterium (SLV0-EVAL-19, §7.2) | Tests |
+| [eval-case.schema.json](schemas/eval-case.schema.json) | `fall.json` eines Fallordners mit Prüfformat, Kern- und Gegenkriterium und erwarteten Befunden (SLV0-EVAL-22/-24/-26, §7.3/§7.4) | Tests; Fallordner unter `research/skills-meta-prompting/` (Research-Branch) |
+| [eval-b1-vorlauf.schema.json](schemas/eval-b1-vorlauf.schema.json) | Kernurteile von B1 je select-Fall für den B1-Vorlauf (SLV0-EVAL-25) | Tests |
+
+Rohdatensatz und Bericht tragen seit Version 0.3 die optionalen Felder `trennschaerfe` und `rolle` (Assertion) bzw. `nulllauf`, `konjunktiv` und
+`hinweise` (SLV0-EVAL-24). Sie sind optional, damit frühere Rohdatensätze und Berichte gültig bleiben; der Harness setzt sie immer.
 
 Die Eval-Schemas kamen mit dem Eval-Harness-PR (Handover §7); Umsetzung und Auslegungen: [tools/skill-library/README.md](../../tools/skill-library/README.md).
 Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die Vereinheitlichung ist offen (O-8).
@@ -286,6 +393,9 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-8 | Feldsprache der Schemas (SL3 Englisch vs. V0 Deutsch) | bei Review dieser Spec festlegen |
 | O-9 | Wer unabhängige Test-Familien schreibt und verwahrt (SL4 §10) | vor E3; betrifft SLV0-EVAL-07 |
 | O-10 | Inhalt der Rubriken `@1` (SLV0-EVAL-13): vom Agenten aus dem Rumpf abgeleitet, also nicht unabhängig; Bewerter-Modell und menschliche Stichprobe (SL1 §7) | Owner-Review der Rubrik-PR; bis dahin Entwurf, nicht für Aktivierungsbelege |
+| O-11 | Belegprüfung (SLV0-EVAL-21): Paarurteile (`paare`) und ihre Begründungen werden nicht geprüft; ein `nicht_erfuellt` mit nicht gefundenem Beleg bleibt `nicht_erfuellt` (gemeldet, nicht herabgestuft), obwohl ein erfundener Mangel eine Gegenseite begünstigen kann | Bewerter-Vorgabe „Paarurteil nur mit Kriterienbelegen“ bzw. Regel für unbelegte Mängel, mit E3-Runde 3 entscheiden |
+| O-12 | Trennschärfe (SLV0-EVAL-23/-25): Negativkontroll-Familie je Kandidat (Portierungsplan P2) und Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion; `regex` folgt ECMAScript statt Python | SL4 §4/§6; bei Bedarf eigene Spec-Ergänzung |
+| O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | mit P5 (`cite-check`) gegen Git-Stände erweitern |
 
 ## 13. Rückverfolgung
 
@@ -299,6 +409,10 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | EVAL-01…12 | K5.1, K5.3, K5.5, K5.7, SL1 §5.5/§7/§8/§9, SL4 §4, Research-Helfer, C0/E1-Ergebnis |
 | EVAL-13…15 | K5.6, SL1 §7/§8 (`rubrik_version`), SL4 §8 (Vergleiche über Rubrikversionen ungültig), Kriterien aus `e1v-e2-plan.json` und `e3/familien/*/fall.json` |
 | EVAL-16…18 | Querprüfungen, die die Werkzeug-README für Stufe 2 als fehlend nannte (Ledger, Manifest, Quellcommit) |
+| EVAL-19…21 | Portierungsplan P1 (Idee aus skills-optimizer: belegpflichtige Gutachten, clean-room); Prototyp `e3/verify_quotes.py` und Ergebnis `e3/zitatpruefung-2026-10-31.md` (Research-Branch) |
+| EVAL-22…24 | Portierungsplan P2 (Idee aus automatic_prompt_engineer: konjunktives Gegenkriterium, Nulllauf); Research-Prüfer `grilling-runde/check_case.py`, Nulllauf-Befund in `grilling-runde/dev-ergebnis.md` (Research-Branch) |
+| EVAL-25 | E3-Runde 2, Ergebnis §4–§5; Owner-Antwort A-20261031-e3-b1-vorlauf („B1-Vorlauf ist ok, führ ihn mit P2 ein“); SL4 §4/§6 |
+| EVAL-26/-27 | Portierungsplan P3 (Konzept aus skill-optimization: erwartete Befunde, 1:1-Zuordnung, Überberichtung; deren Code ausgeschlossen) |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.

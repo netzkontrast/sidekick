@@ -16,6 +16,11 @@ import { normalizeTrace } from './normalize.js';
 import { buildRawRecord } from './raw.js';
 import { buildReport, checkReport } from './report.js';
 import { checkRubrics } from './rubric.js';
+import { readJudgement, checkJudgement } from './judge.js';
+import { loadCaseDir, loadCaseDirs } from './casedir.js';
+import { nullRun, checkWorkspace, b1Precheck } from './checks.js';
+import { findingsCheck } from './findings.js';
+import { requireDir } from './tree.js';
 import { validateProject } from '../project.js';
 
 export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--verify-git]   Snapshot der Pakete (stdout)
@@ -38,13 +43,18 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval raw --meta META.json --normalized NORMALISIERT.json [--rubric RUBRIK.json] [--ledger DATEI]   (stdout)
   eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]...       (stdout)
   eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...
-  eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]`;
+  eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]
+  eval judge check BEWERTUNG.json --outputs AUSGABEN-VERZ [--fixtures FAELLE-VERZ]
+  eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]
+  eval nullrun --cases FALLORDNER|VERZ
+  eval nullrun --b1-kern KERNURTEILE.json
+  eval findings --case FALLORDNER AUSGABE.md...`;
 
 const VALUE_OPTS = new Set([
   '--root', '--source-commit', '--source', '--snapshot', '--candidates', '--id', '--cases', '--project-config',
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
-  '--rubric',
+  '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
 ]);
 const MULTI_OPTS = new Set(['--raw-id', '--rubric-version']);
 const FLAG_OPTS = new Set(['--verify-git']);
@@ -295,6 +305,51 @@ const SUB = {
       sub: 'rubric check',
     };
   },
+
+  judge(a) {
+    const action = a.positional.shift();
+    if (action !== 'check') throw new UsageError('eval judge braucht check');
+    expect(a, ['--outputs', '--fixtures'], ['--outputs'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval judge check braucht genau eine Bewertungsdatei');
+    const file = a.positional[0];
+    const label = displayPath(process.cwd(), file);
+    const outputsDir = requireDir(a.opts['--outputs'], '--outputs');
+    const fixturesDir = a.opts['--fixtures'] !== undefined ? requireDir(a.opts['--fixtures'], '--fixtures') : null;
+    const res = checkJudgement(readJudgement(readJsonFile(file, label), label), { outputsDir, fixturesDir, label });
+    return {
+      out: { checked_level: 'Belege (SLV0-EVAL-19…21)', bewertung: label, ...res },
+      code: res.messages.some((m) => m.severity === 'error') ? 1 : 0,
+      sub: 'judge check',
+    };
+  },
+
+  check(a) {
+    expect(a, ['--case', '--workspace', '--baseline'], ['--case', '--workspace']);
+    const res = checkWorkspace(loadCaseDir(a.opts['--case']), a.opts['--workspace'], a.opts['--baseline'] ?? null);
+    return { out: { checked_level: 'Dateiprüfungen (SLV0-EVAL-22)', ...res, messages: [] } };
+  },
+
+  nullrun(a) {
+    if (a.opts['--b1-kern'] !== undefined) {
+      expect(a, ['--b1-kern'], ['--b1-kern']);
+      const file = a.opts['--b1-kern'];
+      const { result, code } = b1Precheck(readJsonFile(file), displayPath(process.cwd(), file));
+      return { out: { checked_level: 'B1-Vorlauf (SLV0-EVAL-25)', ...result }, code };
+    }
+    expect(a, ['--cases'], ['--cases']);
+    const res = nullRun(loadCaseDirs(a.opts['--cases']));
+    return { out: { checked_level: 'Nulllauf (SLV0-EVAL-23)', ...res } };
+  },
+
+  findings(a) {
+    expect(a, ['--case'], ['--case'], { positionals: true });
+    if (a.positional.length === 0) throw new UsageError('eval findings braucht mindestens eine Ausgabedatei');
+    const outputs = a.positional.map((f) => ({ name: path.basename(f), text: readText(f) }));
+    const names = outputs.map((o) => o.name);
+    if (new Set(names).size !== names.length) throw new UsageError('zwei Ausgabedateien mit gleichem Namen');
+    const res = findingsCheck(loadCaseDir(a.opts['--case']), outputs);
+    return { out: { checked_level: 'Erwartete Befunde und Überberichtung (SLV0-EVAL-26/-27)', ...res, messages: [] } };
+  },
 };
 
 export const RUBRIC_DIR = 'docs/research/rubriken';
@@ -317,7 +372,7 @@ export function runEval(argv) {
     return { out: header(res.sub ?? sub, res.out), code: res.code ?? 0 };
   } catch (err) {
     if (!(err instanceof EvalRefusal)) throw err;
-    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
+    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric' || sub === 'judge') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
     return { out: header(action, { refused: true, ...err.extra, messages: err.messages }), code: 1 };
   }
 }

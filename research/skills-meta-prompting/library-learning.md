@@ -3,6 +3,7 @@
 > Stand 30.10.2026 · Ergebnis SL4 im [Library-Research-Plan](library-research-plan.md) · **Entwurf zur Review**.
 > Evidenz: *dokumentiert* · *im Code gefunden* · *praktisch nachgewiesen* · *offen*; *Ableitung* = eigene Schlussfolgerung; *Vorgabe* = Owner-Antwort.
 > Es wurde kein Modell, keine CLI und kein Fremdcode ausgeführt. Kein Kandidat wurde erzeugt, bewertet oder aktiviert. Kein Lernerfolg ist gemessen.
+> Ergänzt 31.10.2026: **B1-Vorlauf in select** (§4, §6) nach Owner-Antwort A-20261031-e3-b1-vorlauf („B1-Vorlauf ist ok, führ ihn mit P2 ein“; Frage und Evidenz E3-Runde 2 §4–§5 auf Branch `research/e3-runde-2`, PR #20); Spec-Regel [SLV0-EVAL-25](../../docs/spec/skill-library-v0.md).
 
 ## 1. Zweck, Stand und Quellen
 
@@ -111,7 +112,9 @@ nicht eindeutige Ersetzungen und Beschreibungskandidaten mit mehr als einer Zeil
 |---|---|---|---|
 | – → `vorgeschlagen` | Hypothese aus dev-Feedback | Autor | Kandidatendatensatz, Baseline-Hash, Dimension, Hypothese |
 | `vorgeschlagen` → `dev_geprueft` | dev-Läufe + statische Prüfung (M0, Inventar K6.2) | Auswerter | Rohdaten dev, Validator-Ergebnis |
-| `dev_geprueft` → `ausgewaehlt` | bester Kandidat auf select innerhalb Budget | Auswerter | select-Rohdaten; Auswahl mit Kandidatenhash vor Testzugriff protokolliert |
+| `dev_geprueft` → `zurueckgestellt` | B1-Vorlauf: B1 erfüllt das Kernkriterium in **allen** select-Fällen des Kandidaten (`nicht_trennend`), und keine trennende Familie liegt vor | Auswerter | B1-Rohdaten select, Kernurteile, `eval nullrun --b1-kern` (SLV0-EVAL-25); Grund „zurückgestellt, Familie nicht trennend“; 0 Kandidatenstarts |
+| `zurueckgestellt` → `dev_geprueft` | eine getrennte Session hat eine neue select-Familie geschrieben; der B1-Vorlauf beginnt auf ihr neu | Auswerter | neue Familie im Split-Manifest, Autor ≠ Kandidatenautor |
+| `dev_geprueft` → `ausgewaehlt` | B1-Vorlauf `trennend` (B1 verfehlt den Kern in mindestens einem select-Fall), danach bester Kandidat auf select innerhalb Budget | Auswerter | B1-Vorlauf und select-Rohdaten; Auswahl mit Kandidatenhash vor Testzugriff protokolliert |
 | `ausgewaehlt` → `getestet` | einmaliger gepaarter Test B1 vs. Kandidat + Pflichtregression | Auswerter | test-Rohdaten; Split danach `verbraucht` |
 | `getestet` → `vorgelegt` | vorab festgelegte Schwelle erfüllt, 0 R-Verstöße | Auswerter empfiehlt | Vergleichsbericht ([A08](area-evaluating-changes.md)), Rücknahmeplan |
 | `vorgelegt` → `aktiv` | PR-Merge | **nur Owner** am Hash | Merge-Commit; Hashgleichheit nach §5 |
@@ -121,6 +124,17 @@ nicht eindeutige Ersetzungen und Beschreibungskandidaten mit mehr als einer Zeil
 | jeder Zustand vor `aktiv` → `veraltet` | aktive Baseline-Hash ≠ Kandidat-Baseline | deterministisch | Hashvergleich; Neubindung = neuer Kandidat ab `vorgeschlagen` |
 
 Weitere Regeln:
+- **B1-Vorlauf in select** (Owner-Freigabe 31.10.2026, Spec SLV0-EVAL-25; E3-Form der Nulllauf-Trennschärfe SLV0-EVAL-23):
+  1. Vor jedem Kandidatenstart läuft nur B1 auf den select-Fällen des Kandidaten.
+  2. Die B1-Ausgaben werden anonymisiert und **absolut nur am Kernkriterium** bewertet, nicht paarweise: mit dem deterministischen Prüfer des Falls, sonst
+     durch eine getrennte Bewerter-Session mit Belegprüfung (`eval judge check`, SLV0-EVAL-21).
+  3. Erfüllt B1 den Kern in allen select-Fällen, ist die Familienmenge `nicht_trennend`, bevor ein Kandidat startet. Dann schreibt eine getrennte Session eine
+     trennende Familie, oder der Kandidat geht nach `zurueckgestellt`. In select startet der Kandidat in diesem Fall nicht.
+  4. Verfehlt B1 den Kern in mindestens einem select-Fall (`trennend`), läuft der Kandidat in select wie bisher. Die B1-Läufe des Vorlaufs sind die B1-Seite
+     der Paare und werden nicht wiederholt.
+  5. Ein `unklar`es Kernurteil ist weder erfüllt noch verfehlt: erst klären (Beleg nachreichen oder Prüfer), dann entscheiden; kein Kandidatenstart vorher.
+  Evidenz: Über E3-Runde 1 und 2 zeigte kein Kandidat einen Vorteil, wo B1 den Kern in select schon erfüllte (3 von 3), und einer, wo B1 ihn verfehlte (1 von 1).
+  Bei vier Kandidaten ist das ein Hinweis, kein Gesetz.
 - **Test-Split verbraucht:** Nach einmaliger Nutzung kein zweiter Kandidat auf demselben test (SL1 §5.5, WEB-R4). Neue Runde = neue Familien.
 - **Keine Rückkehr:** Aus `getestet` geht es nur nach `vorgelegt` oder `verworfen`; Nachbessern erzeugt einen neuen Kandidaten ab `vorgeschlagen`.
 - **Manuelle Änderungen ohne Lauf** (wie SL2) sind keine übersprungene Messung, sondern direkte Owner-Vorlagen. Sie werden im PR als *ungemessen* gekennzeichnet; der Owner darf sie mergen.
@@ -156,12 +170,13 @@ Die Owner-Antwort sah ursprünglich ~14 Starts für E3 vor; diese Spannung ist o
 |---|---|---|
 | 0 | Baseline am dann aktuellen Stand neu einfrieren; K-DESC neu binden oder neuen Auswahlkandidaten aus E1-dev-Spuren formulieren | 0 |
 | dev | E1-Auswahlläufe auf dev-Familien liefern das Feedback (keine Zusatzstarts) | 0 |
-| select | höchstens 1 Kandidat, 1 Iteration: 2 select-Familien × B1/Kandidat | 4 |
+| select, B1-Vorlauf | 2 select-Familien × B1, Kernurteil absolut (§4, SLV0-EVAL-25) | 2 |
+| select, Kandidat | nur bei `trennend`: höchstens 1 Kandidat, 1 Iteration, 2 select-Familien × Kandidat; B1-Seite aus dem Vorlauf | 2 |
 | test | 4 neue, bisher ungesehene Familien × B1/Kandidat, gepaart, 1 Wiederholung | 8 |
 | Regression | R-01, R-02, R-05 auf dem Kandidaten | 3 |
 | Aktivierung/Rücknahme | im Testbestand (Scratch-Branch) durchspielen, deterministisch | 0 |
 | Reserve | Abbruch | 1 |
-| **Summe** | | **16** |
+| **Summe** | bei `nicht_trennend` endet die Runde nach dem Vorlauf mit 2 Starts | **16** |
 
 Begründung: Eine Auswahldimension lässt sich aus der Spur deterministisch messen (M2), also ohne Judge-Kosten. Das setzt voraus, dass C0
 Skill-Aufrufe beobachtbar macht; sonst ist E3 blockiert. Schwelle für `vorgelegt`, vor dem Test festzuschreiben: 0 R-Verstöße, kein positiver
