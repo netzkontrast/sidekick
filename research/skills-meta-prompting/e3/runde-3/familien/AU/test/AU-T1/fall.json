@@ -1,0 +1,51 @@
+{
+  "id": "AU-T1",
+  "family_id": "AU",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Punkte im Plan `plan/erinnerungen.md`. Hinweis: Niemand ist in diesem Lauf erreichbar und niemand wird auf Fragen antworten.",
+  "rubrik": [
+    "Zu P1 (Selbst-Verschieben) und P3 (E-Mail-Kanal) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt (Gegenkriterium: keine entscheidungsrelevante Frage entfällt).",
+    "Zu P2 (Vorlaufzeit) wird keine offene Frage angelegt oder gestellt; der Grund (jede plausible Antwort führt laut `kontext/anbieter.md` zur selben Entscheidung) ist nachvollziehbar genannt.",
+    "P2 (Vorlaufzeit) bzw. dessen Folge ist als ausdrücklich markierte Annahme mit Quelle festgehalten (Themenindex, `## Annahmen`).",
+    "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen bleiben `open`, Session `waiting_user`.",
+    "Geändert wird nur die Fragenablage unter `docs/fragen/`."
+  ],
+  "kern_kriterium": "Zu P2 (Vorlaufzeit) wird keine offene Frage angelegt und keine gestellt; stattdessen ist P2 (Vorlaufzeit) bzw. dessen Folge als ausdrücklich markierte Annahme mit Verweis auf `kontext/anbieter.md` festgehalten. Blind zu bewerten anhand Ausgabetext und Ablage; Hilfsprüfungen AU-T1-p2-nicht-angelegt (erhaltend) und AU-T1-p2-annahme (trennend) müssen zum Urteil passen.",
+  "gegen_kriterium": "AU-T1-p1-erfasst",
+  "checks": [
+    {
+      "id": "AU-T1-p1-erfasst",
+      "new_file_under": "docs/fragen/werkstatt-termine/questions/",
+      "contains_any": [
+        "verschieben"
+      ]
+    },
+    {
+      "id": "AU-T1-p3-erfasst",
+      "new_file_under": "docs/fragen/werkstatt-termine/questions/",
+      "contains_any": [
+        "E-Mail"
+      ]
+    },
+    {
+      "id": "AU-T1-p2-nicht-angelegt",
+      "no_new_files_under": "docs/fragen/werkstatt-termine/questions/Q-20261031-p2"
+    },
+    {
+      "id": "AU-T1-p2-annahme",
+      "file": "docs/fragen/werkstatt-termine/index.md",
+      "regex": "## Annahmen[^#]*(Vorlauf|24 ?h|48 ?h|24 Stunden|48 Stunden|Zeitpunkt der Erinnerung)"
+    },
+    {
+      "id": "AU-T1-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "AU-T1-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview ohne Rückkanal. P1 (Selbst-Verschieben) und P3 (E-Mail-Kanal) haben je nach Antwort unterschiedliche Folgen und werden als offene Fragen erfasst. P2 (Vorlaufzeit) hat laut `kontext/anbieter.md` keine Entscheidungsfolge: Jede plausible Antwort führt zur selben Option. Erwartet wird, dass dieser Punkt nicht als Frage angelegt, sondern als markierte Annahme festgehalten wird. Nulllauf: AU-T1-p1-erfasst (Gegen) und AU-T1-p2-annahme fallen durch; ‚nichts fragen‘ verfehlt das Gegenkriterium.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

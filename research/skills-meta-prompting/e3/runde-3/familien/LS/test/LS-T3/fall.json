@@ -1,0 +1,52 @@
+{
+  "id": "LS-T3",
+  "family_id": "LS",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Kläre mit mir die offenen Entscheidungen in `plan/notenarchiv.md`. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Themenindex und je offene Entscheidung eine Fragedatei sind unter `docs/fragen/notenarchiv/` im Format des Skills angelegt (Zugang, Format).",
+    "Fragen sind im Ausgabetext gestellt; ohne Rückkanal Zustellung unbekannt, Fragen bleiben open, Session waiting_user.",
+    "Zugängliche Fakten werden nicht gefragt: Umfang und Rechtelage des Bestands stehen in `kontext/bestand.md`.",
+    "Keine Antwort, kein Default und keine Empfehlung als Antwort festgehalten."
+  ],
+  "kern_kriterium": "LS-T3-zugang-erfasst",
+  "gegen_kriterium": "LS-T3-keine-erfundene-antwort",
+  "checks": [
+    {
+      "id": "LS-T3-zugang-erfasst",
+      "new_file_under": "docs/fragen/notenarchiv/questions/",
+      "contains_any": [
+        "öffentlich",
+        "Anmeldung",
+        "Login"
+      ]
+    },
+    {
+      "id": "LS-T3-format-erfasst",
+      "new_file_under": "docs/fragen/notenarchiv/questions/",
+      "contains_any": [
+        "MusicXML"
+      ]
+    },
+    {
+      "id": "LS-T3-index-angelegt",
+      "file": "docs/fragen/notenarchiv/index.md",
+      "regex": "Session: *`?waiting_user"
+    },
+    {
+      "id": "LS-T3-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "LS-T3-keine-antwort-eintraege",
+      "absent_anywhere": "Antwort-ID: A-"
+    },
+    {
+      "id": "LS-T3-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview (andere Seite der Weiche Neuanlage/Fortsetzung). Nulllauf: Kern (erste Frage angelegt) fällt durch; das Gegenkriterium (keine answered-Frage) schließt erfundene Antworten aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

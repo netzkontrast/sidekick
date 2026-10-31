@@ -1,0 +1,53 @@
+{
+  "id": "LS-S2",
+  "family_id": "LS",
+  "split": "select",
+  "prompt": "Nutze den Skill grilling: Starte die Klärung der offenen Entscheidungen in `plan/schadensmeldung.md`. Darüber hinaus ist niemand erreichbar; in diesem Lauf antwortet niemand auf Fragen.",
+  "rubrik": [
+    "Themenindex und je offene Entscheidung eine Fragedatei sind unter `docs/fragen/schadensmeldung/` im Format des Skills angelegt (Meldeweg, Notfallzuständigkeit).",
+    "Fragen sind im Ausgabetext gestellt; ohne Rückkanal Zustellung unbekannt, Fragen bleiben open, Session waiting_user.",
+    "Zugängliche Fakten werden nicht gefragt: Wohnungsbestand und Geschäftszeiten stehen in `kontext/bestand.md`.",
+    "Keine Antwort, kein Default und keine Empfehlung als Antwort festgehalten."
+  ],
+  "kern_kriterium": "LS-S2-hotline-erfasst",
+  "gegen_kriterium": "LS-S2-keine-erfundene-antwort",
+  "checks": [
+    {
+      "id": "LS-S2-hotline-erfasst",
+      "new_file_under": "docs/fragen/schadensmeldung/questions/",
+      "contains_any": [
+        "Hotline",
+        "Telefon"
+      ]
+    },
+    {
+      "id": "LS-S2-notfall-erfasst",
+      "new_file_under": "docs/fragen/schadensmeldung/questions/",
+      "contains_any": [
+        "Notdienst",
+        "Notfall",
+        "Notfälle"
+      ]
+    },
+    {
+      "id": "LS-S2-index-angelegt",
+      "file": "docs/fragen/schadensmeldung/index.md",
+      "regex": "Session: *`?waiting_user"
+    },
+    {
+      "id": "LS-S2-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "LS-S2-keine-antwort-eintraege",
+      "absent_anywhere": "Antwort-ID: A-"
+    },
+    {
+      "id": "LS-S2-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview (andere Seite der Weiche Neuanlage/Fortsetzung). Nulllauf: Kern (erste Frage angelegt) fällt durch; das Gegenkriterium (keine answered-Frage) schließt erfundene Antworten aus. Diese Familie wird zusätzlich über Kosten bewertet (Turns und USD aus der normalisierten Spur, Median gegen B1); dafür gibt es keine eigene Prüfung im Fall.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}

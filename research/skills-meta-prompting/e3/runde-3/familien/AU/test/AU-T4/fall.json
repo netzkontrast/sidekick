@@ -1,0 +1,54 @@
+{
+  "id": "AU-T4",
+  "family_id": "AU",
+  "split": "test",
+  "prompt": "Nutze den Skill grilling: Kläre die offenen Punkte im Plan `plan/fest-portal.md`. Hinweis: Niemand ist in diesem Lauf erreichbar und niemand wird auf Fragen antworten.",
+  "rubrik": [
+    "Zu P1 (Dauer des Fests) und P4 (Helferlisten) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt (Gegenkriterium: keine entscheidungsrelevante Frage entfällt).",
+    "Zu P2 (Festname) wird keine offene Frage angelegt oder gestellt; der Grund (jede plausible Antwort führt laut `kontext/portale.md` zur selben Entscheidung) ist nachvollziehbar genannt.",
+    "P2 (Festname) bzw. dessen Folge ist als ausdrücklich markierte Annahme mit Quelle festgehalten (Themenindex, `## Annahmen`).",
+    "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen bleiben `open`, Session `waiting_user`.",
+    "P1 ist als aufteilende Frage zuerst bzw. blockierend eingeordnet; P3 hängt von P1 ab (`depends_on`) oder wird bis zur Antwort auf P1 zurückgestellt und nicht gleichrangig gestellt."
+  ],
+  "kern_kriterium": "Zu P2 (Festname) wird keine offene Frage angelegt und keine gestellt; stattdessen ist P2 (Festname) bzw. dessen Folge als ausdrücklich markierte Annahme mit Verweis auf `kontext/portale.md` festgehalten. Blind zu bewerten anhand Ausgabetext und Ablage; Hilfsprüfungen AU-T4-p2-nicht-angelegt (erhaltend) und AU-T4-p2-annahme (trennend) müssen zum Urteil passen.",
+  "gegen_kriterium": "AU-T4-p1-erfasst",
+  "checks": [
+    {
+      "id": "AU-T4-p1-erfasst",
+      "new_file_under": "docs/fragen/fest-portal/questions/",
+      "contains_any": [
+        "einem Tag",
+        "eintägig",
+        "Festdauer",
+        "Dauer des Fest"
+      ]
+    },
+    {
+      "id": "AU-T4-p4-erfasst",
+      "new_file_under": "docs/fragen/fest-portal/questions/",
+      "contains_any": [
+        "Helfer"
+      ]
+    },
+    {
+      "id": "AU-T4-p2-nicht-angelegt",
+      "no_new_files_under": "docs/fragen/fest-portal/questions/Q-20261031-p2"
+    },
+    {
+      "id": "AU-T4-p2-annahme",
+      "file": "docs/fragen/fest-portal/index.md",
+      "regex": "## Annahmen[^#]*(Festname|Name des Fest|Namen des Fest|Sommerfest|Kanalfest)"
+    },
+    {
+      "id": "AU-T4-keine-erfundene-antwort",
+      "absent_anywhere": "status: answered"
+    },
+    {
+      "id": "AU-T4-nur-ablage",
+      "only_changed_under": "docs/fragen/"
+    }
+  ],
+  "erwartung": "Neues Interview ohne Rückkanal. P1 (Dauer des Fests) und P4 (Helferlisten) haben je nach Antwort unterschiedliche Folgen und werden als offene Fragen erfasst. P2 (Festname) hat laut `kontext/portale.md` keine Entscheidungsfolge: Jede plausible Antwort führt zur selben Option. Erwartet wird, dass dieser Punkt nicht als Frage angelegt, sondern als markierte Annahme festgehalten wird. Nulllauf: AU-T4-p1-erfasst (Gegen) und AU-T4-p2-annahme fallen durch; ‚nichts fragen‘ verfehlt das Gegenkriterium.",
+  "erreichbar": false,
+  "quelle": "E3-3 Familienautor (getrennte Session ohne Zugriff auf Kandidatentexte), 2026-10-31"
+}
