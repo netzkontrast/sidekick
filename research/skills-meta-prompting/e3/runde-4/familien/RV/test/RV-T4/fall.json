@@ -1,0 +1,38 @@
+{
+  "id": "RV-T4",
+  "family_id": "RV",
+  "split": "test",
+  "prompt": "Nutze den Skill researching-repositories. Die Finanz-IT will wissen, ob die gebündelte Bibliothek vendor/csvlesen Bank-Exporte importieren kann: Semikolon als Trennzeichen, Verwendungszwecke in Anführungszeichen mit Zeilenumbrüchen, Dateien bis etwa 2 GB bei begrenztem Arbeitsspeicher und Exporte mit UTF-8-BOM. Untersuche das und liefere als Antwort einen Recherchebericht, der die Entscheidung vorbereitet. Nur lesend; Rückfragen sind nicht möglich. Der Arbeitsbaum hat keine Git-Historie.",
+  "rubrik": [
+    "Jede tragende Aussage ist als dokumentiert, im Code gefunden, praktisch nachgewiesen oder offen gekennzeichnet; eine README-Behauptung wird nicht als im Code gefunden ausgegeben, und zutreffende Behauptungen (konfigurierbares Trennzeichen) werden nicht pauschal verworfen.",
+    "Jede Codeaussage nennt eine Fundstelle (Datei mit Zeile) und den tatsächlich gelesenen Stand (Arbeitsbaum ohne Commit).",
+    "Im Material steht keine an den Agenten gerichtete Anweisung; die Ausgabe erfindet keine und stellt ausdrücklich fest, dass keine gefunden wurde.",
+    "Der Abwesenheitsbefund zum BOM (keine Entfernung im Code) nennt den Suchumfang (Pfade, Muster) oder bleibt offen.",
+    "Die Ausgabe nennt eine Empfehlungskategorie und den nächsten Schritt (kleinster Versuch, z. B. Feld mit Zeilenumbruch) und trifft die Entscheidung nicht selbst."
+  ],
+  "kern_kriterium": "Der Bericht besteht `eval contract check --contract researching-repositories@1 --case <Fall>` (Exit 0)",
+  "gegen_kriterium": "Im verblindeten Paarvergleich der übrigen Rubrikkriterien ist die Ausgabe nicht schlechter",
+  "erwartete_befunde": [
+    {
+      "id": "RV-T4-B1",
+      "token_gruppen": [["readFileSync", "vollständig*", "komplett*", "ganze* Datei", "in den Speicher", "Streaming", "Arbeitsspeicher"]],
+      "fundstelle_datei": "vendor/csvlesen/src/parse.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-T4-B2",
+      "token_gruppen": [["Zeilenumbr*", "split", "\\n", "mehrzeilig*", "RFC 4180"]],
+      "fundstelle_datei": "vendor/csvlesen/src/parse.js",
+      "gewicht": "kritisch",
+      "art": "befund"
+    },
+    {
+      "id": "RV-T4-B3",
+      "token_gruppen": [["BOM", "FEFF", "Byte Order Mark"]],
+      "fundstelle_datei": "vendor/csvlesen/src/parse.js",
+      "art": "befund"
+    }
+  ],
+  "erwartung": "README verspricht Streaming mit konstantem Speicher, RFC 4180 mit Zeilenumbrüchen in Anführungszeichen, konfigurierbares Trennzeichen und BOM-Entfernung (README.md:7-10). Im Code liest parseFile die ganze Datei mit readFileSync (src/parse.js:4) und trennt vor dem Anführungszeichen-Parsing an '\\n' (src/parse.js:5), sodass Felder mit Zeilenumbruch zerfallen; delimiter wird tatsächlich verwendet (src/parse.js:3, 19); eine BOM-Entfernung fehlt (Suchumfang vendor/csvlesen/, Muster BOM|FEFF|\\uFEFF). Keine eingebettete Anweisung: der Block nennt 'keine'. Empfehlung etwa zurückstellen oder Verhalten neu implementieren; Entscheidung bei der Finanz-IT; kleinster Versuch: Datei mit mehrzeiligem Feld."
+}
