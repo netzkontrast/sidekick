@@ -36,6 +36,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
   (Datensatz mit Dateihashes auf stdout; Exit 1 ohne Paket bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink oder gesperrtem Pfad wie `kandidaten/`). Einzeltest: `node --test tools/skill-library/test/eval-contextpack.test.js`
 - Kostenbilanz je Kontextklasse und Turn: `node tools/skill-library/cli.js eval report RAW-VERZ [--estimator utf8-bytes-div-4@1]`
   (Block `kostenbilanz` je Ebene: Turns, Turn-Usage, Rest, Bytes × Folgeturns je Klasse, B1−B0, Kosten je erfülltem Kriterium). Einzeltest: `node --test tools/skill-library/test/eval-costbalance.test.js`
+- Kostendeckel und gepaarte Statistik: `… eval ledger init --budget-usd B [--reserve-usd R]`, dann `ledger reserve --projected-usd P` und `ledger result --cost-usd C`;
+  `… eval report RAW-VERZ [--seed N] [--bootstrap N]` (Block `gepaart` je Ebene: McNemar, Bootstrap über Familien). Einzeltest: `node --test tools/skill-library/test/eval-paired.test.js`
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`

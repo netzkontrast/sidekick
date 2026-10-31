@@ -15,6 +15,7 @@ export const EVAL_RULES = {
   workspace_exists: 'SLV0-EVAL-04',
   config_overwrite: 'SLV0-EVAL-04',
   budget_exhausted: 'SLV0-EVAL-05',
+  budget_usd_exhausted: 'SLV0-EVAL-43',
   ledger_locked: 'SLV0-EVAL-05',
   family_split_overlap: 'SLV0-EVAL-06',
   split_access_denied: 'SLV0-EVAL-07',

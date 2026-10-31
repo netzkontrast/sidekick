@@ -411,7 +411,52 @@
             }
           }
         },
-        "kostenbilanz": { "$ref": "#/$defs/kostenbilanz" }
+        "kostenbilanz": { "$ref": "#/$defs/kostenbilanz" },
+        "gepaart": {
+          "type": "array",
+          "description": "Gepaarter Vergleich je Variantenpaar (SLV0-EVAL-45/-46, §7.9). Optional, damit frühere Berichte gültig bleiben; der Harness setzt ihn immer.",
+          "items": { "$ref": "#/$defs/gepaart" }
+        }
+      }
+    },
+    "anzahl_ids": {
+      "type": "object",
+      "required": ["anzahl", "rohdatensatz_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "anzahl": { "type": "integer", "minimum": 0 },
+        "rohdatensatz_ids": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "gepaart": {
+      "type": "object",
+      "required": ["minuend", "subtrahend", "paare", "auswertbar", "unklar", "beide_bestanden", "nur_minuend_bestanden", "nur_subtrahend_bestanden", "beide_nicht_bestanden", "familien", "mcnemar_p", "differenz_anteil", "intervall_95"],
+      "additionalProperties": false,
+      "properties": {
+        "minuend": { "type": "string" },
+        "subtrahend": { "type": "string" },
+        "paare": { "$ref": "#/$defs/anzahl_ids" },
+        "auswertbar": { "$ref": "#/$defs/zahl" },
+        "unklar": { "$ref": "#/$defs/zahl" },
+        "beide_bestanden": { "$ref": "#/$defs/zahl_oder_null" },
+        "nur_minuend_bestanden": { "$ref": "#/$defs/zahl_oder_null" },
+        "nur_subtrahend_bestanden": { "$ref": "#/$defs/zahl_oder_null" },
+        "beide_nicht_bestanden": { "$ref": "#/$defs/zahl_oder_null" },
+        "familien": { "$ref": "#/$defs/anzahl_ids" },
+        "mcnemar_p": { "$ref": "#/$defs/wertfeld" },
+        "differenz_anteil": { "$ref": "#/$defs/wertfeld" },
+        "intervall_95": {
+          "type": "object",
+          "required": ["untere", "obere", "ziehungen", "seed", "verfahren"],
+          "additionalProperties": false,
+          "properties": {
+            "untere": { "$ref": "#/$defs/wertfeld" },
+            "obere": { "$ref": "#/$defs/wertfeld" },
+            "ziehungen": { "type": "integer", "minimum": 100 },
+            "seed": { "type": "integer", "minimum": 0 },
+            "verfahren": { "type": "string" }
+          }
+        }
       }
     }
   }

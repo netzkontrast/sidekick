@@ -33,10 +33,10 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval bind --snapshot SNAPSHOT.json --candidates KANDIDATEN.json [--id K-…]
   eval prepare --snapshot S --cases FAELLE.json --project-config DATEI --output NEUES-VERZ [--candidates K]
                [--manifest MANIFEST.json]
-  eval ledger init --ledger DATEI --limit N [--manifest MANIFEST.json]
-  eval ledger reserve --ledger DATEI --trial-id ID
+  eval ledger init --ledger DATEI --limit N [--manifest MANIFEST.json] [--budget-usd B [--reserve-usd R]]
+  eval ledger reserve --ledger DATEI --trial-id ID [--projected-usd P]
   eval ledger result --ledger DATEI --attempt-id N --outcome completed|failed_start|aborted|client_error
-                     [--trace-sha256 H] [--raw-id ID]...
+                     [--trace-sha256 H] [--raw-id ID]... [--cost-usd C]
   eval ledger status --ledger DATEI
   eval split manifest --cases FAELLE.json --manifest-id ID                     (stdout)
   eval split check --manifest MANIFEST.json [--cases FAELLE.json]
@@ -45,7 +45,8 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval split select --ledger DATEI --manifest M --role evaluator --candidate-sha256 H
   eval normalize --trace SPUR.jsonl|SPUR.normalized.json                       (stdout)
   eval raw --meta META.json --normalized NORMALISIERT.json [--rubric RUBRIK.json] [--ledger DATEI]   (stdout)
-  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]... [--estimator utf8-bytes-div-4@1]   (stdout)
+  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]... [--estimator utf8-bytes-div-4@1]
+              [--seed N] [--bootstrap N]                                       (stdout)
   eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...
   eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]
   eval judge check BEWERTUNG.json --outputs AUSGABEN-VERZ [--fixtures FAELLE-VERZ]
@@ -64,6 +65,7 @@ const VALUE_OPTS = new Set([
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
   '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
   '--repo', '--commit', '--github', '--allowlist', '--estimator', '--contract',
+  '--budget-usd', '--reserve-usd', '--projected-usd', '--cost-usd', '--seed', '--bootstrap',
 ]);
 const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope', '--deny']);
 const FLAG_OPTS = new Set(['--verify-git']);
@@ -196,22 +198,30 @@ const SUB = {
   ledger(a) {
     const action = a.positional.shift();
     if (action === 'init') {
-      expect(a, ['--ledger', '--limit', '--manifest'], ['--ledger', '--limit']);
+      expect(a, ['--ledger', '--limit', '--manifest', '--budget-usd', '--reserve-usd'], ['--ledger', '--limit']);
       const manifestSha = a.opts['--manifest'] !== undefined
         ? (() => { const m = readJsonFile(a.opts['--manifest']); checkManifest(m, a.opts['--manifest']); return manifestSha256(m); })()
         : null;
-      return { out: { entry: initLedger(a.opts['--ledger'], { limit: intOpt(a.opts['--limit'], '--limit'), manifestSha256: manifestSha }) }, sub: 'ledger init' };
+      return {
+        out: {
+          entry: initLedger(a.opts['--ledger'], {
+            limit: intOpt(a.opts['--limit'], '--limit'), manifestSha256: manifestSha,
+            budgetUsd: a.opts['--budget-usd'] ?? null, reserveUsd: a.opts['--reserve-usd'] ?? null,
+          }),
+        },
+        sub: 'ledger init',
+      };
     }
     if (action === 'reserve') {
-      expect(a, ['--ledger', '--trial-id'], ['--ledger', '--trial-id']);
-      return { out: reserveStart(a.opts['--ledger'], a.opts['--trial-id']), sub: 'ledger reserve' };
+      expect(a, ['--ledger', '--trial-id', '--projected-usd'], ['--ledger', '--trial-id']);
+      return { out: reserveStart(a.opts['--ledger'], a.opts['--trial-id'], { projectedUsd: a.opts['--projected-usd'] ?? null }), sub: 'ledger reserve' };
     }
     if (action === 'result') {
-      expect(a, ['--ledger', '--attempt-id', '--outcome', '--trace-sha256', '--raw-id'], ['--ledger', '--attempt-id', '--outcome']);
+      expect(a, ['--ledger', '--attempt-id', '--outcome', '--trace-sha256', '--raw-id', '--cost-usd'], ['--ledger', '--attempt-id', '--outcome']);
       return {
         out: recordResult(a.opts['--ledger'], {
           attemptId: intOpt(a.opts['--attempt-id'], '--attempt-id'), outcome: a.opts['--outcome'],
-          traceSha256: a.opts['--trace-sha256'] ?? null, rawIds: a.multi['--raw-id'] ?? [],
+          traceSha256: a.opts['--trace-sha256'] ?? null, rawIds: a.multi['--raw-id'] ?? [], costUsd: a.opts['--cost-usd'],
         }),
         sub: 'ledger result',
       };
@@ -273,8 +283,10 @@ const SUB = {
   },
 
   report(a) {
-    expect(a, ['--check', '--rubric-version', '--estimator'], [], { positionals: true });
-    if (a.opts['--check'] !== undefined && (a.multi['--rubric-version'] || a.opts['--estimator'] !== undefined)) throw new UsageError('--rubric-version und --estimator gelten nicht mit --check');
+    expect(a, ['--check', '--rubric-version', '--estimator', '--seed', '--bootstrap'], [], { positionals: true });
+    if (a.opts['--check'] !== undefined && (a.multi['--rubric-version'] || a.opts['--estimator'] !== undefined || a.opts['--seed'] !== undefined || a.opts['--bootstrap'] !== undefined)) {
+      throw new UsageError('--rubric-version, --estimator, --seed und --bootstrap gelten nicht mit --check');
+    }
     const records = rawFiles(a.positional).map((f) => readJsonFile(f));
     if (a.opts['--check'] !== undefined) {
       const report = readJsonFile(a.opts['--check']);
@@ -282,7 +294,10 @@ const SUB = {
       const bad = res.schema_errors.length > 0 || res.messages.length > 0;
       return { out: { valid: !bad, schema_errors: res.schema_errors, messages: res.messages }, code: bad ? 1 : 0, sub: 'report --check' };
     }
-    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [], estimator: a.opts['--estimator'] ?? null }) };
+    const paired = {};
+    if (a.opts['--seed'] !== undefined) paired.seed = intOpt(a.opts['--seed'], '--seed');
+    if (a.opts['--bootstrap'] !== undefined) paired.draws = intOpt(a.opts['--bootstrap'], '--bootstrap');
+    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [], estimator: a.opts['--estimator'] ?? null, paired }) };
   },
 
   rubric(a) {
