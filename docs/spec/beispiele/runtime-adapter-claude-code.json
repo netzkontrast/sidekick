@@ -1,0 +1,96 @@
+{
+  "schema_version": "0.1",
+  "id": "rta-claude-code",
+  "version": 1,
+  "runtime": {
+    "name": "Claude Code",
+    "programm": "claude",
+    "version_bereich": "2.x"
+  },
+  "befehl": {
+    "basis": [
+      "--print",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt": {
+      "art": "stdin"
+    },
+    "modell_fragment": [
+      "--model",
+      "{modell}"
+    ]
+  },
+  "session": {
+    "form": "paar",
+    "neu_fragment": [
+      "--session-id",
+      "{session}"
+    ],
+    "fortsetzen_fragment": [
+      "--resume",
+      "{session}"
+    ]
+  },
+  "ausgabe": {
+    "format": "jsonl",
+    "ergebnis_pfad": "$.result",
+    "session_pfad": "$.session_id",
+    "verbrauch": {
+      "eingabe_tokens": "$.usage.input_tokens",
+      "ausgabe_tokens": "$.usage.output_tokens",
+      "kosten_usd": "$.total_cost_usd"
+    }
+  },
+  "rechte": {
+    "stufen": {
+      "nur_lesen": [
+        "--permission-mode",
+        "plan"
+      ],
+      "arbeitsbaum_schreiben": [
+        "--permission-mode",
+        "acceptEdits"
+      ]
+    },
+    "verbotene_flags": [
+      "--dangerously-skip-permissions",
+      "--allow-dangerously-skip-permissions",
+      "bypassPermissions"
+    ]
+  },
+  "arbeitsverzeichnis": {
+    "verbotene_flags": [
+      "--add-dir",
+      "-w",
+      "--worktree"
+    ]
+  },
+  "faehigkeiten": {
+    "resume": {
+      "status": "behauptet"
+    },
+    "abbruch": {
+      "status": "offen"
+    },
+    "rueckfrage": {
+      "status": "nicht_unterstuetzt",
+      "beleg": "research/skills-meta-prompting/eval-runs/C0-E1-ergebnis-2026-10-30.md (headless kein AskUser-Werkzeug)"
+    },
+    "kosten_meldung": {
+      "status": "behauptet",
+      "beleg": "research/skills-meta-prompting/eval-runs/C0-E1-ergebnis-2026-10-30.md (Usage-Felder geliefert)"
+    },
+    "wiederanbindung": {
+      "status": "nicht_unterstuetzt"
+    },
+    "modellwahl": {
+      "status": "behauptet"
+    }
+  },
+  "grenzen": {
+    "timeout_s": 1800,
+    "max_parallel": 1
+  }
+}
