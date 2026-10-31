@@ -35,6 +35,7 @@ Jede Zelle mit Belegstatus: *dokumentiert*, *im Code gefunden*, *praktisch nachg
 ## Befunde
 
 - Aus der Skill-Library-Recherche, 30.10.2026 ([C0/E1-Ergebnis](../../research/skills-meta-prompting/eval-runs/C0-E1-ergebnis-2026-10-30.md)), nur für die strukturierte CLI (`claude -p`, headless, OAuth-Abo, ein Modell): Projekt-Skills werden gefunden, und ihr Aufruf erscheint als eigenes Werkzeugereignis in der Spur; Usage-Felder werden geliefert (*praktisch nachgewiesen*). Ein AskUser-Werkzeug fehlt headless (*praktisch nachgewiesen*); Rückfragen brauchen dort einen anderen Kanal. Das füllt keine Zelle der Matrix; Agent SDK und ACP sind dazu *offen*.
+- Vergleichsmuster für die strukturierte CLI, 31.10.2026 ([Dossier afs-spec](../research/dossiers/afs-spec.md#adaptervertrag-der-coding-delegation-7)): Die Agent-Formation-Spec beschreibt einen deklarativen Adapter für Claude Code im Print-Modus mit JSON-Stream, Prompt über stdin und Session-Paar aus Anlegen und Fortsetzen. Sie kennt kein Freigabe-Primitiv und reicht Rechte-Flags ungeprüft durch (*dokumentiert*, nicht praktisch geprüft). Grundlage für die eigene Adapter-Spec; füllt ebenfalls keine Matrixzelle.
 
 ## Entscheidung
 
