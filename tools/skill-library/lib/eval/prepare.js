@@ -13,12 +13,15 @@ import { bindCandidate, candidateSha256 } from './candidate.js';
 import { checkManifest, manifestSha256 } from './split.js';
 
 const CASE_ID_RE = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
-const CONFIG_PATHS = ['.claude', '.agents', 'AGENTS.md', 'CLAUDE.md'];
+// Configuration a client may pick up from the workspace: root entries, and rule files that clients
+// also load from nested directories on demand (SLV0-EVAL-04).
+const CONFIG_ROOTS = ['.claude', '.agents', '.mcp.json'];
+const CONFIG_FILES = ['agents.md', 'claude.md', 'claude.local.md'];
 
-/** Case files must not touch experiment configuration (case-insensitive, first segment). */
+/** Case files must not add or overwrite experiment configuration (case-insensitive). */
 function touchesConfig(rel) {
-  const first = rel.split('/')[0].toLowerCase();
-  return CONFIG_PATHS.some((c) => c.toLowerCase() === first);
+  const segs = rel.split('/').map((s) => s.toLowerCase());
+  return CONFIG_ROOTS.includes(segs[0]) || segs.some((s) => CONFIG_FILES.includes(s));
 }
 
 export function parseCases(data) {
@@ -88,7 +91,7 @@ export function prepare({ snapshot, cases, candidates = [], projectConfig, outpu
     for (const rel of Object.keys(c.files ?? {})) {
       if (!safeRelativeSegments(rel)) throw new UsageError(`${c.id}: unsicherer Dateipfad ${rel}`);
       if (touchesConfig(rel)) {
-        throw new EvalRefusal([evalMsg('config_overwrite', `${c.id}:${rel}`, 'Falldatei würde Experimentkonfiguration (.claude/, .agents/, AGENTS.md, CLAUDE.md) überschreiben')]);
+        throw new EvalRefusal([evalMsg('config_overwrite', `${c.id}:${rel}`, 'Falldatei würde Experimentkonfiguration anlegen oder überschreiben (.claude/, .agents/, .mcp.json; AGENTS.md, CLAUDE.md, CLAUDE.local.md in jedem Verzeichnis)')]);
       }
     }
     const variants = c.variants ?? ['B1'];
