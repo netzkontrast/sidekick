@@ -53,7 +53,7 @@
       "regression": 2
     },
     "summe_hoechstens": 42,
-    "grenze": 42,
+    "grenze": 40,
     "hinweis": "Teil des Owner-Budgets von ~60 Starts für P6–P10; der Rest bleibt für P6/P10"
   },
   "client": "claude -p in bereinigter Umgebung; Werkzeuge Read, Glob, Grep, Skill, Write, Edit (grilling schreibt die Fragenablage der Fixture); kein Bash; Prompts nennen den Skill; kein Mensch erreichbar (Rückkanal fehlt) außer wo die Fixture Antworten als Datei vorgibt",
@@ -65,7 +65,8 @@
     "punkte": [
       "B1-Vorlauf für LS (K-LADESTUFEN): Der Kern ist relativ (gleiche Prüfungen bei weniger Kosten) und lässt sich an B1 allein nicht als erfüllt/verfehlt einstufen. Für LS ist der Vorlauf deshalb nur eine Plausibilitätsprüfung: Verfehlt B1 die deterministischen Zustandsprüfungen, ist die Familie für einen Kostenvergleich ungeeignet und wird nicht weiterverwendet; sonst läuft der Kandidat.",
       "AU-Kern ist ein Kriteriumstext für die verblindete Bewertung, gestützt auf zwei Hilfsprüfungen (p2-nicht-angelegt, p2-annahme). Für den B1-Vorlauf gilt das Kernurteil der verblindeten Bewertung der B1-Ausgaben; bis dahin wird die Hilfsprüfung p2-annahme als Vorab-Signal berichtet.",
-      "Prüfwerkzeug: eval check aus PR #23 (origin/feat/eval-evidence-checks @ 2b4410b), weil die Familien Regeln nutzen, die check_case.py nicht kennt."
+      "Prüfwerkzeug: eval check aus PR #23 (origin/feat/eval-evidence-checks @ 2b4410b), weil die Familien Regeln nutzen, die check_case.py nicht kennt.",
+      "Startgrenze 40 statt 42: Das Ledger (skill_pilot.py record-start) erlaubt höchstens 40; der erste Startversuch wurde fail-closed abgewiesen, bevor ein Client lief. Folge: höchstens 40 Starts in dieser Runde."
     ]
   }
 }
