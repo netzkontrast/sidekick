@@ -65,14 +65,34 @@ test('SLV0-EVAL-01…10 end to end: freeze repo, verify, normalize an E1 trace, 
 
 test('SLV0-INV-04 eval modules import no network or process modules and never name the client binary', () => {
   const evalDir = fileURLToPath(new URL('../lib/eval/', import.meta.url));
+  const NETWORK = /node:net|node:http|node:https|node:dgram|\bfetch\(|['"`]claude['"`]/;
   for (const f of fs.readdirSync(evalDir)) {
     const src = fs.readFileSync(path.join(evalDir, f), 'utf8');
     const imports = [...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]);
+    assert.ok(!NETWORK.test(src), `${f} uses a network API or names the client binary`);
+    if (f === 'git.js') continue; // SLV0-EVAL-18, checked in the next test
     for (const imp of imports) {
       assert.ok(['node:fs', 'node:path', 'node:url', 'node:crypto'].includes(imp) || imp.startsWith('./') || imp.startsWith('../'), `${f} imports ${imp}`);
     }
-    assert.ok(!/child_process|node:net|node:http|node:https|node:dgram|\bfetch\(|\bspawn|(?<![.\w])exec(File|Sync)?\(|['"`]claude['"`]/.test(src), `${f} uses a process or network API`);
+    assert.ok(!/child_process|\bspawn|\bfork\(|(?<![.\w])exec(File|Sync|FileSync)?\(/.test(src), `${f} uses a process API`);
   }
+});
+
+test('SLV0-EVAL-18 only lib/eval/git.js starts a process, and only `git` via execFileSync', () => {
+  const src = fs.readFileSync(fileURLToPath(new URL('../lib/eval/git.js', import.meta.url)), 'utf8');
+  const imports = [...src.matchAll(/^import .* from '([^']+)';$/gm)].map((m) => m[0]);
+  assert.deepEqual(imports.filter((i) => i.includes('child_process')), ["import { execFileSync } from 'node:child_process';"]);
+  for (const i of imports) {
+    const from = /from '([^']+)'/.exec(i)[1];
+    assert.ok(from === 'node:child_process' || from.startsWith('./') || from.startsWith('../'), `git.js imports ${from}`);
+  }
+  const calls = [...src.matchAll(/execFileSync\(([^,]+),/g)].map((m) => m[1].trim());
+  assert.deepEqual(calls, ["'git'"]);
+  assert.ok(!/\bspawn|\bfork\(|(?<![.\w])exec(File|Sync)?\(|shell:\s*true/.test(src), 'no other process API, no shell');
+  // The read-only subcommands are fixed: rev-parse and status, never a writing one.
+  const subcommands = [...src.matchAll(/git\(root, \['([a-z-]+)'/g)].map((m) => m[1]);
+  assert.deepEqual(subcommands.sort(), ['rev-parse', 'status']);
+  assert.match(src, /--no-optional-locks/);
 });
 
 test('SLV0-INV-08 read-only eval commands leave .agents/skills and the stored traces unchanged', (t) => {
@@ -86,6 +106,7 @@ test('SLV0-INV-08 read-only eval commands leave .agents/skills and the stored tr
     ['verify', '--snapshot', snapshot],
     ['bind', '--snapshot', snapshot, '--candidates', path.join(RESEARCH, 'skill-pilot-candidates.json')],
     ['normalize', '--trace', trace],
+    ['rubric', 'check', '--root', REPO_ROOT],
     ['split', 'check', '--manifest', writeJson(dir, 'm.json', { schema_version: 1, manifest_id: 'M', cases: [{ case_id: 'a', family_id: 'f', split: 'dev', case_sha256: 'd'.repeat(64) }] })],
   ]) {
     const r = runEvalCli(args, { cwd: dir });

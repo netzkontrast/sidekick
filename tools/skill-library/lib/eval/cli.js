@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { TOOL_NAME, TOOL_VERSION, compareCodepoints } from '../core.js';
 import { EvalRefusal, UsageError, readJsonFile } from './common.js';
-import { freezeFromRepo, freezeFromSource, verifySnapshot } from './snapshot.js';
+import { freezeFromRepo, freezeFromSource, verifySnapshot, packageHashes } from './snapshot.js';
 import { parseCandidates, bindCandidate } from './candidate.js';
 import { prepare, parseCases } from './prepare.js';
 import { initLedger, reserveStart, recordResult, readLedger, summarize } from './ledger.js';
@@ -15,12 +15,15 @@ import { buildManifest, checkManifest, verifyCaseHashes, accessSplit, selectCand
 import { normalizeTrace } from './normalize.js';
 import { buildRawRecord } from './raw.js';
 import { buildReport, checkReport } from './report.js';
+import { checkRubrics } from './rubric.js';
+import { validateProject } from '../project.js';
 
-export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR]        Snapshot der Pakete (stdout)
+export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--verify-git]   Snapshot der Pakete (stdout)
   eval freeze --source QUELLE.json                     Snapshot aus {source_commit, files} (stdout)
   eval verify --snapshot SNAPSHOT.json
   eval bind --snapshot SNAPSHOT.json --candidates KANDIDATEN.json [--id K-…]
   eval prepare --snapshot S --cases FAELLE.json --project-config DATEI --output NEUES-VERZ [--candidates K]
+               [--manifest MANIFEST.json]
   eval ledger init --ledger DATEI --limit N [--manifest MANIFEST.json]
   eval ledger reserve --ledger DATEI --trial-id ID
   eval ledger result --ledger DATEI --attempt-id N --outcome completed|failed_start|aborted|client_error
@@ -32,16 +35,19 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR]       
                     [--candidate-sha256 H]
   eval split select --ledger DATEI --manifest M --role evaluator --candidate-sha256 H
   eval normalize --trace SPUR.jsonl|SPUR.normalized.json                       (stdout)
-  eval raw --meta META.json --normalized NORMALISIERT.json                     (stdout)
-  eval report ROHDATEN.json|VERZEICHNIS...                                     (stdout)
-  eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...`;
+  eval raw --meta META.json --normalized NORMALISIERT.json [--rubric RUBRIK.json] [--ledger DATEI]   (stdout)
+  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]...       (stdout)
+  eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...
+  eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]`;
 
 const VALUE_OPTS = new Set([
   '--root', '--source-commit', '--source', '--snapshot', '--candidates', '--id', '--cases', '--project-config',
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
+  '--rubric',
 ]);
-const MULTI_OPTS = new Set(['--raw-id']);
+const MULTI_OPTS = new Set(['--raw-id', '--rubric-version']);
+const FLAG_OPTS = new Set(['--verify-git']);
 
 function parse(argv) {
   const opts = {};
@@ -49,7 +55,10 @@ function parse(argv) {
   const positional = [];
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
-    if (VALUE_OPTS.has(a) || MULTI_OPTS.has(a)) {
+    if (FLAG_OPTS.has(a)) {
+      if (opts[a] !== undefined) throw new UsageError(`Option ${a} mehrfach angegeben`);
+      opts[a] = true;
+    } else if (VALUE_OPTS.has(a) || MULTI_OPTS.has(a)) {
       if (i + 1 >= argv.length) throw new UsageError(`Option ${a} braucht einen Wert`);
       if (MULTI_OPTS.has(a)) (multi[a] ??= []).push(argv[i + 1]);
       else if (opts[a] !== undefined) throw new UsageError(`Option ${a} mehrfach angegeben`);
@@ -111,8 +120,10 @@ const SUB = {
       expect(a, ['--source'], ['--source']);
       return { artifact: freezeFromSource(readJsonFile(a.opts['--source'])) };
     }
-    expect(a, ['--root', '--source-commit'], ['--source-commit']);
-    return { artifact: freezeFromRepo(path.resolve(a.opts['--root'] ?? process.cwd()), a.opts['--source-commit']) };
+    expect(a, ['--root', '--source-commit', '--verify-git'], ['--source-commit']);
+    return {
+      artifact: freezeFromRepo(path.resolve(a.opts['--root'] ?? process.cwd()), a.opts['--source-commit'], { verifyGit: a.opts['--verify-git'] === true }),
+    };
   },
 
   verify(a) {
@@ -145,8 +156,9 @@ const SUB = {
   },
 
   prepare(a) {
-    expect(a, ['--snapshot', '--cases', '--candidates', '--project-config', '--output'], ['--snapshot', '--cases', '--project-config', '--output']);
+    expect(a, ['--snapshot', '--cases', '--candidates', '--project-config', '--output', '--manifest'], ['--snapshot', '--cases', '--project-config', '--output']);
     const manifest = prepare({
+      splitManifest: a.opts['--manifest'] !== undefined ? readJsonFile(a.opts['--manifest']) : null,
       snapshot: readJsonFile(a.opts['--snapshot']),
       cases: parseCases(readJsonFile(a.opts['--cases'])),
       candidates: a.opts['--candidates'] !== undefined ? parseCandidates(readJsonFile(a.opts['--candidates'])) : [],
@@ -156,6 +168,7 @@ const SUB = {
     return {
       out: {
         output: a.opts['--output'], manifest: 'trials.json', model_starts: 0, prepared_trials: manifest.trials.length,
+        split_manifest_sha256: manifest.split_manifest_sha256,
         trials: manifest.trials.map((t) => ({ trial_id: t.trial_id, variant: t.variant, skills: t.skills.length })),
       },
     };
@@ -230,12 +243,19 @@ const SUB = {
   },
 
   raw(a) {
-    expect(a, ['--meta', '--normalized'], ['--meta', '--normalized']);
-    return { artifact: buildRawRecord(readJsonFile(a.opts['--meta']), readJsonFile(a.opts['--normalized'])) };
+    expect(a, ['--meta', '--normalized', '--rubric', '--ledger'], ['--meta', '--normalized']);
+    return {
+      artifact: buildRawRecord(readJsonFile(a.opts['--meta']), readJsonFile(a.opts['--normalized']), {
+        rubric: a.opts['--rubric'] !== undefined ? readJsonFile(a.opts['--rubric']) : null,
+        ledger: a.opts['--ledger'] !== undefined ? readLedger(a.opts['--ledger']) : null,
+        ledgerLabel: a.opts['--ledger'] !== undefined ? path.basename(a.opts['--ledger']) : 'ledger',
+      }),
+    };
   },
 
   report(a) {
-    expect(a, ['--check'], [], { positionals: true });
+    expect(a, ['--check', '--rubric-version'], [], { positionals: true });
+    if (a.opts['--check'] !== undefined && a.multi['--rubric-version']) throw new UsageError('--rubric-version gilt nicht mit --check');
     const records = rawFiles(a.positional).map((f) => readJsonFile(f));
     if (a.opts['--check'] !== undefined) {
       const report = readJsonFile(a.opts['--check']);
@@ -243,9 +263,48 @@ const SUB = {
       const bad = res.schema_errors.length > 0 || res.messages.length > 0;
       return { out: { valid: !bad, schema_errors: res.schema_errors, messages: res.messages }, code: bad ? 1 : 0, sub: 'report --check' };
     }
-    return { artifact: buildReport(records) };
+    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [] }) };
+  },
+
+  rubric(a) {
+    const action = a.positional.shift();
+    if (action !== 'check') throw new UsageError('eval rubric braucht check');
+    expect(a, ['--root', '--snapshot'], [], { positionals: true });
+    const root = path.resolve(a.opts['--root'] ?? process.cwd());
+    let hashes;
+    let quelle;
+    if (a.opts['--snapshot'] !== undefined) {
+      const snap = readJsonFile(a.opts['--snapshot']);
+      verifySnapshot(snap, a.opts['--snapshot']);
+      const contents = Object.fromEntries(Object.entries(snap.files).map(([p, r]) => [p, r.content]));
+      hashes = new Map(packageHashes(contents).map((p) => [p.name, p.sha256]));
+      quelle = 'snapshot';
+    } else {
+      const res = validateProject(root, { adapters: false });
+      hashes = new Map(res.packages.filter((p) => p.valid).map((p) => [p.name, p.content_hash]));
+      quelle = 'arbeitsbaum';
+    }
+    const inputs = a.positional.length > 0 ? a.positional : [path.join(root, ...RUBRIC_DIR.split('/'))];
+    const files = rawFiles(inputs);
+    if (files.length === 0) throw new UsageError('keine Rubrikdatei gefunden');
+    const items = files.map((f) => ({ label: displayPath(root, f), fileName: path.basename(f), rubric: readJsonFile(f, displayPath(root, f)) }));
+    const res = checkRubrics(items, hashes);
+    return {
+      out: { checked_level: 'Rubrik (SLV0-EVAL-13/-14)', hash_quelle: quelle, rubriken: res.rubriken, messages: res.messages },
+      code: res.messages.length > 0 ? 1 : 0,
+      sub: 'rubric check',
+    };
   },
 };
+
+export const RUBRIC_DIR = 'docs/research/rubriken';
+
+/** Repo-relative path with '/' when inside root, else the base name (no absolute paths, INV-03). */
+function displayPath(root, file) {
+  const rel = path.relative(root, path.resolve(file));
+  if (rel === '' || rel.startsWith('..') || path.isAbsolute(rel)) return path.basename(file);
+  return rel.split(path.sep).join('/');
+}
 
 /** Run an eval subcommand. EvalRefusal → exit 1 envelope; UsageError propagates (exit 2). */
 export function runEval(argv) {
@@ -258,7 +317,7 @@ export function runEval(argv) {
     return { out: header(res.sub ?? sub, res.out), code: res.code ?? 0 };
   } catch (err) {
     if (!(err instanceof EvalRefusal)) throw err;
-    const action = (sub === 'ledger' || sub === 'split') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
+    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
     return { out: header(action, { refused: true, ...err.extra, messages: err.messages }), code: 1 };
   }
 }

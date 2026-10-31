@@ -5,6 +5,7 @@
 > Reichweite nach Owner-Antwort [A-20261030-sl-reichweite](../fragen/skill-library/questions/Q-20261030-sl-reichweite.md): **Stufen 0–2** (Paketvertrag, Validator, Token-Zählung, Eval-Harness mit Baseline).
 > Aktivierung nur durch den Owner am Hash ([A-20261030-sl-aktivierung](../fragen/skill-library/questions/Q-20261030-sl-aktivierung.md)); Feedback nur synthetisch oder freigegeben ([A-20261030-sl-feedbackdaten](../fragen/skill-library/questions/Q-20261030-sl-feedbackdaten.md)).
 > Implementierungsauftrag: [library-implementation-handover.md](../../research/skills-meta-prompting/library-implementation-handover.md).
+> Version 0.2 · 31.10.2026 · Ergänzung **SLV0-EVAL-13…18** (Rubrik je Skill nach K5.6, Querprüfungen Ledger/Manifest/Git) und Fälle **SLV0-FALL-38…46**; bestehende IDs unverändert.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -154,6 +155,25 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-10 | **Berichte nur aus Rohdaten:** Ein Bericht liest ausschließlich Rohdatensätze, nennt je Zahl Zähler, Nenner und die Rohdatensatz-IDs, trennt Ebenen M0–M5 und R und berichtet Familien und Wiederholungen getrennt. Eine Zahl ohne Rohdatenbezug → `report_without_raw`. Kein Score, keine Aktivierungsempfehlung (SLV0-INV-06). | fehlt |
 | SLV0-EVAL-11 | **R-Verstöße** werden je Fall getrennt ausgewiesen und nie mit anderen Ergebnissen verrechnet (SL1 §7). | fehlt |
 | SLV0-EVAL-12 | **Baseline-Lauf (Stufe 2):** Der Harness kann eine eingefrorene Baseline mit gespeicherten Rohdaten belegen. Die Läufe selbst sind keine Werkzeugfunktion; sie brauchen Owner-Budget und einen geprüften Client (C0). | Teilbeleg: E1-Auswahl, 12 Starts |
+| SLV0-EVAL-13 | **Rubrik je Skill (K5.6):** Je Skill gibt es höchstens eine gültige Rubrikdatei `docs/research/rubriken/<skill>.json` nach [eval-rubric.schema.json](schemas/eval-rubric.schema.json) (§7.1). Sie nennt `skill`, `rubrik_version` der Form `<skill>@<n>`, `paket_hash` (Inhaltshash `sl-hash-v0` des Pakets) und Kriterien mit stabiler ID, Ebene (`M3`, `M4`, `R`), Prüfart (`deterministisch`, `rubrik`) und Formulierung. Je Fall-Typ nennt `kern` genau ein Kriterium dieses Typs. Kriterien beschreiben beobachtbares Verhalten aus dem `SKILL.md`-Rumpf, keine Stilfragen. Kriterien-IDs sind über alle Rubriken eindeutig. Schema- oder Verweisfehler → `rubric_invalid`; doppelte ID → `rubric_id_duplicate`. | teilweise (Kriterien je Lauf in `e1v-e2-plan.json`, `kern_kriterium` je E3-Fall) |
+| SLV0-EVAL-14 | **Rubrikprüfung:** `eval rubric check` prüft jede Rubrik nach EVAL-13 und vergleicht `paket_hash` mit dem aktuellen Inhaltshash des Pakets im Arbeitsbaum oder in einem geprüften Snapshot (EVAL-02). Abweichung oder fehlendes bzw. ungültiges Paket → `rubric_stale`. Eine veraltete Rubrik wird nicht automatisch neu gebunden; jede Änderung an Kriterien oder Bindung ist eine neue `rubrik_version` in einem eigenen PR (library-learning §8). Liest nur. | fehlt |
+| SLV0-EVAL-15 | **Rubrikversion in Rohdaten und Bericht:** `raw --rubric` übernimmt die `rubrik_version` der Rubrik; eine abweichende Angabe in den Metadaten, eine Assertion der Art `rubrik` oder mit `r_regel`, deren ID kein Kriterium der Rubrik ist, oder eine Assertion mit Kriteriums-ID, aber anderer Prüfart bzw. anderer `r_regel` → `rubric_mismatch`. Bei Variante `B1` muss der Inhaltshash des Rubrik-Skills im Datensatz gleich `paket_hash` sein, sonst `rubric_stale`; nennt `B1` den Skill nicht, `rubric_mismatch`. Kandidatenarme tragen absichtlich einen anderen Hash und werden nicht gebunden. Ein Bericht nennt alle Rubrikversionen mit Rohdatensatz-IDs und mischt nie zwei Versionen derselben Rubrik (gleicher Teil vor `@`; Versionen ohne diese Form gelten als eine Rubrik); ein Verstoß oder eine Abweichung von `report --rubric-version` → `rubric_version_mixed`, kein Bericht. | fehlt |
+| SLV0-EVAL-16 | **Querprüfung Rohdatensatz ↔ Ledger:** Mit `raw --ledger` muss `attempt_id` im Ledger reserviert sein, und deren `trial_id` muss `<case_id>--<variante>` lauten (Benennung aus EVAL-04). Liegt ein Ergebnis vor, gilt: ein gesetzter `trace_sha256` ist gleich `spur_sha256`, nicht leere `raw_ids` enthalten `run_id`. Abweichung → `ledger_mismatch`. Das Ledger wird nur gelesen. | fehlt |
+| SLV0-EVAL-17 | **Querprüfung Vorbereiten ↔ Split-Manifest:** Mit `prepare --manifest` wird das Manifest nach EVAL-06 geprüft; jeder Fall muss darin mit gleichem Fall-Hash stehen. Fall fehlt → `case_not_in_manifest`; Hash weicht ab → `case_hash_mismatch`. Alle Fälle werden vor dem ersten Schreiben geprüft; bei Ablehnung entsteht kein Zielverzeichnis. Der `split` jedes Versuchs kommt dann aus dem Manifest. | fehlt (`split check --cases` vergleicht nur nachträglich) |
+| SLV0-EVAL-18 | **Quellcommit gegen Git:** `freeze --source-commit SHA --verify-git` prüft vor dem Einfrieren, dass `SHA` gleich der vollständigen Ausgabe von `git rev-parse HEAD` ist (sonst `source_commit_mismatch`) und dass unter `.agents/skills/` keine geänderte, ungetrackte oder ignorierte Datei liegt (sonst `worktree_dirty`). Die Prüfung liest nur (`git --no-optional-locks`); Git ist kein Client im Sinne von SLV0-INV-04. Nur ein Modul darf dafür einen Prozess starten, ausschließlich `git`. Ohne `--verify-git` wird Git nicht aufgerufen. | fehlt |
+
+### 7.1 Rubrikformat (SLV0-EVAL-13)
+
+| Feld | Inhalt |
+|---|---|
+| `skill`, `rubrik_version` | Paketname; Version `<skill>@<n>`, `n` ab 1. Der Teil vor `@` ist gleich `skill`. |
+| `paket_hash` | `{algorithm: sha256, profile: sl-hash-v0, value}`: der Inhaltshash, gegen den die Kriterien formuliert wurden. |
+| `grundlage` | Woraus die Kriterien abgeleitet sind (Rumpf, übernommene Laufkriterien). |
+| `kriterien[]` | `id` (`<KÜRZEL>-K<nn>`), `ebene` (`M3` Verhalten mit geladenem Skill, `M4` paarweiser Vergleich gegen den Vergleichsarm, `R` harte Regel), `pruefart` (`deterministisch` aus der Spur, `rubrik` durch Bewerter), `formulierung` (ein beobachtbarer Satz), `r_regel` (bei `R` die Regel `R-nn`, sonst `null`), `herkunft` (Rumpfschritt und übernommene Fall- oder Laufkriterien). |
+| `fall_typen[]` | `id`, `beschreibung`, `kriterien` (IDs, die für diesen Typ bewertet werden), `kern` (genau eine dieser IDs: das Kriterium, ohne dessen Erfüllung der Fall nicht als bestanden gilt; Vorbild `kern_kriterium` in E3), `faelle` (Verweise auf vorhandene Fall-IDs, nur Daten). |
+
+Rubriken bewerten nichts selbst und enthalten keine Schwellen oder Scores (SLV0-INV-06). Eine Rubrik ist kein Freigabebeleg: Ob die Kriterien
+den Skill treffen, entscheidet die Owner-Review der Rubrik-PR (O-10).
 
 ## 8. Fehlerfälle
 
@@ -168,6 +188,8 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Adapter | `adapter_missing`, `adapter_link_invalid`, `adapter_orphaned` | nur Bereich Projekt |
 | Registry | `registry_invalid`, `hash_mismatch`, `version_hash_conflict` | Datensatz ungültig; nichts wird korrigiert |
 | Eval | `snapshot_hash_mismatch`, `candidate_baseline_mismatch`, `candidate_multi_dimension`, `replacement_not_unique`, `workspace_exists`, `config_overwrite`, `budget_exhausted`, `ledger_locked`, `family_split_overlap`, `split_access_denied`, `split_consumed`, `trace_invalid`, `report_without_raw` | Vorgang abgebrochen, kein Teilergebnis gilt als Erfolg |
+| Rubrik | `rubric_invalid`, `rubric_id_duplicate`, `rubric_stale`, `rubric_mismatch`, `rubric_version_mixed` | Prüfung fehlgeschlagen bzw. Rohdatensatz oder Bericht nicht erzeugt; nichts wird neu gebunden |
+| Querprüfung | `ledger_mismatch`, `case_not_in_manifest`, `case_hash_mismatch`, `source_commit_mismatch`, `worktree_dirty` | Vorgang abgebrochen; Ledger, Manifest und Git-Stand bleiben unverändert |
 
 Kein Fehler wird still zu einer Warnung herabgestuft, und kein Werkzeug „repariert“ Eingaben (SLV0-INV-08).
 
@@ -215,6 +237,15 @@ Jeder Fall ist ein späterer Contract-Test mit synthetischen Eingaben, außer -0
 | SLV0-FALL-35 | Spur ohne `init`-Katalog; Skill-Aufruf ohne erfolgreiche Antwort; leere Spur; Spur mit Denktext | Katalog `unbekannt`; `confirmed` nicht `true`; keine negative Auswahl; Denktext nicht in der Ausgabe | EVAL-08, INV-05 |
 | SLV0-FALL-36 | Bericht soll eine Zahl ohne Rohdatensatz-ID ausgeben | `report_without_raw`; Bericht enthält kein Score- oder Empfehlungsfeld | EVAL-10, INV-06/-09 |
 | SLV0-FALL-37 | Fall mit R-Verstoß und sonst bestandenen Assertions | R-Verstoß getrennt ausgewiesen, nicht verrechnet | EVAL-11 |
+| SLV0-FALL-38 | Rubrik ohne `kern`; `kern` nicht unter den Kriterien des Fall-Typs; Fall-Typ verweist auf unbekanntes Kriterium; `R`-Kriterium ohne `r_regel`; `rubrik_version` mit fremdem Skill; Dateiname ungleich `<skill>.json` | je `rubric_invalid`, Exit 1 | EVAL-13 |
+| SLV0-FALL-39 | Zwei Kriterien mit gleicher ID in einer Rubrik; gleiche ID in zwei Rubriken; zwei Rubriken für denselben Skill | `rubric_id_duplicate` (2×); `rubric_invalid` | EVAL-13 |
+| SLV0-FALL-40 | Rubrik passend gebunden; danach ein Byte im Paket geändert; Paket fehlt; Prüfung gegen Snapshot mit dem alten Inhalt | ok; `rubric_stale`; `rubric_stale`; ok | EVAL-14 |
+| SLV0-FALL-41 | Die acht Rubriken unter `docs/research/rubriken/` gegen den Arbeitsbaum | 0 Meldungen, Exit 0, acht Rubriken, je Fall-Typ ein `kern` | EVAL-13/-14 |
+| SLV0-FALL-42 | `raw --rubric`: Metadaten ohne Version; mit anderer Version; Rubrik-Assertion mit unbekannter ID; Kriteriums-ID mit falscher Prüfart; B1 mit Skill-Hash ungleich `paket_hash` | Version übernommen; `rubric_mismatch` (3×); `rubric_stale` | EVAL-15 |
+| SLV0-FALL-43 | Bericht aus Rohdaten mit `grilling@1` und `grilling@2`; mit `grilling@1` und `researching-repositories@1`; `--rubric-version grilling@2` bei Rohdaten `grilling@1` | `rubric_version_mixed`, kein Bericht; Bericht mit zwei Versionen und IDs; `rubric_version_mixed` | EVAL-15 |
+| SLV0-FALL-44 | `raw --ledger`: `attempt_id` nicht reserviert; andere `trial_id`; Ergebnis mit anderem Spur-Hash; `raw_ids` ohne `run_id`; alles passend | je `ledger_mismatch`; zuletzt Rohdatensatz, Ledger unverändert | EVAL-16 |
+| SLV0-FALL-45 | `prepare --manifest`: Fall fehlt im Manifest; Fall nach dem Manifest geändert; Manifest mit Familienüberlappung; passend | `case_not_in_manifest`; `case_hash_mismatch`; `family_split_overlap`; je ohne Zielverzeichnis; zuletzt `split` aus dem Manifest | EVAL-17, EVAL-06 |
+| SLV0-FALL-46 | `freeze --verify-git` in einem Test-Git-Repo: passender HEAD und sauberer Baum; anderer Commit; geänderte, ungetrackte bzw. ignorierte Datei unter `.agents/skills/`; Änderung außerhalb; Option ohne `--source-commit`; ohne Git-Repo | ok; `source_commit_mismatch`; `worktree_dirty` (3×); ok; Exit 2; Exit 2. Git-Status vorher/nachher gleich; nur ein Modul startet `git` | EVAL-18, INV-04 |
 
 ## 10. Abgrenzung
 
@@ -234,7 +265,8 @@ Jeder Fall ist ein späterer Contract-Test mit synthetischen Eingaben, außer -0
 | [eval-split-manifest.schema.json](schemas/eval-split-manifest.schema.json) | Split-Manifest (SLV0-EVAL-06) | Tests |
 | [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08) | Tests |
 | [eval-raw-record.schema.json](schemas/eval-raw-record.schema.json) | Rohdatensatz je Start (SLV0-EVAL-09, SL1 §8) | Tests |
-| [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11) | Tests |
+| [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11), mit Rubrikversionen (SLV0-EVAL-15) | Tests |
+| [eval-rubric.schema.json](schemas/eval-rubric.schema.json) | Rubrik je Skill (SLV0-EVAL-13, §7.1) | [docs/research/rubriken/](../research/rubriken/) |
 
 Die Eval-Schemas kamen mit dem Eval-Harness-PR (Handover §7); Umsetzung und Auslegungen: [tools/skill-library/README.md](../../tools/skill-library/README.md).
 Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die Vereinheitlichung ist offen (O-8).
@@ -252,6 +284,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-7 | Quelle für `gemeldet` je Skill (Tokenizer oder Zähldienst mit Schlüssel und Kosten) | eigene Owner-Entscheidung; bis dahin `geschaetzt`/`unbekannt` |
 | O-8 | Feldsprache der Schemas (SL3 Englisch vs. V0 Deutsch) | bei Review dieser Spec festlegen |
 | O-9 | Wer unabhängige Test-Familien schreibt und verwahrt (SL4 §10) | vor E3; betrifft SLV0-EVAL-07 |
+| O-10 | Inhalt der Rubriken `@1` (SLV0-EVAL-13): vom Agenten aus dem Rumpf abgeleitet, also nicht unabhängig; Bewerter-Modell und menschliche Stichprobe (SL1 §7) | Owner-Review der Rubrik-PR; bis dahin Entwurf, nicht für Aktivierungsbelege |
 
 ## 13. Rückverfolgung
 
@@ -263,6 +296,8 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | VAL-01…17 | K1.2, SL0 §2.2/§2.4, PA-R3, RD-R5, SCO-R3, C0-Befund Symlink-Discovery |
 | TOK-01…08 | K7.1, K7.3, K7.5, K7.6, SL3 §7, C0 Usage-Felder |
 | EVAL-01…12 | K5.1, K5.3, K5.5, K5.7, SL1 §5.5/§7/§8/§9, SL4 §4, Research-Helfer, C0/E1-Ergebnis |
+| EVAL-13…15 | K5.6, SL1 §7/§8 (`rubrik_version`), SL4 §8 (Vergleiche über Rubrikversionen ungültig), Kriterien aus `e1v-e2-plan.json` und `e3/familien/*/fall.json` |
+| EVAL-16…18 | Querprüfungen, die die Werkzeug-README für Stufe 2 als fehlend nannte (Ledger, Manifest, Quellcommit) |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.

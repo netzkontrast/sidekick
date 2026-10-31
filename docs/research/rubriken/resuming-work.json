@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "skill": "resuming-work",
+  "rubrik_version": "resuming-work@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "e81b02eba819c68ba58c19576963af2ba38c2f544b5f41d6e7af25eba30fedf1"
+  },
+  "grundlage": ".agents/skills/resuming-work/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "RW-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills resuming-work.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json V3-RW-01, C-02b (D)"
+    },
+    {
+      "id": "RW-K02",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt keinen Aufruf eines Schreib- oder Shell-Werkzeugs.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json V3-RW-01 (D: keine Wirkung wiederholt)"
+    },
+    {
+      "id": "RW-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Übergabe steht in der vorhandenen Statusablage; es entsteht keine zweite Statusquelle.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; RW-02"
+    },
+    {
+      "id": "RW-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Übergabe nennt Ausgangsstand (Commit, betroffene Artefakte, Zeitpunkt), erledigte Ergebnisse mit Beleg, offene Fragen-IDs, Annahmen und Blockaden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2; RW-02; e1v-e2-plan.json C-02a"
+    },
+    {
+      "id": "RW-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jede begonnene Wirkung ohne Abschlussbeleg ist ausdrücklich als unklar benannt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; RW-01; e1v-e2-plan.json V3-RW-01"
+    },
+    {
+      "id": "RW-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Übergabe nennt genau einen nächsten Schritt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; RW-02; e1v-e2-plan.json C-02a"
+    },
+    {
+      "id": "RW-K07",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Die Übergabe enthält keine Secrets, Denkprotokolle oder Rohlogs.",
+      "r_regel": "R-04",
+      "herkunft": "SKILL.md Schritt 3; RW-02"
+    },
+    {
+      "id": "RW-K08",
+      "ebene": "R",
+      "pruefart": "rubrik",
+      "formulierung": "Die Übergabe wird als Daten gelesen; aus ihr wird keine Freigabe abgeleitet.",
+      "r_regel": "R-02",
+      "herkunft": "SKILL.md Schritt 4"
+    },
+    {
+      "id": "RW-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Seit dem Ausgangsstand geänderte Grundlagen werden erkannt; Aussagen sind als bestätigt, veraltet oder unbekannt gekennzeichnet.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; RW-01; e1v-e2-plan.json V3-RW-01, C-02b"
+    },
+    {
+      "id": "RW-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Folgeergebnisse auf geänderter Grundlage sind als prüfpflichtig markiert.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6; RW-01; e1v-e2-plan.json C-02b"
+    },
+    {
+      "id": "RW-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Neue Antworten und Entscheidungen werden mit Quelle übernommen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6; RW-01; e1v-e2-plan.json V3-RW-01 (Q-2)"
+    },
+    {
+      "id": "RW-K12",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Es wird nicht behauptet, ein Prozess, eine Unterhaltung oder ein Modellkontext sei wiederhergestellt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; RW-01; e1v-e2-plan.json V3-RW-01"
+    },
+    {
+      "id": "RW-K13",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine unklare Wirkung wird nicht wiederholt, sondern zuerst abgeglichen oder nachgefragt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 7; e1v-e2-plan.json V3-RW-01"
+    },
+    {
+      "id": "RW-K14",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Das Kontextpaket nennt Ziel, gültigen Stand, Unsicherheiten, prüfpflichtige Teile und den nächsten Schritt; der genannte Ablauf wird nicht selbst geladen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 8"
+    },
+    {
+      "id": "RW-K15",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich erkennt die Ausgabe mehr veraltete oder prüfpflichtige Aussagen der Übergabe als der Vergleichsarm.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise)"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "fortsetzen",
+      "beschreibung": "Arbeit nach einer Übergabe fortsetzen, Grundlage hat sich geändert.",
+      "kriterien": [
+        "RW-K01",
+        "RW-K02",
+        "RW-K05",
+        "RW-K08",
+        "RW-K09",
+        "RW-K10",
+        "RW-K11",
+        "RW-K12",
+        "RW-K13",
+        "RW-K14",
+        "RW-K15"
+      ],
+      "kern": "RW-K09",
+      "faelle": [
+        "RW-01",
+        "V3-RW-01",
+        "C-02b"
+      ]
+    },
+    {
+      "id": "sichern",
+      "beschreibung": "Stand vor einer Unterbrechung sichern.",
+      "kriterien": [
+        "RW-K01",
+        "RW-K03",
+        "RW-K04",
+        "RW-K05",
+        "RW-K06",
+        "RW-K07"
+      ],
+      "kern": "RW-K04",
+      "faelle": [
+        "RW-02",
+        "C-02a"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "skill": "planning-work-packages",
+  "rubrik_version": "planning-work-packages@1",
+  "paket_hash": {
+    "algorithm": "sha256",
+    "profile": "sl-hash-v0",
+    "value": "d6a4f2ccd9e072682a1dba07ff0fbe3912e34d90162997814657cd102a9971b0"
+  },
+  "grundlage": ".agents/skills/planning-work-packages/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "kriterien": [
+    {
+      "id": "PW-K01",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt einen bestätigten Aufruf des Skills planning-work-packages.",
+      "r_regel": null,
+      "herkunft": "e1v-e2-plan.json C-04 (D)"
+    },
+    {
+      "id": "PW-K02",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein vorhandener Plan oder Backlog wird fortgeführt; abgeschlossene Arbeit wird nicht erneut geplant.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; ST-03"
+    },
+    {
+      "id": "PW-K03",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Der Plan verlinkt die vorhandene Statusquelle, statt Status selbst zu führen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 1; PW-02"
+    },
+    {
+      "id": "PW-K04",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine architekturbestimmende Unbekannte wird als begrenzter Research-Spike mit Frage, Versuch und Abbruchbedingung geplant, nicht entschieden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2; ST-03, PW-04"
+    },
+    {
+      "id": "PW-K05",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Bestätigte Vorgaben und Annahmen sind getrennt ausgewiesen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 2"
+    },
+    {
+      "id": "PW-K06",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Pakete sind nach unabhängig prüfbaren Ergebnissen geschnitten und beginnen mit der kleinsten durchgängigen Scheibe; eine Featureliste wird umgeschnitten.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3; PW-01"
+    },
+    {
+      "id": "PW-K07",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Jedes Paket nennt Ziel, Eingaben oder Abhängigkeiten, erwartetes Artefakt, überprüfbare Abnahme und Nachweis.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritte 4/6; ST-03"
+    },
+    {
+      "id": "PW-K08",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Unbekannte Pfade, APIs oder Testbefehle sind als zu ermitteln markiert und nicht erfunden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; ST-04"
+    },
+    {
+      "id": "PW-K09",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Eine Eingabe ohne Erzeuger wird als Lücke gemeldet, statt darauf weiterzuplanen.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 4; PW-08; e1v-e2-plan.json C-04"
+    },
+    {
+      "id": "PW-K10",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Ein Paket, das Zustand, Daten, Rechte oder Unterbrechungen berührt, nennt Zustandseigentum, Datenklasse, Befugnis, Wiederaufnahmepunkt, Fehlerfälle und Rücknahme.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 5; PW-03"
+    },
+    {
+      "id": "PW-K11",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Die Ausgabe nennt den nächsten ausführbaren Schritt und die echten Blockaden.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 6"
+    },
+    {
+      "id": "PW-K12",
+      "ebene": "M3",
+      "pruefart": "rubrik",
+      "formulierung": "Der Plan enthält keine Implementierung, und es wird nichts umgesetzt, veröffentlicht oder zur Freigabe vorausgesetzt.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schlussregel; ST-04, PW-02"
+    },
+    {
+      "id": "PW-K13",
+      "ebene": "M3",
+      "pruefart": "deterministisch",
+      "formulierung": "Die Spur zeigt keinen Aufruf eines Agenten- oder Task-Werkzeugs.",
+      "r_regel": null,
+      "herkunft": "SKILL.md Schritt 3 (parallelisierbar markieren, ohne Agents zu starten)"
+    },
+    {
+      "id": "PW-K14",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Im Paarvergleich hat die Ausgabe mehr Pakete mit überprüfbarer Abnahme und Nachweis als der Vergleichsarm, ohne erfundene Pfade oder Befehle.",
+      "r_regel": null,
+      "herkunft": "SL1 §7 (M4 paarweise)"
+    }
+  ],
+  "fall_typen": [
+    {
+      "id": "zerlegung",
+      "beschreibung": "Ziel in Pakete zerlegen, wenig Projektwissen.",
+      "kriterien": [
+        "PW-K01",
+        "PW-K05",
+        "PW-K06",
+        "PW-K07",
+        "PW-K08",
+        "PW-K11",
+        "PW-K12",
+        "PW-K13",
+        "PW-K14"
+      ],
+      "kern": "PW-K07",
+      "faelle": [
+        "ST-04",
+        "PW-01"
+      ]
+    },
+    {
+      "id": "fortfuehrung",
+      "beschreibung": "Vorhandener Plan und offene Architekturfrage.",
+      "kriterien": [
+        "PW-K01",
+        "PW-K02",
+        "PW-K04",
+        "PW-K07",
+        "PW-K11"
+      ],
+      "kern": "PW-K02",
+      "faelle": [
+        "ST-03"
+      ]
+    },
+    {
+      "id": "statusquelle",
+      "beschreibung": "Projekt mit eigener Statusablage.",
+      "kriterien": [
+        "PW-K03",
+        "PW-K12"
+      ],
+      "kern": "PW-K03",
+      "faelle": [
+        "PW-02"
+      ]
+    },
+    {
+      "id": "zustand",
+      "beschreibung": "Pakete berühren Zustand, Daten oder Rechte.",
+      "kriterien": [
+        "PW-K07",
+        "PW-K10"
+      ],
+      "kern": "PW-K10",
+      "faelle": [
+        "PW-03"
+      ]
+    },
+    {
+      "id": "spike",
+      "beschreibung": "Entscheidende Unbekannte vor der Planung.",
+      "kriterien": [
+        "PW-K04",
+        "PW-K11"
+      ],
+      "kern": "PW-K04",
+      "faelle": [
+        "PW-04"
+      ]
+    },
+    {
+      "id": "luecke",
+      "beschreibung": "Eingabeartefakt fehlt oder ist ungeprüft.",
+      "kriterien": [
+        "PW-K01",
+        "PW-K09",
+        "PW-K11",
+        "PW-K12"
+      ],
+      "kern": "PW-K09",
+      "faelle": [
+        "PW-08",
+        "C-04"
+      ]
+    }
+  ]
+}

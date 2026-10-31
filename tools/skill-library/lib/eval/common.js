@@ -21,6 +21,16 @@ export const EVAL_RULES = {
   split_consumed: 'SLV0-EVAL-07',
   trace_invalid: 'SLV0-EVAL-08',
   report_without_raw: 'SLV0-EVAL-10',
+  rubric_invalid: 'SLV0-EVAL-13',
+  rubric_id_duplicate: 'SLV0-EVAL-13',
+  rubric_stale: 'SLV0-EVAL-14',
+  rubric_mismatch: 'SLV0-EVAL-15',
+  rubric_version_mixed: 'SLV0-EVAL-15',
+  ledger_mismatch: 'SLV0-EVAL-16',
+  case_not_in_manifest: 'SLV0-EVAL-17',
+  case_hash_mismatch: 'SLV0-EVAL-17',
+  source_commit_mismatch: 'SLV0-EVAL-18',
+  worktree_dirty: 'SLV0-EVAL-18',
 };
 
 export function evalMsg(code, pathStr, message, line = null) {

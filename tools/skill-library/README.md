@@ -51,8 +51,10 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/split.js` | Split-Manifest, Familienüberlappung, Rollenzugriff, Auswahl, verbrauchter Test-Split | EVAL-06/-07 |
 | `lib/eval/normalize.js` | Positivliste für Client-Spuren (JSONL oder skill-pilot-v1) | EVAL-08, INV-05 |
 | `lib/eval/raw.js`, `lib/eval/report.js` | Rohdatensatz je Start; Bericht nur aus Rohdaten, R-Verstöße getrennt | EVAL-09…11, INV-06/-09 |
+| `lib/eval/rubric.js` | Rubrik je Skill: Struktur, eindeutige IDs, Hashbindung, Bindung von Rohdatensätzen, Versionsmischung | EVAL-13…15 |
+| `lib/eval/git.js` | Abgleich des Quellcommits mit `git rev-parse HEAD` und `git status`; einziges Modul mit Prozessstart (nur `git`) | EVAL-18 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
-| `test/` | je Fall SLV0-FALL-01…37 mindestens ein Test (Name beginnt mit der Fall-ID) | §9 |
+| `test/` | je Fall SLV0-FALL-01…46 mindestens ein Test (Name beginnt mit der Fall-ID) | §9 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -79,7 +81,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
 
-## Eval-Harness (Stufe 2, SLV0-EVAL-01…11)
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…18)
 
 Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
 Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
@@ -109,6 +111,18 @@ $B eval report raw/ > bericht.json
 $B eval report --check bericht.json raw/
 ```
 
+Rubriken und Querprüfungen (SLV0-EVAL-13…18):
+
+```sh
+$B eval rubric check                                       # alle Rubriken unter docs/research/rubriken/ gegen den Arbeitsbaum
+$B eval rubric check docs/research/rubriken/grilling.json --snapshot snapshot.json   # gegen einen geprüften Snapshot
+$B eval raw --meta meta.json --normalized spur.sl.json --rubric docs/research/rubriken/grilling.json \
+            --ledger ledger.jsonl > raw/RUN-1.json     # Rubrikversion übernehmen, Versuch gegen das Ledger abgleichen
+$B eval report raw/ --rubric-version grilling@1 > bericht.json                    # Rubrikversion festhalten
+$B eval prepare … --manifest manifest.json                # nur Fälle aus dem Split-Manifest mit gleichem Fall-Hash
+$B eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git > snapshot.json  # HEAD und sauberes .agents/skills/
+```
+
 **Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw` und `report` geben bei Erfolg das Artefakt selbst
 als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
 `{tool, tool_version, command, …}` aus. Exit 0 ok; Exit 1 Abbruch mit Code aus §8 (`refused: true`, `messages`) oder
@@ -125,7 +139,8 @@ Alle übrigen Befehle lesen nur.
 [Split-Manifest](../../docs/spec/schemas/eval-split-manifest.schema.json),
 [normalisierte Spur](../../docs/spec/schemas/eval-normalized-trace.schema.json),
 [Rohdatensatz](../../docs/spec/schemas/eval-raw-record.schema.json),
-[Bericht](../../docs/spec/schemas/eval-report.schema.json).
+[Bericht](../../docs/spec/schemas/eval-report.schema.json),
+[Rubrik](../../docs/spec/schemas/eval-rubric.schema.json).
 Der Schemaprüfer kennt dafür zusätzlich `maximum`, `minItems` und `propertyNames`.
 
 ### Verhältnis zum Research-Helfer
@@ -145,7 +160,10 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 
 ### Auslegungen, wo die Spec nichts festlegt
 
-- **Freeze** friert den Arbeitsbaum ein, nicht einen Git-Commit; der Quellcommit wird angegeben und nicht gegen Git geprüft.
+- **Freeze** friert den Arbeitsbaum ein, nicht einen Git-Commit. Ohne `--verify-git` wird der Quellcommit nur angegeben;
+  mit `--verify-git` muss er gleich dem vollständigen `git rev-parse HEAD` sein (ein abgekürzter Hash gilt als
+  `source_commit_mismatch`), und `git status` darf unter `.agents/skills/` nichts melden, auch keine ungetrackten oder
+  ignorierten Dateien (`worktree_dirty`). Fehlt Git oder das Repository, ist das Exit 2.
   Ungültige Pakete werden nicht eingefroren (Validatorfehler, Exit 1), weil sie keinen Hash erhalten (PKG-20).
 - **Kandidaten:** Dimensionen wie im Helfer `description` und `project-binding`. Ein Beschreibungskandidat hat genau eine
   Ersetzung, die genau die ganze `description:`-Zeile im Frontmatter ersetzt; alles andere ist `candidate_multi_dimension`.
@@ -171,3 +189,39 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   R-Assertions zählen nie in den Ebenen-Assertions, sondern nur in `r_pruefungen`/`r_verstoesse`. `skill_aufrufe` zählt Läufe
   mit bestätigtem Aufruf, ohne zu sagen, ob der Aufruf richtig war. Feldsprache: Rohdatensatz und Bericht deutsch nach SL1 §8,
   Snapshot, Ledger, Manifest und normalisierte Spur englisch wie der Research-Helfer (O-8 bleibt offen).
+- **Rubriken** (`docs/research/rubriken/<skill>.json`, je Skill `<skill>@1`): Kriterien aus dem `SKILL.md`-Rumpf abgeleitet;
+  passende Kriterien aus `e1v-e2-plan.json` (D/R-Prüfungen) und `kern_kriterium` der E3-Familien sind übernommen und in
+  `herkunft` genannt. Kriterien-IDs `<KÜRZEL>-Knn` (GR, RR, PW, DG, RW, SB, TB, EC) sind über alle Rubriken eindeutig, damit
+  Assertion-IDs im Rohdatensatz eindeutig auf ein Kriterium zeigen. `faelle` verweist auf vorhandene Fall-IDs und wird nicht
+  geprüft. Ein Paket ohne Rubrik ist kein Fehler; zwei Rubriken für einen Skill sind `rubric_invalid`. Der Dateiname muss
+  `<skill>.json` lauten. Die Rubriken sind Entwurf bis zur Owner-Review (Spec O-10).
+- **`rubric check`** ohne Dateiargument liest `docs/research/rubriken/` unter `--root`. Hashquelle ist der Arbeitsbaum
+  (gültige Pakete, Adapter werden nicht geprüft) oder mit `--snapshot` der geprüfte Snapshot. Ungültiges JSON ist Exit 2;
+  Schema- und Verweisfehler sind Meldungen (`rubric_invalid`, Exit 1), damit alle Rubriken in einem Lauf geprüft werden.
+  Dateipfade erscheinen repo-relativ oder, außerhalb der Wurzel, nur mit Dateinamen.
+- **`raw --rubric`:** Fehlt `rubrik_version` in den Metadaten oder ist sie `null`, kommt sie aus der Rubrik. Deterministische
+  Assertions, die kein Kriterium sind (z. B. Harness-Prüfungen), bleiben erlaubt; Assertions der Art `rubrik` und R-Assertions
+  müssen Kriterien sein. Die Hashbindung gilt nur für `B1`, weil Kandidaten den Skill absichtlich ändern und gegen die
+  Baseline-Rubrik bewertet werden.
+- **Rubrikversionen im Bericht:** Gruppiert wird nach dem Teil vor `@`; alle Versionen ohne die Form `<skill>@<n>`
+  (z. B. `rubrik-e1v-e2-v1`) bilden eine gemeinsame Gruppe. Rohdatensätze ohne `rubrik_version` erscheinen nicht in
+  `rubrik_versionen` und verletzen nichts. `--rubric-version` darf je Rubrik nur einmal stehen (sonst Exit 2); eine verlangte
+  Version, die in den Rohdaten nicht vorkommt, ist kein Fehler. `report --check` meldet gemischte Versionen ebenfalls.
+- **`raw --ledger`:** Das Ledger wird ohne Sperre nur gelesen. Die `trial_id` der Reservierung muss `<case_id>--<variante>`
+  lauten, wie `prepare` sie bildet. Ohne Ergebniseintrag genügt die Reservierung; `outcome` wird nicht gegen `status` geprüft.
+- **`prepare --manifest`:** Das Manifest wird wie bei `split check` geprüft (Schema, `family_split_overlap`). Alle Fälle werden
+  vor dem Abbruch gesammelt. `trials.json` nennt `split_manifest_sha256`, und der `split` jedes Versuchs kommt aus dem Manifest.
+- **Git:** `git --no-optional-locks -c core.fsmonitor=false -C <root> rev-parse|status`; die Ausgabe nennt höchstens fünf
+  unsaubere Pfade. Der Importtest erlaubt `node:child_process` nur in `lib/eval/git.js` und dort nur `execFileSync('git', …)`.
+
+## Nicht umgesetzt
+
+- Keine Bewertung: Weder Harness noch Rubrik urteilen; Bewerter-Session, Modellfixierung und menschliche Stichprobe (SL1 §7)
+  bleiben außerhalb des Werkzeugs (Spec O-10).
+- Keine Versionshistorie von Rubriken: Ob eine Kriterienänderung eine neue `rubrik_version` bekam, prüft das Werkzeug nicht
+  (es sieht nur den aktuellen Stand); das sichert die Review der Rubrik-PR.
+- `faelle` in Rubriken und `allowed_skills`/`expected_skill` der Falldateien werden nicht gegeneinander abgeglichen.
+- Ein Rohdatensatz kennt seine `trial_id` nicht als eigenes Feld; der Ledger-Abgleich nutzt die Namensregel von `prepare`.
+  Mehrere Rohdatensätze zum selben `attempt_id` werden nicht erkannt; der Bericht lehnt nur doppelte `run_id` ab.
+- `freeze --verify-git` prüft nur den Arbeitsbaum gegen HEAD; ein Einfrieren direkt aus einem Commit (`git show`) gibt es nicht.
+- Baseline-Läufe (EVAL-12) bleiben keine Werkzeugfunktion.

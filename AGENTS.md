@@ -19,9 +19,13 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
 - Tests: `node --test "tools/skill-library/test/*.test.js"`
 - Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
 - Einzeltest: `node --test tools/skill-library/test/eval-ledger.test.js` (Testnamen beginnen mit der Fall-ID)
-- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report> …`;
+- Eval-Harness: `node tools/skill-library/cli.js eval <freeze|verify|bind|prepare|ledger|split|normalize|raw|report|rubric> …`;
   startet nie einen Client. Schreibend sind nur `prepare`, `ledger init|reserve|result` und `split access|select`,
   und zwar nur in ausdrücklich angegebene Pfade, ohne zu überschreiben.
+- Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
+  gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
+- Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`
+  (nur lesend; der einzige Prozess, den der Harness startet, ist `git`).
 - Research-Helfer-Tests: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
 
 Details: [tools/skill-library/README.md](tools/skill-library/README.md). Ab Phase 1 (TypeScript/Next.js)

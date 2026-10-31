@@ -1,6 +1,7 @@
 // Prepare trial workspaces (SLV0-EVAL-04). Plans only: no client start (SLV0-INV-04).
 // Everything is computed and checked in memory first; only then is the output directory created
-// (never overwritten) and written with exclusive-create flags.
+// (never overwritten) and written with exclusive-create flags. With a split manifest every case
+// must be listed with the same case hash (SLV0-EVAL-17).
 import fs from 'node:fs';
 import path from 'node:path';
 import { canonicalJson, sha256Hex, compareCodepoints } from '../core.js';
@@ -9,6 +10,7 @@ import { TOOL_NAME, TOOL_VERSION } from '../core.js';
 import { evalMsg, EvalRefusal, UsageError, safeRelativeSegments } from './common.js';
 import { verifySnapshot, packageHashes, packageSetHash } from './snapshot.js';
 import { bindCandidate, candidateSha256 } from './candidate.js';
+import { checkManifest, manifestSha256 } from './split.js';
 
 const CASE_ID_RE = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const CONFIG_PATHS = ['.claude', '.agents', 'AGENTS.md', 'CLAUDE.md'];
@@ -45,11 +47,29 @@ export function caseSha256(caseObj) {
 }
 
 /**
- * @param {{snapshot, cases, candidates, projectConfig: string, output: string}} args
+ * SLV0-EVAL-17: every case is in the split manifest with the same case hash. Checks all cases
+ * before refusing; returns a map case_id → manifest row.
+ */
+export function checkCasesAgainstManifest(cases, splitManifest) {
+  checkManifest(splitManifest, 'manifest');
+  const rows = new Map(splitManifest.cases.map((m) => [m.case_id, m]));
+  const messages = [];
+  for (const c of cases) {
+    const m = rows.get(c.id);
+    if (!m) messages.push(evalMsg('case_not_in_manifest', c.id, `Fall fehlt im Split-Manifest ${splitManifest.manifest_id}`));
+    else if (caseSha256(c) !== m.case_sha256) messages.push(evalMsg('case_hash_mismatch', c.id, `Fall-Hash weicht vom Split-Manifest ${splitManifest.manifest_id} ab (Fall nach dem Manifest geändert?)`));
+  }
+  if (messages.length > 0) throw new EvalRefusal(messages);
+  return rows;
+}
+
+/**
+ * @param {{snapshot, cases, candidates, projectConfig: string, output: string, splitManifest?: object|null}} args
  * @returns manifest (also written to <output>/trials.json)
  */
-export function prepare({ snapshot, cases, candidates = [], projectConfig, output }) {
+export function prepare({ snapshot, cases, candidates = [], projectConfig, output, splitManifest = null }) {
   verifySnapshot(snapshot);
+  const manifestRows = splitManifest !== null ? checkCasesAgainstManifest(cases, splitManifest) : null;
   if (typeof projectConfig !== 'string' || projectConfig.length === 0) throw new UsageError('Projektkonfiguration fehlt oder ist leer');
   const outAbs = path.resolve(output);
   if (fs.existsSync(outAbs) || isLink(outAbs)) {
@@ -85,7 +105,7 @@ export function prepare({ snapshot, cases, candidates = [], projectConfig, outpu
         trial_id: trialId,
         case_id: c.id,
         family_id: c.family_id,
-        split: typeof c.split === 'string' ? c.split : null,
+        split: manifestRows ? manifestRows.get(c.id).split : typeof c.split === 'string' ? c.split : null,
         variant,
         workspace: trialId,
         prompt: projectConfig + c.prompt,
@@ -111,6 +131,7 @@ export function prepare({ snapshot, cases, candidates = [], projectConfig, outpu
     baseline_sha256: snapshot.package_set_sha256,
     source_commit: snapshot.source_commit,
     project_configuration_sha256: configSha,
+    split_manifest_sha256: splitManifest !== null ? manifestSha256(splitManifest) : null,
     trials,
   };
 

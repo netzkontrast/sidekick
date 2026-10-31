@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-report.schema.json",
   "title": "Eval-Bericht – Skill-Library V0",
-  "description": "Deskriptiver Bericht ausschließlich aus Rohdatensätzen (SLV0-EVAL-10, SLV0-INV-09). Jede Zahl trägt Zähler, Nenner und die Rohdatensatz-IDs. Ebenen M0–M5 und R getrennt, Familien und Wiederholungen getrennt. R-Verstöße je Fall getrennt und nie mit anderen Ergebnissen verrechnet (SLV0-EVAL-11). Kein Score, keine Rangfolge, keine Aktivierungsempfehlung (SLV0-INV-06): additionalProperties ist überall false.",
+  "description": "Deskriptiver Bericht ausschließlich aus Rohdatensätzen (SLV0-EVAL-10, SLV0-INV-09). Jede Zahl trägt Zähler, Nenner und die Rohdatensatz-IDs. Ebenen M0–M5 und R getrennt, Familien und Wiederholungen getrennt. R-Verstöße je Fall getrennt und nie mit anderen Ergebnissen verrechnet (SLV0-EVAL-11). Rubrikversionen werden genannt und nie gemischt (SLV0-EVAL-15). Kein Score, keine Rangfolge, keine Aktivierungsempfehlung (SLV0-INV-06): additionalProperties ist überall false.",
   "type": "object",
-  "required": ["schema_version", "bericht", "hinweis", "rohdaten", "ebenen", "r_pruefungen", "r_verstoesse"],
+  "required": ["schema_version", "bericht", "hinweis", "rohdaten", "rubrik_versionen", "ebenen", "r_pruefungen", "r_verstoesse"],
   "additionalProperties": false,
   "properties": {
     "schema_version": { "const": 1 },
@@ -18,6 +18,19 @@
         "anzahl": { "type": "integer", "minimum": 1 },
         "rohdatensatz_ids": { "$ref": "#/$defs/ids" },
         "eingabe_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 über das kanonische JSON der nach run_id sortierten Rohdatensätze." }
+      }
+    },
+    "rubrik_versionen": {
+      "type": "array",
+      "description": "Je in den Rohdaten genannter rubrik_version die Rohdatensätze (SLV0-EVAL-15). Nie zwei Versionen derselben Rubrik; Rohdatensätze ohne rubrik_version erscheinen nicht.",
+      "items": {
+        "type": "object",
+        "required": ["rubrik_version", "rohdatensatz_ids"],
+        "additionalProperties": false,
+        "properties": {
+          "rubrik_version": { "type": "string", "minLength": 1 },
+          "rohdatensatz_ids": { "$ref": "#/$defs/ids" }
+        }
       }
     },
     "ebenen": {

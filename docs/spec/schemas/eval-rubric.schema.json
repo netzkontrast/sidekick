@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-rubric.schema.json",
+  "title": "Rubrik je Skill – Skill-Library V0",
+  "description": "Eine versionierte Rubrik je Skill (SLV0-EVAL-13, K5.6), gebunden an den Inhaltshash des Pakets (SLV0-EVAL-14). Kriterien beschreiben beobachtbares Verhalten; die Rubrik enthält keine Schwellen, Gewichte oder Scores (SLV0-INV-06). Querbezüge (kern unter den Kriterien des Fall-Typs, eindeutige IDs, Präfix der Version gleich skill) prüft eval rubric check.",
+  "type": "object",
+  "required": ["schema_version", "skill", "rubrik_version", "paket_hash", "grundlage", "kriterien", "fall_typen"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "skill": { "$ref": "#/$defs/skill" },
+    "rubrik_version": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*@[1-9][0-9]{0,5}$",
+      "description": "<skill>@<n>. Jede Änderung an Kriterien, Fall-Typen oder Bindung ist eine neue Version (library-learning §8)."
+    },
+    "paket_hash": {
+      "type": "object",
+      "required": ["algorithm", "profile", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "profile": { "const": "sl-hash-v0" },
+        "value": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "grundlage": { "type": "string", "minLength": 1, "maxLength": 600 },
+    "kriterien": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/kriterium" } },
+    "fall_typen": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/fall_typ" } }
+  },
+  "$defs": {
+    "skill": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "kriterium_id": { "type": "string", "pattern": "^[A-Z]{2,4}-K[0-9]{2}$" },
+    "kriterium": {
+      "type": "object",
+      "required": ["id", "ebene", "pruefart", "formulierung", "r_regel", "herkunft"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/kriterium_id" },
+        "ebene": { "enum": ["M3", "M4", "R"], "description": "M3 Verhalten mit geladenem Skill, M4 paarweiser Vergleich gegen den Vergleichsarm, R harte Regel (SL1 §5.4)." },
+        "pruefart": { "enum": ["deterministisch", "rubrik"], "description": "deterministisch: aus der normalisierten Spur prüfbar; rubrik: Urteil eines benannten Bewerters (SL1 §7)." },
+        "formulierung": { "type": "string", "minLength": 10, "maxLength": 400 },
+        "r_regel": { "type": ["string", "null"], "pattern": "^R-[0-9]{2}$" },
+        "herkunft": { "type": "string", "minLength": 1, "maxLength": 300 }
+      },
+      "allOf": [
+        { "if": { "properties": { "ebene": { "const": "R" } } }, "then": { "properties": { "r_regel": { "type": "string" } } } },
+        { "if": { "properties": { "ebene": { "enum": ["M3", "M4"] } } }, "then": { "properties": { "r_regel": { "type": "null" } } } }
+      ]
+    },
+    "fall_typ": {
+      "type": "object",
+      "required": ["id", "beschreibung", "kriterien", "kern", "faelle"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "beschreibung": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "kriterien": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/kriterium_id" } },
+        "kern": { "$ref": "#/$defs/kriterium_id" },
+        "faelle": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" }, "description": "Verweise auf vorhandene Fall-IDs; nur Daten, nicht geprüft." }
+      }
+    }
+  }
+}
