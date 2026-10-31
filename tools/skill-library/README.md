@@ -59,8 +59,9 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/checks.js` | Prüfformat, `eval check`, Nulllauf, B1-Vorlauf | EVAL-22…25 |
 | `lib/eval/findings.js` | Einheiten, 1:1-Zuordnung erwarteter Befunde, Überberichtung | EVAL-26/-27 |
 | `lib/eval/citecheck.js` | Segmentregister am Commit, Zitate (Permalinks, Fundstellen, Commit-Wörter) gegen Git, Abdeckung | EVAL-28…30 |
+| `lib/eval/contextpack.js` | Kontextpaket: Mustersyntax, Auswahl ohne Symlink-Folgen, Sperren, Datensatz mit Hashes, Markdown-Bündel | EVAL-31…34 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
-| `test/` | je Fall SLV0-FALL-01…46 und -48…65 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
+| `test/` | je Fall SLV0-FALL-01…46 und -48…72 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -87,7 +88,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
 
-## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…30)
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…34)
 
 Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
 Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
@@ -157,14 +158,43 @@ Exit 1 bei einem ungültigen Zitat (`commit_unknown`, `sha_mismatch`, `ref_not_p
 oder unbekanntem `--commit`; nicht belegte Dateien und die Warnung `commit_unverified` ändern den Exit-Code nicht. Exit 2 bei Bedienfehlern
 (kein Git-Repository, `--commit` nicht hexadezimal, Bereich unsicher oder ohne Treffer).
 
-**Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw` und `report` geben bei Erfolg das Artefakt selbst
+Kontextpaket für eine Clean-Room-Session (SLV0-EVAL-31…34, Paket P11; Spec §7.6):
+
+```sh
+$B eval context-pack --allowlist allowlist.json [--root VERZ] [--deny MUSTER]... \
+                     [--estimator utf8-bytes-div-4@1] [--output NEUE-DATEI.md] > paket.json
+```
+
+Die [Allowlist](../../docs/spec/schemas/eval-context-allowlist.schema.json) ist die Inputliste einer Übergabe als Datei (Vorbild:
+Implementierungsübergabe §3 „Inputs für die implementierende Session“):
+
+```json
+{
+  "schema_version": 1, "format": "sl-context-allowlist@1",
+  "ziel": "SL7 PR 1: Implementierung", "rolle": "implementierung",
+  "eingaben": [
+    { "muster": "docs/spec/skill-library-v0.md", "wofuer": "§3–§6, §8, §9" },
+    { "muster": "docs/spec/schemas/*.schema.json" }
+  ],
+  "sperre": ["research/fremd"]
+}
+```
+
+Erst entsteht der [Datensatz](../../docs/spec/schemas/eval-context-pack.schema.json) (Dateien nach Codepoint, je SHA-256, Bytes, Zeilen,
+Tokenschätzung, Musterindizes; `kontextpaket_sha256` nach der Paket-Hash-Formel), dann auf Wunsch das Markdown-Bündel daraus. Fail-closed,
+alle Meldungen gesammelt, Exit 1 ohne Datensatz und ohne Bündel: `pattern_invalid`, `path_escapes_root`, `pattern_unmatched`, `file_missing`,
+`not_regular_file`, `symlink_in_pack`, `path_forbidden` (Standardsperren `**/.git`, `**/.env*`, `**/kandidaten`, ergänzt durch `sperre` und
+`--deny`, nie verkleinert), `nested_repository`, `file_not_text`, `output_exists`. Exit 2 bei fehlender oder schemawidriger Allowlist,
+ungültigem `--root`, unbekanntem Schätzer oder fehlendem Zielordner.
+
+**Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw`, `report` und `context-pack` geben bei Erfolg das Artefakt selbst
 als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
 `{tool, tool_version, command, …}` aus. Exit 0 ok; Exit 1 Abbruch mit Code aus §8 (`refused: true`, `messages`) oder
 fehlgeschlagene Prüfung (`bind`, `split check`, `report --check`); Exit 2 Bedienfehler, Eingabe verletzt ihr Schema
 oder interne Ausnahme. Kein Teilergebnis gilt als Erfolg.
 
-**Schreiben.** Nur `prepare` (neues Zielverzeichnis, Dateien mit exklusivem Anlegen), `ledger init` (neue Datei)
-sowie `ledger reserve|result` und `split access|select` (Anhängen an das angegebene Ledger) schreiben. Nichts wird überschrieben.
+**Schreiben.** Nur `prepare` (neues Zielverzeichnis, Dateien mit exklusivem Anlegen), `ledger init` (neue Datei),
+`context-pack --output` (neue Datei, exklusiv angelegt) sowie `ledger reserve|result` und `split access|select` (Anhängen an das angegebene Ledger) schreiben. Nichts wird überschrieben.
 Alle übrigen Befehle lesen nur.
 
 `judge check` endet mit Exit 1, sobald ein Beleg nicht wiedergefunden wird oder ein `erfuellt` keinen gültigen Beleg hat; `nullrun --b1-kern`
@@ -181,7 +211,9 @@ Warnungen (`evidence_unquoted`, `no_discriminating_check`) ändern den Exit-Code
 [Rubrik](../../docs/spec/schemas/eval-rubric.schema.json),
 [Bewertung](../../docs/spec/schemas/eval-judgement.schema.json),
 [Fall](../../docs/spec/schemas/eval-case.schema.json),
-[Kernurteile B1-Vorlauf](../../docs/spec/schemas/eval-b1-vorlauf.schema.json).
+[Kernurteile B1-Vorlauf](../../docs/spec/schemas/eval-b1-vorlauf.schema.json),
+[Allowlist](../../docs/spec/schemas/eval-context-allowlist.schema.json),
+[Kontextpaket](../../docs/spec/schemas/eval-context-pack.schema.json).
 Der Schemaprüfer kennt dafür zusätzlich `maximum`, `minItems`, `maxItems` und `propertyNames`.
 
 ### Verhältnis zum Research-Helfer
@@ -312,6 +344,24 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   mit `/` am Ende trifft alles unterhalb der passenden Ordner. Zeilenzahl wie §7.4 über `git cat-file blob`, nur für zitierte Dateien.
 - **Commit-Wörter:** unbekannte Hex-Wörter sind nur eine Warnung (`commit_unverified`), weil ein Hex-Wort auch ein gekürzter Inhaltshash sein kann.
 
+### Auslegungen zum Kontextpaket (SLV0-EVAL-31…34)
+
+- **Unter `eval`:** Der Befehl dient den Sessions des Eval-Verfahrens (Implementierung, Familienautor, Bewerter) und teilt dessen
+  Abbruchform (`refused`, Codes aus §8, Exit 1/2), das Nie-Überschreiben von `prepare` und die Artefaktausgabe auf stdout. Die Befehle
+  ohne `eval` prüfen dagegen Pakete unter `.agents/skills/`. Die IDs setzen daher SLV0-EVAL fort.
+- **„Übergabe §3“** ist die Inputliste der Implementierungsübergabe (Spalten *Input*, *Wofür*); `resuming-work` liefert dazu das
+  „aktuelle Kontextpaket“ mit Ziel. Die Allowlist führt `ziel`, `rolle` und `eingaben[].wofuer` als Daten; Abschnittsangaben bleiben Lesehinweis,
+  ausgewählt werden ganze Dateien.
+- **Muster vs. Bedienfehler:** Mustersyntax prüft das Werkzeug, nicht das Schema, damit jeder Tippfehler ein Code mit Exit 1 ist; das Schema
+  verlangt nur nichtleere Zeichenketten. Ein Pfad-Muster muss eine Datei sein; Verzeichnisse nur über `verz/**`. Muster nur aus Platzhaltern
+  (`**`, `*/*`) sind unzulässig, weil sie praktisch „alles“ bedeuten.
+- **Sperren** gelten auch für übergeordnete Ordner und ohne Beachtung der Groß- und Kleinschreibung (`Kandidaten/` ist gesperrt); ein Pfad-Muster auf
+  einen gesperrten Pfad wird nicht einmal per `lstat` angefasst. Glob-Treffer unter einem gesperrten Ordner werden je Ordner zusammengefasst.
+- **Fremde Repositories** erkennt das Werkzeug an einem `.git`-Eintrag in einem Unterordner (`nested_repository`), nicht am Inhalt.
+- **Text:** Nur UTF-8 ohne NUL-Byte (`file_not_text`), damit Bündel und Datensatz dieselben Bytes beschreiben; BOM und CRLF bleiben erlaubt und
+  unverändert. Tokens nur mit `--estimator` (SLV0-TOK-04), sonst `unbekannt`; der Paket-Hash hängt nicht vom Schätzer ab.
+- **Wurzel und Ausgabe:** Der Datensatz nennt weder Wurzel noch Bündelpfad (SLV0-INV-03); `allowlist.sha256` bindet ihn an die Allowlist-Bytes.
+
 ## Nicht umgesetzt
 
 - Keine Bewertung: Weder Harness noch Rubrik urteilen; Bewerter-Session, Modellfixierung und menschliche Stichprobe (SL1 §7)
@@ -331,3 +381,6 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 - Überberichtung (`eval findings`) prüft weiter gegen den Fixture-Text, nicht gegen einen Git-Stand; gegen Git prüft `eval cite-check` (Spec O-13, teilweise gelöst).
 - `cite-check` hat keine Schwelle und keinen Schalter, der nicht belegte Dateien zum Fehler macht; ob eine Abdeckung genügt, entscheidet das Verfahren.
   Andere Hosts als GitHub, relative Markdown-Links mit Zeilenanker und Zitate auf Ordner (`tree/`) werden nicht erkannt.
+- Kontextpaket (Spec O-14): keine Bindung der Allowlist an einen Commit, kein Abgleich erwarteter Dateihashes aus der Übergabe, keine
+  Abschnittsauswahl innerhalb einer Datei, keine Angleichung von NFC/NFD in Dateinamen, keine Größenobergrenze. Das Paket erzwingt nicht,
+  dass eine Session nur es sieht; das ist Sache des Rechteprofils (P12).
