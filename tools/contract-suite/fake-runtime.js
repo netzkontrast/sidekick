@@ -5,6 +5,7 @@
 //     "diag": true,            print {type:"diag", argv, env, cwd, prompt} first
 //     "kind": true,            spawn a long-lived child process (same process group)
 //     "haengen": true,         never exit by itself
+//     "warte_ms": 200,         wait this long before printing the lines and exiting
 //     "exit": 0 }              exit code (default 0)
 // It echoes a session id it was started with (--session-id / --resume) as {type:"system", session_id}.
 import { spawn } from 'node:child_process';
@@ -24,8 +25,11 @@ process.stdin.on('end', () => {
     const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], { stdio: 'ignore' });
     out({ type: 'kind', pid: child.pid });
   }
-  for (const z of plan.zeilen ?? []) out(z);
-  if (plan.haengen) { setInterval(() => {}, 1000); return; }
-  process.exitCode = plan.exit ?? 0;
-  if (plan.kind) process.exit(process.exitCode);
+  const rest = () => {
+    for (const z of plan.zeilen ?? []) out(z);
+    if (plan.haengen) { setInterval(() => {}, 1000); return; }
+    process.exitCode = plan.exit ?? 0;
+    if (plan.kind) process.exit(process.exitCode);
+  };
+  if (plan.warte_ms) setTimeout(rest, plan.warte_ms); else rest();
 });

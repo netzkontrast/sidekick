@@ -9,8 +9,8 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_KERN = ['node', path.join(HERE, '..', 'referenzkern', 'kern.js')];
 
-export function startPruefling(command = process.env.CONTRACT_KERN ? process.env.CONTRACT_KERN.split(' ') : DEFAULT_KERN) {
-  const child = spawn(command[0], command.slice(1), { stdio: ['pipe', 'pipe', 'inherit'] });
+export function startPruefling(command = process.env.CONTRACT_KERN ? process.env.CONTRACT_KERN.split(' ') : DEFAULT_KERN, { env = {} } = {}) {
+  const child = spawn(command[0], command.slice(1), { stdio: ['pipe', 'pipe', 'inherit'], env: { ...process.env, ...env } });
   const rl = readline.createInterface({ input: child.stdout });
   const waiting = [];
   rl.on('line', (line) => { const w = waiting.shift(); if (w) w(line); });

@@ -3,61 +3,8 @@
 // against the event schema (KP-INV-02); every response against the port message schema.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { validateSchema } from '../../skill-library/lib/schema.js';
 import { startPruefling, SUITE, OWNER, GERAET, RUN, ADAPTER } from '../lib/pruefling.js';
-
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const SPEC = path.join(ROOT, 'docs', 'spec');
-const readJson = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
-const EVENT_SCHEMA = readJson(path.join(SPEC, 'schemas', 'ereignis.schema.json'));
-const PORT_SCHEMA = readJson(path.join(SPEC, 'schemas', 'kern-port-nachricht.schema.json'));
-const AUFTRAG = { ...readJson(path.join(SPEC, 'beispiele', 'auftrag-recherche.json')), zustand: 'draft' };
-const A = AUFTRAG.id;
-const HASH = `sha256:${'a'.repeat(64)}`;
-
-function check(res) {
-  assert.deepEqual(validateSchema(PORT_SCHEMA, res), [], JSON.stringify(res));
-  return res;
-}
-function ok(res) { check(res); assert.equal(res.ok, true, JSON.stringify(res.fehler)); return res.ergebnis; }
-function err(res, code) { check(res); assert.equal(res.ok, false, 'expected a refusal'); assert.equal(res.fehler.code, code, res.fehler.meldung); return res; }
-
-async function journalValid(k) {
-  const evs = await k.journal();
-  for (const ev of evs) assert.deepEqual(validateSchema(EVENT_SCHEMA, ev), [], JSON.stringify(ev));
-  const seqs = new Map();
-  for (const ev of evs) { const n = (seqs.get(ev.strom) ?? 0) + 1; assert.equal(ev.seq, n, `lückenlose seq im Strom ${ev.strom}`); seqs.set(ev.strom, n); }
-  return evs;
-}
-const typen = (evs) => evs.map((e) => e.typ);
-
-/** Pair devices, draft and open the example task, grant a claim to pc-heim. */
-async function bisClaim(k, { geraete = ['g-pc-heim', 'g-browser-a', 'g-browser-b'], claim = true } = {}) {
-  for (const g of geraete) {
-    ok(await k.send('device.pair_request', GERAET(g)));
-    ok(await k.send('device.pair_confirm', OWNER(null), { geraet_id: g }));
-  }
-  ok(await k.send('task.draft', OWNER(), { auftrag: AUFTRAG }));
-  ok(await k.send('task.open', OWNER(), { auftrag_id: A, version: 1 }));
-  if (!claim) return null;
-  return ok(await k.send('claim.request', GERAET('g-pc-heim'), { auftrag_id: A, schritt: 'arbeit' }));
-}
-
-async function bisAbnahme(k) {
-  const c = await bisClaim(k);
-  const run = RUN(c.run_id);
-  ok(await k.send('task.submit', run, { auftrag_id: A, epoch: c.epoch, artefakt_hash: HASH, belege: ['fixture:q1'] }));
-  const acc = ok(await k.send('task.accept', OWNER(), { auftrag_id: A }));
-  return { c, run, acc };
-}
-
-const withK = (name, fn) => test(name, async () => {
-  const k = startPruefling();
-  try { await fn(k); } finally { await k.close(); }
-});
+import { AUFTRAG, A, HASH, ok, err, journalValid, typen, klassifiziere, bisClaim, bisAbnahme, withK } from './helfer.js';
 
 // ---------- V0-ABL-01 ----------
 
@@ -241,9 +188,16 @@ withK('KP-FALL-07 journal_seq of a response equals the last new event', async (k
   assert.equal(evs.at(-1).typ, 'task.drafted');
 });
 
-withK('KP-FALL-08 a case needing an unbuilt command is reported as nicht_abbildbar', async (k) => {
-  const c = await bisClaim(k);
-  err(await k.send('task.submit_partial', RUN(c.run_id), { auftrag_id: A, epoch: 1 }), 'nicht_abbildbar');
+test('KP-FALL-08 a Prüfling without test.clock_set reports a budget case as nicht abbildbar, not as failed', async () => {
+  // The reference core can switch commands off; a foreign Prüfling would answer nicht_abbildbar itself.
+  const k = startPruefling(undefined, { env: { REFERENZKERN_OHNE: 'test.clock_set' } });
+  try {
+    await bisClaim(k);
+    const r = await k.send('test.clock_set', SUITE, { zeit: '2026-11-01T00:24:00Z' });
+    err(r, 'nicht_abbildbar');
+    assert.equal(klassifiziere(r), 'nicht_abbildbar');
+    assert.ok(!typen(await journalValid(k)).includes('task.budget_warning'));
+  } finally { await k.close(); }
 });
 
 withK('KP-FALL-09 link down and up writes only device events', async (k) => {
@@ -274,4 +228,43 @@ withK('KP-INV-02 restart with empty cache keeps derived state identical (journal
   ok(await k.send('test.restart_core', SUITE, {}));
   assert.deepEqual({ a: await k.state('auftrag', A), c: await k.state('claim', A) }, vorher);
   err(await k.send('test.restart_core', OWNER(), {}), 'nicht_berechtigt');
+});
+
+withK('V0-FALL-13 draft conflict between devices: both versions stay visible, the owner chooses', async (k) => {
+  await bisClaim(k, { claim: false }); // task drafted on browser-a and opened
+  assert.equal(ok(await k.send('task.revise', OWNER('g-browser-a'), { auftrag_id: A, aenderungen: { budget: { max_dauer_min: 45 } } })).version, 2);
+  // browser-b was offline and edited version 1 locally.
+  const entwurf = { ...AUFTRAG, ziel: 'Zwei Ansätze vergleichen; Fokus auf Offline-Betrieb.' };
+  const r = ok(await k.send('task.draft', OWNER('g-browser-b'), { auftrag: entwurf }));
+  assert.equal(r.konflikt, true);
+  assert.equal(r.fassungen.length, 2);
+  assert.notEqual(r.fassungen[0].hash, r.fassungen[1].hash);
+  const auf = await k.state('auftrag', A);
+  assert.equal(auf.konflikt.entwurf.ziel, entwurf.ziel, 'die Fassung des Entwurfs bleibt sichtbar');
+  assert.notEqual(auf.auftrag.ziel, entwurf.ziel, 'die Hub-Fassung bleibt gültig, bis der Owner wählt');
+  const evs = await journalValid(k);
+  assert.equal(evs.filter((e) => e.typ === 'draft.conflict').length, 1);
+  const gewaehlt = ok(await k.send('task.revise', OWNER('g-browser-b'), { auftrag_id: A, konflikt: 'entwurf' }));
+  const danach = await k.state('auftrag', A);
+  assert.equal(danach.version, gewaehlt.version);
+  assert.equal(danach.auftrag.ziel, entwurf.ziel);
+  assert.equal(danach.konflikt, null);
+  err(await k.send('task.revise', OWNER(), { auftrag_id: A, konflikt: 'hub' }), 'zustand_unpassend');
+});
+
+withK('V0-FALL-02 effect proposal with the old epoch is refused; an open run effect of the old epoch is invalidated', async (k) => {
+  const c = await bisClaim(k);
+  const ziel = `${AUFTRAG.befugnis.grants[0].ziel}zwischenstand/`;
+  const e = ok(await k.send('effect.propose', RUN(c.run_id), { auftrag_id: A, epoch: 1, typ: 'artifact.store', ziel, parameter: { artefakt_hash: HASH } }));
+  ok(await k.send('claim.reassign', OWNER(), { auftrag_id: A, geraet_id: 'g-browser-b' }));
+  err(await k.send('effect.propose', RUN(c.run_id), { auftrag_id: A, epoch: 1, typ: 'artifact.store', ziel, parameter: { artefakt_hash: HASH } }), 'epoch_veraltet');
+  assert.equal((await k.state('effekt', e.effekt_id)).zustand, 'invalidated');
+  err(await k.send('effect.approve', OWNER(), { effekt_id: e.effekt_id, gebunden_an: { parameter_hash: e.parameter_hash, ziel, auftrag_version: 1, epoch: 1 } }), 'zustand_unpassend');
+  assert.ok(!typen(await journalValid(k)).includes('effect.intent'));
+});
+
+withK('KP-INV-04 a run cannot propose an effect outside the grants of its task version', async (k) => {
+  const c = await bisClaim(k);
+  err(await k.send('effect.propose', RUN(c.run_id), { auftrag_id: A, epoch: 1, typ: 'git.push', ziel: 'origin/main', parameter: {} }), 'nicht_berechtigt');
+  err(await k.send('effect.propose', RUN(c.run_id), { auftrag_id: A, epoch: 1, typ: 'artifact.store', ziel: 'anderes-vorhaben/', parameter: {} }), 'nicht_berechtigt');
 });
