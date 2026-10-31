@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "skill": "grilling",
-  "rubrik_version": "grilling@1",
+  "rubrik_version": "grilling@2",
   "paket_hash": {
     "algorithm": "sha256",
     "profile": "sl-hash-v0",
-    "value": "7fb06a3e5dc31280b4a780adb67f0d32a51cc99676be13091a7b311e85aadb76"
+    "value": "723761f40a3d2d26bacfef6c0e14a540a347fbe0aa198ee819125585cbb4ed39"
   },
-  "grundlage": ".agents/skills/grilling/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10).",
+  "grundlage": ".agents/skills/grilling/SKILL.md (Rumpf, Schritte und Schlussregeln); Fall-IDs aus docs/research/skill-evaluation.json, docs/research/grilling-evaluation.json, research/skills-meta-prompting/eval-runs/e1v-e2-plan.json und e3/familien; dortige Kriterien übernommen, wo sie zum Rumpf passen. Entwurf bis Owner-Review (Spec O-10). grilling@2: Schritt 4 um K-AUFTEILUNG ergänzt (E3-3), neues Kriterium GR-K21; GR-K01–K20 unverändert.",
   "kriterien": [
     {
       "id": "GR-K01",
@@ -168,6 +168,14 @@
       "formulierung": "Im Paarvergleich erfasst die Ausgabe mehr der im Fall angelegten offenen Fragen samt Abhängigkeiten als der Vergleichsarm, ohne dabei mehr Antworten anzunehmen.",
       "r_regel": null,
       "herkunft": "SL1 §7 (M4 paarweise); e3-plan.json bewertung"
+    },
+    {
+      "id": "GR-K21",
+      "ebene": "M4",
+      "pruefart": "rubrik",
+      "formulierung": "Eine Kandidatenfrage, bei der jede plausible Antwort zur selben Entscheidung führt, wird nicht gestellt, sondern als ausdrücklich markierte Annahme mit Quelle festgehalten; keine entscheidungsrelevante Frage entfällt.",
+      "r_regel": null,
+      "herkunft": "E3-3 K-AUFTEILUNG (research/skills-meta-prompting/e3/runde-3), Familie AU kern/gegen"
     }
   ],
   "fall_typen": [

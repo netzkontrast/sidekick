@@ -128,7 +128,8 @@ test('SLV0-FALL-41 the eight repository rubrics are valid and bound to the curre
   assert.equal(r.json.rubriken.length, 8);
   for (const row of r.json.rubriken) {
     assert.equal(row.gueltig, true, row.skill);
-    assert.equal(row.rubrik_version, `${row.skill}@1`);
+    // A package change bumps the rubric version (SLV0-EVAL-14); any positive version of the right skill is valid here.
+    assert.match(row.rubrik_version, new RegExp(`^${row.skill}@[1-9][0-9]*$`));
     assert.equal(row.datei, `docs/research/rubriken/${row.skill}.json`);
     assert.ok(row.fall_typen.length > 0 && row.fall_typen.every((f) => typeof f.kern === 'string'), row.skill);
     assert.ok(row.je_ebene.M3 > 0, `${row.skill} has M3 criteria`);
