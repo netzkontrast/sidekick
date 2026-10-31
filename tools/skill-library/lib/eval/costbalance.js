@@ -98,6 +98,7 @@ export function costBalance(events, totalUsage) {
   // Pass 2: sizes per class with later turns.
   const classes = new Map();
   let started = 0; // turns begun before the current event
+  let skillPending = false; // a successful Skill result since the last main assistant event
   events.forEach((ev, i) => {
     if (eventTurn.has(i)) started = Math.max(started, eventTurn.get(i));
     if (ev.type !== 'assistant' && ev.type !== 'user') return;
@@ -109,8 +110,15 @@ export function costBalance(events, totalUsage) {
     else return;
     const sub = isSubagent(ev);
     const later = sub ? 0 : n - (eventTurn.get(i) ?? started);
+    if (!sub && ev.type === 'assistant') skillPending = false;
+    // A skill body injected as a synthetic user message right after a successful Skill result
+    // (observed with Claude Code 2.1.316) counts as skill loading (SLV0-EVAL-36, spec §7.7).
+    const injectedSkill = !sub && ev.type === 'user' && skillPending && ev.isSynthetic === true;
+    let skillResult = false;
     for (const block of blocks) {
-      const cls = sub ? 'unteragent' : blockClass(block, ev.type, toolUses);
+      let cls = sub ? 'unteragent' : blockClass(block, ev.type, toolUses);
+      if (cls === 'nutzer_text' && injectedSkill) cls = 'skill_laden';
+      if (!sub && isObj(block) && block.type === 'tool_result' && !block.is_error && toolUses.get(block.tool_use_id)?.name === 'Skill') skillResult = true;
       const bytes = blockBytes(block);
       const c = classes.get(cls) ?? { class: cls, blocks: 0, bytes: 0, bytes_x_later_turns: 0 };
       c.blocks += 1;
@@ -118,6 +126,7 @@ export function costBalance(events, totalUsage) {
       c.bytes_x_later_turns += bytes * later;
       classes.set(cls, c);
     }
+    if (skillResult) skillPending = true;
   });
   const classList = [...classes.values()].sort((a, b) => compareCodepoints(a.class, b.class));
   const sum = Object.fromEntries(TURN_USAGE_FIELDS.map((f) => [f, n === 0 || turnUsage.some((u) => u[f] === null) ? null : turnUsage.reduce((a, u) => a + u[f], 0)]));

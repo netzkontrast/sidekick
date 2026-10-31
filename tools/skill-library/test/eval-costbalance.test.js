@@ -125,6 +125,28 @@ test('SLV0-FALL-73 invariant: class sums equal the totals; turn sum + remainder 
   assert.throws(() => buildRawRecord(meta({ kostenbilanz: null }), n), /abgeleitet/);
 });
 
+test('SLV0-FALL-73 skill body as synthetic user message after a Skill result counts as skill_laden', () => {
+  const BODY = '# Alpha\nRUMPF-GEHEIM';
+  const synth = (text) => ({ ...user({ type: 'text', text }), isSynthetic: true });
+  const tr = normalizeTrace(Buffer.from(jsonl(INIT,
+    asst('m1', usage(1, 10, 0, 1), { type: 'tool_use', id: 'tu_s', name: 'Skill', input: IN.skill }),
+    user({ type: 'tool_result', tool_use_id: 'tu_s', content: 'Launching skill: alpha' }),
+    synth(BODY),
+    asst('m2', usage(1, 0, 10, 1), { type: 'tool_use', id: 'tu_f', name: 'Skill', input: { skill: 'fehlt' } }),
+    user({ type: 'tool_result', tool_use_id: 'tu_f', is_error: true, content: 'Unknown skill' }),
+    synth('nach-fehler'),
+    asst('m3', usage(1, 0, 10, 1), { type: 'text', text: 'x' }),
+    synth('ohne-skill'),
+    user({ type: 'text', text: 'nicht-synthetisch' }),
+    result(usage(3, 10, 20, 3)))), 'rumpf').cost_balance;
+  const m = classMap(tr);
+  // Body and result line: 2 later turns; the failed Skill result itself is still a Skill result (1 later turn).
+  // After a failed Skill call and without a Skill result, synthetic text stays user text.
+  const ok = bytes('Launching skill: alpha') + bytes(BODY);
+  assert.deepEqual(m.skill_laden, [3, ok + bytes('Unknown skill'), ok * 2 + bytes('Unknown skill')]);
+  assert.deepEqual(m.nutzer_text, [3, bytes('nach-fehler') + bytes('ohne-skill') + bytes('nicht-synthetisch'), bytes('nach-fehler')]);
+});
+
 test('SLV0-FALL-74 missing usage stays unknown (null), never 0; pilot import has no balance', () => {
   const noTurnUsage = normalizeTrace(Buffer.from(jsonl(INIT,
     asst('m1', usage(1, 2, 3, 4), { type: 'text', text: 'a' }),
