@@ -1,7 +1,7 @@
 // `eval` subcommands (docs/spec/skill-library-v0.md §7). No command starts a client or model and
 // none uses the network (SLV0-INV-04). Writing commands (prepare, ledger init|reserve|result,
-// split access|select) write only to paths given explicitly and never overwrite.
-// Artifact commands (freeze, split manifest, normalize, raw, report) print the artifact itself on
+// split access|select, context-pack --output) write only to paths given explicitly and never overwrite.
+// Artifact commands (freeze, split manifest, normalize, raw, report, context-pack) print the artifact itself on
 // stdout; all other commands print a JSON envelope. Exit: 0 ok, 1 refused (§8 code), 2 usage error.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +16,15 @@ import { normalizeTrace } from './normalize.js';
 import { buildRawRecord } from './raw.js';
 import { buildReport, checkReport } from './report.js';
 import { checkRubrics } from './rubric.js';
+import { readJudgement, checkJudgement } from './judge.js';
+import { loadCaseDir, loadCaseDirs } from './casedir.js';
+import { nullRun, checkWorkspace, b1Precheck } from './checks.js';
+import { findingsCheck } from './findings.js';
+import { citeCheck } from './citecheck.js';
+import { buildContextPack, renderBundle, writeBundle } from './contextpack.js';
+import { contractCheck } from './contract.js';
+import { ESTIMATORS } from '../tokens.js';
+import { requireDir } from './tree.js';
 import { validateProject } from '../project.js';
 
 export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--verify-git]   Snapshot der Pakete (stdout)
@@ -36,17 +45,27 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval split select --ledger DATEI --manifest M --role evaluator --candidate-sha256 H
   eval normalize --trace SPUR.jsonl|SPUR.normalized.json                       (stdout)
   eval raw --meta META.json --normalized NORMALISIERT.json [--rubric RUBRIK.json] [--ledger DATEI]   (stdout)
-  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]...       (stdout)
+  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]... [--estimator utf8-bytes-div-4@1]   (stdout)
   eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...
-  eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]`;
+  eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]
+  eval judge check BEWERTUNG.json --outputs AUSGABEN-VERZ [--fixtures FAELLE-VERZ]
+  eval check --case FALLORDNER --workspace VERZ [--baseline VERZ]
+  eval nullrun --cases FALLORDNER|VERZ
+  eval nullrun --b1-kern KERNURTEILE.json
+  eval findings --case FALLORDNER AUSGABE.md...
+  eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]
+  eval contract check --contract researching-repositories@2|@1 BERICHT.md [--repo VERZ --commit SHA] [--case FALLORDNER]
+  eval context-pack --allowlist DATEI [--root VERZ] [--deny MUSTER]... [--estimator utf8-bytes-div-4@1]
+                    [--output NEUE-DATEI.md]                                    Datensatz (stdout)`;
 
 const VALUE_OPTS = new Set([
   '--root', '--source-commit', '--source', '--snapshot', '--candidates', '--id', '--cases', '--project-config',
   '--output', '--ledger', '--limit', '--manifest', '--trial-id', '--attempt-id', '--outcome', '--trace-sha256',
   '--role', '--split', '--candidate-sha256', '--manifest-id', '--trace', '--meta', '--normalized', '--check',
-  '--rubric',
+  '--rubric', '--outputs', '--fixtures', '--case', '--workspace', '--baseline', '--b1-kern',
+  '--repo', '--commit', '--github', '--allowlist', '--estimator', '--contract',
 ]);
-const MULTI_OPTS = new Set(['--raw-id', '--rubric-version']);
+const MULTI_OPTS = new Set(['--raw-id', '--rubric-version', '--scope', '--deny']);
 const FLAG_OPTS = new Set(['--verify-git']);
 
 function parse(argv) {
@@ -254,8 +273,8 @@ const SUB = {
   },
 
   report(a) {
-    expect(a, ['--check', '--rubric-version'], [], { positionals: true });
-    if (a.opts['--check'] !== undefined && a.multi['--rubric-version']) throw new UsageError('--rubric-version gilt nicht mit --check');
+    expect(a, ['--check', '--rubric-version', '--estimator'], [], { positionals: true });
+    if (a.opts['--check'] !== undefined && (a.multi['--rubric-version'] || a.opts['--estimator'] !== undefined)) throw new UsageError('--rubric-version und --estimator gelten nicht mit --check');
     const records = rawFiles(a.positional).map((f) => readJsonFile(f));
     if (a.opts['--check'] !== undefined) {
       const report = readJsonFile(a.opts['--check']);
@@ -263,7 +282,7 @@ const SUB = {
       const bad = res.schema_errors.length > 0 || res.messages.length > 0;
       return { out: { valid: !bad, schema_errors: res.schema_errors, messages: res.messages }, code: bad ? 1 : 0, sub: 'report --check' };
     }
-    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [] }) };
+    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [], estimator: a.opts['--estimator'] ?? null }) };
   },
 
   rubric(a) {
@@ -295,6 +314,106 @@ const SUB = {
       sub: 'rubric check',
     };
   },
+
+  judge(a) {
+    const action = a.positional.shift();
+    if (action !== 'check') throw new UsageError('eval judge braucht check');
+    expect(a, ['--outputs', '--fixtures'], ['--outputs'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval judge check braucht genau eine Bewertungsdatei');
+    const file = a.positional[0];
+    const label = displayPath(process.cwd(), file);
+    const outputsDir = requireDir(a.opts['--outputs'], '--outputs');
+    const fixturesDir = a.opts['--fixtures'] !== undefined ? requireDir(a.opts['--fixtures'], '--fixtures') : null;
+    const res = checkJudgement(readJudgement(readJsonFile(file, label), label), { outputsDir, fixturesDir, label });
+    return {
+      out: { checked_level: 'Belege (SLV0-EVAL-19…21)', bewertung: label, ...res },
+      code: res.messages.some((m) => m.severity === 'error') ? 1 : 0,
+      sub: 'judge check',
+    };
+  },
+
+  check(a) {
+    expect(a, ['--case', '--workspace', '--baseline'], ['--case', '--workspace']);
+    const res = checkWorkspace(loadCaseDir(a.opts['--case']), a.opts['--workspace'], a.opts['--baseline'] ?? null);
+    return { out: { checked_level: 'Dateiprüfungen (SLV0-EVAL-22)', ...res, messages: [] } };
+  },
+
+  nullrun(a) {
+    if (a.opts['--b1-kern'] !== undefined) {
+      expect(a, ['--b1-kern'], ['--b1-kern']);
+      const file = a.opts['--b1-kern'];
+      const { result, code } = b1Precheck(readJsonFile(file), displayPath(process.cwd(), file));
+      return { out: { checked_level: 'B1-Vorlauf (SLV0-EVAL-25)', ...result }, code };
+    }
+    expect(a, ['--cases'], ['--cases']);
+    const res = nullRun(loadCaseDirs(a.opts['--cases']));
+    return { out: { checked_level: 'Nulllauf (SLV0-EVAL-23)', ...res } };
+  },
+
+  findings(a) {
+    expect(a, ['--case'], ['--case'], { positionals: true });
+    if (a.positional.length === 0) throw new UsageError('eval findings braucht mindestens eine Ausgabedatei');
+    const outputs = a.positional.map((f) => ({ name: path.basename(f), text: readText(f) }));
+    const names = outputs.map((o) => o.name);
+    if (new Set(names).size !== names.length) throw new UsageError('zwei Ausgabedateien mit gleichem Namen');
+    const res = findingsCheck(loadCaseDir(a.opts['--case']), outputs);
+    return { out: { checked_level: 'Erwartete Befunde und Überberichtung (SLV0-EVAL-26/-27)', ...res, messages: [] } };
+  },
+
+  'cite-check'(a) {
+    expect(a, ['--repo', '--commit', '--scope', '--github'], ['--repo', '--commit'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval cite-check braucht genau eine Berichtsdatei');
+    const file = a.positional[0];
+    const { result, code } = citeCheck({
+      repo: requireDir(a.opts['--repo'], '--repo'),
+      commit: a.opts['--commit'],
+      reportText: readText(file),
+      reportLabel: displayPath(process.cwd(), file),
+      scopes: a.multi['--scope'] ?? [],
+      github: a.opts['--github'] ?? null,
+    });
+    return { out: { checked_level: 'Belegabdeckung am Commit (SLV0-EVAL-28…30)', ...result }, code };
+  },
+
+  contract(a) {
+    const action = a.positional.shift();
+    if (action !== 'check') throw new UsageError('eval contract braucht check');
+    expect(a, ['--contract', '--repo', '--commit', '--case'], ['--contract'], { positionals: true });
+    if (a.positional.length !== 1) throw new UsageError('eval contract check braucht genau eine Berichtsdatei');
+    const file = a.positional[0];
+    const { result, code } = contractCheck({
+      contractId: a.opts['--contract'],
+      reportText: readText(file),
+      reportLabel: displayPath(process.cwd(), file),
+      repo: a.opts['--repo'] !== undefined ? requireDir(a.opts['--repo'], '--repo') : null,
+      commit: a.opts['--commit'] ?? null,
+      caseDir: a.opts['--case'] !== undefined ? loadCaseDir(a.opts['--case']) : null,
+    });
+    return { out: { checked_level: 'Ausgabevertrag (SLV0-EVAL-39…42)', ...result }, code, sub: 'contract check' };
+  },
+
+  'context-pack'(a) {
+    expect(a, ['--allowlist', '--root', '--deny', '--estimator', '--output'], ['--allowlist']);
+    const estimator = a.opts['--estimator'] ?? null;
+    if (estimator !== null && !Object.hasOwn(ESTIMATORS, estimator)) {
+      throw new UsageError(`unbekannter Schätzer ${estimator}; verfügbar: ${Object.keys(ESTIMATORS).join(', ')}`);
+    }
+    const file = a.opts['--allowlist'];
+    let allowlistBytes;
+    try { allowlistBytes = fs.readFileSync(file); } catch (err) {
+      if (err.code === 'ENOENT' || err.code === 'EISDIR') throw new UsageError(`${file}: Datei nicht gefunden`);
+      throw err;
+    }
+    const { record, contents } = buildContextPack({
+      root: path.resolve(requireDir(a.opts['--root'] ?? process.cwd(), '--root')),
+      allowlistBytes,
+      allowlistLabel: displayPath(process.cwd(), file),
+      extraDeny: a.multi['--deny'] ?? [],
+      estimator,
+    });
+    if (a.opts['--output'] !== undefined) record.bundle = writeBundle(a.opts['--output'], renderBundle(record, contents));
+    return { artifact: record };
+  },
 };
 
 export const RUBRIC_DIR = 'docs/research/rubriken';
@@ -317,7 +436,7 @@ export function runEval(argv) {
     return { out: header(res.sub ?? sub, res.out), code: res.code ?? 0 };
   } catch (err) {
     if (!(err instanceof EvalRefusal)) throw err;
-    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
+    const action = (sub === 'ledger' || sub === 'split' || sub === 'rubric' || sub === 'judge' || sub === 'contract') && rest[0] && !rest[0].startsWith('--') ? `${sub} ${rest[0]}` : sub;
     return { out: header(action, { refused: true, ...err.extra, messages: err.messages }), code: 1 };
   }
 }

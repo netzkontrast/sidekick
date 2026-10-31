@@ -31,12 +31,50 @@ export const EVAL_RULES = {
   case_hash_mismatch: 'SLV0-EVAL-17',
   source_commit_mismatch: 'SLV0-EVAL-18',
   worktree_dirty: 'SLV0-EVAL-18',
+  evidence_not_found: 'SLV0-EVAL-21',
+  evidence_missing: 'SLV0-EVAL-21',
+  evidence_unquoted: 'SLV0-EVAL-21',
+  no_discriminating_check: 'SLV0-EVAL-23',
+  family_not_discriminating: 'SLV0-EVAL-25',
+  core_verdict_unclear: 'SLV0-EVAL-25',
+  commit_unknown: 'SLV0-EVAL-29',
+  sha_mismatch: 'SLV0-EVAL-29',
+  ref_not_pinned: 'SLV0-EVAL-29',
+  path_missing: 'SLV0-EVAL-29',
+  path_ambiguous: 'SLV0-EVAL-29',
+  range_out_of_bounds: 'SLV0-EVAL-29',
+  commit_unverified: 'SLV0-EVAL-29',
+  pattern_invalid: 'SLV0-EVAL-31',
+  path_escapes_root: 'SLV0-EVAL-31',
+  pattern_unmatched: 'SLV0-EVAL-32',
+  file_missing: 'SLV0-EVAL-32',
+  not_regular_file: 'SLV0-EVAL-32',
+  symlink_in_pack: 'SLV0-EVAL-32',
+  path_forbidden: 'SLV0-EVAL-32',
+  nested_repository: 'SLV0-EVAL-32',
+  file_not_text: 'SLV0-EVAL-32',
+  output_exists: 'SLV0-EVAL-34',
+  block_missing: 'SLV0-EVAL-39',
+  block_duplicate: 'SLV0-EVAL-39',
+  block_heading_variant: 'SLV0-EVAL-39',
+  block_empty: 'SLV0-EVAL-39',
+  block_malformed: 'SLV0-EVAL-39',
+  evidence_level_unknown: 'SLV0-EVAL-40',
+  source_role_unknown: 'SLV0-EVAL-40',
+  evidence_role_mismatch: 'SLV0-EVAL-40',
+  citation_missing: 'SLV0-EVAL-40',
+  citation_invalid: 'SLV0-EVAL-40',
+  injection_not_reported: 'SLV0-EVAL-41',
+  injection_declared_none: 'SLV0-EVAL-41',
 };
+
+/** Codes reported as warnings: they never change the exit code (spec §8). */
+export const EVAL_WARNINGS = new Set(['evidence_unquoted', 'no_discriminating_check', 'commit_unverified']);
 
 export function evalMsg(code, pathStr, message, line = null) {
   const rule = EVAL_RULES[code];
   if (!rule) throw new Error(`unknown eval code ${code}`);
-  return { path: pathStr, line, code, severity: 'error', rule, message };
+  return { path: pathStr, line, code, severity: EVAL_WARNINGS.has(code) ? 'warning' : 'error', rule, message };
 }
 
 /** Thrown when an eval operation is refused with one or more §8 codes (exit 1). */

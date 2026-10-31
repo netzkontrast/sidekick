@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-context-allowlist.schema.json",
+  "title": "Allowlist eines Kontextpakets – Skill-Library V0",
+  "description": "Eingabe von `eval context-pack` (SLV0-EVAL-31, §7.6): die maschinenlesbare Inputliste einer Übergabe (Vorbild Implementierungsübergabe §3, Spalten Input und Wofür). Muster sind Pfade oder Globs mit *, ?, ** relativ zur Wurzel; ihre Syntax prüft das Werkzeug (pattern_invalid, path_escapes_root, Exit 1), nicht dieses Schema. Sperren ergänzen die Standardsperren, ersetzen sie nie.",
+  "type": "object",
+  "required": ["schema_version", "format", "ziel", "eingaben"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "format": { "const": "sl-context-allowlist@1" },
+    "ziel": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[^\\n\\r]*$", "description": "Wofür das Paket gebaut wird, eine Zeile." },
+    "rolle": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9_-]*$", "description": "Session, die das Paket erhält, z. B. implementierung, familienautor, bewerter. Nur Daten." },
+    "eingaben": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["muster"],
+        "additionalProperties": false,
+        "properties": {
+          "muster": { "type": "string", "minLength": 1, "maxLength": 1024 },
+          "wofuer": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[^\\n\\r]*$", "description": "Lesehinweis, z. B. Abschnitte; nur Daten." }
+        }
+      }
+    },
+    "sperre": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+    }
+  }
+}

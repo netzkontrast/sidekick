@@ -4,7 +4,8 @@
 // JSON on stdout. Exit codes (SLV0-VAL-17): 0 no error, 1 at least one error or refusal,
 // 2 usage error or internal exception. No network, no model, no client start (SLV0-INV-04);
 // nothing under .agents/skills/ is written (SLV0-INV-08). Only `eval prepare`, `eval ledger
-// init|reserve|result` and `eval split access|select` write, only to explicit paths, never overwriting.
+// init|reserve|result`, `eval split access|select` and `eval context-pack --output` write, only to
+// explicit paths, never overwriting.
 // `questions …` (lib/questions/, docs/spec/questions-cli-v0.md) writes only below its --root, atomically.
 import fs from 'node:fs';
 import path from 'node:path';

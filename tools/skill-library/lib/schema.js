@@ -8,6 +8,8 @@ const SUPPORTED = new Set([
   'items', 'minLength', 'maxLength', 'pattern', 'minimum', 'format', 'allOf', 'if', 'then',
   // Added for the eval schemas (SLV0-EVAL, docs/spec/schemas/eval-*.schema.json).
   'maximum', 'minItems', 'propertyNames',
+  // Added for eval-case.schema.json (count_at_least pair, SLV0-EVAL-22).
+  'maxItems',
 ]);
 
 export class SchemaUnsupportedError extends Error {}
@@ -105,6 +107,9 @@ export function validateSchema(schema, value, root = schema, pointer = '') {
   }
   if (Array.isArray(value) && schema.minItems !== undefined && value.length < schema.minItems) {
     errors.push({ pointer: at, message: `weniger als ${schema.minItems} Einträge` });
+  }
+  if (Array.isArray(value) && schema.maxItems !== undefined && value.length > schema.maxItems) {
+    errors.push({ pointer: at, message: `mehr als ${schema.maxItems} Einträge` });
   }
   if (jsonType(value) === 'object') {
     for (const req of schema.required ?? []) {

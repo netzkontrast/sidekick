@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-case.schema.json",
+  "title": "Fall eines Fallordners (fall.json) – Skill-Library V0",
+  "description": "Ein Fall ist ein Ordner mit fall.json und der Fixture unter fixture/ (SLV0-EVAL-22, §7.3). checks folgt dem Prüfformat des Research-Prüfers check_case.py; jede Prüfung hat genau eine Regel (zusätzlich im Werkzeug geprüft). gegen_kriterium nur zusammen mit kern_kriterium (SLV0-EVAL-24). erwartete_befunde nach §7.4 (SLV0-EVAL-26), optional mit art (SLV0-EVAL-41).",
+  "type": "object",
+  "required": ["id", "prompt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "#/$defs/id" },
+    "family_id": { "$ref": "#/$defs/id" },
+    "split": { "enum": ["dev", "select", "test", "regression"] },
+    "prompt": { "type": "string" },
+    "rubrik": {
+      "type": ["string", "array"],
+      "items": { "type": "string" },
+      "description": "Pfad einer Rubrikdatei oder Liste von Kriterienformulierungen."
+    },
+    "rubrik_kriterien": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "kern_kriterium": { "type": "string", "minLength": 1, "description": "Kriterium, ohne dessen Erfüllung der Fall nicht bestanden ist: Formulierung, Kriteriums- oder Prüf-ID." },
+    "gegen_kriterium": { "type": "string", "minLength": 1, "description": "Gegenkriterium, das den trivialen Weg zum Kern ausschließt; wird je Stichprobe konjunktiv mit dem Kern verrechnet." },
+    "checks": { "type": "array", "items": { "$ref": "#/$defs/pruefung" } },
+    "erwartete_befunde": { "type": "array", "items": { "$ref": "#/$defs/befund" } },
+    "erwartung": { "type": "string" },
+    "erreichbar": { "type": "boolean" },
+    "quelle": { "type": "string" }
+  },
+  "allOf": [
+    { "if": { "required": ["gegen_kriterium"] }, "then": { "required": ["kern_kriterium"] } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "text": { "type": "string", "minLength": 1 },
+    "pruefung": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "file": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "frontmatter": { "type": "object", "additionalProperties": { "type": "string" } },
+        "frontmatter_in": { "type": "object", "additionalProperties": { "type": "array", "minItems": 1, "items": { "type": "string" } } },
+        "contains": { "$ref": "#/$defs/text" },
+        "not_contains": { "$ref": "#/$defs/text" },
+        "regex": { "$ref": "#/$defs/text" },
+        "count_at_least": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": ["string", "integer"] },
+          "description": "[Text, Mindestanzahl]; Text nicht leer, Anzahl ab 1 (im Werkzeug geprüft)."
+        },
+        "absent_anywhere": { "$ref": "#/$defs/text" },
+        "only_changed_under": { "$ref": "#/$defs/text" },
+        "no_new_files_under": { "$ref": "#/$defs/text" },
+        "new_file_under": { "$ref": "#/$defs/text" },
+        "contains_any": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/text" } }
+      },
+      "allOf": [
+        { "if": { "required": ["frontmatter"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["frontmatter_in"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["contains"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["not_contains"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["regex"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["count_at_least"] }, "then": { "required": ["file"] } },
+        { "if": { "required": ["contains_any"] }, "then": { "required": ["new_file_under"] } }
+      ]
+    },
+    "befund": {
+      "type": "object",
+      "required": ["id", "token_gruppen"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "token_gruppen": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1, "maxLength": 200 } }
+        },
+        "fundstelle_datei": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "gewicht": { "enum": ["kritisch", "normal"] },
+        "art": {
+          "enum": ["befund", "eingebettete_anweisung"],
+          "description": "Standard befund. eingebettete_anweisung: im Material eingepflanzte, an den Agenten gerichtete Anweisung; `eval contract check --case` erwartet sie im Block „Eingebettete Anweisungen“ (SLV0-EVAL-41). `eval findings` behandelt beide Arten gleich."
+        }
+      }
+    }
+  }
+}

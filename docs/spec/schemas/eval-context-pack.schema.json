@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-context-pack.schema.json",
+  "title": "Datensatz eines Kontextpakets – Skill-Library V0",
+  "description": "Ausgabe von `eval context-pack` bei Erfolg (SLV0-EVAL-33/-34, §7.6). Dateien nach Codepoint sortiert, je SHA-256 der unveränderten Bytes; kontextpaket_sha256 nach der Formel aus SLV0-PKG-22 über {Pfad: Dateihash}. Kein Zeitstempel, kein absoluter Pfad. Tokenzahlen sind Schätzungen oder unbekannt, nie gemeldet.",
+  "type": "object",
+  "required": ["schema_version", "format", "tool", "tool_version", "hash", "kontextpaket_sha256", "allowlist", "muster", "sperrliste", "schaetzer", "dateien", "summe", "bundle"],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "count": { "type": "integer", "minimum": 0 },
+    "tokens": {
+      "type": "object",
+      "required": ["wert", "quelle", "methode", "bezug", "beleg"],
+      "additionalProperties": false,
+      "properties": {
+        "wert": { "type": ["integer", "null"], "minimum": 0 },
+        "quelle": { "enum": ["geschaetzt", "unbekannt"] },
+        "methode": { "type": ["string", "null"] },
+        "bezug": { "type": "string" },
+        "beleg": { "type": "string" }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": { "const": 1 },
+    "format": { "const": "sl-context-pack@1" },
+    "tool": { "type": "string" },
+    "tool_version": { "type": "string" },
+    "hash": {
+      "type": "object",
+      "required": ["algorithm", "profile"],
+      "additionalProperties": false,
+      "properties": { "algorithm": { "const": "sha256" }, "profile": { "const": "sl-hash-v0" } }
+    },
+    "kontextpaket_sha256": { "$ref": "#/$defs/sha256" },
+    "allowlist": {
+      "type": "object",
+      "required": ["sha256", "ziel", "rolle"],
+      "additionalProperties": false,
+      "properties": {
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "ziel": { "type": "string" },
+        "rolle": { "type": ["string", "null"] }
+      }
+    },
+    "muster": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["index", "muster", "art", "wofuer", "dateien"],
+        "additionalProperties": false,
+        "properties": {
+          "index": { "$ref": "#/$defs/count" },
+          "muster": { "type": "string" },
+          "art": { "enum": ["pfad", "glob"] },
+          "wofuer": { "type": ["string", "null"] },
+          "dateien": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "sperrliste": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["muster", "quelle"],
+        "additionalProperties": false,
+        "properties": {
+          "muster": { "type": "string" },
+          "quelle": { "enum": ["standard", "allowlist", "aufruf"] }
+        }
+      }
+    },
+    "schaetzer": { "type": ["string", "null"] },
+    "dateien": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["pfad", "sha256", "bytes", "zeilen", "tokens", "muster"],
+        "additionalProperties": false,
+        "properties": {
+          "pfad": { "type": "string", "minLength": 1 },
+          "sha256": { "$ref": "#/$defs/sha256" },
+          "bytes": { "$ref": "#/$defs/count" },
+          "zeilen": { "$ref": "#/$defs/count" },
+          "tokens": { "$ref": "#/$defs/tokens" },
+          "muster": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/count" } }
+        }
+      }
+    },
+    "summe": {
+      "type": "object",
+      "required": ["dateien", "bytes", "zeilen", "tokens"],
+      "additionalProperties": false,
+      "properties": {
+        "dateien": { "type": "integer", "minimum": 1 },
+        "bytes": { "$ref": "#/$defs/count" },
+        "zeilen": { "$ref": "#/$defs/count" },
+        "tokens": { "$ref": "#/$defs/tokens" }
+      }
+    },
+    "bundle": {
+      "type": ["object", "null"],
+      "required": ["format", "sha256", "bytes"],
+      "additionalProperties": false,
+      "properties": {
+        "format": { "const": "sl-context-bundle@1" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "bytes": { "$ref": "#/$defs/count" }
+      }
+    }
+  }
+}
