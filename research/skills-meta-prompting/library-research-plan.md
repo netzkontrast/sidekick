@@ -185,7 +185,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | umgesetzt in PR #23 (`eval check`, `eval nullrun`, `--b1-kern`) |
 | P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | umgesetzt in PR #23 (`eval findings`) |
 | P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
-| P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | geplant |
+| P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | umgesetzt in PR #25 (gestapelt auf #23; `eval cite-check`) |
 | P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | geplant; E3-Kandidat |
 | P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | Diagnose geliefert ([dev](grilling-runde/dev-ergebnis.md)); Kandidat geplant |
 | P8 | grilling K-RUECKWAERTS: Rückwärtsabgleich vor der Zusammenfassung (prompt-architect) | geplant |
