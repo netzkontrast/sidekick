@@ -225,3 +225,82 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   Mehrere Rohdatensätze zum selben `attempt_id` werden nicht erkannt; der Bericht lehnt nur doppelte `run_id` ab.
 - `freeze --verify-git` prüft nur den Arbeitsbaum gegen HEAD; ein Einfrieren direkt aus einem Commit (`git show`) gibt es nicht.
 - Baseline-Läufe (EVAL-12) bleiben keine Werkzeugfunktion.
+
+## Fragen-CLI (`questions`, Paket P9)
+
+Vertrag: [Spec Fragen-CLI V0](../../docs/spec/questions-cli-v0.md) (IDs `QCLI-…`). Die CLI schreibt die Interview-Ablage
+von [grilling](../../.agents/skills/grilling/SKILL.md) (`docs/fragen/`) aus JSON-Nutzdaten, prüft dabei die Zustandsregeln
+des Workflows und erzeugt genau das Markdown aus `records.md`. grilling arbeitet ohne CLI unverändert weiter; der Skilltext
+nutzt sie (noch) nicht. Kein Netz, kein Modell, kein Prozessstart; geschrieben wird nur unter `--root`.
+
+```sh
+Q="node tools/skill-library/cli.js questions"   # aus dem Repo-Wurzelverzeichnis
+$Q check  --root docs/fragen [--topic skill-library]      # Invarianten prüfen, nur lesend (Exit 1 bei Fehlern)
+$Q status --root docs/fragen --topic skill-library        # Session, Zählung, je Frage Status und wirksame Antwort
+$Q next   --root docs/fragen --topic skill-library        # fragbar / prüfpflichtig / blockiert / wartend / vertagt
+$Q init   --root docs/fragen --topic thema --json '{"title":"Thema","goal":"…","editor":"…"}'
+$Q add    --root docs/fragen --topic thema --json '{"id":"Q-20261031-x","title":"…?","kind":"decision",
+            "priority":"blocking","context":"…","occasion":"…","impact":"…","options":"a) … b) …","recommendation":"a, weil …"}'
+$Q ask    --root docs/fragen --topic thema --json '{"round_id":"R-20261031-chat1","channel":"chat",
+            "delivery":"bestaetigt","questions":[{"id":"Q-20261031-x","version":1}]}'
+$Q answer --root docs/fragen --topic thema --json '{"question_id":"Q-20261031-x","version":1,
+            "round_id":"R-20261031-chat1","text":"…","source":{"by":"Owner","channel":"Chat"}}'
+$Q correct|defer|supersede|revise|review --root … --topic … --json '…'   # Nutzdaten: Spec §4
+$Q pause|resume|render --root docs/fragen --topic thema
+$Q status --root docs/fragen --topic thema --set awaiting_confirmation --summary "…"
+```
+
+Gemeinsame Optionen: `--now ISO-8601` (Datum für `Erstellt`, Verlauf und erzeugte Antwort-IDs; Standard: jetzt, UTC).
+Nutzdaten per `--json`, `--file` oder stdin (nur Pipe oder Datei, z. B. Heredoc). Ausgabe JSON; Exit 0 ok, 1 Verweigerung mit
+Code (`refused: true`, `messages`), 2 Bedienfehler. Eine Verweigerung schreibt nichts.
+
+**Rechte.** `.claude/settings.json` erlaubt im Projekt genau eine Regel: `Bash(node tools/skill-library/cli.js questions:*)`
+(Owner-Freigabe A-20261031-p9-questions-cli; `:*` ist laut Claude-Code-Doku gleichbedeutend mit ` *` am Ende). Messläufe setzen
+dieselbe Regel zusätzlich zu ihrem bisherigen Werkzeugprofil und keine allgemeine Bash-Freigabe:
+
+```sh
+claude -p "<Auftrag>" --allowedTools "Bash(node tools/skill-library/cli.js questions:*)" …   # … = übriges Laufprofil
+```
+
+Zusammengesetzte Befehle (`|`, `&&`, `;`) brauchen für jeden Teil eine eigene Erlaubnis; Nutzdaten deshalb als `--json '…'` im
+selben Befehl übergeben (ein Apostroph im Text als `'\''`). `--file` setzt voraus, dass der Lauf die Datei schreiben darf.
+
+**Aufbau.** `lib/questions/ids.js` (IDs, Themen, Datum), `secrets.js` (Heuristik), `record.js` (Fragedatei lesen und
+zeilengenau ändern), `topic-index.js`, `round.js`, `store.js` (sichere Pfade, Laden, atomares Schreiben mit Rücknahme),
+`model.js` (wirksame Antwort, Konflikte, Abhängigkeiten, `next`), `payload.js` (strenge Nutzdaten, Urheberprüfung),
+`commands.js`, `check.js`, `cli.js`. Tests: `test/questions-*.test.js` (QCLI-FALL-01…44); die acht Dev-Fixtures der
+grilling-Runde liegen unverändert in `test/fixtures/questions-grilling-dev.json` (Quelle `research/e3-runde-2` @ `83cbb7f8`).
+
+### Auslegungen
+
+- **Zusätzliche Befehle** `revise` (neue Frageversion) und `review` (Prüfbedarf mit Notiz aufheben): Ohne sie gäbe es keinen
+  Weg zu Version 2 und keinen Ausweg aus `needs_review` außer Handarbeit. `status --set` setzt die übrigen Sessionzustände.
+- **Prüfbedarf:** Konfliktantwort, `correct` (für alle transitiven Folgefragen, auch offene), `supersede` (ebenso) und `revise`
+  einer Frage mit Antworten setzen `needs_review: true`. Aufgehoben wird er durch die erste Antwort auf die aktuelle Version,
+  durch `correct` an der korrigierten Frage und durch `review`. Ein offener Konflikt lässt sich nur per `correct` auflösen.
+  Offene oder vertagte prüfpflichtige Fragen sind nicht fragbar (`ask` verweigert, `next` listet sie unter `needs_review`).
+- **Runden:** `channel: tool` schreibt `rounds/<R-ID>.md`, `channel: chat` eine Zeile `Chat-Runden:` im Index. `answer`
+  verlangt eine bekannte Runde, die die Frage in genau dieser Version nennt (Rundendatei oder Chat-Zeile, auch von Hand
+  geschrieben), und trägt den Antwortverweis dort nach. Eine Antwort auf eine Runde mit Zustellung `unbekannt` ist erlaubt
+  (die Antwort belegt die Zustellung). `correct` braucht keine Runde (`Bezug: Version N, Korrektur ohne Runde`).
+- **Urheber:** `source.by` darf kein Wort aus einer festen Liste enthalten (Agent, Claude, Modell, KI, Empfehlung, Default,
+  Standard, Frist, Timeout, automatisch u. a., ganzes Wort). Antworttext gleich Empfehlungsfeld (ohne Anführungszeichen,
+  Groß-/Kleinschreibung, Satzzeichen am Ende) wird abgelehnt. Beides sind Heuristiken: Die CLI kann eine Absicht nicht prüfen.
+- **Secrets:** geprüft werden alle Strings jeder schreibenden Nutzlast, `check` prüft alle Dateien. Commit-SHAs in Permalinks
+  zählen nicht; ein freistehender 40-stelliger Hexwert (auch ein vollständiger Commit-SHA) wird abgelehnt – Kurz-SHA verwenden.
+- **Antwort-IDs:** ohne `answer_id` `A-<Datum aus --now>-<Suffix der Frage>`, bei Belegung `-2`, `-3` …; eindeutig je Thema.
+- **Index:** `add` und `render` hängen fehlende Zeilen nach der letzten Tabellenzeile an (Kurzfrage `short` bzw. Titel);
+  vorhandene Zeilen bleiben byte-gleich, auch wenn die Tabelle durch Leerzeilen geteilt ist. Nichts wird umsortiert.
+- **Einzeilige Felder:** Zeilenumbrüche und Steuerzeichen in Nutzdaten werden abgelehnt (`field_invalid`); von Hand geschriebene
+  Folgezeilen (z. B. Optionen als Liste) werden gelesen und bleiben erhalten.
+- **Gleichzeitigkeit:** keine Sperrdatei; vor jedem Umbenennen wird der Inhalt mit dem gelesenen Stand verglichen
+  (`concurrent_modification`), neue Dateien entstehen per Hardlink ohne Überschreiben.
+- **`check`** liest alle Themenordner unter `--root`, die `index.md` oder `questions/` haben; andere Ordner werden übersprungen.
+
+### Nicht umgesetzt
+
+- Keine Änderung am grilling-Skilltext und keine Messläufe; ob grilling mit der CLI günstiger arbeitet, ist offen (Spec QO-1).
+- Kein Löschen von Fragen, Antworten oder Runden, kein Zurücknehmen von `superseded`, keine Abhängigkeiten über Themen hinweg.
+- Eine Runde mit Zustellung `unbekannt` lässt sich nicht nachträglich als bestätigt markieren (neue Runde oder Antwort genügt).
+- Mehrzeilige Antworttexte werden nicht als Folgezeilen geschrieben, sondern abgelehnt.
+- `revise` kann keine Kopffelder ergänzen, die in einer von Hand geschriebenen Datei fehlen.

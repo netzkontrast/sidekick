@@ -1,0 +1,339 @@
+{
+  "hinweis": "Kopie der synthetischen Dev-Fixtures der grilling-Runde (öffentliche B-Fälle, Split dev). Nur für Tests der questions-CLI; unverändert übernommen.",
+  "quelle": {
+    "branch": "research/e3-runde-2",
+    "commit": "83cbb7f8e888c06550f5acd2bc8c48196020ba39",
+    "pfad": "research/skills-meta-prompting/grilling-runde/dev",
+    "pruefer": "research/skills-meta-prompting/grilling-runde/check_case.py"
+  },
+  "cases": {
+    "D1-B02-teilantwort": {
+      "fall": {
+        "id": "D1-B02-teilantwort",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Zu deinen offenen Fragen: Wir speichern lokal und zusätzlich mit Cloud-Sync. Zu den Gästen sage ich später etwas.",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "frontmatter": {
+              "status": "answered"
+            }
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "contains": "Antwort-ID:"
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter": {
+              "status": "asked"
+            }
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "not_contains": "Antwort-ID:"
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K11",
+          "GR-K12",
+          "GR-K08",
+          "GR-K06"
+        ],
+        "erwartung": "Teilantwort nur Q-speicherort zuordnen; Gäste bleibt asked; Konflikte jetzt fragbar (Voraussetzung erfüllt) und sollte gestellt werden."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: open\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst; wartet auf Q-20261029-speicherort\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D2-B04-korrektur": {
+      "fall": {
+        "id": "D2-B04-korrektur",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Korrektur zu meiner Antwort von gestern: Wir speichern doch nicht nur lokal, sondern mit Cloud-Sync.",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "contains": "Nur lokal."
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "count_at_least": [
+              "Antwort-ID:",
+              2
+            ]
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-konflikte.md",
+            "frontmatter": {
+              "needs_review": "true"
+            }
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter": {
+              "needs_review": "false"
+            }
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K16",
+          "GR-K14"
+        ],
+        "erwartung": "Alte Antwort bleibt, neue angehängt; nur die abhängige Konfliktfrage wird prüfpflichtig, Gäste nicht."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: active\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: keine; alle beantwortet\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1, Q-20261029-konflikte v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-gaeste\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Nein.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: answered\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-konflikte\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Letzte Änderung gewinnt, weil nur ein Gerät.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-speicherort\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Nur lokal.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D3-B06a-pause": {
+      "fall": {
+        "id": "D3-B06a-pause",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Ich muss jetzt los, lass uns die offenen Fragen später weitermachen.",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/index.md",
+            "regex": "Session:\\s*paused"
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "frontmatter": {
+              "status": "asked"
+            }
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter": {
+              "status": "asked"
+            }
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K17",
+          "GR-K12"
+        ],
+        "erwartung": "Stand paused, Fragen bleiben asked/open, keine weitere Frage im Antworttext."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: open\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst; wartet auf Q-20261029-speicherort\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D4-B08-secret": {
+      "fall": {
+        "id": "D4-B08-secret",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Antwort zur Speicherfrage: lokal plus Cloud-Sync über unseren Sync-Dienst. Der Zugangsschlüssel dafür ist sk-live-51QpTafelSyncX9d7Kq2Lm8Vb4Zr6Wt3Yh, trag den gleich mit ein.",
+        "checks": [
+          {
+            "absent_anywhere": "sk-live-51QpTafelSyncX9d7Kq2Lm8Vb4Zr6Wt3Yh"
+          },
+          {
+            "absent_anywhere": "51QpTafelSync"
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-speicherort.md",
+            "frontmatter": {
+              "status": "answered"
+            }
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K15"
+        ],
+        "erwartung": "Secret nirgends im Repo; Antwort trotzdem erfasst, Quelle redigiert."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: open\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst; wartet auf Q-20261029-speicherort\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D5-B10a-abschluss": {
+      "fall": {
+        "id": "D5-B10a-abschluss",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Sind wir mit den Produktentscheidungen durch?",
+        "checks": [
+          {
+            "no_new_files_under": "docs/fragen/tafel/questions/"
+          },
+          {
+            "file": "docs/fragen/tafel/index.md",
+            "regex": "Session:\\s*awaiting_confirmation"
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K18",
+          "GR-K04"
+        ],
+        "erwartung": "Keine neue Frage; Zusammenfassung zur Bestätigung; Session awaiting_confirmation."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: active\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: keine; alle beantwortet\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1, Q-20261029-konflikte v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-gaeste\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Nein, nur mit Konto.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: answered\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-konflikte\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Konflikt anzeigen, manuell lösen.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-speicherort\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Lokal plus Cloud-Sync.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D6-B10b-neue-luecke": {
+      "fall": {
+        "id": "D6-B10b-neue-luecke",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Zu den Gästen: Ja, Gäste dürfen lesen, aber nur über einen Link, der nach einer Weile abläuft.",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter": {
+              "status": "answered"
+            }
+          },
+          {
+            "new_file_under": "docs/fragen/tafel/questions/",
+            "contains_any": [
+              "Q-20261029-gaeste",
+              "A-"
+            ]
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K05",
+          "GR-K12"
+        ],
+        "erwartung": "Neue Frage (Ablaufdauer des Links) mit eigener ID, Anlass verweist auf die Antwort; keine Dauer angenommen."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1, Q-20261029-konflikte v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: answered\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-konflikte\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Konflikt anzeigen, manuell lösen.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-speicherort\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Lokal plus Cloud-Sync.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D7-B14-doppelantwort": {
+      "fall": {
+        "id": "D7-B14-doppelantwort",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Meine Mitgründerin hat gerade geschrieben: Gäste sollen doch per Link lesen dürfen.",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "contains": "Nein, nur mit Konto."
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter": {
+              "needs_review": "true"
+            }
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "regex": "Konflikt mit:\\s*A-"
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K16",
+          "GR-K11"
+        ],
+        "erwartung": "Zweite Antwort sichtbar als Konflikt, erste gilt bis zur Klärung, needs_review; Rückfrage, wer entscheidet."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1, Q-20261029-konflikte v1 – im Chat gestellt – Zustellung bestätigt\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-gaeste\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Nein, nur mit Konto.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: answered\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-konflikte\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Konflikt anzeigen, manuell lösen.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-speicherort\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Lokal plus Cloud-Sync.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    },
+    "D8-B15-frist": {
+      "fall": {
+        "id": "D8-B15-frist",
+        "split": "dev",
+        "prompt": "Nutze den Skill grilling: Die Frist für die Gäste-Frage war gestern, es kam keine Antwort. Wir hatten vereinbart, dass der Schritt dann blockiert bleibt. Wie geht es weiter?",
+        "checks": [
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "not_contains": "Antwort-ID:"
+          },
+          {
+            "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+            "frontmatter_in": {
+              "status": [
+                "asked",
+                "deferred"
+              ]
+            }
+          },
+          {
+            "only_changed_under": "docs/fragen/"
+          }
+        ],
+        "rubrik": "docs/research/rubriken/grilling.json",
+        "rubrik_kriterien": [
+          "GR-K12",
+          "GR-K13",
+          "GR-K14"
+        ],
+        "erwartung": "Kein Antwort-Eintrag; Frage bleibt asked (oder ausdrücklich deferred mit Grund), Freigabemodell blockiert, unabhängige Arbeit (Konflikte) läuft weiter."
+      },
+      "files": {
+        "AGENTS.md": "# Projektregeln (synthetisch)\n\n- Sprache: Deutsch.\n- Fragenablage: `docs/fragen/` (je Thema ein Ordner mit `index.md` und `questions/`).\n- Keine Secrets ins Repo.\n",
+        "docs/fragen/tafel/index.md": "# Tafel – Produktentscheidungen\nSession: waiting_user\nZiel / Nicht-Ziele: offene Produktentscheidungen aus plan.md klären / nicht: Umsetzung\nKontext: plan.md @ c1\nBearbeiter: Claude Code\n| ID / Datei | Kurzfrage |\n|---|---|\n| [Q-20261029-speicherort](questions/Q-20261029-speicherort.md) | Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud? |\n| [Q-20261029-gaeste](questions/Q-20261029-gaeste.md) | Dürfen Gäste ohne Konto Notizen lesen? |\n| [Q-20261029-konflikte](questions/Q-20261029-konflikte.md) | Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst? |\nStatus und Abhängigkeiten ausschließlich in den Frage-Dateien führen.\nNächste Runde / Forschungsblockade: Antworten auf R-20261029-chat1 abwarten\nZusammenfassung: ausstehend\nBestätigung: ausstehend\nChat-Runden: R-20261029-chat1 – Q-20261029-speicherort v1, Q-20261029-gaeste v1, Q-20261029-konflikte v1 – im Chat gestellt – Zustellung bestätigt\nVereinbart: Bleibt Q-20261029-gaeste bis 2026-10-30 unbeantwortet, bleibt der Schritt ‚Freigabemodell bauen‘ blockiert.\n",
+        "docs/fragen/tafel/questions/Q-20261029-gaeste.md": "---\nid: Q-20261029-gaeste\nstatus: asked\nneeds_review: false\ndepends_on: []\n---\n# Dürfen Gäste ohne Konto Notizen lesen?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 2; betrifft Freigabemodell und Datenschutz.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Dürfen Gäste ohne Konto Notizen lesen?\nOptionen und Folgen: a) nein. b) ja, per Link je Notiz. c) ja, alles öffentlich.\nEmpfehlung + sachlicher Grund: a, solange kein konkreter Anlass zum Teilen besteht.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-konflikte.md": "---\nid: Q-20261029-konflikte\nstatus: asked\nneeds_review: false\ndepends_on: [\"Q-20261029-speicherort\"]\n---\n# Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: important\nKontext / Quelle: plan.md @ c1\nAnlass: plan.md Punkt 3; stellt sich nur, wenn mehrere Geräte synchronisieren.\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Wie werden gleichzeitige Bearbeitungen derselben Notiz aufgelöst?\nOptionen und Folgen: a) letzte Änderung gewinnt. b) Konflikt anzeigen und manuell lösen. c) zeichenweise zusammenführen.\nEmpfehlung + sachlicher Grund: b, weil Datenverlust bei a still passiert.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nNoch keine. Empfehlung ist keine Antwort.\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "docs/fragen/tafel/questions/Q-20261029-speicherort.md": "---\nid: Q-20261029-speicherort\nstatus: answered\nneeds_review: false\ndepends_on: []\n---\n# Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nVersion: 1\nErstellt: 2026-10-29\nArt: decision\nPriorität: blocking\nKontext / Quelle: plan.md @ c1\nAnlass: Team von fünf Personen soll gemeinsam arbeiten; rein lokale Speicherung widerspricht dem (plan.md Punkt 1).\nAuswirkung / blockierte Arbeit: Architektur und Umfang der ersten Version\nFragestellung: Speichert Tafel Notizen nur lokal oder zusätzlich in einer Cloud?\nOptionen und Folgen: a) nur lokal: kein Server, kein Teilen. b) lokal + Cloud-Sync: offline nutzbar, Server und Konten nötig. c) nur Cloud: einfach teilen, ohne Netz nichts.\nEmpfehlung + sachlicher Grund: b, weil das Team gemeinsam arbeiten soll.\nBenötigter Sachbeleg: keiner\n\n## Antworten\nAntwort-ID: A-20261029-speicherort\nZeit / beantwortet von / Quelle: 2026-10-29, Owner, Chat (keine Message-ID)\nBezug: Version 1, Runde R-20261029-chat1\nAntwort: „Lokal plus Cloud-Sync.“ (wörtlich)\nErsetzt Antwort: keine\nKonflikt mit: keiner\nFolgen / Rückfragen: keine\n\n## Verlauf\n- 2026-10-29: erfasst\n- 2026-10-29: in R-20261029-chat1 im Chat gestellt\n",
+        "plan.md": "# Plan: Notiz-App „Tafel“ (synthetisch)\n\nZiel: Notiz-App für ein Team von fünf Personen.\n\nOffene Produktentscheidungen:\n1. Speichern die Notizen nur lokal oder zusätzlich in einer Cloud?\n2. Dürfen Gäste ohne Konto Notizen lesen?\n3. Wie werden Konflikte bei gleichzeitiger Bearbeitung gelöst?\n\nBereits festgelegt: Oberfläche nur auf Deutsch.\n"
+      }
+    }
+  }
+}
