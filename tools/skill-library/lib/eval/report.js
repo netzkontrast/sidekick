@@ -4,13 +4,15 @@
 // together with other assertions. Rubric versions are listed and never mixed (SLV0-EVAL-15).
 // Deterministic assertions are split by null-run discrimination; core and counter criterion are
 // combined per sample, never as a product of rates (SLV0-EVAL-24).
+// Cost balance per level from the raw records' `kostenbilanz` (SLV0-EVAL-37/-38).
 // No score, no ranking, no activation recommendation.
 import { canonicalJson, sha256Hex, compareCodepoints } from '../core.js';
-import { sumTokens } from '../tokens.js';
+import { sumTokens, ESTIMATORS } from '../tokens.js';
 import { evalMsg, EvalRefusal, UsageError, requireSchema, schemaErrors } from './common.js';
 import { RAW_SCHEMA, checkAssertionMarks } from './raw.js';
 import { USAGE_FIELDS } from './normalize.js';
 import { rubricVersionsOf, mixingMessages, rubricName } from './rubric.js';
+import { levelBalance } from './costbalance.js';
 
 export const REPORT_SCHEMA = 'eval-report';
 const LEVELS = ['M0', 'M1', 'M2', 'M3', 'M4', 'M5', 'R'];
@@ -121,7 +123,7 @@ function discriminationHints(records) {
   return hints;
 }
 
-function levelReport(records) {
+function levelReport(records, estimator) {
   const byVariant = groupBy(records, (r) => r.variante);
   const laeufe = byVariant.map(([v, rs]) => ({ variante: v, abgeschlossen: zahl(rs.filter((r) => r.status === 'completed').length, rs.length, rs.map((r) => r.run_id)) }));
   const assertions = byVariant.map(([v, rs]) => ({ variante: v, assertions: assertionBlocks(rs) }));
@@ -153,15 +155,18 @@ function levelReport(records) {
     }
     return row;
   });
-  return { laeufe, assertions, je_fall: jeFall, je_familie: jeFamilie, je_wiederholung: jeWdh, skill_aufrufe: skillAufrufe, katalog_unbekannt: katalog, usage };
+  const kostenbilanz = levelBalance(records, { estimator }); // SLV0-EVAL-37/-38
+  return { laeufe, assertions, je_fall: jeFall, je_familie: jeFamilie, je_wiederholung: jeWdh, skill_aufrufe: skillAufrufe, katalog_unbekannt: katalog, usage, kostenbilanz };
 }
 
 /**
  * Build a report from validated raw records. Throws report_without_raw without any record and
  * rubric_version_mixed when two versions of one rubric (or a version other than a pinned one,
- * `rubricVersions`) occur (SLV0-EVAL-15).
+ * `rubricVersions`) occur (SLV0-EVAL-15). `estimator` names a token estimator for class sizes
+ * in the cost balance (SLV0-EVAL-37, SLV0-TOK-04); without it class tokens are unknown.
  */
-export function buildReport(records, { rubricVersions = [] } = {}) {
+export function buildReport(records, { rubricVersions = [], estimator = null } = {}) {
+  if (estimator !== null && !Object.hasOwn(ESTIMATORS, estimator)) throw new UsageError(`unbekannter Schätzer ${estimator}; verfügbar: ${Object.keys(ESTIMATORS).join(', ')}`);
   if (!Array.isArray(records) || records.length === 0) {
     throw new EvalRefusal([evalMsg('report_without_raw', 'report', 'keine Rohdatensätze; ein Bericht ohne Rohdaten wird nicht erzeugt')]);
   }
@@ -177,7 +182,7 @@ export function buildReport(records, { rubricVersions = [] } = {}) {
   const ebenen = {};
   for (const level of LEVELS) {
     const rs = sorted.filter((r) => r.ebene === level);
-    if (rs.length > 0) ebenen[level] = levelReport(rs);
+    if (rs.length > 0) ebenen[level] = levelReport(rs, estimator);
   }
   const rRows = sorted.flatMap((r) => r.assertions.filter((a) => a.r_regel !== null).map((a) => ({ r, a })));
   const rPruefungen = groupBy(rRows, (x) => `${x.r.case_id}\u0000${x.r.variante}\u0000${x.a.r_regel}`).map(([, xs]) => {

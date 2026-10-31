@@ -60,6 +60,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/findings.js` | Einheiten, 1:1-Zuordnung erwarteter Befunde, Überberichtung | EVAL-26/-27 |
 | `lib/eval/citecheck.js` | Segmentregister am Commit, Zitate (Permalinks, Fundstellen, Commit-Wörter) gegen Git, Abdeckung | EVAL-28…30 |
 | `lib/eval/contextpack.js` | Kontextpaket: Mustersyntax, Auswahl ohne Symlink-Folgen, Sperren, Datensatz mit Hashes, Markdown-Bündel | EVAL-31…34 |
+| `lib/eval/costbalance.js` | Kostenbilanz: Usage je Turn, Bytes und Bytes × Folgeturns je Ereignisklasse; Berichtsblock mit Differenzen und Kosten je erfülltem Kriterium | EVAL-35…38 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
 | `test/` | je Fall SLV0-FALL-01…46 und -48…72 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
 
@@ -88,7 +89,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 - Inhaltshashes je Paket wie in Übergabe §9, nachgerechnet aus dem Snapshot (`test/repo.test.js`).
 - SLV0-FALL-22: Erwartungswert mit Python `hashlib`/`json` (`sort_keys`, Trenner `,`/`:`, `ensure_ascii=False`) unabhängig berechnet.
 
-## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…34)
+## Eval-Harness (Stufe 2, SLV0-EVAL-01…11, 13…38)
 
 Der Harness bereitet Versuche vor, zählt Starts, bewacht Splits, normalisiert Spuren und baut Berichte aus Rohdaten.
 Er startet keinen Client und kein Modell, nutzt kein Netz und urteilt nicht über Qualität. Baseline-Läufe (EVAL-12)
@@ -186,6 +187,58 @@ alle Meldungen gesammelt, Exit 1 ohne Datensatz und ohne Bündel: `pattern_inval
 `not_regular_file`, `symlink_in_pack`, `path_forbidden` (Standardsperren `**/.git`, `**/.env*`, `**/kandidaten`, ergänzt durch `sperre` und
 `--deny`, nie verkleinert), `nested_repository`, `file_not_text`, `output_exists`. Exit 2 bei fehlender oder schemawidriger Allowlist,
 ungültigem `--root`, unbekanntem Schätzer oder fehlendem Zielordner.
+
+Kostenbilanz je Kontextklasse und Turn (SLV0-EVAL-35…38, Paket P4; Spec §7.7):
+
+```sh
+$B eval normalize --trace spur.jsonl > spur.sl.json            # + cost_balance: Usage je Turn, Bytes je Ereignisklasse
+$B eval raw --meta meta.json --normalized spur.sl.json > raw/RUN-1.json   # übernimmt sie als kostenbilanz
+$B eval report raw/ [--estimator utf8-bytes-div-4@1] > bericht.json        # je Ebene: kostenbilanz.je_variante, .differenzen
+```
+
+Der Bericht nennt je Variante Turns, Turn-Usage (gemeldet), Rest (Lauf-Usage minus Turn-Summe), Bytes und Bytes × Folgeturns je Klasse
+(`skill_laden`, `datei_lesen`, `tool_ergebnis:<Tool>`, `assistant_text`, `assistant_denken`, `assistant_werkzeugaufruf`, `nutzer_text`,
+`unteragent`, `nicht_zuordenbar`) sowie Kosten je erfülltem Kriterium; dazu Differenzen `B1 − B0` und `K-… − B1` über die gemeinsamen Fälle,
+jeweils mit beiden Werten und Rohdatensatz-IDs. Tokens je Klasse gibt es nur geschätzt (mit `--estimator`), nie gemeldet.
+
+**Methode: den M4-Faktor erklären.** Der M4-Pilot ([Ergebnis](../../research/skills-meta-prompting/eval-runs/E1V-E2-M4-ergebnis-2026-10-30.md))
+nennt 0,84 gegen 0,36 USD Client-Schätzung (×2,3). Mit den neuen Feldern lässt sich ein solcher Faktor zerlegen, sobald rohe Spuren vorliegen:
+
+1. `differenzen[B1−B0].kosten_usd` gibt den Kostenunterschied mit beiden Summen (Faktor = `minuend_wert / subtrahend_wert`, vom Leser gebildet).
+2. `usage_turns` je Feld zeigt, welche Tokenart wächst. Wächst `cache_read_input_tokens` stark und `output_tokens` kaum, ist der Mehraufwand
+   wiederholt gelesener Kontext, nicht Ausgabe. `output_tokens` dabei aus der Lauf-Usage (`usage`) lesen: je Turn meldet der Client sie nicht final (s. u.).
+3. `turns` trennt die zwei Faktoren dieses Kontextanteils: Cache-Lesen B1/B0 = (Turns B1/B0) × (Cache-Lesen je Turn B1/B0).
+4. `klassen[].bytes_mal_folgeturns` zeigt, welche Ereignisklasse den Kontext je Turn vergrößert (z. B. `skill_laden`: Rumpfgröße × Turns danach;
+   „Dauergeladenes kostet Größe × Nachrichten“). Die Summe über die Klassen ist gleich `bytes_mal_folgeturns_gesamt`; die Differenzen je Klasse
+   addieren sich zur Gesamtdifferenz. Systemprompt und Katalog haben keine Bytegröße in der Spur; ihr Anteil zeigt sich nur im Sockel der
+   Eingabe-Usage je Turn (`turns[].usage`).
+5. `kosten_je_erfuelltem_kriterium` stellt den Aufwand neben die bestandenen Assertions derselben Läufe.
+
+Beispielrechnung zur Methode mit den Lauf-Summen aus [`eval-runs/m4/spur-auswertung.json`](../../research/skills-meta-prompting/eval-runs/m4/spur-auswertung.json)
+(je Variante sechs Läufe, wie im Portierungsplan): Turns 24 → 34 (×1,42), Cache-Lesen 84 204 → 196 723 (×2,34), Cache-Erzeugung ×3,38, Output ×1,30.
+Nach Schritt 3 wüchse das Cache-Lesen je Turn um etwa ×1,65; mehr Turns erklären also nur einen Teil. Welche Klasse den größeren Kontext je Turn
+trägt (Schritt 4), ist damit **nicht** belegt: Die gespeicherten M4-Spuren haben das alte Format (`skill-pilot-v1`, ohne Turns und Inhaltsgrößen);
+dort bleiben Turns, Klassen und Turn-Usage `unbekannt`, nur die Kostendifferenz ist bekannt (SLV0-FALL-77). Die Zerlegung braucht neue rohe Spuren.
+
+**Praktisch geprüft an 24 Spuren (31.10.2026, Claude Code 2.1.316).** 20 synthetische grilling-Läufe der E3-Runde 3 und 4 Kanarienläufe
+als rohes stream-json, außerhalb des Repos gelesen, nicht eingecheckt; hier nur Summen (Werkzeugprüfung, keine Aussage über Kandidaten):
+
+- Alle 24 normalisiert, schemagültig, Klassensummen = Gesamt; 109 Turns (1–7 je Spur); eine Antwort kam in bis zu 7 Ereignissen mit gleicher `message.id`.
+- **Rest:** `input_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens` in allen 24 Spuren 0, die Turn-Summe ist dort also gleich der
+  Lauf-Usage. `output_tokens` nie 0: Turn-Summe 9 535 gegen 115 250 im `result` (Rest 26 bis 7 672 je Spur). Die `assistant`-Ereignisse melden die
+  Ausgabe-Tokens nicht final; Output nur aus der Lauf-Usage lesen.
+- **Skill-Rümpfe:** Das `Skill`-Ergebnis ist nur eine Zeile (25 Bytes); der Rumpf (3 605–4 313 Bytes) folgt als eigene Nutzernachricht mit
+  `isSynthetic: true` (20 von 20). Er wird seither als `skill_laden` gezählt (vorher `nutzer_text`); andere Nutzertexte gab es in diesen Spuren nicht.
+- **Bytes × Folgeturns** (gesamt 1 161 706): `datei_lesen` 50,7 %, `skill_laden` 27,8 %, `assistant_werkzeugaufruf` 14,7 %, `tool_ergebnis:Glob` 5,0 %,
+  Rest unter 2 %. `datei_lesen` ist in 21 von 24 Spuren die größte Klasse; Antworttext trägt fast nichts nach (0 %), weil er meist im letzten Turn steht.
+- Die Eingabe des ersten Turns (Systemprompt, Katalog, Auftrag) liegt bei 11 159–11 750 Tokens; dieser Sockel steht in keiner Bytegröße.
+
+**Abgleich mit gespeicherten Spuren (Werkzeugprüfung, keine Aussage über Kandidaten).** Die 20 normalisierten Spuren unter
+`research/skills-meta-prompting/e3/runde-3/laeufe/spuren/` (Branch `research/e3-runde-2`, Commit `3c7873b6`) haben das bisherige Format ohne
+`cost_balance`. Ad hoc (nicht als Test eingecheckt) gegen die erweiterten Schemas geprüft: alle 20 gültig; daraus gebaute Rohdatensätze tragen
+`kostenbilanz: null`; der Bericht ist schemagültig, `report --check` ohne Meldung, Turns und Bytes `null` mit Grund, Kostendifferenzen
+`K-AUFTEILUNG − B1` (sechs Fälle) und `K-LADESTUFEN − B1` (zwei Fälle) mit beiden Summen. Rohe stream-json-Spuren liegen im Repo nicht vor;
+die Tests nutzen nur synthetische.
 
 **Ausgabe und Exit-Codes.** `freeze`, `split manifest`, `normalize`, `raw`, `report` und `context-pack` geben bei Erfolg das Artefakt selbst
 als JSON auf stdout aus (Umleitung in eine Datei durch den Aufrufer); alle anderen Befehle geben einen JSON-Umschlag
@@ -362,8 +415,30 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   unverändert. Tokens nur mit `--estimator` (SLV0-TOK-04), sonst `unbekannt`; der Paket-Hash hängt nicht vom Schätzer ab.
 - **Wurzel und Ausgabe:** Der Datensatz nennt weder Wurzel noch Bündelpfad (SLV0-INV-03); `allowlist.sha256` bindet ihn an die Allowlist-Bytes.
 
+### Auslegungen zur Kostenbilanz (SLV0-EVAL-35…38)
+
+- **Turn:** gleiche `message.id` der Hauptsitzung; Usage vom letzten Ereignis des Turns (der Client wiederholt die Usage je Inhaltsblock).
+  Ereignisse mit `parent_tool_use_id` sind keine Turns; ihre Usage steht nur im Rest, ihre Blöcke in `unteragent` mit 0 Folgeturns.
+- **Rest statt Abgleich:** An 24 Spuren (Claude Code 2.1.316) ist der Rest für die Eingabefelder 0, für `output_tokens` nicht (Spec O-15). Darum wird
+  nichts erzwungen: Der Rest ist vorzeichenbehaftet und zeigt jede Abweichung. Die Invariante gilt exakt für Bytes; für Tokens gilt
+  Turn-Summe + Rest = Gesamt, sobald beide bekannt sind.
+- **Skill-Rumpf als Nachricht:** Text eines `user`-Ereignisses mit `isSynthetic: true` zwischen einem erfolgreichen `Skill`-Ergebnis und dem nächsten
+  `assistant`-Ereignis zählt als `skill_laden`; nach einem fehlgeschlagenen Aufruf oder ohne `Skill`-Ergebnis bleibt er `nutzer_text`.
+- **Bytes:** UTF-8-Länge der Nutzlast, nicht des JSON-Ereignisses; Werkzeugaufrufe als JSON ihrer Eingabe. Nicht erkannte Blöcke zählen mit
+  ihrem ganzen JSON in `nicht_zuordenbar`, damit die Summe vollständig bleibt.
+- **Folgeturns** sind eine Obergrenze der Dauerlast: Der Client kann Denkblöcke oder alte Ergebnisse in späteren Eingaben kürzen; das ist in
+  der Spur nicht sichtbar.
+- **Differenzen** nur über Fälle mit Läufen beider Seiten; ungleiche Laufzahlen je Seite werden nicht ausgeglichen (beide ID-Listen stehen dabei).
+  Ein Lauf ohne Bilanz macht Turns, Bytes und Rest seiner Seite unbekannt; die Kosten kommen aus der Lauf-Usage und bleiben bekannt.
+- **Kosten je erfülltem Kriterium:** erfüllt = bestandene Assertion ohne `r_regel` (deterministisch und Rubrik zusammen), Nenner der Zählung sind alle
+  Assertions ohne `r_regel`; R-Assertions zählen nie. Ohne bestandene Assertion oder mit einem Lauf ohne Kostenschätzung `unbekannt`.
+- **Format:** `normalizer` bleibt `sl-eval-normalize@1`, die neuen Felder sind optional (frühere Spuren, Rohdatensätze und Berichte bleiben gültig).
+
 ## Nicht umgesetzt
 
+- Kostenbilanz: Systemprompt und Skill-Katalog haben keine eigene Klasse (keine Bytegröße in der Spur); die Skill-Ladeform ist nur für Claude Code
+  2.1.316 geprüft, Unteragenten an echten Spuren gar nicht (Spec O-15). Kein Preismodell: Kosten nur als Client-Schätzung,
+  keine Umrechnung von Tokens in USD. Keine Faktoren oder Anteile im Bericht; Quotienten bildet der Leser.
 - Keine Bewertung: Weder Harness noch Rubrik urteilen; Bewerter-Session, Modellfixierung und menschliche Stichprobe (SL1 §7)
   bleiben außerhalb des Werkzeugs (Spec O-10).
 - Keine Versionshistorie von Rubriken: Ob eine Kriterienänderung eine neue `rubrik_version` bekam, prüft das Werkzeug nicht

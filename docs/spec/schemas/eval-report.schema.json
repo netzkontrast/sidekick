@@ -91,6 +91,170 @@
     }
   },
   "$defs": {
+    "wertfeld": {
+      "type": "object",
+      "description": "Ein Wert mit den Rohdatensätzen seiner Population; null mit Grund in beleg, wenn unbekannt (nie 0).",
+      "required": ["wert", "rohdatensatz_ids", "beleg"],
+      "additionalProperties": false,
+      "properties": { "wert": { "type": ["number", "null"] }, "rohdatensatz_ids": { "$ref": "#/$defs/ids" }, "beleg": { "type": ["string", "null"] } }
+    },
+    "differenz": {
+      "type": "object",
+      "description": "Minuendwert minus Subtrahendwert über die gemeinsamen Fälle (SLV0-EVAL-37); null, wenn eine Seite unbekannt ist oder Methoden sich unterscheiden.",
+      "required": ["wert", "minuend_wert", "subtrahend_wert", "rohdatensatz_ids", "beleg"],
+      "additionalProperties": false,
+      "properties": {
+        "wert": { "type": ["number", "null"] },
+        "minuend_wert": { "type": ["number", "null"] },
+        "subtrahend_wert": { "type": ["number", "null"] },
+        "rohdatensatz_ids": { "$ref": "#/$defs/ids" },
+        "beleg": { "type": ["string", "null"] }
+      }
+    },
+    "zahl_oder_null": {
+      "type": ["object", "null"],
+      "required": ["zaehler", "nenner", "rohdatensatz_ids"],
+      "additionalProperties": false,
+      "properties": { "zaehler": { "type": "integer", "minimum": 0 }, "nenner": { "type": "integer", "minimum": 1 }, "rohdatensatz_ids": { "$ref": "#/$defs/ids" } }
+    },
+    "kostenbilanz": {
+      "type": "object",
+      "description": "Kostenbilanz je Ebene (SLV0-EVAL-37/-38, Spec §7.7). Optional, damit frühere Berichte gültig bleiben; der Harness setzt den Block immer.",
+      "required": ["je_variante", "differenzen"],
+      "additionalProperties": false,
+      "properties": {
+        "je_variante": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["variante", "laeufe_mit_bilanz", "turns", "usage_turns", "usage_rest", "bytes_gesamt", "bytes_mal_folgeturns_gesamt", "klassen", "kosten_je_erfuelltem_kriterium"],
+            "additionalProperties": false,
+            "properties": {
+              "variante": { "type": "string" },
+              "laeufe_mit_bilanz": { "$ref": "#/$defs/zahl" },
+              "turns": { "$ref": "#/$defs/wertfeld" },
+              "usage_turns": {
+                "type": "object",
+                "description": "Summe der Turn-Usage nach SLV0-TOK-05.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/tokensumme" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/tokensumme" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/tokensumme" },
+                  "output_tokens": { "$ref": "#/$defs/tokensumme" }
+                }
+              },
+              "usage_rest": {
+                "type": "object",
+                "description": "Summe der Reste (Lauf-Usage minus Turn-Summe), vorzeichenbehaftet.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/wertfeld" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/wertfeld" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/wertfeld" },
+                  "output_tokens": { "$ref": "#/$defs/wertfeld" }
+                }
+              },
+              "bytes_gesamt": { "$ref": "#/$defs/wertfeld" },
+              "bytes_mal_folgeturns_gesamt": { "$ref": "#/$defs/wertfeld" },
+              "klassen": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["klasse", "bloecke", "bytes", "bytes_mal_folgeturns", "tokens"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "klasse": {
+                      "type": "string",
+                      "pattern": "^(skill_laden|datei_lesen|assistant_text|assistant_denken|assistant_werkzeugaufruf|nutzer_text|unteragent|nicht_zuordenbar|tool_ergebnis:[A-Za-z0-9_.:-]{1,128})$"
+                    },
+                    "bloecke": { "$ref": "#/$defs/wertfeld" },
+                    "bytes": { "$ref": "#/$defs/wertfeld" },
+                    "bytes_mal_folgeturns": { "$ref": "#/$defs/wertfeld" },
+                    "tokens": { "$ref": "#/$defs/tokensumme" }
+                  }
+                }
+              },
+              "kosten_je_erfuelltem_kriterium": {
+                "type": "object",
+                "description": "Summe der Client-Kostenschätzung geteilt durch die bestandenen Assertions ohne r_regel (SLV0-EVAL-38).",
+                "required": ["wert", "quelle", "kosten_usd", "erfuellte_kriterien", "rohdatensatz_ids", "beleg"],
+                "additionalProperties": false,
+                "properties": {
+                  "wert": { "type": ["number", "null"], "minimum": 0 },
+                  "quelle": { "enum": ["berechnet", "unbekannt"] },
+                  "kosten_usd": { "$ref": "#/$defs/wertfeld" },
+                  "erfuellte_kriterien": { "$ref": "#/$defs/zahl_oder_null" },
+                  "rohdatensatz_ids": { "$ref": "#/$defs/ids" },
+                  "beleg": { "type": ["string", "null"] }
+                }
+              }
+            }
+          }
+        },
+        "differenzen": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["minuend", "subtrahend", "case_ids", "minuend_ids", "subtrahend_ids", "turns", "usage_turns", "usage_rest", "bytes_gesamt", "bytes_mal_folgeturns_gesamt", "klassen", "kosten_usd"],
+            "additionalProperties": false,
+            "properties": {
+              "minuend": { "type": "string" },
+              "subtrahend": { "type": "string" },
+              "case_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "minuend_ids": { "$ref": "#/$defs/ids" },
+              "subtrahend_ids": { "$ref": "#/$defs/ids" },
+              "turns": { "$ref": "#/$defs/differenz" },
+              "usage_turns": {
+                "type": "object",
+                "description": "Differenz der Turn-Usage je Feld.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/differenz" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/differenz" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/differenz" },
+                  "output_tokens": { "$ref": "#/$defs/differenz" }
+                }
+              },
+              "usage_rest": {
+                "type": "object",
+                "description": "Differenz der Reste je Feld.",
+                "required": ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"],
+                "additionalProperties": false,
+                "properties": {
+                  "input_tokens": { "$ref": "#/$defs/differenz" },
+                  "cache_creation_input_tokens": { "$ref": "#/$defs/differenz" },
+                  "cache_read_input_tokens": { "$ref": "#/$defs/differenz" },
+                  "output_tokens": { "$ref": "#/$defs/differenz" }
+                }
+              },
+              "bytes_gesamt": { "$ref": "#/$defs/differenz" },
+              "bytes_mal_folgeturns_gesamt": { "$ref": "#/$defs/differenz" },
+              "klassen": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["klasse", "bytes", "bytes_mal_folgeturns"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "klasse": {
+                      "type": "string",
+                      "pattern": "^(skill_laden|datei_lesen|assistant_text|assistant_denken|assistant_werkzeugaufruf|nutzer_text|unteragent|nicht_zuordenbar|tool_ergebnis:[A-Za-z0-9_.:-]{1,128})$"
+                    },
+                    "bytes": { "$ref": "#/$defs/differenz" },
+                    "bytes_mal_folgeturns": { "$ref": "#/$defs/differenz" }
+                  }
+                }
+              },
+              "kosten_usd": { "$ref": "#/$defs/differenz" }
+            }
+          }
+        }
+      }
+    },
     "ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "zahl": {
       "type": "object",
@@ -246,7 +410,8 @@
               "cache_creation_input_tokens": { "$ref": "#/$defs/tokensumme" }
             }
           }
-        }
+        },
+        "kostenbilanz": { "$ref": "#/$defs/kostenbilanz" }
       }
     }
   }

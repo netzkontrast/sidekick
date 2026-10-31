@@ -32,6 +32,8 @@ Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo
   („X von Y Dateien belegt; nicht belegt: …“; Exit 1 bei falschem SHA, Bereich hinter dem Dateiende oder fehlender Datei). Einzeltest: `node --test tools/skill-library/test/eval-citecheck.test.js`
 - Kontextpaket für eine Clean-Room-Session: `node tools/skill-library/cli.js eval context-pack --allowlist ALLOWLIST.json [--root VERZ] [--deny MUSTER]… [--estimator utf8-bytes-div-4@1] [--output NEUE-DATEI.md]`
   (Datensatz mit Dateihashes auf stdout; Exit 1 ohne Paket bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink oder gesperrtem Pfad wie `kandidaten/`). Einzeltest: `node --test tools/skill-library/test/eval-contextpack.test.js`
+- Kostenbilanz je Kontextklasse und Turn: `node tools/skill-library/cli.js eval report RAW-VERZ [--estimator utf8-bytes-div-4@1]`
+  (Block `kostenbilanz` je Ebene: Turns, Turn-Usage, Rest, Bytes × Folgeturns je Klasse, B1−B0, Kosten je erfülltem Kriterium). Einzeltest: `node --test tools/skill-library/test/eval-costbalance.test.js`
 - Rubriken prüfen: `node tools/skill-library/cli.js eval rubric check` (alle Dateien unter `docs/research/rubriken/`
   gegen die aktuellen Paket-Hashes; Exit 1 z. B. bei `rubric_stale`). Einzeltest: `node --test tools/skill-library/test/eval-rubric.test.js`
 - Snapshot mit Git-Abgleich: `node tools/skill-library/cli.js eval freeze --source-commit "$(git rev-parse HEAD)" --verify-git`

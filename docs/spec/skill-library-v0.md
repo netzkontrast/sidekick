@@ -9,6 +9,7 @@
 > Version 0.3 · 31.10.2026 · Ergänzung **SLV0-EVAL-19…27** nach den Paketen P1–P3 des Portierungsplans (`research/skills-meta-prompting/portierungsplan-2026-10-31.md`, Research-Branch `research/e3-runde-2`, PR #20): belegpflichtige Bewertungen, Nulllauf-Trennschärfe mit Gegenkriterium und B1-Vorlauf, erwartete Befunde mit Überberichtung; Formate §7.2–§7.4, Fälle **SLV0-FALL-48…59** (§9.1). Bestehende IDs unverändert.
 > Version 0.4 · 31.10.2026 · Ergänzung **SLV0-EVAL-28…30** nach Paket P5 des Portierungsplans (Abdeckungsnachweis über ein Segmentregister, Konzept aus recursive-decomposition-skill): `eval cite-check` prüft die Zitate eines Berichts gegen einen Git-Commit; Format §7.5, Fälle **SLV0-FALL-60…65** (§9.2); O-13 teilweise gelöst. Bestehende IDs unverändert.
 > Version 0.5 · 31.10.2026 · Ergänzung **SLV0-EVAL-31…34** nach Paket P11 des Portierungsplans (Kontextpaket als Datensatz, Konzept aus code2prompt, bei uns fail-closed): `eval context-pack` wählt Dateien nur über eine Allowlist, bricht bei ungültigem Muster, leerem Treffer, fehlender Datei, Symlink, Ausbruch oder verbotenem Pfad ab und gibt einen Datensatz mit Hashes aus; Format §7.6, Fälle **SLV0-FALL-66…72** (§9.3), offener Punkt O-14. Bestehende IDs unverändert.
+> Version 0.6 · 31.10.2026 · Ergänzung **SLV0-EVAL-35…38** nach Paket P4 des Portierungsplans (Kostenbilanz je Kontextklasse × Turns, Konzept aus skill-cost-optimizer): `eval normalize` behält Usage je Turn und Bytegrößen je Ereignisklasse, `eval raw` übernimmt sie, `eval report` zeigt Summen und Differenzen je Klasse sowie Kosten je erfülltem Kriterium; Format §7.7, Fälle **SLV0-FALL-73…77** (§9.4). Alle neuen Felder sind optional; bestehende IDs, Spuren, Rohdatensätze und Berichte bleiben gültig.
 
 **Belege, keine Garantien.** Die Anforderungen stützen sich auf die Research-Ergebnisse SL1–SL5 des
 [Library-Research-Plans](../../research/skills-meta-prompting/library-research-plan.md). Dort Gemessenes ist ein Diagnosehinweis
@@ -180,6 +181,10 @@ Er startet keinen Client (SLV0-INV-04) und urteilt nicht über Qualität (SLV0-I
 | SLV0-EVAL-32 | **Auswahl fail-closed:** Jedes Muster muss mindestens eine reguläre Datei treffen. Ein Pfad-Muster ohne Datei (auch bei abweichender Groß- und Kleinschreibung) → `file_missing`; ein Pfad-Muster auf ein Verzeichnis oder eine andere Nicht-Datei → `not_regular_file`; ein Glob ohne Treffer → `pattern_unmatched`. Ein Symlink im Pfad eines Treffers oder ein Symlink, den ein Glob trifft oder durchlaufen müsste → `symlink_in_pack`; Symlinks werden nie verfolgt. Liegt ein Treffer unter einem gesperrten Pfad (§7.6: Standardsperren `**/.git`, `**/.env*`, `**/kandidaten`, ergänzt durch `sperre` und `--deny`, nie verkleinert) → `path_forbidden`, ohne die Datei zu lesen; liegt er unter einem Unterordner mit eigenem `.git` (fremdes oder eingebettetes Repository) → `nested_repository`. Eine Datei, die kein UTF-8-Text ist (ungültige Folge oder NUL-Byte) → `file_not_text`. Alle Meldungen werden gesammelt; schon eine führt zu Exit 1 ohne Datensatz und ohne Darstellung. Es gibt weder ein leeres Paket noch ein Paket „alles“. | fehlt |
 | SLV0-EVAL-33 | **Datensatz:** Bei Erfolg gibt `eval context-pack` den Datensatz nach [eval-context-pack.schema.json](schemas/eval-context-pack.schema.json) auf stdout aus: Hash der Allowlist-Datei, `ziel`, `rolle`, Muster mit Trefferzahl, wirksame Sperrliste, je Datei Pfad (relativ zur Wurzel, `/`), SHA-256 der unveränderten Bytes, Bytes, Zeilen, Tokenzahl nach SLV0-TOK-01/-04 (ohne `--estimator` `unbekannt`, sonst `geschaetzt` mit Methode) und die Indizes der Muster, die sie treffen; Dateien kommen je nur einmal vor und sind nach Codepoint sortiert. `kontextpaket_sha256` ist der Hash nach der Formel aus SLV0-PKG-22 über `{<Pfad>: <Dateihash>}`. Der Datensatz enthält keinen Zeitstempel und keinen absoluten Pfad; gleiche Eingabebytes ergeben einen byte-gleichen Datensatz (SLV0-INV-03). Die Tokenzahl ist eine Schätzung, kein Messwert (SLV0-TOK-07). | fehlt |
 | SLV0-EVAL-34 | **Darstellung erst nach dem Datensatz:** Mit `--output DATEI` wird zusätzlich ein Markdown-Bündel nach §7.6 geschrieben, und zwar nur aus dem fertigen Datensatz und nur, wenn die Auswahl vollständig gelungen ist. Die Datei wird exklusiv neu angelegt; existiert der Pfad schon (auch als Symlink) → `output_exists`, nichts wird geschrieben oder überschrieben. Der Datensatz nennt dann Format, SHA-256 und Bytes des Bündels, nicht dessen Pfad. Außer dieser Datei schreibt der Befehl nichts; ohne `--output` liest er nur. | fehlt |
+| SLV0-EVAL-35 | **Usage je Turn:** Die Normalisierung einer rohen Spur setzt zusätzlich `cost_balance` (§7.7). Ein Turn ist eine Modellantwort der Hauptsitzung: alle `assistant`-Ereignisse ohne `parent_tool_use_id` mit gleicher `message.id` (ohne `message.id` je Ereignis ein Turn), gezählt in der Reihenfolge des ersten Auftretens. Usage des Turns sind die vier Felder `input_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`, `output_tokens` aus `message.usage` des **letzten** Ereignisses des Turns, so wie gemeldet; ein fehlendes Feld ist `null` (unbekannt, nie 0). Die Turn-Summe je Feld ist `null`, sobald ein Turn das Feld nicht meldet oder es keinen Turn gibt. Der Rest je Feld ist Gesamt-Usage der Spur (SLV0-EVAL-08) minus Turn-Summe, vorzeichenbehaftet, `null`, wenn eines davon unbekannt ist; er zeigt Usage, die keinem Turn der Hauptsitzung zugeordnet ist (z. B. Unteragenten) oder je Turn nicht final gemeldet wurde (`output_tokens` bei Claude Code 2.1.316, O-15). Beim Import aus `skill-pilot-v1` ist `cost_balance` `null`. | fehlt (nur Lauf-Usage, SLV0-TOK-06) |
+| SLV0-EVAL-36 | **Größen je Ereignisklasse:** Jeder Inhaltsblock der `assistant`- und `user`-Ereignisse gehört zu genau einer Klasse (§7.7): `skill_laden`, `datei_lesen`, `tool_ergebnis:<Tool>`, `assistant_text`, `assistant_werkzeugaufruf`, `assistant_denken`, `nutzer_text`, `unteragent` oder `nicht_zuordenbar`. Je Klasse stehen Blockzahl, Bytes (UTF-8, exakt) und Bytes × Folgeturns (Zahl der späteren Turns der Hauptsitzung, deren Eingabe den Block enthält; „Dauergeladenes kostet Größe × Nachrichten“). **Invariante:** Die Summen über alle Klassen sind gleich `bytes_total` bzw. `bytes_x_later_turns_total`; was keiner benannten Klasse zugeordnet werden kann, steht in `nicht_zuordenbar`, nie in keiner Klasse. Ausgegeben werden nur Größen, nie Inhalte (SLV0-EVAL-08). Tokens je Klasse meldet kein Client; sie sind `unbekannt` oder nach SLV0-TOK-04 mit benanntem Schätzer `geschaetzt` und werden nie mit gemeldeter Usage verrechnet. | fehlt |
+| SLV0-EVAL-37 | **Kostenbilanz in Rohdatensatz und Bericht:** `eval raw` übernimmt `cost_balance` als `kostenbilanz` (abgeleitet, nicht aus Metadaten; `null` ohne Bilanz). `eval report [--estimator NAME]` weist je Ebene und Variante aus: Läufe mit Bilanz, Turns, Turn-Usage nach SLV0-TOK-05, Rest, Bytes und Bytes × Folgeturns je Klasse und gesamt, Tokens je Klasse (geschätzt oder `unbekannt`). Differenzen gibt es für `B1` − `B0` und für jeden Kandidaten `K-…` − `B1`, nur über Fälle mit Läufen beider Varianten auf derselben Ebene; jede Differenz nennt Minuend, Subtrahend, beide Werte und die Rohdatensatz-IDs beider Seiten. Ein Lauf ohne Bilanz macht jeden Wert seiner Population `unbekannt` (`null` mit Grund), nie 0; innerhalb eines Laufs mit Bilanz ist eine fehlende Klasse 0 Bytes. Kein Quotient außer SLV0-EVAL-38, kein Score, keine Empfehlung. Ältere Rohdatensätze ohne das Feld bleiben gültig und gelten als ohne Bilanz. | fehlt |
+| SLV0-EVAL-38 | **Kosten je erfülltem Kriterium:** je Ebene und Variante die Summe der `kosten_client_schaetzung` (SLV0-TOK-08) geteilt durch die Zahl der bestandenen Assertions ohne `r_regel` (deterministisch und Rubrik) aus den Rohdatensätzen. Der Wert ist `unbekannt`, wenn ein Lauf keine Kostenschätzung hat oder keine Assertion bestanden ist; Kosten, Zähler (bestanden) und Nenner (alle Assertions ohne `r_regel`) stehen mit Rohdatensatz-IDs daneben. R-Assertions zählen nie mit (SLV0-EVAL-11). | fehlt (K7.7 offen) |
 
 ### 7.1 Rubrikformat (SLV0-EVAL-13)
 
@@ -345,6 +350,39 @@ SHA-256 des Bündels. Ein Leser kann so jede Datei aus dem Bündel lösen und ge
 **Bedienfehler (Exit 2):** Allowlist fehlt, ist kein JSON oder verletzt ihr Schema; `--root` ist kein Verzeichnis (auch kein Symlink darauf);
 unbekannter Schätzer; der Ordner von `--output` fehlt. Ein Muster ist kein Bedienfehler, sondern Inhalt der Allowlist: seine Fehler sind Codes mit Exit 1.
 
+### 7.7 Kostenbilanz je Kontextklasse und Turn (SLV0-EVAL-35…38)
+
+`eval normalize` ergänzt die normalisierte Spur um `cost_balance`; `eval raw` übernimmt sie als `kostenbilanz`; `eval report` bildet daraus
+den Block `kostenbilanz` je Ebene. Alle drei Felder sind in den Schemas optional, damit frühere Artefakte gültig bleiben; die Werkzeuge setzen sie immer
+(bei Spuren ohne Rohformat als `null`).
+
+**Turns.** Gezählt werden `assistant`-Ereignisse, deren `parent_tool_use_id` fehlt oder `null` ist. Ereignisse mit gleicher `message.id` bilden einen Turn
+(der Client zerlegt eine Antwort in mehrere Ereignisse und wiederholt dabei die Usage); maßgeblich ist das letzte Ereignis. `N` ist die Zahl der Turns.
+
+**Blöcke und Bytes.** Betrachtet werden die Inhalte (`message.content`) aller `assistant`- und `user`-Ereignisse; ein Inhalt als Zeichenkette ist ein Block.
+Gemessen wird die UTF-8-Länge der Nutzlast: `text` bei Textblöcken, `thinking` bzw. `data` bei Denkblöcken, das JSON von `input` (ohne Leerraum) bei
+Werkzeugaufrufen, bei Werkzeugergebnissen der Inhalt (Zeichenkette; bei einer Liste je Element `text` oder sonst das JSON des Elements; fehlend 0),
+bei allen anderen Blöcken das JSON des ganzen Blocks.
+
+| Klasse | Blöcke |
+|---|---|
+| `skill_laden` | Ergebnis eines `Skill`-Aufrufs; Ergebnis eines `Read` auf `.agents/skills/<name>/SKILL.md` bzw. `.claude/skills/<name>/SKILL.md` (wie SLV0-EVAL-08); Text-Blöcke eines `user`-Ereignisses der Hauptsitzung mit `isSynthetic: true`, das nach einem erfolgreichen `Skill`-Ergebnis und vor dem nächsten `assistant`-Ereignis steht (so spielt Claude Code 2.1.316 den Skill-Rumpf ein) |
+| `datei_lesen` | Ergebnis eines anderen `Read` |
+| `tool_ergebnis:<Tool>` | Ergebnis eines anderen Werkzeugs; `<Tool>` ist dessen Name (`[A-Za-z0-9_.:-]`, höchstens 128 Zeichen) |
+| `assistant_text`, `assistant_denken`, `assistant_werkzeugaufruf` | Text-, Denk- (`thinking`, `redacted_thinking`) und Werkzeugaufruf-Blöcke der Hauptsitzung |
+| `nutzer_text` | Text-Blöcke und Zeichenketten-Inhalte von `user`-Ereignissen der Hauptsitzung |
+| `unteragent` | jeder Block eines Ereignisses mit gesetzter `parent_tool_use_id` |
+| `nicht_zuordenbar` | Werkzeugergebnis ohne bekannten Aufruf oder mit ungültigem Werkzeugnamen, unbekannter Blocktyp, Block, der kein Objekt ist |
+
+**Folgeturns.** Ein Block eines `assistant`-Ereignisses aus Turn `k` und ein Block eines `user`-Ereignisses, vor dem `k` Turns begonnen haben, steht in der
+Eingabe der Turns `k+1 … N`; seine Folgeturns sind `N − k`. Blöcke der Klasse `unteragent` haben 0 Folgeturns. Der Systemprompt und der Skill-Katalog
+erscheinen in der Spur nicht als Inhalt; ihr Anteil steckt nur in der gemeldeten Eingabe-Usage je Turn.
+
+**Bericht.** Je Ebene: `je_variante` (Felder nach SLV0-EVAL-37/-38) und `differenzen` (`minuend`, `subtrahend`, `case_ids`, Rohdatensatz-IDs beider Seiten,
+Differenzen für Turns, Turn-Usage, Rest, Bytes und Bytes × Folgeturns gesamt und je Klasse, Kosten). Turn-Usage folgt SLV0-TOK-05/-06 (`gemeldet`,
+Methode `client-usage@<modell>`); verschiedene Methoden ergeben eine unbekannte Differenz. Tokens je Klasse werden aus der Bytesumme der Klasse mit dem
+gewählten Schätzer gebildet, ohne Schätzer `unbekannt`.
+
 ## 8. Fehlerfälle
 
 Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und, wo sinnvoll, Zeile.
@@ -358,6 +396,7 @@ Codes sind stabile Bezeichner (Englisch, wie Code). Jeder Fehler nennt Pfad und,
 | Adapter | `adapter_missing`, `adapter_link_invalid`, `adapter_orphaned` | nur Bereich Projekt |
 | Registry | `registry_invalid`, `hash_mismatch`, `version_hash_conflict` | Datensatz ungültig; nichts wird korrigiert |
 | Eval | `snapshot_hash_mismatch`, `candidate_baseline_mismatch`, `candidate_multi_dimension`, `replacement_not_unique`, `workspace_exists`, `config_overwrite`, `budget_exhausted`, `ledger_locked`, `family_split_overlap`, `split_access_denied`, `split_consumed`, `trace_invalid`, `report_without_raw` | Vorgang abgebrochen, kein Teilergebnis gilt als Erfolg |
+| Kostenbilanz | kein eigener Code (SLV0-EVAL-35…38): Unbekanntes ist `null` mit Grund; ein unbekannter Schätzer bei `eval report --estimator` ist ein Bedienfehler (Exit 2) | Bericht wird erzeugt; nichts wird zu 0 ergänzt |
 | Rubrik | `rubric_invalid`, `rubric_id_duplicate`, `rubric_stale`, `rubric_mismatch`, `rubric_version_mixed` | Prüfung fehlgeschlagen bzw. Rohdatensatz oder Bericht nicht erzeugt; nichts wird neu gebunden |
 | Querprüfung | `ledger_mismatch`, `case_not_in_manifest`, `case_hash_mismatch`, `source_commit_mismatch`, `worktree_dirty` | Vorgang abgebrochen; Ledger, Manifest und Git-Stand bleiben unverändert |
 | Belege, Trennschärfe | `evidence_not_found`, `evidence_missing` · Warnung `evidence_unquoted` (SLV0-EVAL-21) · Warnung `no_discriminating_check` (SLV0-EVAL-23/-24) · `family_not_discriminating`, `core_verdict_unclear` (SLV0-EVAL-25) | Belegprüfung fehlgeschlagen bzw. kein Kandidatenstart in select (Exit 1); Warnungen ändern den Exit-Code nicht; nichts wird korrigiert oder neu bewertet |
@@ -471,6 +510,18 @@ Jeder Test legt einen synthetischen Dateibaum in einem temporären Verzeichnis a
 | SLV0-FALL-71 | Darstellung: Lauf mit `--output paket.md`, Datei mit Backtick-Zaun im Inhalt und Datei ohne abschließenden Zeilenumbruch; zweiter Lauf mit demselben `--output`; Lauf mit Fehler und `--output` | Bündel enthält Kopf mit Paket-Hash und je Datei Pfad, Hash und Inhalt in Datensatzreihenfolge; jede herausgelöste Datei hat den Hash aus dem Datensatz; `bundle.sha256` gleich Hash der Datei; zweiter Lauf `output_exists`, Datei unverändert; bei Fehler entsteht keine Datei | EVAL-34 |
 | SLV0-FALL-72 | Bedienung und Lesend: Allowlist fehlt; kein JSON; Schema verletzt (`eingaben` leer); unbekannter Schätzer; `--root` ist Datei; Ordner von `--output` fehlt. Dateibaum vor und nach einem erfolgreichen Lauf ohne `--output` | Exit 2 (6×); Baum unverändert (gleiche Pfade, Bytes) | EVAL-31…34, INV-08 |
 
+### 9.4 Fälle zu SLV0-EVAL-35…38
+
+Alle Spuren sind synthetisches stream-json, im Test erzeugt; -77 liest gespeicherte Research-Spuren im Repo.
+
+| ID | Fall | Erwartung | Deckt |
+|---|---|---|---|
+| SLV0-FALL-73 | Spur mit drei Turns, davon einer über zwei Ereignisse mit gleicher `message.id`; Ergebnisse von `Skill`, `Read` auf `SKILL.md`, `Read` auf eine andere Datei und `Bash`; Text-, Denk- und Werkzeugaufruf-Blöcke; unbekannter Blocktyp; Ergebnis ohne bekannten Aufruf; Ereignis eines Unteragenten; Gesamt-Usage größer als die Turn-Summe; Skill-Rumpf als synthetische Nutzernachricht nach einem `Skill`-Ergebnis, synthetische Nachricht nach einem fehlgeschlagenen `Skill`-Aufruf bzw. ohne `Skill`-Ergebnis | drei Turns mit der Usage des jeweils letzten Ereignisses; Bytes und Bytes × Folgeturns je Klasse wie im Test nachgerechnet; Summe über die Klassen = Gesamt; Turn-Summe + Rest = Gesamt-Usage; keine Inhalte in der Ausgabe; Schema gültig; Rumpf in `skill_laden`, die beiden anderen Nachrichten in `nutzer_text` | EVAL-35/-36 |
+| SLV0-FALL-74 | Ein Turn ohne `usage`; Spur ohne `result`; leere Spur; Import `skill-pilot-v1` | Turn-Usage `null`, Summe und Rest `null`; Rest `null`; keine Turns, Summen `null`, 0 Bytes; `cost_balance: null`. Im Bericht jeweils `unbekannt`/`null` mit Grund, nie 0 | EVAL-35/-37 |
+| SLV0-FALL-75 | Bericht über B0, B1 und `K-X` auf zwei Fällen, ein weiterer Fall nur mit B1; mit und ohne `--estimator utf8-bytes-div-4@1`; ein Rohdatensatz ohne `kostenbilanz` | Differenzen `B1 − B0` und `K-X − B1` nur über die gemeinsamen Fälle, mit beiden Werten und Rohdatensatz-IDs; je Klasse Summe der Bytes, fehlende Klasse 0; Tokens je Klasse `geschaetzt` bzw. `unbekannt`; der Lauf ohne Bilanz macht die Werte seiner Variante `null`; Bericht schemagültig, `report --check` Exit 0 | EVAL-37 |
+| SLV0-FALL-76 | Kosten je erfülltem Kriterium: Kosten bekannt, drei bestandene von vier Assertions und eine R-Assertion; ein Lauf ohne Kostenschätzung; keine bestandene Assertion | Wert = Kosten / 3, Zähler 3, Nenner 4; `unbekannt`; `unbekannt` | EVAL-38 |
+| SLV0-FALL-77 | Gespeicherte Spuren `research/skills-meta-prompting/eval-runs/` (Format `skill-pilot-v1`) über `raw` und `report` | Rohdatensätze und Bericht schemagültig; `kostenbilanz` `null`; Turns, Bytes und Turn-Usage im Bericht `null` mit Grund; Lauf-Usage unverändert `gemeldet` | EVAL-35/-37, Abwärtsverträglichkeit |
+
 ## 10. Abgrenzung
 
 - **Keine Aktivierung durch Code.** Aktivieren heißt im Repo: Owner mergt einen PR am geprüften Hash (SL4 §5). Werkzeuge liefern Belege, keine Freigaben.
@@ -487,7 +538,7 @@ Jeder Test legt einen synthetischen Dateibaum in einem temporären Verzeichnis a
 | [eval-snapshot.schema.json](schemas/eval-snapshot.schema.json) | Snapshot (SLV0-EVAL-01/-02), Form des Research-Helfers | [skill-pilot-baseline-v2.json](../../research/skills-meta-prompting/skill-pilot-baseline-v2.json) |
 | [eval-ledger.schema.json](schemas/eval-ledger.schema.json) | Eine Ledger-Zeile: Kopf, Reservierung, Ergebnis, Splitzugriff, Auswahl (SLV0-EVAL-05/-07) | Tests unter `tools/skill-library/test/` |
 | [eval-split-manifest.schema.json](schemas/eval-split-manifest.schema.json) | Split-Manifest (SLV0-EVAL-06) | Tests |
-| [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08) | Tests |
+| [eval-normalized-trace.schema.json](schemas/eval-normalized-trace.schema.json) | Normalisierte Spur, Positivliste (SLV0-EVAL-08), optional mit Kostenbilanz (SLV0-EVAL-35/-36) | Tests |
 | [eval-raw-record.schema.json](schemas/eval-raw-record.schema.json) | Rohdatensatz je Start (SLV0-EVAL-09, SL1 §8) | Tests |
 | [eval-report.schema.json](schemas/eval-report.schema.json) | Bericht nur aus Rohdaten, ohne Score- und Empfehlungsfeld (SLV0-EVAL-10/-11), mit Rubrikversionen (SLV0-EVAL-15) | Tests |
 | [eval-rubric.schema.json](schemas/eval-rubric.schema.json) | Rubrik je Skill (SLV0-EVAL-13, §7.1) | [docs/research/rubriken/](../research/rubriken/) |
@@ -502,6 +553,8 @@ Jeder Test legt einen synthetischen Dateibaum in einem temporären Verzeichnis a
 
 Rohdatensatz und Bericht tragen seit Version 0.3 die optionalen Felder `trennschaerfe` und `rolle` (Assertion) bzw. `nulllauf`, `konjunktiv` und
 `hinweise` (SLV0-EVAL-24). Sie sind optional, damit frühere Rohdatensätze und Berichte gültig bleiben; der Harness setzt sie immer.
+Seit Version 0.6 tragen normalisierte Spur, Rohdatensatz und Bericht die optionalen Felder `cost_balance`, `kostenbilanz` bzw. `kostenbilanz` je Ebene
+(SLV0-EVAL-35…38) unter derselben Regel; `normalizer` bleibt `sl-eval-normalize@1`, weil sich kein bestehendes Feld ändert.
 
 Die Eval-Schemas kamen mit dem Eval-Harness-PR (Handover §7); Umsetzung und Auslegungen: [tools/skill-library/README.md](../../tools/skill-library/README.md).
 Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die Vereinheitlichung ist offen (O-8).
@@ -524,6 +577,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | O-12 | Trennschärfe (SLV0-EVAL-23/-25): Negativkontroll-Familie je Kandidat (Portierungsplan P2) und Pflicht zur Markierung ab E3-Runde 3 sind Verfahren, keine Werkzeugfunktion; `regex` folgt ECMAScript statt Python | SL4 §4/§6; bei Bedarf eigene Spec-Ergänzung |
 | O-13 | Überberichtung (SLV0-EVAL-27) erkennt Fundstellen nur mit Dateiendung und Commits nur aus dem Fixture-Text (kein Git-Verlauf); `host.tld:port` ohne Schema würde als Pfad gelesen | **Teilweise gelöst** mit P5: `eval cite-check` (SLV0-EVAL-28…30) prüft Permalinks, Fundstellen und Commit-Wörter gegen Git. Offen bleibt: `eval findings` prüft weiter nur gegen den Fixture-Text, weil Fallordner keinen Git-Stand haben; beide erkennen Fundstellen nur mit Dateiendung; `host.tld:port` ohne Schema würde auch in `cite-check` als Fundstelle gelesen (`path_missing`); ein Hex-Wort ist nicht sicher als Commit erkennbar (darum dort nur Warnung) |
 | O-14 | Kontextpaket (SLV0-EVAL-31…34): Das Paket ist ein Datensatz, keine Sperre. Ob eine Session nur das Paket sieht, hängt am Rechteprofil des Laufs (Portierungsplan P12); das Werkzeug bindet die Allowlist nicht an einen Commit, prüft keine erwarteten Dateihashes aus der Übergabe und wählt keine Abschnitte innerhalb einer Datei. Unicode-Normalisierung von Dateinamen (NFC/NFD) wird nicht angeglichen | Mit P12 und der nächsten Übergabe entscheiden; bis dahin `wofuer` als Lesehinweis und Hashvergleich durch den Empfänger |
+| O-15 | Kostenbilanz (SLV0-EVAL-35…38): **eingegrenzt** nach 24 rohen Spuren (Claude Code 2.1.316, 31.10.2026, *praktisch nachgewiesen*): Rest für `input_tokens`, `cache_read_input_tokens` und `cache_creation_input_tokens` in allen 24 Spuren 0; `output_tokens` je Turn ist nicht final (Turn-Summe 9 535 gegen 115 250 im `result`), der Rest trägt die Differenz. Der Skill-Rumpf kommt als synthetische Nutzernachricht nach dem `Skill`-Ergebnis (20 von 20) und zählt seither als `skill_laden`. Offen bleiben: andere Clients und Versionen; Unteragenten (in diesen Spuren nicht vorhanden); Systemprompt und Katalog haben keine Bytegröße in der Spur; Denkblöcke zählen mit Folgeturns, obwohl der Client sie in späteren Eingaben kürzen kann | `output_tokens` aus der Lauf-Usage lesen, nicht aus der Turn-Summe; Bytes × Folgeturns als Obergrenze der Dauerlast lesen; bei neuer Client-Version erneut prüfen |
 
 ## 13. Rückverfolgung
 
@@ -543,6 +597,7 @@ Feldnamen folgen SL3 (Englisch, wie Code); V0 verwendet deutsche Feldnamen. Die 
 | EVAL-26/-27 | Portierungsplan P3 (Konzept aus skill-optimization: erwartete Befunde, 1:1-Zuordnung, Überberichtung; deren Code ausgeschlossen) |
 | EVAL-28…30 | Portierungsplan P5 (Konzept aus recursive-decomposition-skill, nur *dokumentiert*: Suchraum einmal aufzählen, bearbeitete Segmente protokollieren, Abdeckung vor der Synthese prüfen; Dossier-Anforderung R4); O-13 |
 | EVAL-31…34 | Portierungsplan P11 (Konzept aus code2prompt, nur Konzept: erst Auswahl und Datensatz mit Dateien, Hashes und Tokens, dann Darstellung; dort fail-open, bei uns fail-closed); Implementierungsübergabe §3 (Inputliste der implementierenden Session); `resuming-work` Schritt 8 (Kontextpaket mit Ziel); Clean-Room-Plan |
+| EVAL-35…38 | Portierungsplan P4 (Konzept aus skill-cost-optimizer, nur Konzept: Bilanz je Kontextklasse und Turn, Dauergeladenes kostet Größe × Nachrichten); M4-Befund im Portierungsplan (Cache × Turns, kaum Output); K7.7 (Kosten je erfülltem Kriterium); SLV0-TOK-04/-05/-06/-08 |
 | INV-01…11 | V0-INV-01/-07/-09/-11, SL3, SL4, Plan §1/§7 |
 
 Nächster Schritt: Review dieser Spec zusammen mit dem Handover; Owner beantwortet O-4. Danach erster Implementierungs-PR nach Handover.

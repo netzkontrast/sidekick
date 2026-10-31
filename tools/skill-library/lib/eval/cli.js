@@ -44,7 +44,7 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval split select --ledger DATEI --manifest M --role evaluator --candidate-sha256 H
   eval normalize --trace SPUR.jsonl|SPUR.normalized.json                       (stdout)
   eval raw --meta META.json --normalized NORMALISIERT.json [--rubric RUBRIK.json] [--ledger DATEI]   (stdout)
-  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]...       (stdout)
+  eval report ROHDATEN.json|VERZEICHNIS... [--rubric-version SKILL@N]... [--estimator utf8-bytes-div-4@1]   (stdout)
   eval report --check BERICHT.json ROHDATEN.json|VERZEICHNIS...
   eval rubric check [RUBRIK.json|VERZEICHNIS...] [--root DIR] [--snapshot SNAPSHOT.json]
   eval judge check BEWERTUNG.json --outputs AUSGABEN-VERZ [--fixtures FAELLE-VERZ]
@@ -271,8 +271,8 @@ const SUB = {
   },
 
   report(a) {
-    expect(a, ['--check', '--rubric-version'], [], { positionals: true });
-    if (a.opts['--check'] !== undefined && a.multi['--rubric-version']) throw new UsageError('--rubric-version gilt nicht mit --check');
+    expect(a, ['--check', '--rubric-version', '--estimator'], [], { positionals: true });
+    if (a.opts['--check'] !== undefined && (a.multi['--rubric-version'] || a.opts['--estimator'] !== undefined)) throw new UsageError('--rubric-version und --estimator gelten nicht mit --check');
     const records = rawFiles(a.positional).map((f) => readJsonFile(f));
     if (a.opts['--check'] !== undefined) {
       const report = readJsonFile(a.opts['--check']);
@@ -280,7 +280,7 @@ const SUB = {
       const bad = res.schema_errors.length > 0 || res.messages.length > 0;
       return { out: { valid: !bad, schema_errors: res.schema_errors, messages: res.messages }, code: bad ? 1 : 0, sub: 'report --check' };
     }
-    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [] }) };
+    return { artifact: buildReport(records, { rubricVersions: a.multi['--rubric-version'] ?? [], estimator: a.opts['--estimator'] ?? null }) };
   },
 
   rubric(a) {
