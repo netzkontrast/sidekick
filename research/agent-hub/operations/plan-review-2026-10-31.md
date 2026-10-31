@@ -136,4 +136,4 @@ Eigener Index nur für sidekick (`codegraph init` im Repo, durch den Owner) oder
 
 ## 7. Nächster ausführbarer Schritt
 
-N1 – ohne Kosten, ohne neue Entscheidung, behebt K3 und bereitet N3 vor.
+N1 ist erledigt (31.10.2026). Die Pakete N2–N7 sind in den [Gesamtplan](gesamtplan-2026-11.md) übergegangen (Zuordnung dort §6); nächster Schritt ist M1.1.

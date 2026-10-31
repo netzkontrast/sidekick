@@ -20,15 +20,15 @@ Jeder Befund enthält Quelle, Commit, Datum und Evidenzstufe: dokumentiert / Cod
 
 ## Reihenfolge ab 31.10.2026 (Vorschlag, Owner-Entscheidung offen)
 
-Begründung und Kritik: [Plan-Review 31.10.2026](plan-review-2026-10-31.md). Vorschlag „Kern vor Library“:
+Maßgebliche Reihenfolge: [Gesamtplan ab November 2026](gesamtplan-2026-11.md) (Meilensteine M0–M4, Library L1–L6). Begründung: [Plan-Review](plan-review-2026-10-31.md). Status nur hier:
 
-- [x] AP1–AP3 der Übernahme afs-spec/DSPy-Buch gemergt (#31, #32, #34); MUXI-Dossier und Skill `using-codegraph` gemergt (#36, #35).
-- [x] N1: DSPy-Dossier auf `92d97ca` (Zahlen, Dateizuordnung 346 Dateien, Kapitel 11), RS-1 als RTA-INV-07, RTA-AUF-07, RTA-LEB-09 mit Fällen 49–51, Präsentation korrigiert (31.10.2026).
-- [ ] N2: Tor B praktisch über die Claude-CLI (≤ 12 Starts, ≤ 3 USD; Owner-Budget und Auth offen).
-- [ ] N3: Fake-Runtime und ausführbare RTA-Fälle (= RS-2; Ablageort offen).
-- [ ] N4: Tor-A-Spike Paperclip/OpenHands lokal mit Docker (Owner-Freigabe offen).
-- [ ] N5–N6: Spielraum-Vorprüfung vor D3, AP4 nur als Fallfamilie – Status im [Library-Plan §8.2](../../skills-meta-prompting/library-research-plan.md#82-buchgestützter-dspy-ausbau-owner-auftrag-31102026).
-- [ ] N7: Eigener CodeGraph-Index für sidekick (Owner-Entscheidung; Clean-Room-Risiko K6).
+- [x] AP1–AP3 und MUXI-Dossier, Skill `using-codegraph` gemergt (#31–#36).
+- [x] M0.1–M0.2: Plan-Review und N1/RS-1 (DSPy-Dossier auf `92d97ca`; RTA-INV-07, -AUF-07, -LEB-09).
+- [ ] M0.3–M0.4: Gesamtplan und Owner-Entscheidungen E1–E6.
+- [ ] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index. **Nächster Schritt: M1.1.**
+- [ ] M2: Tor B (CLI, ACP/SDK) und Tor A mit der Vertragssuite.
+- [ ] M3: Tor C und Tor D mit Prozessgrenze und Neustarts.
+- [ ] M4: Review-Schulden, Stack (O-4), vertikaler MVP.
 
 ## Run-Supervisor statt eigener Agent-Runtime (31.10.2026)
 
