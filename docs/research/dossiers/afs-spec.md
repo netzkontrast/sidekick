@@ -173,7 +173,7 @@ Festgehalten, nicht geglättet (*dokumentiert*):
 ## Offene Punkte
 
 1. Rechteinhaber und Upstream-Herkunft klären, bevor je eine Datei lizenziert übernommen würde.
-2. Ob MUXI die Spec so umsetzt, ist ungeprüft (Referenz-PRs in `schemas/coding/README.md` nicht gelesen).
+2. **Teilweise geprüft (31.10.2026):** Coding-Delegation, `watch_job` und Gruppenauflösung sind in MUXI weitgehend spec-treu umgesetzt; Abweichungen: Parallelitätsgrenze pro Nutzer statt pro Formation, Rückweg ohne Freigabe. Siehe [Dossier MUXI Runtime](muxi-runtime.md).
 3. Kompatibilität des AFS-Skill-Formats mit [`skill-package.schema.json`](../../spec/schemas/skill-package.schema.json) prüfen.
 4. Der geplante Wechsel zur Linux Foundation kann die IP-Regeln ändern; Updates nur nach erneuter Prüfung am neuen Commit.
 5. Import/Export von Formationen ist nicht geplant; nur bei nachgewiesenem Bedarf neu bewerten.
