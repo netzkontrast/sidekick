@@ -14,8 +14,14 @@ Produktüberblick: [README.md](README.md). Hier steht nur, was sich nicht aus de
 
 ## Befehle
 
-Noch keine. Ab Phase 1 (TypeScript/Next.js) stehen hier Install, Dev, Build, Einzeltest,
-Typecheck und Lint mit exakten Flags.
+Skill-Library-Werkzeuge (Node 22, keine Dependencies, kein Install; aus dem Repo-Wurzelverzeichnis):
+
+- Tests: `node --test "tools/skill-library/test/*.test.js"`
+- Validator: `node tools/skill-library/cli.js validate --scope project` (Exit 0 = keine Fehler)
+- Research-Helfer-Tests: `python3 -m unittest discover -s research/skills-meta-prompting -p test_skill_pilot.py -v`
+
+Details: [tools/skill-library/README.md](tools/skill-library/README.md). Ab Phase 1 (TypeScript/Next.js)
+stehen hier Install, Dev, Build, Einzeltest, Typecheck und Lint mit exakten Flags.
 
 ## Konventionen
 

@@ -1,0 +1,11 @@
+{
+  "name": "skill-library-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only validator, hash, token count and registry check for .agents/skills (docs/spec/skill-library-v0.md).",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {}
+}
