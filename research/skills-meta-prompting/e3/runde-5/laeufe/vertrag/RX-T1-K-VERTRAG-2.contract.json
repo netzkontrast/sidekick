@@ -1,0 +1,304 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-T1-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        16
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        52
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 20,
+      "aussage": "Das README verspricht: Alle Platzhalter werden automatisch HTML-escaped, Nutzereingaben sind gefahrlos, auch in Attributen wie `title=\"{{name}}\"`.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "Escaping ist standardmäßig ausgeschaltet (`DEFAULTS = { escape: false }`). Ohne Option werden Werte unverändert per `String(value)` eingesetzt. Das widerspricht dem README.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 22,
+      "aussage": "Auch der Aufruf aus dem README-Beispiel übergibt keine Option und escaped deshalb nichts.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 23,
+      "aussage": "`escapeHtml` ersetzt nur `&`, `<` und `>`. `\"` und `'` bleiben stehen. Ein Wert wie `\" onmouseover=\"…` kann deshalb aus einem Attribut in Anführungszeichen ausbrechen, auch mit `escape: true`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Laut Integrationsdoku kann man `escape: false` für Textmails wählen. Das legt nahe, dass Escaping der Normalfall sei, was zum Code nicht passt.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Für Platzhalter wird `data[key]` ohne Prüfung auf eigene Eigenschaften gelesen. Ein Vorlagen-Platzhalter wie `{{constructor}}` liefert daher Werte aus der Objekt-Prototypkette. Das ist nur bei fehlerhaften Vorlagen relevant.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Lizenz laut Metadaten und README: BSD-2-Clause.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 27,
+      "aussage": "Die LICENSE.txt hört nach den zwei Klauseln auf, der übliche Haftungsausschluss der BSD-2-Clause fehlt. Ob die Datei gekürzt oder abgewandelt ist, ist ungeklärt.",
+      "quellenrolle": "Spezifikation",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "Durch einen Test nachgewiesen ist der Ausbruch aus dem Attribut noch nicht. Dafür bräuchte es einen Aufruf `render('<p title=\"{{name}}\">', { name: '\" onmouseover=\"x' }, { escape: true })`; erwartet wird eine Ausgabe mit einem unveränderten `\"`.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 29,
+      "aussage": "Wie die Mailprogramme der Empfänger mit eingeschleustem Markup umgehen (Skripte, Event-Handler, Styles), ist nicht geprüft.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 54,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/mailvorlage/README.md:5-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/README.md",
+      "von": 5,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/mailvorlage/src/render.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/src/render.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/mailvorlage/src/render.js:6-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/src/render.js",
+      "von": 6,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/mailvorlage/README.md:14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/README.md",
+      "von": 14,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/mailvorlage/src/render.js:3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/src/render.js",
+      "von": 3,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/mailvorlage/src/escape.js:1-4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/src/escape.js",
+      "von": 1,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/mailvorlage/docs/INTEGRATION.md:9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/docs/INTEGRATION.md",
+      "von": 9,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/mailvorlage/src/render.js:7-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/src/render.js",
+      "von": 7,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/mailvorlage/package.json:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/package.json",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/mailvorlage/README.md:19@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/README.md",
+      "von": 19,
+      "bis": 19,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/mailvorlage/LICENSE.txt:1-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/LICENSE.txt",
+      "von": 1,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 54,
+      "verweis": "vendor/mailvorlage/docs/INTEGRATION.md:5-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/mailvorlage/docs/INTEGRATION.md",
+      "von": 5,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-T1",
+    "erwartet": [
+      "RX-T1-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RX-T1-A1",
+        "eintrag": 1,
+        "zeile": 54
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 4, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 10 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 10,
+    "codeaussagen": 4,
+    "anweisungen": 1,
+    "zitate": 12,
+    "gueltig": 12,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}
