@@ -584,3 +584,23 @@ grilling-Runde liegen unverändert in `test/fixtures/questions-grilling-dev.json
 - Eine Runde mit Zustellung `unbekannt` lässt sich nicht nachträglich als bestätigt markieren (neue Runde oder Antwort genügt).
 - Mehrzeilige Antworttexte werden nicht als Folgezeilen geschrieben, sondern abgelehnt.
 - `revise` kann keine Kopffelder ergänzen, die in einer von Hand geschriebenen Datei fehlen.
+
+## Integrierte Vertragsprüfung (31.10.2026)
+
+Die Werkzeuge aus PR #24 (Fragen-CLI), #28 (Kostenbilanz) und #29 (Ausgabevertrag) sind auf `main` integriert.
+Der Integrationstest ergänzt die Pfadprüfung einzelner Rundendateien (QCLI-FALL-45), auch bei einem Symlink ohne Ziel.
+Die acht Dev-Szenarien prüfen CLI-Endzustände deterministisch; sie ersetzen keinen Modellvergleich.
+Ob grilling durch die CLI billiger arbeitet, bleibt QO-1. Für einen Vergleich müssen dieselbe Runtime,
+positive und negative Fälle, Rechte, Usage und Zustandsprüfungen vor den Modellstarts feststehen.
+In dieser Work-Umgebung ist keine Claude-CLI verfügbar; es wurden dafür keine Modellstarts durchgeführt.
+
+V0-Verträge zusätzlich prüfen:
+
+```bash
+node --test tools/skill-library/test/v0-contracts.test.js
+```
+
+Der vorhandene Schemaprüfer prüft dabei die neuen Budgetgrenzen (`exclusiveMinimum`, `exclusiveMaximum`),
+`uniqueItems` und bedingte Regeln der Übergaben/Befunde. `examples` und `default` sind Annotationen;
+Defaults werden nicht eingesetzt. Unbekannte Schlüsselwörter bleiben Fehler. Keine neue Dependency.
+Datenform und synthetische Beispiele sind prüfbar; fachliche Journal-, Claim- und Freigaberegeln brauchen V1.

@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "normalizer": "sl-eval-normalize@1",
+  "source_format": "claude-stream-json",
+  "input_sha256": "0386550d48eab6b933aa45f272870404c5340b2cbbc765234ea34dbb76eaa5b4",
+  "trace_sha256": "0386550d48eab6b933aa45f272870404c5340b2cbbc765234ea34dbb76eaa5b4",
+  "status": "completed",
+  "catalog": {
+    "status": "beobachtet",
+    "skills": [
+      "evaluating-changes",
+      "grilling",
+      "planning-work-packages",
+      "researching-repositories",
+      "resuming-work",
+      "reviewing-decision-gates",
+      "specifying-behavior",
+      "testing-system-boundaries",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "send-to-project",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ]
+  },
+  "tools": [
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Skill",
+    "Write"
+  ],
+  "plugins": [
+    {
+      "name": "cc-plugin-agents-md",
+      "source": "cc-plugin-agents-md@builtin"
+    },
+    {
+      "name": "cc-plugin-telemetry",
+      "source": "cc-plugin-telemetry@builtin"
+    },
+    {
+      "name": "cc-plugin-plugin-authoring",
+      "source": "cc-plugin-plugin-authoring@builtin"
+    }
+  ],
+  "model": "claude-opus-5-5",
+  "activations": [
+    {
+      "mode": "skill_tool",
+      "skill": "grilling",
+      "tool_use_id": "toolu_018kHebAHWH9dNtLcy6D1uMf",
+      "confirmed": true
+    }
+  ],
+  "activation_observability": "events_observed",
+  "absence_is_proven": false,
+  "usage": {
+    "input_tokens": 14,
+    "output_tokens": 7418,
+    "cache_read_input_tokens": 124058,
+    "cache_creation_input_tokens": 25395
+  },
+  "client_cost_estimate_usd": 0.37638760000000004,
+  "quality_scored": false
+}

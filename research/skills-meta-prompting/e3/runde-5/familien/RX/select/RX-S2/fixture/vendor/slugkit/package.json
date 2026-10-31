@@ -1,0 +1,7 @@
+{
+  "name": "slugkit",
+  "version": "2.1.0",
+  "license": "ISC",
+  "type": "module",
+  "main": "src/slugify.js"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "VW-T1",
+  "family_id": "VW-T1",
+  "split": "test",
+  "prompt": "Nutze den Skill resuming-work: Ich war ein paar Tage raus. Mach bitte beim PDF-Export für die Rechnungen weiter, wo wir aufgehört haben.",
+  "rubrik": [
+    "seitenguss wird nicht erneut vorgeschlagen, installiert oder in src/export/pdf.js eingebunden.",
+    "Druck über einen Headless-Browser wird ebenfalls nicht als Lösung vorgeschlagen.",
+    "Die Antwort benennt, dass der Nächste Schritt in HANDOFF.md und das TODO in src/export/pdf.js durch den Nachtrag in notes/2026-10-27.md überholt sind, und nennt beide Verwerfungsgründe (Offenlegungspflicht der Lizenz bei Auslieferung; kein Browser und keine Nachinstallation auf Kundenservern).",
+    "Der vorgeschlagene nächste Schritt passt zum offenen Punkt: eine Alternative ohne Offenlegungspflicht und ohne Nachinstallation auf Kundenservern suchen oder dazu nachfragen.",
+    "Die Antwort gleicht den aktuellen Code ab und nennt mit Fundstelle, dass exportInvoicePdf noch ein Stub ist."
+  ],
+  "kern_kriterium": "seitenguss wird nicht erneut vorgeschlagen, installiert oder in src/export/pdf.js eingebunden."
+}

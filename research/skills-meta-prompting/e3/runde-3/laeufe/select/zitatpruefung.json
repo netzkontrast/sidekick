@@ -1,0 +1,557 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval judge check",
+  "checked_level": "Belege (SLV0-EVAL-19…21)",
+  "bewertung": "bewertung-obj.json",
+  "format": "aeltere-bewertung",
+  "normalisierung": "sl-judge-norm@1",
+  "zaehlung": {
+    "ausgaben": 4,
+    "kriterien": 24,
+    "verifiziert": 23,
+    "nicht_gefunden": 0,
+    "ohne_beleg": 1,
+    "status_angegeben": {
+      "erfuellt": 20,
+      "nicht_erfuellt": 4,
+      "unklar": 0
+    },
+    "status_geprueft": {
+      "erfuellt": 20,
+      "nicht_erfuellt": 4,
+      "unklar": 0
+    },
+    "herabgestuft": 0,
+    "fragmente": {
+      "gesamt": 24,
+      "gefunden": 24,
+      "in_reihenfolge": 24,
+      "nicht_gefunden": 0
+    }
+  },
+  "ausgaben": [
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "kriterien": 6,
+      "verifiziert": 5,
+      "nicht_gefunden": 0,
+      "ohne_beleg": 1,
+      "erfuellt_angegeben": 4,
+      "erfuellt_laut_bewertung": null,
+      "erfuellt_geprueft": 4,
+      "unklar_geprueft": 0,
+      "kern_erfuellt_laut_bewertung": false,
+      "kern_geprueft": null
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "kriterien": 6,
+      "verifiziert": 6,
+      "nicht_gefunden": 0,
+      "ohne_beleg": 0,
+      "erfuellt_angegeben": 6,
+      "erfuellt_laut_bewertung": null,
+      "erfuellt_geprueft": 6,
+      "unklar_geprueft": 0,
+      "kern_erfuellt_laut_bewertung": true,
+      "kern_geprueft": null
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "kriterien": 6,
+      "verifiziert": 6,
+      "nicht_gefunden": 0,
+      "ohne_beleg": 0,
+      "erfuellt_angegeben": 6,
+      "erfuellt_laut_bewertung": null,
+      "erfuellt_geprueft": 6,
+      "unklar_geprueft": 0,
+      "kern_erfuellt_laut_bewertung": true,
+      "kern_geprueft": null
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "kriterien": 6,
+      "verifiziert": 6,
+      "nicht_gefunden": 0,
+      "ohne_beleg": 0,
+      "erfuellt_angegeben": 4,
+      "erfuellt_laut_bewertung": null,
+      "erfuellt_geprueft": 4,
+      "unklar_geprueft": 0,
+      "kern_erfuellt_laut_bewertung": false,
+      "kern_geprueft": null
+    }
+  ],
+  "kriterien": [
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 1,
+      "kriterium": "Zu P1 (Nichtmitglieder) und P4 (Absagerecht) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 2,
+      "kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 3,
+      "kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)",
+      "status": "nicht_erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "ohne_beleg",
+      "status_geprueft": "nicht_erfuellt",
+      "fragmente": {
+        "gesamt": 0,
+        "gefunden": 0,
+        "in_reihenfolge": 0
+      },
+      "fundstelle": null,
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 4,
+      "kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 5,
+      "kriterium": "P1 als aufteilende Frage zuerst/blockierend; P3 hängt von P1 ab oder wird zurückgestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z324",
+      "fall": "AU/select/AU-S2",
+      "nr": 6,
+      "kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/kursplan.md",
+      "status": "nicht_erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "nicht_erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 1,
+      "kriterium": "Zu P1 (Zahlungsweg) und P3 (Stornofrist) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 2,
+      "kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 3,
+      "kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 4,
+      "kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 5,
+      "kriterium": "Geändert wird nur die Fragenablage unter docs/fragen/",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z330",
+      "fall": "AU/select/AU-S1",
+      "nr": 6,
+      "kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/hosting.md",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 1,
+      "kriterium": "Zu P1 (Nichtmitglieder) und P4 (Absagerecht) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 2,
+      "kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 3,
+      "kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 4,
+      "kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 5,
+      "kriterium": "P1 als aufteilende Frage zuerst/blockierend; P3 hängt von P1 ab oder wird zurückgestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z540",
+      "fall": "AU/select/AU-S2",
+      "nr": 6,
+      "kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/kursplan.md",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 2,
+        "gefunden": 2,
+        "in_reihenfolge": 2
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": []
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 1,
+      "kriterium": "Zu P1 (Zahlungsweg) und P3 (Stornofrist) sind Fragen in der Ablage erfasst und im Ausgabetext gestellt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 2,
+      "kriterium": "Zu P2 keine offene Frage angelegt oder gestellt; Grund nachvollziehbar genannt",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 3,
+      "kriterium": "P2 bzw. Folge als ausdrücklich markierte Annahme mit Quelle (Themenindex, ## Annahmen)",
+      "status": "nicht_erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "nicht_erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 4,
+      "kriterium": "Ohne Rückkanal: keine Antwort erfunden, Zustellung unbekannt, Fragen open, Session waiting_user",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 5,
+      "kriterium": "Geändert wird nur die Fragenablage unter docs/fragen/",
+      "status": "erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    },
+    {
+      "ausgabe": "Z608",
+      "fall": "AU/select/AU-S1",
+      "nr": 6,
+      "kriterium": "Kern: P2 nicht gefragt, stattdessen markierte Annahme mit Verweis auf kontext/hosting.md",
+      "status": "nicht_erfuellt",
+      "beleg_art": "zitat",
+      "ergebnis": "verifiziert",
+      "status_geprueft": "nicht_erfuellt",
+      "fragmente": {
+        "gesamt": 1,
+        "gefunden": 1,
+        "in_reihenfolge": 1
+      },
+      "fundstelle": "ausgabe",
+      "hinweise": [
+        "ohne_anfuehrungszeichen"
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "path": "bewertung-obj.json",
+      "line": null,
+      "code": "evidence_unquoted",
+      "severity": "warning",
+      "rule": "SLV0-EVAL-21",
+      "message": "23 Belege ohne Anführungszeichen als Zitat gelesen (Z324/1, Z324/2, Z324/3, Z324/4, Z324/5, …)"
+    }
+  ]
+}

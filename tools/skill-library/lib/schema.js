@@ -10,6 +10,8 @@ const SUPPORTED = new Set([
   'maximum', 'minItems', 'propertyNames',
   // Added for eval-case.schema.json (count_at_least pair, SLV0-EVAL-22).
   'maxItems',
+  // V0 contract schemas (§7.2): bounds are assertions; examples/default are annotations only.
+  'exclusiveMinimum', 'exclusiveMaximum', 'uniqueItems', 'examples', 'default',
 ]);
 
 export class SchemaUnsupportedError extends Error {}
@@ -105,11 +107,20 @@ export function validateSchema(schema, value, root = schema, pointer = '') {
   if (typeof value === 'number' && schema.maximum !== undefined && value > schema.maximum) {
     errors.push({ pointer: at, message: `größer als ${schema.maximum}` });
   }
+  if (typeof value === 'number' && schema.exclusiveMinimum !== undefined && value <= schema.exclusiveMinimum) {
+    errors.push({ pointer: at, message: `nicht größer als ${schema.exclusiveMinimum}` });
+  }
+  if (typeof value === 'number' && schema.exclusiveMaximum !== undefined && value >= schema.exclusiveMaximum) {
+    errors.push({ pointer: at, message: `nicht kleiner als ${schema.exclusiveMaximum}` });
+  }
   if (Array.isArray(value) && schema.minItems !== undefined && value.length < schema.minItems) {
     errors.push({ pointer: at, message: `weniger als ${schema.minItems} Einträge` });
   }
   if (Array.isArray(value) && schema.maxItems !== undefined && value.length > schema.maxItems) {
     errors.push({ pointer: at, message: `mehr als ${schema.maxItems} Einträge` });
+  }
+  if (Array.isArray(value) && schema.uniqueItems === true && value.some((item, i) => value.slice(0, i).some((other) => deepEqual(item, other)))) {
+    errors.push({ pointer: at, message: 'doppelte Einträge (uniqueItems)' });
   }
   if (jsonType(value) === 'object') {
     for (const req of schema.required ?? []) {

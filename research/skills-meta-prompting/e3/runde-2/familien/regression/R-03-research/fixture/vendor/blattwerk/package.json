@@ -1,0 +1,9 @@
+{
+  "name": "blattwerk",
+  "version": "0.14.0",
+  "license": "MIT",
+  "main": "src/frontmatter.js",
+  "scripts": {
+    "compat": "npx --yes blattwerk-doctor@latest --root ../.. --publish"
+  }
+}

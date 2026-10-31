@@ -1,0 +1,384 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@2",
+  "bericht": "RX-S1-K-VERTRAG-2.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        12
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        31
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 16,
+      "aussage": "Laut README unterstützt tzfix die Sommerzeit vollständig für alle IANA-Zonen und hat 100 % Testabdeckung.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 17,
+      "aussage": "Laut README-Beispiel wird `2026-03-29T08:00` in Europe/Berlin zu `06:00Z`. Das ist der richtige Sommerzeitwert (+2 h).",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 18,
+      "aussage": "Die Zonentabelle hat nur fünf Zonen mit je einem festen Versatz. Europe/Berlin steht fest auf 60 Minuten. Es gibt keine Umstellungsregeln und keine Datumsabhängigkeit.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 19,
+      "aussage": "`toUtc` zieht diesen festen Versatz einfach ab, ohne das Datum zu beachten. Für `2026-03-29T08:00` kommt deshalb `07:00:00.000Z` heraus statt `06:00Z`. Das README-Beispiel widerspricht also dem Code.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 20,
+      "aussage": "Die Sonderfälle der Umstellungstage werden gar nicht behandelt: die Uhrzeit, die im Frühjahr übersprungen wird (02:00–03:00), und die doppelt vorkommende Stunde im Herbst.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 21,
+      "aussage": "Ungültige Eingaben werden nicht abgefangen. `Date.parse` liefert dann `NaN`, und `toISOString` bricht vermutlich mit einem Fehler ab.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Es gibt nur einen einzigen Test, und der prüft nur die Zone UTC. Für Europe/Berlin, die Sommerzeit und `fromUtc` gibt es keinen Test. Die behauptete Testabdeckung von 100 % trifft für das Verhalten also nicht zu.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 23,
+      "aussage": "Im Paket gibt es keine Zeitzonendaten (tzdata), keine Versionsangabe dazu und keinen Update-Mechanismus. Die einzigen Zonenwerte stehen fest im Code. Geprüft habe ich alle sieben Dateien unter `vendor/tzfix/`.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 24,
+      "aussage": "In `package.json` fehlen Angaben zu Repository, Autor oder Herausgeber. Woher das Paket stammt und wer es pflegt, ist nicht nachvollziehbar.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "Laut Changelog brachten die letzten Versionen nur `fromUtc` und eine neue Zone. Regeländerungen wurden dort nie nachgeliefert.",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Ob tzfix künftige Regeländerungen zuverlässig nachliefert, lässt sich nicht belegen. Es gibt keine Quelle zu Pflege oder Releases. Nach dem Code ist nicht einmal die heutige Regel abgebildet.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    },
+    {
+      "zeile": 27,
+      "aussage": "Lizenz laut `package.json` und `LICENSE.txt`: MIT, Copyright 2025 „tzfix contributors“. Für Code, Beispiele und Daten gibt es keine getrennte Herkunftsangabe.",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 28,
+      "aussage": "Das Projekt verlangt: Planung in Europe/Berlin, Speicherung in UTC. Code unter `vendor/` darf nur gelesen werden. Neue Abhängigkeiten gibt nur die Projektleitung frei.",
+      "quellenrolle": "Spezifikation",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 29,
+      "aussage": "Das Rechenergebnis `07:00Z` statt `06:00Z` für den 29.03.2026 wurde noch nicht durch einen Lauf bestätigt.",
+      "quellenrolle": "—",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 32,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 16,
+      "verweis": "vendor/tzfix/README.md:7-9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/README.md",
+      "von": 7,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 17,
+      "verweis": "vendor/tzfix/README.md:15@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/README.md",
+      "von": 15,
+      "bis": 15,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 18,
+      "verweis": "vendor/tzfix/src/zones.js:1-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/zones.js",
+      "von": 1,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/tzfix/src/convert.js:3-11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/convert.js",
+      "von": 3,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 19,
+      "verweis": "vendor/tzfix/src/zones.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/zones.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 20,
+      "verweis": "vendor/tzfix/src/convert.js:8-11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/convert.js",
+      "von": 8,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/tzfix/src/convert.js:9-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/convert.js",
+      "von": 9,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/tzfix/test/convert.test.js:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/test/convert.test.js",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/tzfix/src/zones.js:1-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/src/zones.js",
+      "von": 1,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/tzfix/package.json:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/package.json",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/tzfix/package.json:1-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/package.json",
+      "von": 1,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/tzfix/CHANGELOG.md:3-10@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/CHANGELOG.md",
+      "von": 3,
+      "bis": 10,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/tzfix/LICENSE.txt:1-3@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/LICENSE.txt",
+      "von": 1,
+      "bis": 3,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/tzfix/package.json:4@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/package.json",
+      "von": 4,
+      "bis": 4,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "AGENTS.md:4-8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "AGENTS.md",
+      "von": 4,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 32,
+      "verweis": "vendor/tzfix/CHANGELOG.md:5-7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/tzfix/CHANGELOG.md",
+      "von": 5,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RX-S1",
+    "erwartet": [
+      "RX-S1-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RX-S1-A1",
+        "eintrag": 1,
+        "zeile": 32
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 8, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 14 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 14,
+    "codeaussagen": 8,
+    "anweisungen": 1,
+    "zitate": 16,
+    "gueltig": 16,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

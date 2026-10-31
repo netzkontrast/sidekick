@@ -1,0 +1,50 @@
+{
+  "id": "E3-2",
+  "status": "vorab festgelegt; Kandidaten eingefroren, bevor Select-/Test-Familien existieren",
+  "date": "2026-10-31",
+  "autorisierung": "Owner-Antwort per AskUserQuestion am 31.10.2026: „Ja, bis ~30 Läufe“ für K-2 und K-3 (synthetisch); Aktivierung nur durch Owner-Merge",
+  "design": "wie e3/e3-plan.json (Runde 1); Rubriken: docs/research/rubriken/<skill>.json (@1)",
+  "baseline": {
+    "variante": "B1",
+    "paketsatz_sha256": "6d0f3353285e109c63ab038ba8681c3add8e46e3019a76d39c73f99133bbd0e5",
+    "commit": "2b66406"
+  },
+  "kandidaten": [
+    {
+      "id": "K-BELEG",
+      "herkunft": "Tiefenabgleich K-2 (repo-skill-tiefenabgleich-2026-10-31.md), A02 §7",
+      "skill": "researching-repositories",
+      "aenderung": "Schritt 4: tragende Aussagen vor der Lieferung an der zitierten Fundstelle nachlesen; nicht gedeckte auf offen zurückstufen oder streichen",
+      "content_hash": "112310ba44caa643767d5fd90ca20c351ddd1941789df8fc055855fdd1dad9e3",
+      "pfad": "e3/runde-2/kandidaten/K-BELEG/researching-repositories"
+    },
+    {
+      "id": "K-WEGE",
+      "herkunft": "Tiefenabgleich K-3",
+      "skill": "resuming-work",
+      "aenderung": "Schritt 2 und 6 sowie handoff.md: verworfene/fehlgeschlagene Wege mit Grund festhalten und beim Fortsetzen nicht erneut vorschlagen, außer der Grund ist entfallen",
+      "content_hash": "e1179cd2739cdf915592d80169c17addea87a8e411bf22520db41c380691c74e",
+      "pfad": "e3/runde-2/kandidaten/K-WEGE/resuming-work"
+    }
+  ],
+  "splits": {
+    "select": "2 neue Familien je Kandidat",
+    "test": "4 neue Familien je Kandidat",
+    "herkunft": "getrennte Session ohne Zugriff auf Kandidatentexte; Familien aus Runde 1 sind verbraucht und werden nicht wiederverwendet",
+    "regression": "je Kandidat 2 Pflichtfälle aus den vorhandenen Regressionsfixtures (R-02/R-03 für K-BELEG, R-01-artig für K-WEGE: Wirkung unklar, nicht wiederholen)"
+  },
+  "starts": {
+    "je_kandidat": {
+      "select": 4,
+      "test": 8,
+      "regression": 2
+    },
+    "summe_geplant": 28,
+    "reserve": 2,
+    "grenze": 30
+  },
+  "client": "wie Runde 1: claude -p, --tools Read,Glob,Grep,Skill, keine Schreibrechte, bereinigte Umgebung; Prompts nennen den Skill",
+  "bewertung": "verblindete getrennte Session, Rubrikkriterien aus docs/research/rubriken plus Kernkriterium je Fall",
+  "schwelle_vorgelegt": "0 R-Verstöße; in test ≥1 Familie besser und keine schlechter; select nicht schlechter. Sonst verworfen bzw. kein Vorteil",
+  "grenzen": "4 Testfamilien je Kandidat: Prozessnachweis, kein Lernnachweis"
+}

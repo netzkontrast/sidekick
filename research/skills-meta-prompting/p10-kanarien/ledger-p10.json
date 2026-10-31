@@ -1,0 +1,24 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "P10-K1-pfad",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "P10-K2-netz",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "P10-K3-mcp",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "P10-K4-grep",
+      "status": "reserved_before_start"
+    }
+  ]
+}

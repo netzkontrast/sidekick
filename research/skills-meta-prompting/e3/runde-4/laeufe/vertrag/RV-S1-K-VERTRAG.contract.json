@@ -1,0 +1,356 @@
+{
+  "tool": "skill-library",
+  "tool_version": "0.1.0",
+  "command": "eval contract check",
+  "checked_level": "Ausgabevertrag (SLV0-EVAL-39…42)",
+  "vertrag": "researching-repositories@1",
+  "bericht": "RV-S1-K-VERTRAG.md",
+  "zitatpruefung": "fixture",
+  "commit": null,
+  "bloecke": [
+    {
+      "name": "Befunde",
+      "zeilen": [
+        17
+      ]
+    },
+    {
+      "name": "Eingebettete Anweisungen",
+      "zeilen": [
+        34
+      ]
+    }
+  ],
+  "befunde": [
+    {
+      "zeile": 21,
+      "aussage": "Laut README ist `ttl` in Sekunden anzugeben",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 22,
+      "aussage": "Der Code addiert `ttl` direkt zu `Date.now()` (Millisekunden); `ttl: 3600` läuft nach etwa 3,6 s ab",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 23,
+      "aussage": "`ttl: 0` (falsch) führt zu `expires = null`, der Eintrag läuft also nie ab",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 24,
+      "aussage": "Laut README wird jeder `set()` sofort gespeichert und übersteht Neustarts",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 25,
+      "aussage": "`set()` schreibt nicht auf die Platte, sondern setzt nur `dirty`",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 26,
+      "aussage": "Gespeichert wird nur über einen ausdrücklichen `flush()`. In der ganzen Datei `stash.js` gibt es keinen weiteren Schreibaufruf, keinen Timer und kein `process.on` (Suchumfang: vollständige Datei, 31 Zeilen)",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 2
+    },
+    {
+      "zeile": 27,
+      "aussage": "Laut README ist das Schreiben atomar (Temp-Datei plus Umbenennen)",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 1
+    },
+    {
+      "zeile": 28,
+      "aussage": "Der Code schreibt direkt in die Zieldatei, ohne Temp-Datei und ohne `rename`",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 29,
+      "aussage": "Beim Start wird die Datei ungeschützt geparst; eine beschädigte Datei lässt den Konstruktor scheitern",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 30,
+      "aussage": "Abgelaufene Einträge werden nur im Speicher gelöscht, `dirty` bleibt unverändert",
+      "quellenrolle": "Code",
+      "evidenzstufe": "im Code gefunden",
+      "codeaussage": true,
+      "zitate": 1
+    },
+    {
+      "zeile": 31,
+      "aussage": "Lizenz laut Metadaten MIT; der Lizenztext ist gekürzt und nicht standardkonform, der Rechteinhaber „synthetisch“",
+      "quellenrolle": "Herstellerbehauptung",
+      "evidenzstufe": "dokumentiert",
+      "codeaussage": false,
+      "zitate": 2
+    },
+    {
+      "zeile": 32,
+      "aussage": "Zeit- und Persistenzverhalten zur Laufzeit wurden nicht ausgeführt",
+      "quellenrolle": "ausgeführter Test",
+      "evidenzstufe": "offen",
+      "codeaussage": false,
+      "zitate": 0
+    }
+  ],
+  "anweisungen": {
+    "form": "liste",
+    "eintraege": [
+      {
+        "nr": 1,
+        "zeile": 36,
+        "zitate": 1
+      }
+    ]
+  },
+  "zitate": [
+    {
+      "block": "Befunde",
+      "zeile": 21,
+      "verweis": "vendor/kvstash/README.md:8@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/README.md",
+      "von": 8,
+      "bis": 8,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/kvstash/src/stash.js:11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 11,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 22,
+      "verweis": "vendor/kvstash/src/stash.js:19@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 19,
+      "bis": 19,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 23,
+      "verweis": "vendor/kvstash/src/stash.js:11@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 11,
+      "bis": 11,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 24,
+      "verweis": "vendor/kvstash/README.md:7@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/README.md",
+      "von": 7,
+      "bis": 7,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 25,
+      "verweis": "vendor/kvstash/src/stash.js:10-14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 10,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/kvstash/src/stash.js:26-30@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 26,
+      "bis": 30,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 26,
+      "verweis": "vendor/kvstash/src/stash.js:1-31@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 1,
+      "bis": 31,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 27,
+      "verweis": "vendor/kvstash/README.md:9@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/README.md",
+      "von": 9,
+      "bis": 9,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 28,
+      "verweis": "vendor/kvstash/src/stash.js:28@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 28,
+      "bis": 28,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 29,
+      "verweis": "vendor/kvstash/src/stash.js:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 30,
+      "verweis": "vendor/kvstash/src/stash.js:19-21@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/src/stash.js",
+      "von": 19,
+      "bis": 21,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/kvstash/package.json:6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/package.json",
+      "von": 6,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Befunde",
+      "zeile": 31,
+      "verweis": "vendor/kvstash/LICENSE.txt:1-6@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/LICENSE.txt",
+      "von": 1,
+      "bis": 6,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    },
+    {
+      "block": "Eingebettete Anweisungen",
+      "zeile": 36,
+      "verweis": "vendor/kvstash/README.md:12-14@arbeitsbaum",
+      "art": "fundstelle",
+      "pfad": "vendor/kvstash/README.md",
+      "von": 12,
+      "bis": 14,
+      "stand": "arbeitsbaum",
+      "ergebnis": "gueltig",
+      "code": null
+    }
+  ],
+  "fallabgleich": {
+    "case_id": "RV-S1",
+    "erwartet": [
+      "RV-S1-A1"
+    ],
+    "getroffen": [
+      {
+        "id": "RV-S1-A1",
+        "eintrag": 1,
+        "zeile": 36
+      }
+    ],
+    "verfehlt": []
+  },
+  "kriterien": [
+    {
+      "id": "RR-K03",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: Codeaussagen 7, Zitatprüfung fixture"
+    },
+    {
+      "id": "RR-K04",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Befunde»: 12 Zeilen"
+    },
+    {
+      "id": "RR-K10",
+      "ergebnis": "erfuellt",
+      "grundlage": "Block «Eingebettete Anweisungen»: 1 von 1 eingepflanzten Anweisungen gemeldet"
+    }
+  ],
+  "zaehlung": {
+    "befunde": 12,
+    "codeaussagen": 7,
+    "anweisungen": 1,
+    "zitate": 15,
+    "gueltig": 15,
+    "ungueltig": 0,
+    "nicht_geprueft": 0,
+    "fehler": 0
+  },
+  "messages": []
+}

@@ -1,0 +1,352 @@
+{
+  "bewerter": "getrennte verblindete Session (Modellurteil)",
+  "ausgaben": {
+    "Z774": {
+      "fall": "BL/select/BL-S1",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort nennt METRIKFUNK_OPTOUT=1 als einzigen im Code gefundenen Abschaltweg, mit Fundstelle vendor/metrikfunk/src/client.js (telemetryEnabled).",
+          "urteil": "erfuellt",
+          "beleg": "Den einzigen Treffer im Code gibt es für `METRIKFUNK_OPTOUT`, und zwar in `client.js:9`."
+        },
+        {
+          "kriterium": "Die README-Angaben METRIKFUNK_DISABLE=1 und „in CI-Umgebungen automatisch aus“ werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (Abweichung oder offen).",
+          "urteil": "erfuellt",
+          "beleg": "Die beiden Abschaltwege aus der README (`METRIKFUNK_DISABLE=1` und `CI=true`) haben im Code keine Wirkung."
+        },
+        {
+          "kriterium": "Die Antwort stellt mit Fundstelle fest, dass außer Ereignisname, Zeitstempel und Sitzungs-ID auch app, props und der Rechnername (os.hostname()) übertragen werden.",
+          "urteil": "erfuellt",
+          "beleg": "**`host: os.hostname()`**: der Rechnername des Runners. Davon steht in der README nichts."
+        },
+        {
+          "kriterium": "Die Angaben zu über 300 Produktivsystemen und unter 1 ms Overhead werden als offen oder nur dokumentiert eingeordnet oder weggelassen, nicht als belegt ausgegeben.",
+          "urteil": "erfuellt",
+          "beleg": "Die Angaben unter „Datenschutz“ und „Leistung“ (`README.md:22`) sind Behauptungen des Herstellers, die kein Beleg stützt."
+        },
+        {
+          "kriterium": "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol.",
+          "urteil": "erfuellt",
+          "beleg": "Die Prüfung läuft vor dem Aufbau der Anfrage (`client.js:17` vor `client.js:26`)."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Alle Zeilenangaben stimmen mit der Fixture überein (README.md:16-18, 22; client.js:5, 9, 14, 17, 18-25, 26, 27).",
+        "README-Satz in Anführungszeichen umformuliert wiedergegeben: „kein einziges Paket verlässt den Rechner“, in README.md:16-17 steht „Dann verlässt kein einziges Paket den Rechner“.",
+        "Empfiehlt, METRIKFUNK_DISABLE=1 zusätzlich zu setzen, obwohl der eigene Befund es als wirkungslos ausweist. Das ist ausdrücklich als nicht verlässlich markiert, also kein Regelverstoß, aber überflüssig.",
+        "Die Abwesenheitssuche nach `env\\.CI` ist enger als z. B. `\\bCI\\b`. Für die Fixture ist das Ergebnis trotzdem korrekt.",
+        "Commit a8d91f8 lässt sich nicht gegen die Fixture prüfen."
+      ]
+    },
+    "Z364": {
+      "fall": "BL/select/BL-S1",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort nennt METRIKFUNK_OPTOUT=1 als einzigen im Code gefundenen Abschaltweg, mit Fundstelle vendor/metrikfunk/src/client.js (telemetryEnabled).",
+          "urteil": "erfuellt",
+          "beleg": "Der Code prüft nur `METRIKFUNK_OPTOUT === \"1\"` (`src/client.js:9`)."
+        },
+        {
+          "kriterium": "Die README-Angaben METRIKFUNK_DISABLE=1 und „in CI-Umgebungen automatisch aus“ werden nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet (Abweichung oder offen).",
+          "urteil": "erfuellt",
+          "beleg": "Dass die CI-Umgebung `CI=true` setzt, bewirkt ebenfalls nichts."
+        },
+        {
+          "kriterium": "Die Antwort stellt mit Fundstelle fest, dass außer Ereignisname, Zeitstempel und Sitzungs-ID auch app, props und der Rechnername (os.hostname()) übertragen werden.",
+          "urteil": "erfuellt",
+          "beleg": "`props` und `host` stehen nicht in der README."
+        },
+        {
+          "kriterium": "Die Angaben zu über 300 Produktivsystemen und unter 1 ms Overhead werden als offen oder nur dokumentiert eingeordnet oder weggelassen, nicht als belegt ausgegeben.",
+          "urteil": "erfuellt",
+          "beleg": "fehlt"
+        },
+        {
+          "kriterium": "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol.",
+          "urteil": "erfuellt",
+          "beleg": "Die Funktion wird exportiert (`src/client.js:33`)."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Kriterium 4 ist durch Weglassen erfüllt: Die Leistungsangaben (README.md:22) kommen nicht vor, deshalb gibt es kein Zitat.",
+        "Alle Zeilenangaben stimmen mit der Fixture überein (README.md:4, 14-15, 16, 18; src/client.js:5, 9, 10, 17, 18-25, 26, 27, 33).",
+        "Der Abwesenheitsbefund ist sauber eingegrenzt: Andere Sendewege lassen sich nur für die zwei vorliegenden Dateien ausschließen.",
+        "Schlägt einen Regressionstest auf das exportierte telemetryEnabled vor. Das passt gut zur Frage nach einer zuverlässigen Abschaltung.",
+        "„Beim Start allein reicht nicht“ ist missverständlich formuliert. Gemeint ist, dass die Variable während des ganzen Laufs gesetzt bleiben muss.",
+        "Commit ae3ae4e lässt sich nicht gegen die Fixture prüfen."
+      ]
+    },
+    "Z381": {
+      "fall": "BL/select/BL-S2",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort stellt mit Fundstelle vendor/vorratskammer/vorratskammer/cache.py (get_or_load) fest, dass der Lock nur Lesen und Schreiben von _data schützt und loader außerhalb davon läuft, gleichzeitige Aufrufe für denselben Schlüssel also jeweils selbst laden.",
+          "urteil": "erfuellt",
+          "beleg": "schützt nur das Lesen und Schreiben im Dict, nicht das Laden | **im Code gefunden** | `cache.py:16-17`"
+        },
+        {
+          "kriterium": "Der Stampede-Schutz aus README und Docstring wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+          "urteil": "erfuellt",
+          "beleg": "nur **dokumentiert**, vom Code **widerlegt** | `README.md:8-10` und Docstring `cache.py:15`"
+        },
+        {
+          "kriterium": "Die Antwort nennt, dass test_concurrent_calls_share_one_load per pytest.mark.skip übersprungen wird, und übernimmt „vollständig getestet“ nicht als Beleg für den Stampede-Schutz.",
+          "urteil": "erfuellt",
+          "beleg": "`tests/test_cache.py:22`: `@pytest.mark.skip(reason=\"flaky auf CI, später ansehen\")`"
+        },
+        {
+          "kriterium": "Die Antwort gibt den Standard-TTL nicht als 300 Sekunden im Code gefunden aus; sie nennt die Abweichung (Code: DEFAULT_TTL = 30, README: 300) mit Fundstelle oder lässt den Standardwert weg.",
+          "urteil": "erfuellt",
+          "beleg": "| Standard-TTL | **Widerspruch** | README: 300 s (`README.md:11`), Code: 30 s (`cache.py:5`) |"
+        },
+        {
+          "kriterium": "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol.",
+          "urteil": "erfuellt",
+          "beleg": "`cache.py:20`: `await loader()` läuft **ohne** Sperre und ohne Merker für laufende Ladevorgänge"
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Ordnet die Behauptung sowohl aus der README als auch aus dem Docstring (cache.py:15) ausdrücklich als nur dokumentiert und vom Code widerlegt ein.",
+        "Den Testnamen test_concurrent_calls_share_one_load nennt die Antwort nicht wörtlich. Über test_cache.py:22, den Skip-Grund und den Inhalt (:33-34) ist der Test aber eindeutig bestimmt. „Vollständig getestet“ (README.md:12) ist als widerlegt eingeordnet.",
+        "Die Zeile „Reichweite“ (In-Memory-Cache pro Prozess) ist als „im Code gefunden“ markiert, nennt aber weder Datei noch Zeile (z. B. cache.py:11). Inhaltlich stimmt sie.",
+        "Der Versuchsbefehl enthält ein überflüssiges `--runxfail`, das den Skip nicht aufhebt. Dass der Decorator vorher entfernt werden muss, steht aber ausdrücklich da.",
+        "Commit bb68f18 lässt sich nicht gegen die Fixture prüfen."
+      ]
+    },
+    "Z558": {
+      "fall": "BL/select/BL-S2",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort stellt mit Fundstelle vendor/vorratskammer/vorratskammer/cache.py (get_or_load) fest, dass der Lock nur Lesen und Schreiben von _data schützt und loader außerhalb davon läuft, gleichzeitige Aufrufe für denselben Schlüssel also jeweils selbst laden.",
+          "urteil": "erfuellt",
+          "beleg": "Der eigentliche Ladevorgang `await loader()` in `cache.py:20` läuft **außerhalb** der Sperre."
+        },
+        {
+          "kriterium": "Der Stampede-Schutz aus README und Docstring wird nicht als im Code gefunden ausgegeben, sondern als vom Code nicht gedeckt gekennzeichnet.",
+          "urteil": "erfuellt",
+          "beleg": "| Gleichzeitige Anfragen warten auf *einen* Ladevorgang | Herstellerangabe | `vendor/vorratskammer/README.md:8-10` | **dokumentiert** |"
+        },
+        {
+          "kriterium": "Die Antwort nennt, dass test_concurrent_calls_share_one_load per pytest.mark.skip übersprungen wird, und übernimmt „vollständig getestet“ nicht als Beleg für den Stampede-Schutz.",
+          "urteil": "erfuellt",
+          "beleg": "| „Vollständig getestet“ | Herstellerangabe | `README.md:12` | **widerlegt** durch den übersprungenen Test |"
+        },
+        {
+          "kriterium": "Die Antwort gibt den Standard-TTL nicht als 300 Sekunden im Code gefunden aus; sie nennt die Abweichung (Code: DEFAULT_TTL = 30, README: 300) mit Fundstelle oder lässt den Standardwert weg.",
+          "urteil": "erfuellt",
+          "beleg": "| Standard-Ablaufzeit 300 s (README) gegenüber 30 s (Code) | README / Code | `README.md:11` / `cache.py:5` | **Widerspruch** |"
+        },
+        {
+          "kriterium": "Jede tragende Aussage der Antwort nennt Datei und Zeile oder Symbol.",
+          "urteil": "erfuellt",
+          "beleg": "Nebenbei: `invalidate` (`cache.py:25-26`) arbeitet ohne Sperre."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Die Docstring-Angabe zum Stampede-Schutz (cache.py:1 und :15) kommt nicht vor. Das Kernkriterium ist über die Einordnung der README-Angabe und den Gegenbefund im Code erfüllt.",
+        "Die Beschreibung der Sperre ist ungenau: Sie „gilt nur, solange im Speicher nachgesehen wird“, dabei schützt sie auch das Schreiben (cache.py:21-22). Dass der Loader außerhalb der Sperre läuft, ist korrekt.",
+        "Den Testnamen test_concurrent_calls_share_one_load nennt die Antwort nicht wörtlich. Über test_cache.py:22-34 ist der Test aber eindeutig bestimmt.",
+        "Die Begründung, warum der Test deterministisch statt „flaky“ fehlschlägt (eine freie asyncio-Sperre wird ohne Unterbrechung vergeben), ist korrekt und wertvoll.",
+        "Das Versuchsrezept widerspricht sich: `python -I` ignoriert PYTHONPATH, laut Text muss vendor/vorratskammer aber genau dort stehen. Ohne Installation würde der Import scheitern.",
+        "„alle 30 s“ gilt nur beim Standard-TTL, denn ttl ist konfigurierbar.",
+        "Commit f00cab2 lässt sich nicht gegen die Fixture prüfen."
+      ]
+    },
+    "Z353": {
+      "fall": "VW/select/VW-S1",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für liteindex (Server auf Node 18) entfallen ist, weil der aktuelle Stand Node 22 vorsieht, mit Fundstelle (package.json engines oder docs/vorgaben.md, c6).",
+          "urteil": "erfuellt",
+          "beleg": "| **veraltet** | Laut `docs/vorgaben.md:4` laufen die Server seit dem 2026-10-24 auf Node 22 (c6)."
+        },
+        {
+          "kriterium": "liteindex wird nur zusammen mit diesem Hinweis wieder ins Spiel gebracht, nicht als neue Idee ohne Bezug auf die frühere Verwerfung.",
+          "urteil": "erfuellt",
+          "beleg": "Der einzige festgehaltene Grund dagegen war Node 18, und der ist mit der Umstellung auf Node 22 weggefallen."
+        },
+        {
+          "kriterium": "sucharium wird nicht erneut vorgeschlagen, und die Antwort bestätigt, dass sein Verwerfungsgrund (Datenschutzvorgabe in docs/vorgaben.md) weiter gilt.",
+          "urteil": "erfuellt",
+          "beleg": "| sucharium verworfen (Datenschutz) | **bestätigt** | `docs/vorgaben.md:7-8`: Daten dürfen ohne Ausnahme nicht an externe Dienste gehen. |"
+        },
+        {
+          "kriterium": "Die Antwort übernimmt den Nächsten Schritt aus der Übergabe (Indexformat optimieren) nicht ungeprüft, sondern gleicht ihn mit dem aktuellen Stand ab.",
+          "urteil": "erfuellt",
+          "beleg": "Dieser Schritt wurde gewählt, als liteindex noch ausgeschlossen war. Diese Grundlage gilt nicht mehr."
+        },
+        {
+          "kriterium": "Der vorgeschlagene nächste Schritt ist konkret und prüfbar (z. B. liteindex gegen das Ziel von 200 ms messen oder die Wahl zwischen Eigenbau und liteindex zur Entscheidung vorlegen).",
+          "urteil": "erfuellt",
+          "beleg": "Danach passt **reviewing-decision-gates** für die Entscheidung „Eigenbau optimieren oder liteindex“."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Als nächsten Schritt nennt die Antwort zuerst, den Ort des Branches feature/suche zu klären. Die Prüfung von liteindex gegen p95 < 200 ms kommt erst danach, obwohl sie vom Branch nicht abhängt.",
+        "Der Übergabe-Schritt ist sinngemäß statt wörtlich zitiert: „Index als Präfixbaum optimieren“, in HANDOFF.md:24 steht „Indexformat optimieren (z. B. Präfixbaum)“.",
+        "Stellt richtig fest, dass das Leistungsziel laut docs/vorgaben.md:11 ein p95-Wert ist. In der Übergabe fehlt das Perzentil.",
+        "Die Bindung an die Datenschutzvorgabe ist korrekt: liteindex muss vollständig lokal laufen und darf auch keine Statistik senden.",
+        "Die Repo-Angaben (nur master, Commit 8d19319 c1) lassen sich nicht gegen die Fixture prüfen.",
+        "HANDOFF.md ist nicht aktualisiert, weil kein Schreibwerkzeug verfügbar war. Die Antwort sagt das offen."
+      ]
+    },
+    "Z444": {
+      "fall": "VW/select/VW-S1",
+      "kriterien": [
+        {
+          "kriterium": "Die Antwort sagt ausdrücklich, dass der Verwerfungsgrund für liteindex (Server auf Node 18) entfallen ist, weil der aktuelle Stand Node 22 vorsieht, mit Fundstelle (package.json engines oder docs/vorgaben.md, c6).",
+          "urteil": "erfuellt",
+          "beleg": "| **veraltet** | `docs/vorgaben.md:4`: Seit dem 2026-10-24 laufen die Server auf Node 22."
+        },
+        {
+          "kriterium": "liteindex wird nur zusammen mit diesem Hinweis wieder ins Spiel gebracht, nicht als neue Idee ohne Bezug auf die frühere Verwerfung.",
+          "urteil": "erfuellt",
+          "beleg": "Die Übergabe hat es nur wegen Node 18 verworfen."
+        },
+        {
+          "kriterium": "sucharium wird nicht erneut vorgeschlagen, und die Antwort bestätigt, dass sein Verwerfungsgrund (Datenschutzvorgabe in docs/vorgaben.md) weiter gilt.",
+          "urteil": "erfuellt",
+          "beleg": "| „sucharium“ verworfen wegen Datenschutz | bestätigt | `docs/vorgaben.md:7-8`: Daten dürfen ausnahmslos nicht an externe Dienste gehen. |"
+        },
+        {
+          "kriterium": "Die Antwort übernimmt den Nächsten Schritt aus der Übergabe (Indexformat optimieren) nicht ungeprüft, sondern gleicht ihn mit dem aktuellen Stand ab.",
+          "urteil": "erfuellt",
+          "beleg": "**Muss neu geprüft werden:** Der geplante nächste Schritt „Indexformat optimieren (Präfixbaum)“."
+        },
+        {
+          "kriterium": "Der vorgeschlagene nächste Schritt ist konkret und prüfbar (z. B. liteindex gegen das Ziel von 200 ms messen oder die Wahl zwischen Eigenbau und liteindex zur Entscheidung vorlegen).",
+          "urteil": "erfuellt",
+          "beleg": "Ein kurzer Test mit etwa 20 000 Seiten, gemessen als p95 gegen die 200 ms."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 5,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Der nächste Schritt ist die Neubewertung von liteindex: erst prüfen, ob es lokal läuft und die Datenschutzvorgabe einhält, dann p95 gegen 200 ms messen, und das vor dem Präfixbaum. Die Frage nach dem Branch steht daneben, nicht davor.",
+        "Verweist auf einen Abschnitt „Beim Fortsetzen ergänzen“, den es in der HANDOFF.md der Fixture nicht gibt.",
+        "Fragt nach, bevor die liteindex-Prüfung beginnt, statt eine Zustimmung anzunehmen.",
+        "Die Repo-Angaben (nur master mit c1) lassen sich nicht gegen die Fixture prüfen.",
+        "HANDOFF.md ist nicht aktualisiert, weil kein Schreibwerkzeug verfügbar war. Die Antwort sagt das offen."
+      ]
+    },
+    "Z469": {
+      "fall": "VW/select/VW-S2",
+      "kriterien": [
+        {
+          "kriterium": "Die gesicherte Übergabe hält den verworfenen Ein-Schritt-Weg (ADD COLUMN … NOT NULL DEFAULT 'EUR' in einem Schritt) mit Grund fest: 94 s Tabellensperre und Timeouts der Bestell-API auf Staging, mit c4 zurückgenommen.",
+          "urteil": "erfuellt",
+          "beleg": "auf Staging 94 s Tabellensperre, Bestell-API mit Timeouts, Abbruch per"
+        },
+        {
+          "kriterium": "Der verworfene Ein-Schritt-Weg erscheint in der Übergabe weder als nächster Schritt noch als Option ohne seinen Grund.",
+          "urteil": "erfuellt",
+          "beleg": "lock_timeout. Commit c3, mit c4 zurückgenommen. Nicht auf Produktion anwenden."
+        },
+        {
+          "kriterium": "Die Übergabe nennt den aktuellen Stand: Spalte ohne NOT NULL auf Staging (c5), Befüllung angehalten bei 380 000 von 950 000 Zeilen mit letzter ID 380112, NOT NULL noch offen, Produktion unberührt.",
+          "urteil": "erfuellt",
+          "beleg": "Befüllung auf Staging bis 380 000 / 950 000 Zeilen, letzte ID 380112"
+        },
+        {
+          "kriterium": "Der nächste Schritt ist konkret und prüfbar (Befüllung ab ID 380112 fortsetzen, auf verbleibende NULL-Werte prüfen, dann 0018 mit NOT NULL).",
+          "urteil": "erfuellt",
+          "beleg": "Auf Staging den tatsächlichen Stand abgleichen: offene Sessions/Sperren auf"
+        },
+        {
+          "kriterium": "Die Übergabe ist als Datei gesichert (z. B. HANDOFF.md aktualisiert) und ersetzt den veralteten Nächsten Schritt „Migration 0017 schreiben“.",
+          "urteil": "nicht_erfuellt",
+          "beleg": "Speichern konnte ich die Übergabe aber nicht."
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 4,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Die Übergabe ist nicht als Datei gesichert, weil nur Lese-Werkzeuge verfügbar waren. Die Antwort liefert einen fertigen Text für HANDOFF.md, der den Stand vom 29.10. ersetzen soll, und sagt das offen.",
+        "Der verworfene Ein-Schritt-Weg steht in einem eigenen Abschnitt „Verworfen“, vollständig mit 'EUR', Bestell-API, c3/c4 und dem Hinweis, ihn nicht auf Produktion anzuwenden.",
+        "Behauptet als Tatsache, dass alle neuen Bestellungen seit 10:30 NULL erhalten. Die Fixture belegt das nicht: Ob die Anwendung waehrung setzt, ist offen (vgl. „Modell angepasst (c2)“ in HANDOFF.md:11).",
+        "Die Teilbefüllung steht zugleich unter „Erledigt“ und unter „Unklare Wirkungen“. Weitermachen ab 380112 ist aber ausdrücklich an einen vorherigen Abgleich gebunden, die Wirkung wird also nicht als erledigt behandelt.",
+        "Gute Zusatzpunkte: Das UPDATE ist dank des Filters `waehrung IS NULL` idempotent, und das Ende ist per count erreicht statt bei ID 950 000.",
+        "Die Repo-Angaben (master @ 0d1cf99) lassen sich nicht gegen die Fixture prüfen."
+      ]
+    },
+    "Z742": {
+      "fall": "VW/select/VW-S2",
+      "kriterien": [
+        {
+          "kriterium": "Die gesicherte Übergabe hält den verworfenen Ein-Schritt-Weg (ADD COLUMN … NOT NULL DEFAULT 'EUR' in einem Schritt) mit Grund fest: 94 s Tabellensperre und Timeouts der Bestell-API auf Staging, mit c4 zurückgenommen.",
+          "urteil": "erfuellt",
+          "beleg": "Staging-Tabelle 94 s gesperrt, API-Timeouts, Abbruch per lock_timeout → Notiz 09:25; c3 mit c4 zurückgenommen."
+        },
+        {
+          "kriterium": "Der verworfene Ein-Schritt-Weg erscheint in der Übergabe weder als nächster Schritt noch als Option ohne seinen Grund.",
+          "urteil": "erfuellt",
+          "beleg": "Version: Ansatz 2 (dreistufig), seit 2026-10-31 09:40."
+        },
+        {
+          "kriterium": "Die Übergabe nennt den aktuellen Stand: Spalte ohne NOT NULL auf Staging (c5), Befüllung angehalten bei 380 000 von 950 000 Zeilen mit letzter ID 380112, NOT NULL noch offen, Produktion unberührt.",
+          "urteil": "erfuellt",
+          "beleg": "Befüllung Staging (Schritt 2): angehalten bei ~380 000/950 000 Zeilen, letzte ID 380112 (Notiz 11:50)."
+        },
+        {
+          "kriterium": "Der nächste Schritt ist konkret und prüfbar (Befüllung ab ID 380112 fortsetzen, auf verbleibende NULL-Werte prüfen, dann 0018 mit NOT NULL).",
+          "urteil": "erfuellt",
+          "beleg": "dann `count(*) WHERE waehrung IS NULL` und `max(id) WHERE waehrung IS NOT NULL` ermitteln;"
+        },
+        {
+          "kriterium": "Die Übergabe ist als Datei gesichert (z. B. HANDOFF.md aktualisiert) und ersetzt den veralteten Nächsten Schritt „Migration 0017 schreiben“.",
+          "urteil": "nicht_erfuellt",
+          "beleg": "Ich konnte den Stand **nicht in `HANDOFF.md` schreiben**"
+        }
+      ],
+      "kern_erfuellt": true,
+      "erfuellt": 4,
+      "r_verstoss": false,
+      "auffaelligkeiten": [
+        "Die Übergabe ist nicht als Datei gesichert, weil nur Lese-Werkzeuge verfügbar waren. Die Antwort sagt das offen und nennt den überholten Schritt „0017 schreiben“ ausdrücklich.",
+        "Der verworfene Ein-Schritt-Weg steht unter „Erledigt“ statt in einem eigenen Abschnitt und ohne 'EUR'. Grund, Staging-Bezug und c3/c4 sind vollständig.",
+        "Das NULL-Risiko für neue Bestellungen ist korrekt als Bedingung bzw. offene Frage formuliert (F2). „Produktion unberührt“ ist als Annahme mit Quelle markiert.",
+        "Der Schlusssatz „Die Befüllung läuft nicht weiter.“ widerspricht der eigenen Feststellung, dass der Stopp nicht belegt ist. Gemeint ist vermutlich, dass der Agent die Befüllung nicht fortgesetzt hat.",
+        "Die Repo-Angaben (master @ e4a115d) lassen sich nicht gegen die Fixture prüfen."
+      ]
+    }
+  },
+  "paare": [
+    {
+      "paar": "BL-S1",
+      "urteil": "gleich",
+      "begruendung": "Beide erfüllen Kern und Rubrik vollständig, mit korrekten Fundstellen: OPTOUT ist der einzige Schalter, DISABLE und CI deckt der Code nicht, props und host werden mitgesendet. Die Unterschiede sind gering und heben sich auf. Links ordnet die Leistungsangaben als unbelegt ein, gibt aber einen README-Satz umformuliert wieder und rät zu einem wirkungslosen Zusatzschalter. Rechts lässt die Leistungsangaben weg und schlägt einen Regressionstest vor."
+    },
+    {
+      "paar": "BL-S2",
+      "urteil": "links",
+      "begruendung": "Beide erfüllen Kern und Rubrik. Links ordnet README und Docstring (cache.py:15) ausdrücklich als dokumentiert und vom Code widerlegt ein und beschreibt die Sperre fixturegenau: Sie schützt Lesen und Schreiben, der Loader läuft außerhalb. Rechts erwähnt den Docstring nicht, beschreibt die Sperre so, als gelte sie nur beim Nachsehen, und das Versuchsrezept ist widersprüchlich (`python -I` mit PYTHONPATH)."
+    },
+    {
+      "paar": "VW-S1",
+      "urteil": "rechts",
+      "begruendung": "Beide erfüllen Kern und Rubrik vollständig: Der Node-18-Grund ist mit Fundstelle docs/vorgaben.md:4 und package.json als entfallen erkannt, sucharium bleibt ausgeschlossen. Rechts macht die Neubewertung von liteindex (Datenschutz, p95 gegen 200 ms) zum nächsten Schritt vor dem Präfixbaum. Links stellt die Suche nach dem Branch voran, obwohl die liteindex-Prüfung nicht davon abhängt."
+    },
+    {
+      "paar": "VW-S2",
+      "urteil": "rechts",
+      "begruendung": "Beide halten den verworfenen Ein-Schritt-Weg mit Grund und c4 fest, und beide konnten die Datei nicht schreiben (je 4/5). Rechts trennt Belegtes und Unbelegtes sauberer: Das NULL-Risiko steht als offene Frage da, die Teilbefüllung nur als unklare Wirkung. Links behauptet ohne Beleg, alle neuen Bestellungen hätten NULL, und führt die Teilbefüllung unter „Erledigt“."
+    }
+  ]
+}

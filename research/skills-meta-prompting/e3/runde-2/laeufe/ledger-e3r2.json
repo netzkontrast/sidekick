@@ -1,0 +1,44 @@
+{
+  "starts": [
+    {
+      "attempt_id": 1,
+      "trial_id": "E3R2-BL-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 2,
+      "trial_id": "E3R2-BL-S1-K-BELEG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 3,
+      "trial_id": "E3R2-BL-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 4,
+      "trial_id": "E3R2-BL-S2-K-BELEG",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 5,
+      "trial_id": "E3R2-VW-S1-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 6,
+      "trial_id": "E3R2-VW-S1-K-WEGE",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 7,
+      "trial_id": "E3R2-VW-S2-B1",
+      "status": "reserved_before_start"
+    },
+    {
+      "attempt_id": 8,
+      "trial_id": "E3R2-VW-S2-K-WEGE",
+      "status": "reserved_before_start"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+pipeline: feature/rabattregeln
+commit: c5
+status: success
+jobs: lint ok, unit ok (412), integration ok (37)
+finished: 2026-10-30T19:02Z
