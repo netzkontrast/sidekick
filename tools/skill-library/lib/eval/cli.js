@@ -54,7 +54,7 @@ export const EVAL_USAGE = `  eval freeze --source-commit SHA [--root DIR] [--ver
   eval nullrun --b1-kern KERNURTEILE.json
   eval findings --case FALLORDNER AUSGABE.md...
   eval cite-check --repo VERZ --commit SHA BERICHT.md [--scope PRAEFIX|GLOB]... [--github OWNER/REPO]
-  eval contract check --contract researching-repositories@1 BERICHT.md [--repo VERZ --commit SHA] [--case FALLORDNER]
+  eval contract check --contract researching-repositories@2|@1 BERICHT.md [--repo VERZ --commit SHA] [--case FALLORDNER]
   eval context-pack --allowlist DATEI [--root VERZ] [--deny MUSTER]... [--estimator utf8-bytes-div-4@1]
                     [--output NEUE-DATEI.md]                                    Datensatz (stdout)`;
 

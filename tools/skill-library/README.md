@@ -61,9 +61,9 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/citecheck.js` | Segmentregister am Commit, Zitate (Permalinks, Fundstellen, Commit-Wörter) gegen Git, Abdeckung | EVAL-28…30 |
 | `lib/eval/contextpack.js` | Kontextpaket: Mustersyntax, Auswahl ohne Symlink-Folgen, Sperren, Datensatz mit Hashes, Markdown-Bündel | EVAL-31…34 |
 | `lib/eval/costbalance.js` | Kostenbilanz: Usage je Turn, Bytes und Bytes × Folgeturns je Ereignisklasse; Berichtsblock mit Differenzen und Kosten je erfülltem Kriterium | EVAL-35…38 |
-| `lib/eval/contract.js` | Ausgabevertrag `researching-repositories@1`: Pflichtblöcke fail-closed, Evidenzstufe und Quellenrolle, Fundstellen mit Stand gegen Git (`citecheck.js`) oder Fixture (`findings.js`), Fallabgleich eingepflanzter Anweisungen | EVAL-39…42 |
+| `lib/eval/contract.js` | Ausgabevertrag `researching-repositories@2` (und `@1`): Pflichtblöcke fail-closed, Evidenzstufe und Quellenrolle, Fundstellen mit Stand gegen Git (`citecheck.js`) oder Fixture (`findings.js`), Fallabgleich eingepflanzter Anweisungen | EVAL-39…42 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
-| `test/` | je Fall SLV0-FALL-01…46 und -48…84 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
+| `test/` | je Fall SLV0-FALL-01…46 und -48…85 mindestens ein Test (Name beginnt mit der Fall-ID); `test/fixtures/` hält Kopien von Research-Daten mit Hashes für die Gleichheitstests | §9, §9.1 |
 
 ## Auslegungen, wo die Spec nichts festlegt
 
@@ -163,7 +163,7 @@ oder unbekanntem `--commit`; nicht belegte Dateien und die Warnung `commit_unver
 Ausgabevertrag eines Research-Berichts (SLV0-EVAL-39…42, Paket P6, nur lesend; Spec §7.8):
 
 ```sh
-$B eval contract check --contract researching-repositories@1 bericht.md \
+$B eval contract check --contract researching-repositories@2 bericht.md \
                        [--repo ../fremd-repo --commit 1780d46a] [--case FALLORDNER]
 ```
 
@@ -466,6 +466,8 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
   erlaubt, aber `pfad:zeile` ohne Stand ist auch dort ein Fehler. Links: Ziel zählt, Linktext nicht.
 - **Prüfmodus:** `--repo` hat Vorrang vor der Fixture eines `--case`; ohne beides wird nur die Form geprüft und RR-K03 bleibt `nicht_geprueft`
   (Exit 0 möglich). Die Fixture-Prüfung nutzt die Regeln der Überberichtung (Pfadende genügt, Commit muss im Fixture-Text stehen), meldet aber Fehler.
+- **Vertragsversion:** `researching-repositories@2` erlaubt die Quellenrolle `—` (nur U+2014) bei Evidenzstufe `offen`; bei jeder anderen Stufe
+  bleibt sie `source_role_unknown`, `-`/`–` nie. `@1` bleibt mit alter Bedeutung prüfbar, damit E3-4-Ergebnisse reproduzierbar sind; neue Kandidaten nutzen `@2`.
 - **Kriterien nur im Block:** `kriterien` sagt, ob die Vertragsblöcke RR-K03/-K04/-K10 erfüllen. Die Rubrik `researching-repositories@1` bleibt
   bei Prüfart `rubrik` (sie ist an den Pakethash gebunden; eine deterministische Fassung braucht eine neue Rubrikversion mit einem Skill, der den
   Vertrag anweist). Deshalb erzeugt der Befehl keine Assertions für `eval raw`.
@@ -497,7 +499,7 @@ fällt auf). Unverändert Bewerter: RR-K05 inhaltlich, RR-K07, RR-K08, RR-K09, R
 - Überberichtung (`eval findings`) prüft weiter gegen den Fixture-Text, nicht gegen einen Git-Stand; gegen Git prüft `eval cite-check` (Spec O-13, teilweise gelöst).
 - `cite-check` hat keine Schwelle und keinen Schalter, der nicht belegte Dateien zum Fehler macht; ob eine Abdeckung genügt, entscheidet das Verfahren.
   Andere Hosts als GitHub, relative Markdown-Links mit Zeilenanker und Zitate auf Ordner (`tree/`) werden nicht erkannt.
-- Ausgabevertrag (Spec O-16): nur `researching-repositories@1`; geprüft werden nur die beiden Blöcke, nicht der übrige Bericht; eine gültige
+- Ausgabevertrag (Spec O-16): nur `researching-repositories@1` und `@2`; geprüft werden nur die beiden Blöcke, nicht der übrige Bericht; eine gültige
   Fundstelle belegt Existenz, nicht Inhalt; kein Skill weist den Vertrag bisher an (E3-Kandidat folgt getrennt); die vorhandenen Injektionsfälle
   tragen noch kein `art: eingebettete_anweisung`. Fundstellen ohne Dateiendung und Symbolangaben werden nicht erkannt.
 - Kontextpaket (Spec O-14): keine Bindung der Allowlist an einen Commit, kein Abgleich erwarteter Dateihashes aus der Übergabe, keine

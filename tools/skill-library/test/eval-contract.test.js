@@ -375,3 +375,50 @@ test('SLV0-FALL-84 usage errors: unknown contract, options, report count; nothin
   if (GIT_OK) usage(['contract', 'check', '--contract', CONTRACT, file, '--repo', path.join(root, 'reports'), '--commit', 'abc1234']);
   assert.deepEqual(fs.readdirSync(root).sort(), before);
 });
+
+test('SLV0-FALL-85 researching-repositories@2: source role — only with evidence level offen; @1 unchanged', (t) => {
+  const { root, report } = setup(t);
+  const V2 = 'researching-repositories@2';
+  const sha = 'abc1234';
+  const valid = validReport(sha);
+  const row = '| Verhalten mit echtem SMTP-Server nicht ausgeführt | ausgeführter Test | — | offen |';
+  assert.ok(valid.includes(row));
+  const run = (name, newRow, contract, extra, base) => runEvalCli(['contract', 'check', '--contract', contract, report(name, base.replace(row, newRow)), ...extra]);
+  const pass = (name, newRow, contract = V2) => {
+    const r = run(name, newRow, contract, [], valid);
+    assert.equal(r.code, 0, `${name}: ${r.stdout}`);
+    assert.equal(r.json.vertrag, contract);
+    return r;
+  };
+  const fail = (name, newRow, codes, contract = V2, extra = [], base = valid) => {
+    const r = run(name, newRow, contract, extra, base);
+    assert.equal(r.code, 1, `${name}: ${r.stdout}`);
+    assert.deepEqual(codesOf(r.json), codes, name);
+    assert.ok(r.json.messages.every((m) => m.line === 12), name);
+    assert.equal(r.json.vertrag, contract);
+    return r;
+  };
+  const offen = '| Verhalten mit echtem SMTP-Server nicht ausgeführt | — | — | offen |';
+  const r = pass('offen-strich.md', offen);
+  assert.deepEqual(r.json.befunde[3], { zeile: 12, aussage: 'Verhalten mit echtem SMTP-Server nicht ausgeführt', quellenrolle: '—', evidenzstufe: 'offen', codeaussage: false, zitate: 0 });
+  assert.equal(kriterium(r.json, 'RR-K04'), 'erfuellt');
+  pass('offen-strich-kursiv.md', offen.replace('| — | — |', '| *—* | — |'));
+  // citations in such a row are checked as usual
+  const cited = pass('offen-zitat.md', offen.replace('| — | offen |', `| \`README.md:2@${sha}\` | offen |`));
+  assert.equal(cited.json.befunde[3].zitate, 1);
+  assert.equal(cited.json.zaehlung.zitate, 6);
+  fail('offen-ohne-stand.md', offen.replace('| — | offen |', '| `README.md:2` | offen |'), ['citation_invalid']);
+  const fall = caseDir(root, 'FALL-85', PLANTED);
+  fail('offen-fixture.md', offen.replace('| — | offen |', '| `src/fehlt.js:1@arbeitsbaum` | offen |'), ['path_missing'], V2, ['--case', fall], validReport('arbeitsbaum'));
+  // — with any other evidence level stays an unknown source role
+  const doc = fail('dokumentiert-strich.md', offen.replace('| offen |', '| dokumentiert |'), ['source_role_unknown']);
+  assert.match(doc.json.messages[0].message, /nur mit Evidenzstufe offen/);
+  assert.equal(kriterium(doc.json, 'RR-K04'), 'nicht_erfuellt');
+  fail('code-strich.md', offen.replace('| — | offen |', `| \`src/mailer.js:1-3@${sha}\` | im Code gefunden |`), ['source_role_unknown']);
+  fail('belegt-strich.md', offen.replace('| offen |', '| belegt |'), ['evidence_level_unknown', 'source_role_unknown']);
+  fail('offen-minus.md', offen.replace('| — | — |', '| - | — |'), ['source_role_unknown']);
+  fail('offen-halbgeviert.md', offen.replace('| — | — |', '| – | — |'), ['source_role_unknown']);
+  // @1 keeps its meaning
+  pass('v1-gueltig.md', row, CONTRACT);
+  fail('v1-offen-strich.md', offen, ['source_role_unknown'], CONTRACT);
+});

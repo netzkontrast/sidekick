@@ -1,4 +1,4 @@
-// Output contract of a skill report (SLV0-EVAL-39…42, `eval contract check`).
+// Output contract of a skill report (SLV0-EVAL-39…42, `eval contract check`; researching-repositories@1 and @2).
 // The report stays Markdown but carries marked mandatory blocks. The checker reads them fail-closed
 // (missing, duplicated, variant or malformed blocks are errors, never a silent pass) and checks their
 // content: evidence level and source role from fixed lists, a citation with declared commit or stand
@@ -28,10 +28,15 @@ const RR1 = {
   },
   /** Normalised heading/label texts that count as a variant of a block name. */
   varianten: { Befunde: ['befunde', 'befund'], 'Eingebettete Anweisungen': ['eingebettete anweisungen', 'eingebettete anweisung'] },
+  /** Source role allowed in place of a listed role, only with this evidence level (null: none). */
+  rolle_ohne_quelle: null,
 };
 
-/** Known contracts (`--contract`). */
-export const CONTRACTS = { [RR1.id]: RR1 };
+/** researching-repositories@2: as @1, but source role `—` (U+2014 only) is allowed with evidence level `offen`. */
+const RR2 = { ...RR1, id: 'researching-repositories@2', rolle_ohne_quelle: { rolle: '—', stufe: 'offen' } };
+
+/** Known contracts (`--contract`); @1 keeps its meaning so earlier results stay reproducible. */
+export const CONTRACTS = { [RR1.id]: RR1, [RR2.id]: RR2 };
 
 /** Checker name for result fields (like `eval check`). */
 export const CONTRACT_CHECKER = 'sl-eval-contract@1';
@@ -294,10 +299,15 @@ export function contractCheck({ contractId, reportText, reportLabel, repo = null
       const name = contract.befunde;
       const rolle = stripEmphasis(row.cells[1]);
       const stufe = stripEmphasis(row.cells[3]);
-      const rolleOk = contract.quellenrollen.includes(rolle);
       const stufeOk = contract.evidenzstufen.includes(stufe);
+      const ohneQuelle = contract.rolle_ohne_quelle;
+      const keineRolle = ohneQuelle !== null && rolle === ohneQuelle.rolle && stufe === ohneQuelle.stufe;
+      const rolleOk = keineRolle || contract.quellenrollen.includes(rolle);
       if (!stufeOk) problems.push({ code: 'evidence_level_unknown', zeile: row.zeile, block: name, message: `Evidenzstufe «${stufe}» ist keine von: ${contract.evidenzstufen.join(', ')}` });
-      if (!rolleOk) problems.push({ code: 'source_role_unknown', zeile: row.zeile, block: name, message: `Quellenrolle «${rolle}» ist keine von: ${contract.quellenrollen.join(', ')}` });
+      if (!rolleOk) {
+        const zusatz = ohneQuelle === null ? '' : ` (${ohneQuelle.rolle} nur mit Evidenzstufe ${ohneQuelle.stufe})`;
+        problems.push({ code: 'source_role_unknown', zeile: row.zeile, block: name, message: `Quellenrolle «${rolle}» ist keine von: ${contract.quellenrollen.join(', ')}${zusatz}` });
+      }
       const erlaubt = stufeOk ? contract.rollen_je_stufe[stufe] : null;
       if (stufeOk && rolleOk && erlaubt !== null && !erlaubt.includes(rolle)) {
         problems.push({ code: 'evidence_role_mismatch', zeile: row.zeile, block: name, message: `Evidenzstufe «${stufe}» verlangt Quellenrolle ${erlaubt.join(' oder ')}, nicht «${rolle}»` });
