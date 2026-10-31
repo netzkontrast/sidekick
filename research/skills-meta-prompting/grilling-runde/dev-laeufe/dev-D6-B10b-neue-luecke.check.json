@@ -1,0 +1,45 @@
+{
+ "case": "D6-B10b-neue-luecke",
+ "skill_calls": [
+  "grilling"
+ ],
+ "tools": [
+  "Edit",
+  "Glob",
+  "Read",
+  "Skill",
+  "Write"
+ ],
+ "checks": [
+  {
+   "rule": {
+    "file": "docs/fragen/tafel/questions/Q-20261029-gaeste.md",
+    "frontmatter": {
+     "status": "answered"
+    }
+   },
+   "ok": true,
+   "detail": "ok"
+  },
+  {
+   "rule": {
+    "new_file_under": "docs/fragen/tafel/questions/",
+    "contains_any": [
+     "Q-20261029-gaeste",
+     "A-"
+    ]
+   },
+   "ok": true,
+   "detail": "neu: ['docs/fragen/tafel/questions/Q-20261031-link-ablauf.md', 'docs/fragen/tafel/questions/Q-20261031-link-umfang.md']; passend: ['docs/fragen/tafel/questions/Q-20261031-link-ablauf.md', 'docs/fragen/tafel/questions/Q-20261031-link-umfang.md']"
+  },
+  {
+   "rule": {
+    "only_changed_under": "docs/fragen/"
+   },
+   "ok": true,
+   "detail": "ok"
+  }
+ ],
+ "passed": 3,
+ "total": 3
+}
