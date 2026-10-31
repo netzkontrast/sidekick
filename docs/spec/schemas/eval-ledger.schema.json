@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sidekick.invalid/spec/skill-library-v0/eval-ledger.schema.json",
   "title": "Eval-Ledger-Eintrag – Skill-Library V0",
-  "description": "Eine Zeile des append-only Ledgers (JSON Lines). Kopf `ledger` mit freigegebenem Startlimit und optional gebundenem Split-Manifest; `reservation` vor jedem Start (SLV0-EVAL-05); `result` als eigener Nachtrag, nie durch Umschreiben; `split_access` und `split_selection` protokollieren Splitzugriffe einschließlich Verstößen (SLV0-EVAL-07). Der Zähler ist ein Protokoll, keine systemweite Kostensperre.",
+  "description": "Eine Zeile des append-only Ledgers (JSON Lines). Kopf `ledger` mit freigegebenem Startlimit und optional gebundenem Split-Manifest; `reservation` vor jedem Start (SLV0-EVAL-05); `result` als eigener Nachtrag, nie durch Umschreiben; `split_access` und `split_selection` protokollieren Splitzugriffe einschließlich Verstößen (SLV0-EVAL-07). Optional ein Kostendeckel in USD mit Reserve (SLV0-EVAL-43/-44): `budget_usd`/`reserve_usd` im Kopf, `projected_usd` je Reservierung, `cost_usd` im Ergebnis (null = unbekannt). Zähler und Deckel sind ein Protokoll, keine systemweite Kostensperre.",
   "type": "object",
   "required": ["schema_version", "seq", "kind", "recorded_at"],
   "additionalProperties": false,
@@ -27,14 +27,19 @@
     "decision": { "enum": ["granted", "denied"] },
     "code": { "enum": [null, "split_access_denied", "split_consumed"] },
     "candidate_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
-    "case_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+    "case_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+    "budget_usd": { "type": "number", "minimum": 0, "description": "Kostendeckel in USD (> 0), nur zusammen mit reserve_usd (SLV0-EVAL-43)." },
+    "reserve_usd": { "type": "number", "minimum": 0, "description": "Nicht verplanbare Reserve in USD, kleiner als budget_usd." },
+    "projected_usd": { "type": "number", "minimum": 0, "description": "Vorab geplante Kosten des Starts; Pflicht bei Deckel." },
+    "cost_usd": { "type": ["number", "null"], "minimum": 0, "description": "Gemeldete Kosten des Starts oder null (unbekannt, nie 0) (SLV0-EVAL-44)." }
   },
   "allOf": [
     { "if": { "properties": { "kind": { "const": "ledger" } } }, "then": { "required": ["limit", "manifest_sha256"] } },
     { "if": { "properties": { "kind": { "const": "reservation" } } }, "then": { "required": ["attempt_id", "trial_id", "status", "limit"] } },
     { "if": { "properties": { "kind": { "const": "result" } } }, "then": { "required": ["attempt_id", "outcome", "trace_sha256", "raw_ids"] } },
     { "if": { "properties": { "kind": { "const": "split_access" } } }, "then": { "required": ["role", "split", "decision", "code", "candidate_sha256", "case_ids"] } },
-    { "if": { "properties": { "kind": { "const": "split_selection" } } }, "then": { "required": ["role", "candidate_sha256"] } }
+    { "if": { "properties": { "kind": { "const": "split_selection" } } }, "then": { "required": ["role", "candidate_sha256"] } },
+    { "if": { "required": ["budget_usd"] }, "then": { "required": ["reserve_usd"] } }
   ],
   "$defs": {
     "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" }

@@ -47,7 +47,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/snapshot.js` | Einfrieren aus Arbeitsbaum oder Quellform, Prüfen aller Hashes | EVAL-01/-02 |
 | `lib/eval/candidate.js` | Kandidatenbindung: Baseline, genau eine Dimension, eindeutige Ersetzung | EVAL-03 |
 | `lib/eval/prepare.js` | Versuchsverzeichnisse B0/B1/Kandidat, Konfigurationsschutz, nie überschreiben | EVAL-04 |
-| `lib/eval/ledger.js` | append-only Ledger (JSON Lines) mit Sperrdatei, Startlimit, Ergebnisnachtrag | EVAL-05 |
+| `lib/eval/ledger.js` | append-only Ledger (JSON Lines) mit Sperrdatei, Startlimit, optionalem Kostendeckel in USD, Ergebnisnachtrag | EVAL-05, EVAL-43/-44 |
 | `lib/eval/split.js` | Split-Manifest, Familienüberlappung, Rollenzugriff, Auswahl, verbrauchter Test-Split | EVAL-06/-07 |
 | `lib/eval/normalize.js` | Positivliste für Client-Spuren (JSONL oder skill-pilot-v1) | EVAL-08, INV-05 |
 | `lib/eval/raw.js`, `lib/eval/report.js` | Rohdatensatz je Start; Bericht nur aus Rohdaten, R-Verstöße getrennt | EVAL-09…11, INV-06/-09 |
@@ -60,6 +60,7 @@ oder interner Ausnahme; Warnungen ändern den Exit-Code nicht (SLV0-VAL-17).
 | `lib/eval/findings.js` | Einheiten, 1:1-Zuordnung erwarteter Befunde, Überberichtung | EVAL-26/-27 |
 | `lib/eval/citecheck.js` | Segmentregister am Commit, Zitate (Permalinks, Fundstellen, Commit-Wörter) gegen Git, Abdeckung | EVAL-28…30 |
 | `lib/eval/contextpack.js` | Kontextpaket: Mustersyntax, Auswahl ohne Symlink-Folgen, Sperren, Datensatz mit Hashes, Markdown-Bündel | EVAL-31…34 |
+| `lib/eval/paired.js` | Gepaarter Vergleich je Ebene: Vierfeldertafel, exakter McNemar-Test, Bootstrap-Intervall über Familien (mulberry32) | EVAL-45/-46 |
 | `lib/eval/costbalance.js` | Kostenbilanz: Usage je Turn, Bytes und Bytes × Folgeturns je Ereignisklasse; Berichtsblock mit Differenzen und Kosten je erfülltem Kriterium | EVAL-35…38 |
 | `lib/eval/contract.js` | Ausgabevertrag `researching-repositories@2` (und `@1`): Pflichtblöcke fail-closed, Evidenzstufe und Quellenrolle, Fundstellen mit Stand gegen Git (`citecheck.js`) oder Fixture (`findings.js`), Fallabgleich eingepflanzter Anweisungen | EVAL-39…42 |
 | `lib/eval/cli.js` | Unterbefehle `eval …` | – |
@@ -203,6 +204,21 @@ alle Meldungen gesammelt, Exit 1 ohne Datensatz und ohne Bündel: `pattern_inval
 `--deny`, nie verkleinert), `nested_repository`, `file_not_text`, `output_exists`. Exit 2 bei fehlender oder schemawidriger Allowlist,
 ungültigem `--root`, unbekanntem Schätzer oder fehlendem Zielordner.
 
+Kostendeckel und gepaarte Statistik (SLV0-EVAL-43…46, AP3; Spec §7.9):
+
+```sh
+$B eval ledger init --ledger ledger.jsonl --limit 20 --budget-usd 5.00 --reserve-usd 0.50
+$B eval ledger reserve --ledger ledger.jsonl --trial-id F-01--B1 --projected-usd 0.25    # Pflicht bei Deckel
+$B eval ledger result --ledger ledger.jsonl --attempt-id 1 --outcome completed --cost-usd 0.19   # ohne Angabe: unbekannt
+$B eval ledger status --ledger ledger.jsonl                     # summary.kostendeckel: gebunden, verfügbar, ohne bekannte Kosten
+$B eval report raw/ [--seed 20261031] [--bootstrap 2000] > bericht.json   # je Ebene: gepaart (B1−B0, K-…−B1)
+```
+
+Gebunden ist je Reservierung der gemeldete Betrag, sonst der geplante; auch Fehlstarts bleiben gebunden. Beträge sind Dezimaltext mit
+höchstens 6 Nachkommastellen und werden in Mikro-USD summiert. Der Block `gepaart` zeigt Paare gleicher `case_id`/`repeat_id`, die
+Vierfeldertafel, den exakten McNemar-p-Wert und ein 95-%-Perzentil-Intervall der Differenz der Bestehensanteile mit der Familie als
+Ziehungseinheit. Gleicher Seed, gleiches Ergebnis. Kein Feld ist ein Urteil; ein kleiner p-Wert ist kein Aktivierungsbeleg.
+
 Kostenbilanz je Kontextklasse und Turn (SLV0-EVAL-35…38, Paket P4; Spec §7.7):
 
 ```sh
@@ -327,6 +343,7 @@ umgeschriebenen JSON-Datei; die Normalisierung übernimmt von Plugins nur `name`
 - **Vorbereiten:** Konfigurationsschutz ohne Groß-/Kleinschreibung: an der Wurzel `.claude/`, `.agents/`, `.mcp.json`; `AGENTS.md`, `CLAUDE.md` und `CLAUDE.local.md` in jedem Verzeichnis, weil der Client verschachtelte Regeldateien nachlädt (SLV0-FALL-47). Alles wird vor dem
   ersten Schreiben geprüft; ein Abbruch hinterlässt kein Zielverzeichnis.
 - **Ledger:** Das Limit steht im Kopf (`ledger init`, 1…40, Owner-Budget). Ein Ergebnis je Versuch; ein zweites ist Exit 2.
+  Ein optionaler Kostendeckel (`--budget-usd`, `--reserve-usd`) steht ebenfalls im Kopf; ältere Ledger haben keinen und bleiben gültig.
   Ein beschädigtes Ledger wird nicht repariert (Exit 2). Die Sperre `<ledger>.lock` wird bei `ledger_locked` nie entfernt.
 - **Splits:** `author` liest `dev` und `regression`, `evaluator` liest `select` und `regression`; `test` nur `evaluator`
   nach `split select` mit demselben Kandidatenhash. Derselbe Kandidat darf `test` erneut lesen (Wiederholungen); ein
