@@ -1,0 +1,63 @@
+{
+  "id": "E3-3",
+  "status": "vorab festgelegt; Kandidaten eingefroren, bevor Select-/Test-Familien existieren",
+  "date": "2026-10-31",
+  "autorisierung": "Owner-Antworten 31.10.2026: Laufbudget ~60 Starts für P6–P10 (A-20261031-port-laufbudget), B1-Vorlauf mit P2 (A-20261031-e3-b1-vorlauf); Aktivierung nur durch Owner-Merge",
+  "design": "wie e3/runde-2/e3-plan.json, zusätzlich B1-Vorlauf nach SLV0-EVAL-25 (PR #23) und Nulllauf-Markierung jeder deterministischen Prüfung (SLV0-EVAL-23)",
+  "baseline": {
+    "variante": "B1",
+    "paketsatz_sha256": "6d0f3353285e109c63ab038ba8681c3add8e46e3019a76d39c73f99133bbd0e5",
+    "commit": "2b66406"
+  },
+  "kandidaten": [
+    {
+      "id": "K-AUFTEILUNG",
+      "herkunft": "Deep Research 31.10.2026, Befunde B5–B7 (grilling-runde/deep-research/auswertung-2026-10-31.md)",
+      "skill": "grilling",
+      "aenderung": "Schritt 4: plausible Antworten je Kandidatenfrage nennen; Frage ohne Entscheidungsfolge nicht stellen, sondern als markierte Annahme festhalten; zuerst die am stärksten aufteilende Frage; widerlegte Annahmen nach jeder Antwort streichen",
+      "content_hash": "723761f40a3d2d26bacfef6c0e14a540a347fbe0aa198ee819125585cbb4ed39",
+      "pfad": "e3/runde-3/kandidaten/K-AUFTEILUNG/grilling",
+      "kern": "Eine Frage ohne Entscheidungsfolge wird nicht gestellt und als Annahme markiert; Gegenkriterium: keine entscheidungsrelevante Frage entfällt"
+    },
+    {
+      "id": "K-LADESTUFEN",
+      "herkunft": "Portierungsplan P7 (prompt-engineering-skill, Einstiegsweiche); Kostenbefund grilling-runde/dev-ergebnis.md",
+      "skill": "grilling",
+      "aenderung": "Schritt 2: Weiche Neuanlage/Fortsetzung; Fortsetzung liest nur Themenindex, betroffene Fragedateien und eine kompakte Zustandstabelle; workflow.md nur für Sonderfälle",
+      "content_hash": "cc614473d65cc640fbad725d50bbb055ec793531b3b6da736e4cf1dde97fd5fd",
+      "pfad": "e3/runde-3/kandidaten/K-LADESTUFEN/grilling",
+      "kern": "Fortsetzungsfall: alle trennenden Prüfungen wie B1 bestanden UND weniger Turns oder USD als B1 (Kosten aus der normalisierten Spur)"
+    },
+    {
+      "id": "K-RUECKWAERTS",
+      "herkunft": "Portierungsplan P8 (prompt-architect, Rückwärtsabgleich)",
+      "skill": "grilling",
+      "aenderung": "Schritt 8: vor der Zusammenfassung rückwärts abgleichen; vorausgesetzte, nie gestellte Entscheidungen werden offene Frage oder markierte Annahme, nie geklärt; Empfehlung ist keine Antwort",
+      "content_hash": "0d08016bc84433149389ead9ca05cd0b3d5c1605b29dbe81597b672d23f20859",
+      "pfad": "e3/runde-3/kandidaten/K-RUECKWAERTS/grilling",
+      "kern": "Eine im Entwurf vorausgesetzte, nie gestellte Entscheidung wird als offene Frage erfasst oder als Annahme markiert; eine nur empfohlene Option wird nicht als answered geführt"
+    }
+  ],
+  "splits": {
+    "select": "2 neue Familien je Kandidat; B1-Vorlauf zuerst (nur B1, 2 Starts); Kandidatenstarts nur bei 'trennend'",
+    "test": "4 neue Familien je Kandidat",
+    "herkunft": "getrennte Session ohne Zugriff auf Kandidatentexte; dev-Fixtures D1–D8 und frühere Familien werden nicht wiederverwendet",
+    "regression": "je Kandidat 2 Pflichtfälle aus den vorhandenen grilling-Regressionsfixtures (R-01, R-05)",
+    "negativkontrolle": "jede Familie enthält ein Gegenkriterium; jede deterministische Prüfung wird gegen einen Nulllauf als trennend/erhaltend markiert"
+  },
+  "starts": {
+    "je_kandidat": {
+      "select_b1_vorlauf": 2,
+      "select_kandidat_nur_wenn_trennend": 2,
+      "test": 8,
+      "regression": 2
+    },
+    "summe_hoechstens": 42,
+    "grenze": 42,
+    "hinweis": "Teil des Owner-Budgets von ~60 Starts für P6–P10; der Rest bleibt für P6/P10"
+  },
+  "client": "claude -p in bereinigter Umgebung; Werkzeuge Read, Glob, Grep, Skill, Write, Edit (grilling schreibt die Fragenablage der Fixture); kein Bash; Prompts nennen den Skill; kein Mensch erreichbar (Rückkanal fehlt) außer wo die Fixture Antworten als Datei vorgibt",
+  "bewertung": "deterministische Prüfungen je Fall (eval check, Nulllauf-markiert) für Kern und Gegenkriterium; wo nicht deterministisch prüfbar: verblindete getrennte Session mit Zitatprüfung (eval judge check); Kosten aus normalisierten Spuren",
+  "schwelle_vorgelegt": "0 R-Verstöße; B1-Vorlauf 'trennend'; in test ≥1 Familie besser und keine schlechter; select nicht schlechter. K-LADESTUFEN: zusätzlich keine trennende Prüfung schlechter als B1 und Turns oder USD im Median niedriger. Sonst verworfen, zurückgestellt (nicht trennend) bzw. kein Vorteil",
+  "grenzen": "4 Testfamilien je Kandidat, ein Start je Variante und Fall: Prozessnachweis, kein Lernnachweis; simulierte bzw. dateibasierte Antworten statt echter Interviews"
+}
