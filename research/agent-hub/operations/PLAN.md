@@ -25,7 +25,9 @@ Maßgebliche Reihenfolge: [Gesamtplan ab November 2026](gesamtplan-2026-11.md) (
 - [x] AP1–AP3 und MUXI-Dossier, Skill `using-codegraph` gemergt (#31–#36).
 - [x] M0.1–M0.2: Plan-Review und N1/RS-1 (DSPy-Dossier auf `92d97ca`; RTA-INV-07, -AUF-07, -LEB-09).
 - [ ] M0.3–M0.4: Gesamtplan und Owner-Entscheidungen E1–E6.
-- [ ] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index. **Nächster Schritt: M1.1.**
+- [ ] M1: Kern-Port, Fake-Runtime, Vertragssuite, wegwerfbarer Referenzkern, getrennter CodeGraph-Index.
+  - [x] M1.1: [Kern-Port V0](../../../docs/spec/kern-port-v0.md) als Spec-Entwurf (31.10.2026).
+  - [ ] M1.2–M1.4 warten auf E2 (Ablageort); M1.5 auf E3 (Index).
 - [ ] M2: Tor B (CLI, ACP/SDK) und Tor A mit der Vertragssuite.
 - [ ] M3: Tor C und Tor D mit Prozessgrenze und Neustarts.
 - [ ] M4: Review-Schulden, Stack (O-4), vertikaler MVP.

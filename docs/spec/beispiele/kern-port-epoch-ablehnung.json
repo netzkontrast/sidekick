@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1",
+  "art": "antwort",
+  "id": "req-0017",
+  "ok": false,
+  "journal_seq": 14,
+  "fehler": {
+    "code": "epoch_veraltet",
+    "meldung": "Claim für a-beispiel-1 steht auf Epoch 2; Einreichung mit Epoch 1 abgewiesen, Ereignis claim.rejected_stale_epoch geschrieben."
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidekick.invalid/spec/kern-port/v0/kern-port-nachricht.schema.json",
+  "title": "Kern-Port-Nachricht – V0",
+  "description": "Eine Zeile an der Prüfgrenze (kern-port-v0.md §3): entweder Anfrage oder Antwort. Fachliche args prüft der Prüfling gegen die V0-Schemas.",
+  "type": "object",
+  "required": ["schema_version", "art", "id"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "art": { "enum": ["anfrage", "antwort"] },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "command": { "type": "string", "pattern": "^(task|claim|run|input|effect|device|memory|review|journal|state|context|test)\\.[a-z_]+$" },
+    "akteur": {
+      "type": "object",
+      "required": ["art", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "art": { "enum": ["owner", "run", "geraet", "kern", "effekt_adapter", "suite"] },
+        "id": { "type": "string", "minLength": 1 },
+        "geraet_id": { "type": "string" }
+      }
+    },
+    "idempotenz_key": { "type": ["string", "null"], "minLength": 8 },
+    "args": { "type": "object" },
+    "ok": { "type": "boolean" },
+    "ergebnis": { "type": "object" },
+    "journal_seq": { "type": ["integer", "null"], "minimum": 0 },
+    "fehler": {
+      "type": "object",
+      "required": ["code"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "enum": ["anfrage_ungueltig", "command_unbekannt", "nicht_abbildbar", "nicht_berechtigt", "epoch_veraltet", "claim_inaktiv", "zustand_unpassend", "bindung_abweichend", "pflichtteil_fehlt", "key_konflikt", "unbekannt"] },
+        "meldung": { "type": "string" }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "art": { "const": "anfrage" } } }, "then": { "required": ["command", "akteur", "args"] } },
+    { "if": { "properties": { "art": { "const": "antwort" } } }, "then": { "required": ["ok", "journal_seq"] } },
+    { "if": { "properties": { "art": { "const": "antwort" }, "ok": { "const": true } } }, "then": { "required": ["ergebnis"] } },
+    { "if": { "properties": { "art": { "const": "antwort" }, "ok": { "const": false } } }, "then": { "required": ["fehler"] } }
+  ]
+}

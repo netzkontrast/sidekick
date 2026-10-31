@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "art": "anfrage",
+  "id": "req-0003",
+  "command": "claim.request",
+  "akteur": { "art": "geraet", "id": "g-pc-heim" },
+  "idempotenz_key": "k-claim-a-beispiel-1-pc-heim",
+  "args": {
+    "auftrag_id": "a-beispiel-1",
+    "schritt": "arbeit",
+    "capabilities": [{ "art": "runtime", "name": "fake-runtime", "version": "0.1.0" }]
+  }
+}
