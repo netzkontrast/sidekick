@@ -105,8 +105,8 @@ L6 verbindet beide Stränge: Ein Run bekommt sein Kontextpaket aus der Library �
 | Nr. | Frage | Wann gebraucht | Vorschlag |
 |---|---|---|---|
 | E1 | Gilt „Kern vor Library“ und dieser Gesamtplan? | jetzt | ja |
-| E2 | Ablage für Fake-Runtime, Suite und Referenzkern | vor M1.2 | `tools/contract-suite/` für die Suite (bleibt), `research/agent-hub/prototyp/` für den wegwerfbaren Referenzkern |
-| E3 | Eigener CodeGraph-Index für sidekick | vor M1.3 | ja, `codegraph init` im Repo durch den Owner |
+| E2 | Ablage für Fake-Runtime, Suite und Referenzkern | vor M1.2 | **umgesetzt:** alles unter `tools/contract-suite/`, Referenzkern in `referenzkern/` als wegwerfbar markiert; `research/` scheidet aus, weil es nach Owner-Entscheidung vom 30.10.2026 außerhalb von Test- und Buildpfaden bleibt |
+| E3 | Eigener CodeGraph-Index für sidekick | vor M1.3 | **entschieden** (Owner, 31.10.2026): Index angelegt; ohne Watcher, daher nach Änderungen `codegraph sync` |
 | E4 | Budget M2.1 (≤ 12 Starts, ≤ 3 USD) und zulässiger CLI-Zugang | vor M2.1 | freigeben |
 | E5 | Docker-Läufe von Paperclip und OpenHands mit Netz | vor M2.3 | freigeben, Zeitbox 2 Tage |
 | E6 | Dependencies und Budget für L5 | erst nach L1 | zurückstellen |

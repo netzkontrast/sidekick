@@ -1,0 +1,348 @@
+{
+  "stand": "2026-10-31",
+  "hinweis": "Status je Fall-ID der Vertragssuite. automatisiert = Testname beginnt mit der ID; offen = mit Grund; daten = an anderer Stelle geprüft. Der Test abdeckung.test.js hält diese Liste mit Specs und Testnamen synchron.",
+  "faelle": {
+    "V0-ABL-01": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-01": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-02": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-03": {
+      "status": "offen",
+      "grund": "Netz weg mit lokalem Puffer braucht einen Connector mit Outbox (M3.1); Schritt 5–7 von V0-ABL-01 prüfen nur den Kernanteil"
+    },
+    "V0-FALL-04": {
+      "status": "offen",
+      "grund": "Connector-Neustart mit echtem Connector erst in M3.1; Supervisor-Seite in RTA-FALL-28"
+    },
+    "V0-FALL-05": {
+      "status": "offen",
+      "grund": "Runtime-Absturz mit Übergabepaket braucht task.record_handover (im Referenzkern noch nicht gebaut)"
+    },
+    "V0-FALL-06": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-07": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-08": {
+      "status": "offen",
+      "grund": "Abbruch mit Run-Rückmeldung: Kernanteil fehlt noch; Supervisor-Seite in RTA-FALL-26"
+    },
+    "V0-FALL-09": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-10": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-11": {
+      "status": "offen",
+      "grund": "Hub-Instanzwechsel erst mit Prozessgrenze und Transport (M3.1)"
+    },
+    "V0-FALL-12": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-13": {
+      "status": "offen",
+      "grund": "Entwurfskonflikt zwischen Geräten: Command-Variante für draft.conflict noch nicht gebaut"
+    },
+    "V0-FALL-14": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-15": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-16": {
+      "status": "automatisiert"
+    },
+    "V0-FALL-17": {
+      "status": "offen",
+      "grund": "Capability-Abgleich beim Start braucht Kopplung Supervisor ↔ Kern (M1-Nachfolge)"
+    },
+    "V0-FALL-18": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-19": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-20": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-21": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-22": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-23": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-24": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-25": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-26": {
+      "status": "offen",
+      "grund": "Budgetfall: run.report_usage, run.report_attempt, task.submit_partial, task.record_handover, task.revise im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-27": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-28": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-29": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-30": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-31": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-32": {
+      "status": "offen",
+      "grund": "Rückwärtsabnahme: review.* im Referenzkern noch nicht gebaut"
+    },
+    "V0-FALL-33": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "V0-FALL-34": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "V0-FALL-35": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "V0-FALL-36": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "V0-FALL-37": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "V0-FALL-38": {
+      "status": "daten",
+      "grund": "Datenprüfung der Schemas, abgedeckt in tools/skill-library/test/v0-contracts.test.js"
+    },
+    "KP-FALL-01": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-02": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-03": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-04": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-05": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-06": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-07": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-08": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-09": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-10": {
+      "status": "automatisiert"
+    },
+    "KP-FALL-11": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-01": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-02": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-03": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-04": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-05": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-06": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-07": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-08": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-09": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-10": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-11": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-12": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-13": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-14": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-15": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-16": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-17": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-18": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-19": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-20": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-21": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-22": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-23": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-24": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-25": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-26": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-27": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-28": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-29": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-30": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-31": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-32": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-33": {
+      "status": "offen",
+      "grund": "Push ohne Credential im kontrollierten Run braucht Sandbox/Netzgrenze (V1)"
+    },
+    "RTA-FALL-34": {
+      "status": "offen",
+      "grund": "Kennzeichnung „eingeschränkt überwacht“ ist Sache des Kerns, nicht gebaut"
+    },
+    "RTA-FALL-35": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-36": {
+      "status": "offen",
+      "grund": "Rückfrage über den Kern mit anschließender Wiederaufnahme: Kopplung Supervisor ↔ Kern fehlt"
+    },
+    "RTA-FALL-37": {
+      "status": "offen",
+      "grund": "Antwort ohne Rechtezuwachs: Kopplung Supervisor ↔ Kern fehlt"
+    },
+    "RTA-FALL-38": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-39": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-40": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-41": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-42": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-43": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-44": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-45": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-46": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-47": {
+      "status": "offen",
+      "grund": "Beobachter gehört zum Effekt-Adapter; dessen Spec und Prototyp folgen mit V1"
+    },
+    "RTA-FALL-48": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-49": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-50": {
+      "status": "automatisiert"
+    },
+    "RTA-FALL-51": {
+      "status": "automatisiert"
+    }
+  }
+}
