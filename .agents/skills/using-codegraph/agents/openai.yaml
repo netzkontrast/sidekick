@@ -1,0 +1,6 @@
+interface:
+  display_name: "Code mit CodeGraph verstehen"
+  short_description: "Codefragen und Änderungen zuerst über den CodeGraph-Index klären"
+  default_prompt: "Nutze $using-codegraph, um diese Codefrage zuerst über CodeGraph zu beantworten."
+policy:
+  allow_implicit_invocation: true

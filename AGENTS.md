@@ -122,6 +122,7 @@ für Repo-/Machbarkeitsrecherche, `planning-work-packages` für mehrstufige Plan
 `resuming-work` für Übergaben und Wiederaufnahme, `testing-system-boundaries` für Ausfallmatrizen,
 `evaluating-changes` für Vergleiche gegen eine eingefrorene Baseline.
 `grilling` für entscheidungsrelevante Rückfragen mit AskUser-Tools; Ablage: [docs/fragen/](docs/fragen/README.md).
+`using-codegraph` immer, sobald es um vorhandenen Code geht (siehe Abschnitt CodeGraph).
 Nur den passenden Skill lesen,
 Referenzen nur bei fehlender Projektvorlage. Lokale Vorgaben und Ablagen bleiben maßgeblich.
 Laufende Skill-Library-Recherche und Priorität: [Library-Research-Plan](research/skills-meta-prompting/library-research-plan.md).
@@ -131,6 +132,8 @@ Laufende Skill-Library-Recherche und Priorität: [Library-Research-Plan](researc
 Das Repo ist für [CodeGraph](https://github.com/colbymchenry/codegraph) eingerichtet.
 Der Ordner `.codegraph/` existiert immer, weil seine `.gitignore` eingecheckt ist.
 Er sagt also nichts darüber, ob ein Index vorhanden ist.
+
+**Ablauf:** Skill [`using-codegraph`](.agents/skills/using-codegraph/SKILL.md) mit Befehlsübersicht und Grenzen.
 
 **Wann:** Wenn der Index nicht leer ist (`codegraph status` zeigt `Files` > 0), nutze CodeGraph
 vor grep/Read, um Code zu verstehen oder zu finden. Das gilt für Fragen wie „wie funktioniert X“,
