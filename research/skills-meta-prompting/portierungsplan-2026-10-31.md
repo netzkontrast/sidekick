@@ -92,12 +92,12 @@ Reihenfolge nach Hebel: erst die Messung belastbar machen (sonst messen wir alle
 - **Bleibt verworfen:** Technik-Katalog, Modell-Routing und Degradation (SCO), Prompt-Templating, Hot-Reload.
 - **Messregeln ab sofort:** Bewerter liefern wörtliche Belege, die vor der Entblindung geprüft werden; jede neue Familie bekommt eine Negativkontrolle; deterministische Prüfungen werden gegen einen Nulllauf markiert.
 
-## 6. Entscheidungen für den Owner
+## 6. Entscheidungen des Owners (beantwortet 31.10.2026, [Runde](../../docs/fragen/skill-library/rounds/R-20261031-port-runde1.md))
 
-1. Reihenfolge und Umfang P0–P12 wie oben.
-2. Laufbudget für P6–P10: zusammen etwa 60 Starts, in Runden zu je etwa 14, jede Runde vorab registriert.
-3. P9 (`questions`-CLI) liegt außerhalb der V1-Stufen 0–2 und braucht in headless Läufen eine Freigabe für Bash oder ein MCP-Werkzeug.
-4. P12 ändert die V0-Spec des Kerns (spec-driven, Owner-Review).
+1. Reihenfolge und Umfang P0–P12: **ok**; unabhängige Pakete laufen parallel.
+2. Laufbudget für P6–P10: **ja**, bis ~60 Starts in vorab registrierten Runden zu je etwa 14.
+3. P9 (`questions`-CLI): **ja, mit Rechten**. Freigegeben wird nur `node tools/skill-library/cli.js questions …` (Messläufe per `--allowedTools`, Projekt per Permission-Regel); keine allgemeine Bash-Freigabe.
+4. P12 (V0-Spec des Kerns): **ok**, als eigener PR zur Owner-Review.
 
 ## 7. Grenzen
 

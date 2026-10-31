@@ -176,12 +176,12 @@ In SL0 zunächst alle neun Bereiche inventarisieren; die eigentliche Bereichsrec
 
 ### 8.1 Phase 2: Portierung (P0–P12) und laufende Messrunden
 
-Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ und „improve grilling“. Inhalt, Begründung und Abnahme: [Portierungsplan](portierungsplan-2026-10-31.md). Status nur hier.
+Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ und „improve grilling“. Owner-Entscheidungen zu Reihenfolge, Budget (~60 Starts für P6–P10), P9 und P12: [R-20261031-port-runde1](../../docs/fragen/skill-library/rounds/R-20261031-port-runde1.md). Inhalt, Begründung und Abnahme: [Portierungsplan](portierungsplan-2026-10-31.md). Status nur hier.
 
 | Paket | Highlight (Repo) | Status |
 |---|---|---|
-| P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | geplant |
-| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | Prototyp: [Zitatprüfung](e3/zitatpruefung-2026-10-31.md) (101/101 bei K-MELDEN, 66/83 bei M4) |
+| P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | umgesetzt in PR #21 (116/116 Tests) |
+| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | in Umsetzung (P1–P3 gemeinsam); Prototyp: [Zitatprüfung](e3/zitatpruefung-2026-10-31.md) (101/101 bei K-MELDEN, 66/83 bei M4) |
 | P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer) | Befund: Nulllauf besteht 20/31 grilling-Prüfungen ([Korrektur](grilling-runde/dev-ergebnis.md)); Umsetzung geplant |
 | P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | geplant |
 | P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
@@ -189,7 +189,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | geplant; E3-Kandidat |
 | P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | Diagnose geliefert ([dev](grilling-runde/dev-ergebnis.md)); Kandidat geplant |
 | P8 | grilling K-RUECKWAERTS: Rückwärtsabgleich vor der Zusammenfassung (prompt-architect) | geplant |
-| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | geplant; Owner-Entscheidung (außerhalb V1, Bash/MCP-Freigabe) |
+| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | freigegeben mit eng begrenzten Rechten ([A-20261031-p9-questions-cli](../../docs/fragen/skill-library/questions/Q-20261031-p9-questions-cli.md)); geplant |
 | P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | geplant |
 | P11 | Fail-closed `context-pack` (code2prompt) | geplant |
 | P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | geplant; Owner-Review der V0-Spec |
