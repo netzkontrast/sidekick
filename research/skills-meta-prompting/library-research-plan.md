@@ -192,7 +192,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 | P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | freigegeben mit eng begrenzten Rechten ([A-20261031-p9-questions-cli](../../docs/fragen/skill-library/questions/Q-20261031-p9-questions-cli.md)); geplant |
 | P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | geplant |
 | P11 | Fail-closed `context-pack` (code2prompt) | geplant |
-| P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | geplant; Owner-Review der V0-Spec |
+| P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | Spec-Entwurf V0 0.2 in PR #22 zum Owner-Review (5 vorläufige Festlegungen zur Entscheidung; Schemas folgen nach dem Review) |
 | E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | abgeschlossen: beide **verworfen, kein Vorteil** (Select schlechter, B1 erfüllt den Kern bereits); Abbruch vor Test, 8/30 Starts; Testfamilien ungelaufen ([Ergebnis](e3/runde-2/E3-2-ergebnis-2026-10-31.md)) |
 | DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | läuft |
 
