@@ -182,7 +182,7 @@ Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ 
 |---|---|---|
 | P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | umgesetzt in PR #21 (116/116 Tests) |
 | P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | in Umsetzung (P1–P3 gemeinsam); Prototyp: [Zitatprüfung](e3/zitatpruefung-2026-10-31.md) (101/101 bei K-MELDEN, 66/83 bei M4) |
-| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer) | Befund: Nulllauf besteht 20/31 grilling-Prüfungen ([Korrektur](grilling-runde/dev-ergebnis.md)); Umsetzung geplant |
+| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer), dazu B1-Vorlauf in E3-Select (freigegeben, [A-20261031-e3-b1-vorlauf](../../docs/fragen/skill-library/questions/Q-20261031-e3-b1-vorlauf.md)) | Befund: Nulllauf besteht 20/31 grilling-Prüfungen ([Korrektur](grilling-runde/dev-ergebnis.md)); Umsetzung geplant |
 | P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | geplant |
 | P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
 | P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | geplant |

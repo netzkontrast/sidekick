@@ -9,7 +9,7 @@ Version: 1
 Erstellt: 2026-10-31
 Art: decision
 Priorität: blocking
-Kontext / Quelle: [Portierungsplan](../../../research/skills-meta-prompting/portierungsplan-2026-10-31.md) §4, §6
+Kontext / Quelle: [Portierungsplan](../../../../research/skills-meta-prompting/portierungsplan-2026-10-31.md) §4, §6
 Anlass: Owner-Entscheidungen aus dem Portierungsplan §6.
 Auswirkung / blockierte Arbeit: Umsetzung der Pakete P0–P12.
 Fragestellung: Etwa 60 headless Starts für P6–P10, in vorab registrierten Runden zu je etwa 14?
