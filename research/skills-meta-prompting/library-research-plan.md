@@ -174,6 +174,28 @@ Reihenfolge: SL0 → SL1 → Review → SL2 → SL3 → SL4 → SL5 → SL6 → 
 
 In SL0 zunächst alle neun Bereiche inventarisieren; die eigentliche Bereichsrecherche folgt nach Review in SL2. Danach entscheidende Lücken vertiefen. Kein generisches Framework implementieren, bevor Vertrag und Baseline stehen. Keine Aufwands-/Kostenersparnis vor Messung zusagen.
 
+### 8.1 Phase 2: Portierung (P0–P12) und laufende Messrunden
+
+Owner-Auftrag 31.10.2026 (Chat): „pick something incredible from each repo“ und „improve grilling“. Inhalt, Begründung und Abnahme: [Portierungsplan](portierungsplan-2026-10-31.md). Status nur hier.
+
+| Paket | Highlight (Repo) | Status |
+|---|---|---|
+| P0 | Konfigurationsschutz in `eval prepare` vervollständigen (Befund aus AHP/C2P-Recherche) | geplant |
+| P1 | Belegpflichtige Gutachten, `eval judge check` (skills-optimizer) | Prototyp: [Zitatprüfung](e3/zitatpruefung-2026-10-31.md) (101/101 bei K-MELDEN, 66/83 bei M4) |
+| P2 | Gegenkriterium und Nulllauf-Trennschärfe (automatic_prompt_engineer) | Befund: Nulllauf besteht 20/31 grilling-Prüfungen ([Korrektur](grilling-runde/dev-ergebnis.md)); Umsetzung geplant |
+| P3 | Gepflanzte Erwartungsbefunde mit 1:1-Zuordnung (skill-optimization, nur Konzept) | geplant |
+| P4 | Kostenbilanz je Kontextklasse × Turns (skill-cost-optimizer) | geplant |
+| P5 | `cite-check` mit Segmentregister (recursive-decomposition-skill) | geplant |
+| P6 | Ausgabevertrag mit inhaltlich geprüften Pflichtblöcken, researching-repositories (dspy-advanced-prompting) | geplant; E3-Kandidat |
+| P7 | grilling K-LADESTUFEN: Einstiegsweiche Neuanlage/Fortsetzung (prompt-engineering-skill) | Diagnose geliefert ([dev](grilling-runde/dev-ergebnis.md)); Kandidat geplant |
+| P8 | grilling K-RUECKWAERTS: Rückwärtsabgleich vor der Zusammenfassung (prompt-architect) | geplant |
+| P9 | `questions`-CLI mit Index als Projektion (claude-prompts-mcp) | geplant; Owner-Entscheidung (außerhalb V1, Bash/MCP-Freigabe) |
+| P10 | Rechteprofil je Lauf mit Kanarienfall (agentic-harness-patterns, nur öffentliche Doku) | geplant |
+| P11 | Fail-closed `context-pack` (code2prompt) | geplant |
+| P12 | Kern-Spec: Budget-Vorwarnung und Rückwärtsabnahme am Tor (meta-prompting, prompt-architect) | geplant; Owner-Review der V0-Spec |
+| E3-2 | K-BELEG, K-WEGE (aus dem Tiefenabgleich) | läuft: Select ausgeführt (8/30 Starts), Bewertung läuft |
+| DR | Deep Research Intent Capture, Interviewtechnik, Tree of Thoughts für grilling | läuft |
+
 ## 9. Drei spätere durchgängige Versuche (SL5)
 
 SL1 entwirft diese Versuche; ausgeführt werden sie erst in SL5. Für spätere Kandidatensuche sind Baseline, Rubrik und Entwicklungs-/Auswahldaten vorher versioniert festzuhalten. Eine getrennte Review-Person oder -Session prüft das Evaluationsdesign; eine neue Session allein beweist keine Unabhängigkeit. Finale Testinhalte bleiben vom Optimierungsprozess getrennt. Ein Autor bewertet seine eigenen Varianten nicht als alleiniger unabhängiger Nachweis.
